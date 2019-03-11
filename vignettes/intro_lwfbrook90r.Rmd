@@ -1,11 +1,11 @@
 ---
-title: "Introduction to LWFBrook90r"
+title: "Introduction to LWFBrook90R"
 output:
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
 vignette: >
-  %\VignetteIndexEntry{"Introduction to LWFBrook90r"}
+  %\VignetteIndexEntry{"Introduction to LWFBrook90R"}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 ---
-title: "Introduction to brook90r"
+title: "Introduction to LWFBrook90R"
 author: "Paul Schmidt-Walter"
 date: "`r Sys.Date()`"
 output: 
@@ -32,12 +32,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette gives a brief introduction to the usage of the *LWFBrook90r* R-package. The package serves as an interface between R and the executable code of the hydrological model LWF-BROOK90 [@hammel_charakterisierung_2001]. The model code reside in a separate R-package which is available at the [Bavarian State Institute of Forestry](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php). The functionality is presented on a working example.
+This vignette gives a brief introduction to the usage of the *LWFBrook90R* R-package. The package serves as an interface between R and the executable code of the hydrological model LWF-BROOK90 [@hammel_charakterisierung_2001]. The model code reside in a separate R-package which is available at the [Bavarian State Institute of Forestry](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php). The functionality is presented on a working example.
 
 ***
 
 # Introduction
-LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions (@van_genuchten_closed-form_1980; @mualem_new_1976), and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90r*, and with one function call it will:
+LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions (@van_genuchten_closed-form_1980; @mualem_new_1976), and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
 
 * write input files from climate driving data, model control options and parameters,
 * execute the model code,
@@ -47,27 +47,27 @@ The model control options thereby let you select different functions for definin
 
 ##Installation {#installation}
 
-Before installing the *LWFBrook90r* R-package, be sure to download and install the 'Rbrook90' and 'data.table' packages, as *LWFBrook90r* depends on them:
+Before installing the *LWFBrook90R* R-package, be sure to download and install the 'Rbrook90' and 'data.table' packages, as *LWFBrook90R* depends on them:
 
 ```{r, eval = F}
 install.packages("Rbrook90", repos="https://cran.rstudio.com/")
 install.packages("data.table", repos="https://cran.rstudio.com/")
 ```
 
-Please also install the suggested R-packages to get the full functionality of *LWFBrook90r*:
+Please also install the suggested R-packages to get the full functionality of *LWFBrook90R*:
 ```{r, eval = F}
 install.packages("vegperiod")
 install.packages("sirad", repos="https://cran.rstudio.com/")
 install.packages("foreach", repos="https://cran.rstudio.com/")
 install.packages("doSNOW", repos="https://cran.rstudio.com/")
 ```
-Now you can install *LWFBrook90r*. The package is not available on CRAN, you have to install it directly from GitHub, using the *devtools*-package:
+Now you can install *LWFBrook90R*. The package is not available on CRAN, you have to install it directly from GitHub, using the *devtools*-package:
 ```{r, eval = F}
 devtools::install_github(repo = "pschmidtwalter/brook90r")
 ```
-Now load the *LWFBrook90r* package:
+Now load the *LWFBrook90R* package:
 ```{r}
-library(LWFBrook90r)
+library(LWFBrook90R)
 ```
 
 ## Data
