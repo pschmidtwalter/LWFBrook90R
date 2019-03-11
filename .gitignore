@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.o
+*.so
+*.dll
+*.DS_Store
+*.html
+*.mod
+out
+inst/doc
+data-raw
+example_run_b90
+scratch.R
+MultiRuns
+Poster

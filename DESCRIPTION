@@ -1,0 +1,27 @@
+Package: LWFBrook90R
+Title: Run the LWF-Brook90 hydrological model inside R.
+Version: 1.2.0
+Authors@R: person("Paul", "Schmidt-Walter", email = "paul.schmidt-walter@nw-fva.de",
+    role = c("aut", "cre"))
+Description: Run the LWF-BROOK90 hydrological model inside R. The central
+    function creates the input from model control options, parameters, soil and
+    climate data, runs the LWF-BROOK90 hydrological model from the Rbrook90 package
+    and returns the created output files. Additionally, submodels for defining vegetation
+    dynamics and pedotransfer functions for deriving soil hydraulic parameters are
+    provided.
+Depends:
+    data.table (>= 1.10.4),
+    Rbrook90 (>= 0.1.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Suggests:
+    vegperiod (>= 0.2.1),
+    sirad,
+    foreach,
+    doSNOW,
+    testthat,
+    knitr,
+    rmarkdown,
+VignetteBuilder: knitr
