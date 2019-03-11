@@ -439,7 +439,7 @@ runLWFB90 <- function(project.dir,
   start <- Sys.time()
 
 
-  Rbrook90::r_brook90(
+  r_brook90(
     site = data.frame(simyears[1],
                       as.integer(format(options.b90$startdate, "%j")),
                       param.b90$coords_y, param.b90$snowini, param.b90$gwatini, options.b90$prec.interval),
