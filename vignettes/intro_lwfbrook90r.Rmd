@@ -67,7 +67,7 @@ devtools::install_github(repo = "pschmidtwalter/brook90r")
 ```
 Now load the *LWFBrook90r* package:
 ```{r}
-library(LWFBrook90r)
+library(LWFBrook90R)
 ```
 
 ## Data

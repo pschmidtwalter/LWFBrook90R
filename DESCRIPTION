@@ -1,8 +1,10 @@
 Package: LWFBrook90R
 Title: Run the LWF-Brook90 hydrological model inside R.
 Version: 1.2.0
-Authors@R: person("Paul", "Schmidt-Walter", email = "paul.schmidt-walter@nw-fva.de",
-    role = c("aut", "cre"))
+Authors@R: c(
+        person("Paul", "Schmidt-Walter", email = "paul.schmidt-walter@nw-fva.de", role = c("aut", "cre")),
+        person("Volodymyr", "Trotsiuk", , "vtrotsiuk@gmail.com", role = c("aut"))
+        )
 Description: Run the LWF-BROOK90 hydrological model inside R. The central
     function creates the input from model control options, parameters, soil and
     climate data, runs the LWF-BROOK90 hydrological model from the Rbrook90 package
@@ -24,4 +26,5 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+    roxygen2
 VignetteBuilder: knitr
