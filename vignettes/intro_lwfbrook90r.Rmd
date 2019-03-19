@@ -47,10 +47,9 @@ The model control options thereby let you select different functions for definin
 
 ##Installation {#installation}
 
-Before installing the *LWFBrook90R* R-package, be sure to download and install the 'Rbrook90' and 'data.table' packages, as *LWFBrook90R* depends on them:
+Before installing the *LWFBrook90R* R-package, be sure to download and install the 'data.table' packages, as *LWFBrook90R* depends on it:
 
 ```{r, eval = F}
-install.packages("Rbrook90", repos="https://cran.rstudio.com/")
 install.packages("data.table", repos="https://cran.rstudio.com/")
 ```
 
@@ -63,7 +62,7 @@ install.packages("doSNOW", repos="https://cran.rstudio.com/")
 ```
 Now you can install *LWFBrook90R*. The package is not available on CRAN, you have to install it directly from GitHub, using the *devtools*-package:
 ```{r, eval = F}
-devtools::install_github(repo = "pschmidtwalter/brook90r")
+devtools::install_github(repo = "pschmidtwalter/LWFBrook90R")
 ```
 Now load the *LWFBrook90R* package:
 ```{r}

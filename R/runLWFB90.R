@@ -18,15 +18,11 @@
 #' the parameters of the van Genuchten retention functions are \emph{ths}, \emph{thr},
 #'  \emph{alpha} [m-1], \emph{npar}, and the parameters of the Mualem conductivity function
 #'  \emph{ksat} [mm d-1] and \emph{tort}. The volume fraction of stones has to be named \emph{gravel}.
+#'  If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
+#'  These have to be set up in advance.
 #' @param outputmat a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{choose_output.B90}} to generate and edit default output matrix.
-#' @param output.log Logical or filename where 'stdout' of \code{\link[base]{system2}}-call
-#' is sent. The default \emph{output.log} = "" sents all command-line model-output to
-#' the R console, \emph{output.log} = FALSE discards stdout.
-#' All other names will create a text file containing the model runtime output.
 #' @param out.dir path where to write the output-files.
-#' @param path_b90.exe filename of the executable code. The default setting looks for the
-#' executable 'b90.exe' within 'project.dir'.
 #' @param output.param.options append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?
 #' @param keep.log.on.success keep the file 'output.log' after a successful simulation?
@@ -34,11 +30,9 @@
 #' @param keep.outputfiles keep the model .asc output files after running and
 #' returning the output?
 #' @param verbose print messages to the console? Default is TRUE.
-#' @param write.climate.in  should the climate file be written or not to save execution time?
-#' Ignored if no 'Climate.in' is found in 'project.dir/in'.
-#' @param run.model run the executable or only create input files? Default is TRUE.
+#' @param run.model run the model or only return model input objects? Default is TRUE.
 #'
-#' @return Returns the model-output from the files found in 'out.dir' as a list of data.frames (data.tables),
+#' @return Returns the model-output from the files found in 'out.dir' as a list of data.tables,
 #' along with the execution time of the simulation, and input-parameters and options if desired.
 #' @export
 #'
@@ -71,7 +65,7 @@ runLWFB90 <- function(project.dir,
                     options.b90,
                     param.b90,
                     climate,
-                    soil,
+                    soil = NULL,
                     outputmat = setoutput_LWFB90(),
                     keep.log.on.success = T,
                     out.dir = "out/",
@@ -86,7 +80,6 @@ runLWFB90 <- function(project.dir,
   #name-checks ----------------------------------------------------------------------
   names(options.b90) <- tolower(names(options.b90))
   names(param.b90) <- tolower(names(param.b90))
-  names(soil) <- tolower(names(soil))
   names(climate) <- tolower(names(climate))
 
   options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
@@ -101,6 +94,8 @@ runLWFB90 <- function(project.dir,
 
   options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
 
+  options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
+
   # Check suggested packages --------------------------------------------------------
   if (!options.b90$budburst.method %in% c("constant", "fixed") || !options.b90$leaffall.method %in% c("constant", "fixed")) {
     if (!requireNamespace("vegperiod", quietly = TRUE)) {
@@ -110,7 +105,7 @@ runLWFB90 <- function(project.dir,
     }
     }
 
-  # Input checks --------------------------------------------------------------------
+  # ---- Input checks ---------------------------------------------------------------
 
   if (!inherits(options.b90$startdate, "Date")) {
     stop("Invalid argument: 'options.b90$startdate'")}
@@ -119,6 +114,19 @@ runLWFB90 <- function(project.dir,
   if (!(options.b90$startdate < options.b90$enddate)) {
     stop("Invalid arguments: 'startdate > enddate ")}
 
+  if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_material))){
+    stop("Please provide soil data, either via the argument 'soil' or as list items 'soil_nodes' and 'soil_materials' in param.b90 ")
+  }
+
+  if (options.b90$root.method == "soilvar") {
+    if (is.null(soil)) {
+      stop("Please provide the 'soil'-argument when using options.b90$root.method = 'soilvar'.")
+    } else {
+      if (is.null(soil$rootden)) {
+        stop("Please provide the column 'rootden' in 'soil'-data.frame")
+      }
+    }
+  }
   # # Climate
   # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
   #   if (any( names(climate) == "sunhour" )) {
@@ -137,7 +145,7 @@ runLWFB90 <- function(project.dir,
     climate$mesfl <- 0
   }
 
-  # clean file paths and set up directories -----------------------------------------
+  # ---- clean file paths and set up directories -----------------------------------------
 
   # create project-directory
 
@@ -188,7 +196,7 @@ runLWFB90 <- function(project.dir,
   try(file.remove(list.files(options.b90$out.dir, pattern = ".csv", full.names = T)))
 
 
-  # Simulation period ----------------------------------------------------------------
+  # ---- Simulation period ----------------------------------------------------------------
   climyears <- unique(year(climate$dates))
   simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
                   to = as.integer(format(options.b90$enddate,"%Y")),
@@ -397,52 +405,44 @@ runLWFB90 <- function(project.dir,
   climate <- climate[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
 
 
+
+  # ---- Make soilnodes & soil materials --------------------------------------------
+  # soil provided as argument -> create soil nodes and materials and add them to param.b90
+  if (!is.null(soil)) {
+    soil_nodes_mat <- soil_to_param(soil)
+    param.b90$soil_nodes <- soil_nodes_mat$soil_nodes
+    param.b90$soil_materials <- soil_nodes_mat$soil_materials
+  }
+
+  param.b90$soil_nodes$thick <- param.b90$soil_nodes$upper - param.b90$soil_nodes$lower
+  param.b90$soil_nodes$midpoint <- param.b90$soil_nodes$lower + param.b90$soil_nodes$thick/2
+  param.b90$soil_nodes$thick <- param.b90$soil_nodes$thick * 1000 # mm
+  param.b90$soil_nodes$layer <- 1:nrow(param.b90$soil_nodes)
+  param.b90$soil_nodes$psiini <- param.b90$psiini
+
   # Make Roots ----------------------------------------------------------------------
   if (options.b90$root.method != "soilvar") {
-    soil$rootden <- MakeRelRootDens(soilnodes = soil$lower,
+    param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = param.b90$soil_nodes$lower,
                                     maxrootdepth = param.b90$maxrootdepth,
                                     method = options.b90$root.method,
                                     beta = param.b90$betaroot,
                                     relrootden = param.b90$rootden.tab$rootden,
                                     rootdepths = param.b90$rootden.tab$depth)
+  } else {
+    param.b90$soil_nodes$rootden <- soil$rootden
   }
 
-  #  Make soil ----------------------------------------------------------------------
-  #  Create materials for writeparam.in from soil
-  ## TODO: materials and layers as list-elements in param.b90?
-
-  dubl <- duplicated(soil[,c("ths","thr","alpha","npar","ksat","tort","gravel")])
-  materials <- soil[!dubl,c("ths","thr","alpha","npar","ksat","tort","gravel")]
-  materials$mat <- 1:nrow(materials)
-  materials <- materials[,c("mat","ths","thr","alpha","npar","ksat","tort","gravel")] #Reihenfolge im Output
-  #add material-identifier to soil
-  seqalong <- 2:length(dubl)
-  soil$mat[1] <- 1
-  m = 1
-  for (i in seqalong) {
-    if (dubl[i] == FALSE) {
-      m = m + 1
-      soil$mat[i] <- m
-    } else soil$mat[i] <- m
-  }
-  soil$thick <- soil$upper - soil$lower
-  soil$midpoint <- soil$lower + soil$thick/2
-  soil$thick <- soil$thick * 1000
-  soil$layer <- 1:nrow(soil)
-  soil$psiini <- param.b90$psiini
-
-  # Execute LWF-Brook90  ----------------------------------------------------------------
-
+  # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (verbose == T) {
     message("Running model..." )
   }
+
   start <- Sys.time()
-
-
   r_brook90(
     site = data.frame(simyears[1],
                       as.integer(format(options.b90$startdate, "%j")),
-                      param.b90$coords_y, param.b90$snowini, param.b90$gwatini, options.b90$prec.interval),
+                      param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
+                      options.b90$prec.interval),
 
     climate = climate[, list(year(dates), month(dates), mday(dates),
                              globrad,
@@ -458,13 +458,12 @@ runLWFB90 <- function(project.dir,
                              standprop_daily$sai,
                              standprop_daily$age)],
 
-    param = param_to_rbrook90(param.b90, nrow(soil), nrow(materials), options.b90$imodel),
+    param = param_to_rbrook90(param.b90, options.b90$imodel),
     paramYear = param.b90$pdur,
-    materials = materials,
-    soil = soil[,list(layer,midpoint, thick, mat, psiini,rootden)],
+    materials = param.b90$soil_materials,
+    soil = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
     output = outputmat
   )
-
 
   simtime <- Sys.time() - start
   units(simtime) <- "secs"
@@ -474,7 +473,7 @@ runLWFB90 <- function(project.dir,
     message("Reading output...")
   }
 
-  # Read output files -----------------------------------------------------------
+  # ---- Read output files ----------------------------------------------------------
   simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
   names(simres) <- list.files(out.dir, pattern = ".csv")
 

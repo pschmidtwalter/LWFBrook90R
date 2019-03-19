@@ -4,16 +4,16 @@
 \alias{param_to_rbrook90}
 \title{Creates the parameter vector for r_brook90}
 \usage{
-param_to_rbrook90(param.b90, n_soillays, n_materials, imodel)
+param_to_rbrook90(param.b90, imodel)
 }
 \arguments{
 \item{param.b90}{a named list of model parameters.}
 
+\item{options.b90}{a named list of model control options.}
+
 \item{n_soillays}{number of model soil layers.}
 
 \item{n_materials}{number of soil materials}
-
-\item{options.b90}{a named list of model control options.}
 }
 \value{
 a numerical vector with the parameters in the right order for r_brook90

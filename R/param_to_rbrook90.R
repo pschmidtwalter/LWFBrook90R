@@ -11,8 +11,6 @@
 #' @return a numerical vector with the parameters in the right order for r_brook90
 #' @export
 param_to_rbrook90 <- function(param.b90,
-                              n_soillays,
-                              n_materials,
                               imodel){
 
   fparms <- c(param.b90$ndays,
@@ -79,8 +77,8 @@ param_to_rbrook90 <- function(param.b90,
               param.b90$psicr,
               param.b90$rrad,
               param.b90$nooutf,
-              n_soillays,
-              n_materials,
+              nrow(param.b90$soil_nodes),
+              nrow(param.b90$soil_materials),
               param.b90$ilayer,
               param.b90$qlayer,
               ifelse(imodel == "MvG", 1,0),

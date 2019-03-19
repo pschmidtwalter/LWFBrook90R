@@ -1,21 +1,21 @@
-library(LWFBrook90r)
+library(LWFBrook90R)
 
 options.b90 <- setoptions_LWFB90()
 param.b90 <- setparam_LWFB90()
-soil <- cbind(soil_slb1, hydpar_wessolek_mvg(tex.KA5 = soil_slb1$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_mvg(tex.KA5 = slb1_soil$texture))
 
 options.b90$lai.method <- 'Coupmodel'
 options.b90$budburst.method <- 'fixed'
 options.b90$leaffall.method <- 'fixed'
-options.b90$startdate <- as.Date("1990-01-01")
 
+soillaymat <- soil_to_param(soil)
+param.b90$soil_nodes <- soillaymat$soil_nodes
+param.b90$soil_materials <- soillaymat$soil_materials
 b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
                             options.b90 = options.b90,
                             param.b90 = param.b90,
-                            climate = meteo_slb1,
-                            soil = soil
-                            )
-b90.results.slb1$SWATDAY.csv
+                            climate = slb1_meteo)
+
 
 
 # Multirun
