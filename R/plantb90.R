@@ -14,6 +14,7 @@
 #'
 #' @examples
 #' plot(plant.b90(0,5, 121, 20, 270, 50,365))
+#' @export
 plant.b90 <- function(minval, maxval,
                       doy.incr,incr.dur,
                       doy.decr, decr.dur,

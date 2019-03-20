@@ -113,8 +113,10 @@ Create the list of model parameters
  melfac       \tab degree day melt factor for open. Default: 1.5\tab MJ m-2 d-1 K-1    \tab Snow                   \cr
  saimlt       \tab parameter for snowmelt dependence on SAI. Default: 0.5 \tab -                  \tab Snow                   \cr
  snoden       \tab snow density. Default: 0.3 \tab mm mm-1           \tab Snow                   \cr
- rssa         \tab soil evaporation resistance at field capacity. Default: 100 \tab s m-1             \tab Soilevap               \cr
- rssb         \tab exponent in relation of RSS to water potential. Default: 1 \tab -                  \tab Soilevap               \cr
+ rssa         \tab soil evaporation resistance at field capacity. Default: 100 \tab s m-1  \tab Soilevap               \cr
+ rssb         \tab exponent in relation of RSS to water potential. Default: 1 \tab - \tab Soilevap               \cr
+ soil_nodes   \tab a data.frame with soil nodes discretization passed to LWF-Brook90 \tab - \tab Soil               \cr
+ soil_materials \tab a data.frame with soil materials (hydrualic parameters) passed to LWF-Brook90 \tab -  \tab Soil               \cr
  age.ini      \tab Age of stand (for root development). Default: 100\tab a                 \tab Water supply           \cr
  initrdep     \tab Initial root depth. Default: 0.25\tab m                 \tab Water supply           \cr
  initrlen     \tab Initial water-absorbing root length per unit area. Default: 12\tab m/m-2             \tab Water supply           \cr

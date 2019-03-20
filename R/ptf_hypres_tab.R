@@ -34,8 +34,8 @@ hydpar_hypres_tab <- function(tex.hypres, topsoil){
   }
   topsoil <- as.logical(topsoil)
 
-  out <- data.frame(id = 1:length(tex.hypres),tex.hypres, topsoil, stringsAsFactors=F)
-  out <- merge(out,brook90r:::hypres_tab4, by=c("tex.hypres","topsoil" ), all.x=T )
+  out <- data.frame(id = 1:length(tex.hypres),tex.hypres, topsoil, stringsAsFactors = F)
+  out <- merge(out, LWFBrook90R:::hypres_tab4, by=c("tex.hypres","topsoil" ), all.x = T )
   out$alpha <- out$alpha*100
   out[order(out$id), c("ths", "thr", "alpha","npar","mpar","ksat","tort")]
 }

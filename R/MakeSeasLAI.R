@@ -56,6 +56,7 @@
 #' leaffall.dur = param.b90$leaffalldur))
 #'
 #' @export
+#' @import data.table
 MakeSeasLAI <- function(method="b90",
                         year,
                         maxlai,
@@ -86,14 +87,14 @@ MakeSeasLAI <- function(method="b90",
     dat[, minlai := winlaifrac*maxlai]
 
     if (method == "b90") {
-      out <- dat[, brook90r:::plant.b90(minval = minlai, maxval = maxlai,
+      out <- dat[, plant.b90(minval = minlai, maxval = maxlai,
                                         doy.incr = budburst.doy, incr.dur = emerge.dur,
                                         doy.decr = leaffall.doy, decr.dur = leaffall.dur,
                                         maxdoy = maxdoy),
                  by = year]$V1
     }
     if (method == "Coupmodel") {
-      out <- dat[, brook90r:::plant.coupmodel(minval = minlai, maxval = maxlai,
+      out <- dat[, plant.coupmodel(minval = minlai, maxval = maxlai,
                                               doy.incr = budburst.doy,
                                               doy.max = shape.optdoy,
                                               doy.min = leaffall.doy + leaffall.dur,
@@ -108,7 +109,7 @@ MakeSeasLAI <- function(method="b90",
                       maxdoy = ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
                                        366, 365),
                       maxlai = maxlai)
-    out <- dat[, brook90r:::plant.linear(doys = lai.doy, values = lai.frac*maxlai, maxdoy = maxdoy),
+    out <- dat[, plant.linear(doys = lai.doy, values = lai.frac*maxlai, maxdoy = maxdoy),
                by = year]$V1
 
   }

@@ -4,7 +4,7 @@
 \alias{runLWFB90}
 \title{Run the LWF-Brook90 hydrological model and return results}
 \usage{
-runLWFB90(project.dir, options.b90, param.b90, climate, soil,
+runLWFB90(project.dir, options.b90, param.b90, climate, soil = NULL,
   outputmat = setoutput_LWFB90(), keep.log.on.success = T,
   out.dir = "out/", output.param.options = TRUE,
   keep.outputfiles = TRUE, verbose = TRUE)
@@ -25,7 +25,9 @@ Each row represents one layer, containing the layers' boundaries and soil hydrau
 The columns names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards),
 the parameters of the van Genuchten retention functions are \emph{ths}, \emph{thr},
  \emph{alpha} [m-1], \emph{npar}, and the parameters of the Mualem conductivity function
- \emph{ksat} [mm d-1] and \emph{tort}. The volume fraction of stones has to be named \emph{gravel}.}
+ \emph{ksat} [mm d-1] and \emph{tort}. The volume fraction of stones has to be named \emph{gravel}.
+ If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
+ These have to be set up in advance.}
 
 \item{outputmat}{a [10,5]-matrix flagging the desired model-output. Use
 \code{\link{choose_output.B90}} to generate and edit default output matrix.}
@@ -43,21 +45,10 @@ returning the output?}
 
 \item{verbose}{print messages to the console? Default is TRUE.}
 
-\item{output.log}{Logical or filename where 'stdout' of \code{\link[base]{system2}}-call
-is sent. The default \emph{output.log} = "" sents all command-line model-output to
-the R console, \emph{output.log} = FALSE discards stdout.
-All other names will create a text file containing the model runtime output.}
-
-\item{path_b90.exe}{filename of the executable code. The default setting looks for the
-executable 'b90.exe' within 'project.dir'.}
-
-\item{write.climate.in}{should the climate file be written or not to save execution time?
-Ignored if no 'Climate.in' is found in 'project.dir/in'.}
-
-\item{run.model}{run the executable or only create input files? Default is TRUE.}
+\item{run.model}{run the model or only return model input objects? Default is TRUE.}
 }
 \value{
-Returns the model-output from the files found in 'out.dir' as a list of data.frames (data.tables),
+Returns the model-output from the files found in 'out.dir' as a list of data.tables,
 along with the execution time of the simulation, and input-parameters and options if desired.
 }
 \description{

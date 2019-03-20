@@ -35,7 +35,7 @@
 #' @return Returns the model-output from the files found in 'out.dir' as a list of data.tables,
 #' along with the execution time of the simulation, and input-parameters and options if desired.
 #' @export
-#'
+#' @import data.table vegperiod
 #' @examples
 #'
 #' #Set up lists containing model control options and model parameters:
@@ -60,6 +60,7 @@
 #'                       climate = meteo_slb1,
 #'                       soil = soil,
 #'                       path_b90.exe = "b90.exe")
+
 
 runLWFB90 <- function(project.dir,
                     options.b90,

@@ -10,6 +10,7 @@
 #' @param b0 angström parameter b, defaults to 0.5
 #'
 #' @return a sequence of global radiation in \eqn{MJ m^-2 d^-1} with the length of doy
+#'@import sirad
 #' @export
 CalcGlobRad <- function(doy, SunHour, lat,
                         a0=0.25,

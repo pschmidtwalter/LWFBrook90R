@@ -29,6 +29,7 @@
 #'
 #'
 #'@examples
+#'@import data.table
 #' @export
 
 approx_standprop <- function(x.years,
