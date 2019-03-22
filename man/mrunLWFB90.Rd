@@ -2,45 +2,50 @@
 % Please edit documentation in R/mrunLWFB90.R
 \name{mrunLWFB90}
 \alias{mrunLWFB90}
-\title{Make a multirun simulation using a set of variable input parameters.}
+\title{Make a multirun simulation using a variable input parameters.}
 \usage{
-mrunLWFB90(nRuns = nrow(param_var), param_var, param.b90, options.b90,
-  soil, climate, param_var_names = names(param_var),
-  multirun.dir = "MultiRuns", keep.subdirs = FALSE,
-  singlerun_names = paste0("RunNo", 1:nRuns), cores = 3,
-  showProgress = TRUE, ...)
+mrunLWFB90(param.b90, options.b90, climate, soil = NULL,
+  paramvar = NULL, paramvar_nms = names(paramvar),
+  all_combinations = F, multirun.dir = "MultiRuns/",
+  keep.subdirs = FALSE, cores = 3, showProgress = TRUE, ...)
 }
 \arguments{
-\item{nRuns}{Number of single runs}
+\item{param.b90}{Named list of parameters to be used in all simulations, or list of lists with different parameter sets.}
 
-\item{param_var}{data.frame of variable input parameters with realisations for each single run.}
+\item{options.b90}{Named list of model control option to be used in all simulations, or list of lists with different options sets.}
 
-\item{param.b90}{Named list of constant model input parameters to use in all single runs.}
+\item{climate}{data.frame with climate data passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of climate data.frames}
 
-\item{options.b90}{Named list of constant model control options passed to \code{\link[Run.B90]{Run.B90}}}
+\item{soil}{data.frame with soil properties passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of lists with different soil profiles}
 
-\item{soil}{data.frame with soil properties passed to \code{\link[Run.B90]{Run.B90}}}
+\item{paramvar}{data.frame of variable input parameters with realisations for each single run.
+The ith values replace the list elements in param.b90 of the ith simulation,
+with the column names of paramvar being matched to the names in param.b90.
+In order to match values from paramvar to data.frame or vector elements in param.b90,
+the respective column name of paramvar has to setup from the name and index.
+E.g., in order to place the 2nd value of 'ths' in the soil_materials data.frame,
+the respective column name of paramvar has to be called 'soil_materials.ths2'.
+In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.#'}
 
-\item{climate}{data.frame with climate data passed to \code{\link[Run.B90]{Run.B90}}}
+\item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90}
 
-\item{param_var_names}{names of the parameters in param_var to be replaced in param.b90}
+\item{all_combinations}{logical wether to set up all possible combinations of lists param.b90, options, climate and soil. See details.}
 
-\item{multirun.dir}{The directory where to create the subdirectories for the the single runs.}
+\item{multirun.dir}{the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'}
 
-\item{singlerun_names}{character vector with the names of the single runs. Used for creating
-the subdirectories and for naming the returned list of singlerun results.}
+\item{keep.subdirs}{keep sub-directories of the single runs? Defeault is FALSE}
 
-\item{cores}{Number of cores to use for parallel processing}
+\item{cores}{number of cores to use for parallel processing}
 
 \item{showProgress}{Show progressbar?}
 
-\item{...}{Further arguments passed to \code{\link[Run.B90]{Run.B90}}.}
+\item{...}{Further arguments passed to \code{\link[runLWFB90]{runLWFB90}}.}
 }
 \value{
 A named list with the results for the single runs. Simulation errors are passed on.
 }
 \description{
-Repeatedly calls \code{\link[Run.B90]{Run.B90}} with varying input parameters in parallel,
+Repeatedly calls \code{\link[runLWFB90]{runLWFB90}} with varying input parameters in parallel,
 stores the single run results in subdirectories and returns the results as a named list.
 }
 \examples{

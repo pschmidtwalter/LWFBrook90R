@@ -56,7 +56,6 @@
 #' leaffall.dur = param.b90$leaffalldur))
 #'
 #' @export
-#' @import data.table
 MakeSeasLAI <- function(method="b90",
                         year,
                         maxlai,

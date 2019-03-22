@@ -35,7 +35,7 @@
 #' @return Returns the model-output from the files found in 'out.dir' as a list of data.tables,
 #' along with the execution time of the simulation, and input-parameters and options if desired.
 #' @export
-#' @import data.table vegperiod
+#' @import vegperiod
 #' @examples
 #'
 #' #Set up lists containing model control options and model parameters:
@@ -63,16 +63,16 @@
 
 
 runLWFB90 <- function(project.dir,
-                    options.b90,
-                    param.b90,
-                    climate,
-                    soil = NULL,
-                    outputmat = setoutput_LWFB90(),
-                    keep.log.on.success = T,
-                    out.dir = "out/",
-                    output.param.options = TRUE,
-                    keep.outputfiles = TRUE,
-                    verbose = TRUE
+                      options.b90,
+                      param.b90,
+                      climate,
+                      soil = NULL,
+                      outputmat = setoutput_LWFB90(),
+                      keep.log.on.success = T,
+                      out.dir = "out/",
+                      output.param.options = TRUE,
+                      keep.outputfiles = TRUE,
+                      verbose = TRUE
 ){
 
   oldWD <- getwd()
@@ -97,15 +97,6 @@ runLWFB90 <- function(project.dir,
 
   options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
 
-  # Check suggested packages --------------------------------------------------------
-  if (!options.b90$budburst.method %in% c("constant", "fixed") || !options.b90$leaffall.method %in% c("constant", "fixed")) {
-    if (!requireNamespace("vegperiod", quietly = TRUE)) {
-      stop("In 'options.b90' you chose dynamic budburst or leaf fall, for which the
-           package \"vegperiod\" is required. Please install it:
-           install.packages('vegperiod')")
-    }
-    }
-
   # ---- Input checks ---------------------------------------------------------------
 
   if (!inherits(options.b90$startdate, "Date")) {
@@ -128,6 +119,7 @@ runLWFB90 <- function(project.dir,
       }
     }
   }
+
   # # Climate
   # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
   #   if (any( names(climate) == "sunhour" )) {
@@ -222,14 +214,14 @@ runLWFB90 <- function(project.dir,
       stop("When options.b90$leaffall.method == 'fixed', either provide a single value
            for param.b90$leaffall or a sequence of values, one for each year of the simulation period.")
     }
-    }
+  }
   #check length of fixed budburst
   if (options.b90$budburst.method %in% c("constant", "fixed") ) {
     if (length(param.b90$budburstdoy) > 1 & length(param.b90$budburstdoy) != length(simyears)) {
       stop("When options.b90$budburst.method == 'fixed', either provide a single value
            for param.b90$budburstdoy or a sequence of values, one for each year of the simulation period.")
     }
-    }
+  }
 
   # Extend budburst
   if (length(param.b90$budburstdoy) == 1) {
@@ -424,15 +416,21 @@ runLWFB90 <- function(project.dir,
   # Make Roots ----------------------------------------------------------------------
   if (options.b90$root.method != "soilvar") {
     param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = param.b90$soil_nodes$lower,
-                                    maxrootdepth = param.b90$maxrootdepth,
-                                    method = options.b90$root.method,
-                                    beta = param.b90$betaroot,
-                                    relrootden = param.b90$rootden.tab$rootden,
-                                    rootdepths = param.b90$rootden.tab$depth)
+                                                    maxrootdepth = param.b90$maxrootdepth,
+                                                    method = options.b90$root.method,
+                                                    beta = param.b90$betaroot,
+                                                    relrootden = param.b90$rootden.tab$rootden,
+                                                    rootdepths = param.b90$rootden.tab$depth)
   } else {
     param.b90$soil_nodes$rootden <- soil$rootden
   }
+  if (!is.data.table(param.b90$soil_nodes)) {
+    setDT(param.b90$soil_nodes)
+  }
 
+  if (!is.data.table(param.b90$soil_materials)) {
+    setDT(param.b90$soil_materials)
+  }
   # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (verbose == T) {
     message("Running model..." )
@@ -445,7 +443,7 @@ runLWFB90 <- function(project.dir,
                       param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
                       options.b90$prec.interval),
 
-    climate = climate[, list(year(dates), month(dates), mday(dates),
+    climate = climate[, list(year(dates), month(dates), mday(dates), # should be defined in advance.
                              globrad,
                              tmax,
                              tmin,
@@ -461,7 +459,7 @@ runLWFB90 <- function(project.dir,
 
     param = param_to_rbrook90(param.b90, options.b90$imodel),
     paramYear = param.b90$pdur,
-    materials = param.b90$soil_materials,
+    materials = param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)],
     soil = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
     output = outputmat
   )
@@ -496,5 +494,5 @@ runLWFB90 <- function(project.dir,
   simres$finishing.time <- Sys.time()
   simres$sim.time <- simtime
   return(simres)
-  }
+}
 

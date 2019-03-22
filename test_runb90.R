@@ -14,7 +14,8 @@ param.b90$soil_materials <- soillaymat$soil_materials
 b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
                             options.b90 = options.b90,
                             param.b90 = param.b90,
-                            climate = slb1_meteo)
+                            climate = slb1_meteo,
+                            soil = soil)
 
 
 
