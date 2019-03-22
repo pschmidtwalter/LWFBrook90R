@@ -7,7 +7,7 @@
 runLWFB90(project.dir, options.b90, param.b90, climate, soil = NULL,
   outputmat = setoutput_LWFB90(), keep.log.on.success = T,
   out.dir = "out/", output.param.options = TRUE,
-  keep.outputfiles = TRUE, verbose = TRUE)
+  keep.outputfiles = TRUE, run = T, verbose = TRUE)
 }
 \arguments{
 \item{options.b90}{named list of model control options. Use
@@ -43,13 +43,14 @@ properties ('plant.devt', as derived from parameters and written to 'climate.in'
 \item{keep.outputfiles}{keep the model .asc output files after running and
 returning the output?}
 
-\item{verbose}{print messages to the console? Default is TRUE.}
+\item{run}{run the LWFBrook90 or only return model input objects?
+Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
-\item{run.model}{run the model or only return model input objects? Default is TRUE.}
+\item{verbose}{print messages to the console? Default is TRUE.}
 }
 \value{
 Returns the model-output from the files found in 'out.dir' as a list of data.tables,
-along with the execution time of the simulation, and input-parameters and options if desired.
+along with the execution time of the simulation, and model inpt if desired.
 }
 \description{
 Takes all necessary information needed to run the LWF-Brook90 hydrological model,

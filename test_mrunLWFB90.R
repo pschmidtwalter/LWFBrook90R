@@ -4,7 +4,7 @@ options.b90 <- setoptions_LWFB90()
 param.b90 <- setparam_LWFB90()
 
 options_list <- list(options.b90,options.b90,options.b90)
-options_list <- list(options.b90,options.b90)
+
 paramlist <- list(no1 = param.b90, no2 = param.b90, no3 =param.b90)
 str(param.b90, max.level = 1)
 str(paramlist,max.level = 1)
@@ -31,10 +31,6 @@ soil <- cbind(slb1_soil, hydpar_wessolek_mvg(tex.KA5 = slb1_soil$texture))
 soillaymat <- soil_to_param(soil)
 param.b90$soil_nodes <- soillaymat$soil_nodes
 param.b90$soil_materials <- soillaymat$soil_materials
-
-param.b90 <- setparam_LWFB90()
-param.b90$soil_materials <- soillaymat$soil_materials
-param.b90$soil_nodes <- soillaymat$soil_nodes
 
 # data.frame
 n = 10

@@ -30,10 +30,11 @@
 #' @param keep.outputfiles keep the model .asc output files after running and
 #' returning the output?
 #' @param verbose print messages to the console? Default is TRUE.
-#' @param run.model run the model or only return model input objects? Default is TRUE.
+#' @param run run the LWFBrook90 or only return model input objects?
+#' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
 #'
 #' @return Returns the model-output from the files found in 'out.dir' as a list of data.tables,
-#' along with the execution time of the simulation, and input-parameters and options if desired.
+#' along with the execution time of the simulation, and model inpt if desired.
 #' @export
 #' @import vegperiod
 #' @examples
@@ -72,6 +73,7 @@ runLWFB90 <- function(project.dir,
                       out.dir = "out/",
                       output.param.options = TRUE,
                       keep.outputfiles = TRUE,
+                      run = T,
                       verbose = TRUE
 ){
 
@@ -141,53 +143,53 @@ runLWFB90 <- function(project.dir,
   # ---- clean file paths and set up directories -----------------------------------------
 
   # create project-directory
+  if (run) {
+    project.dir <- normalizePath(project.dir, mustWork = FALSE)
 
-  project.dir <- normalizePath(project.dir, mustWork = FALSE)
+    if (!dir.exists(project.dir)) {
+      if (verbose == TRUE) {message("Creating project-directory...")}
+      tryCatch( {
+        dir.create(project.dir)
+      }, warning = function(wrn){
+        stop(paste0("The specified  project directory (",
+                    project.dir,
+                    ") could not be created.)"))
+      },
+      error = function(err){
+        return(err)
+      })
+    }
 
-  if (!dir.exists(project.dir)) {
-    if (verbose == TRUE) {message("Creating project-directory...")}
-    tryCatch( {
-      dir.create(project.dir)
-    }, warning = function(wrn){
-      stop(paste0("The specified  project directory (",
-                  project.dir,
-                  ") could not be created.)"))
-    },
-    error = function(err){
-      return(err)
-    })
-  }
+    setwd(project.dir) # set the working directory to the project folder
 
-  setwd(project.dir) # set the working directory to the project folder
+    # output-directory: variable! But, in Param.in needs to be shorter than 80 characters!
+    options.b90$out.dir <- normalizePath(out.dir, mustWork = FALSE)
 
-  # output-directory: variable! But, in Param.in needs to be shorter than 80 characters!
-  options.b90$out.dir <- normalizePath(out.dir, mustWork = FALSE)
-
-  # if normalized output-name too long, and not inside 'project.dir' make out.dir within 'project.dir':
-  if (nchar(options.b90$out.dir) > 80 &
-      options.b90$out.dir != normalizePath(file.path(getwd(), basename(options.b90$out.dir)), mustWork = F) ) {
-    warning(paste0("The specified output directory (",options.b90$out.dir,") is too long
+    # if normalized output-name too long, and not inside 'project.dir' make out.dir within 'project.dir':
+    if (nchar(options.b90$out.dir) > 80 &
+        options.b90$out.dir != normalizePath(file.path(getwd(), basename(options.b90$out.dir)), mustWork = F) ) {
+      warning(paste0("The specified output directory (",options.b90$out.dir,") is too long
                    and could not be read by the model. Find the results in ",basename(options.b90$out.dir),
-                   " within the project directory instead!"))
-    options.b90$out.dir <- basename(options.b90$out.dir)
-  }
-
-  #Create output directory:
-  if (!dir.exists(options.b90$out.dir) ) {
-    tryCatch( {
-      dir.create(options.b90$out.dir)
-    }, warning = function(wrn){
-      options.b90$out.dir <- basename(options.b90$out.dir)
-      dir.create(options.b90$out.dir)
-      warning(paste0("The specified output directory (",options.b90$out.dir,") could
-                     not be created. Find the results in ",basename(options.b90$out.dir),
                      " within the project directory instead!"))
-    })
+      options.b90$out.dir <- basename(options.b90$out.dir)
+    }
+
+    #Create output directory:
+    if (!dir.exists(options.b90$out.dir) ) {
+      tryCatch( {
+        dir.create(options.b90$out.dir)
+      }, warning = function(wrn){
+        options.b90$out.dir <- basename(options.b90$out.dir)
+        dir.create(options.b90$out.dir)
+        warning(paste0("The specified output directory (",options.b90$out.dir,") could
+                     not be created. Find the results in ",basename(options.b90$out.dir),
+                       " within the project directory instead!"))
+      })
+    }
+
+    #clear output and log
+    try(file.remove(list.files(options.b90$out.dir, pattern = ".csv", full.names = T)))
   }
-
-  #clear output and log
-  try(file.remove(list.files(options.b90$out.dir, pattern = ".csv", full.names = T)))
-
 
   # ---- Simulation period ----------------------------------------------------------------
   climyears <- unique(year(climate$dates))
@@ -432,56 +434,64 @@ runLWFB90 <- function(project.dir,
     setDT(param.b90$soil_materials)
   }
   # ---- Execute LWF-Brook90  -------------------------------------------------------
-  if (verbose == T) {
-    message("Running model..." )
+  if (run) {
+    if (verbose == T) {
+      message("Running model..." )
+    }
+
+    start <- Sys.time()
+    r_brook90(
+      site = data.frame(simyears[1],
+                        as.integer(format(options.b90$startdate, "%j")),
+                        param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
+                        options.b90$prec.interval),
+
+      climate = climate[, list(year(dates), month(dates), mday(dates), # should be defined in advance.
+                               globrad,
+                               tmax,
+                               tmin,
+                               vappres,
+                               wind,
+                               prec,
+                               mesfl,
+                               standprop_daily$densef,
+                               standprop_daily$height,
+                               standprop_daily$lai,
+                               standprop_daily$sai,
+                               standprop_daily$age)],
+
+      param = param_to_rbrook90(param.b90, options.b90$imodel),
+      paramYear = param.b90$pdur,
+      materials = param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)],
+      soil = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
+      output = outputmat
+    )
+
+    simtime <- Sys.time() - start
+    units(simtime) <- "secs"
+
+    if (verbose == T) {
+      message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
+      message("Reading output...")
+    }
+
+    # ---- Read output files ----------------------------------------------------------
+    simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
+    names(simres) <- list.files(out.dir, pattern = ".csv")
+
+  } else { #'dry' run
+    simres <- list(options.b90 = options.b90,
+                   param.b90 = param.b90,
+                   plant.devt = data.table(standprop_daily)
+                   )
+    return(simres)
   }
 
-  start <- Sys.time()
-  r_brook90(
-    site = data.frame(simyears[1],
-                      as.integer(format(options.b90$startdate, "%j")),
-                      param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
-                      options.b90$prec.interval),
-
-    climate = climate[, list(year(dates), month(dates), mday(dates), # should be defined in advance.
-                             globrad,
-                             tmax,
-                             tmin,
-                             vappres,
-                             wind,
-                             prec,
-                             mesfl,
-                             standprop_daily$densef,
-                             standprop_daily$height,
-                             standprop_daily$lai,
-                             standprop_daily$sai,
-                             standprop_daily$age)],
-
-    param = param_to_rbrook90(param.b90, options.b90$imodel),
-    paramYear = param.b90$pdur,
-    materials = param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)],
-    soil = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
-    output = outputmat
-  )
-
-  simtime <- Sys.time() - start
-  units(simtime) <- "secs"
-
-  if (verbose == T) {
-    message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
-    message("Reading output...")
-  }
-
-  # ---- Read output files ----------------------------------------------------------
-  simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
-  names(simres) <- list.files(out.dir, pattern = ".csv")
-
-  # append input parameters
-  if (output.param.options == TRUE) {
-    simres$plant.devt <- data.table(standprop_daily)
-    simres$param.b90 <- param.b90
-    simres$options.b90 <- options.b90
-    simres$soil <- soil
+  # append model input
+  if (output.param.options == TRUE){
+    simres$model_input <- list(options.b90 = options.b90,
+                               param.b90 = param.b90,
+                               plant.devt = data.table(standprop_daily))
   }
 
   #remove output
