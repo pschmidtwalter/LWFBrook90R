@@ -12,10 +12,10 @@
 #' The ith values replace the list elements in param.b90 of the ith simulation,
 #' with the column names of paramvar being matched to the names in param.b90.
 #' In order to match values from paramvar to data.frame or vector elements in param.b90,
-#' the respective column name of paramvar has to setup from the name and index.
+#' the respective column name of paramvar has to be setup from the name and index.
 #' E.g., in order to place the 2nd value of 'ths' in the soil_materials data.frame,
 #' the respective column name of paramvar has to be called 'soil_materials.ths2'.
-#' In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.#'
+#' In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.
 #' @param paramvar_nms names of the parameters in paramvar to be replaced in param.b90
 #' @param all_combinations logical wether to set up all possible combinations of lists param.b90, options, climate and soil. See details.
 #' @param multirun.dir the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'
@@ -79,19 +79,11 @@ mrunLWFB90 <- function(param.b90,
                        showProgress = TRUE,
                        ...){
 
-
-  # 2 Options:
-  # 1. param, opts, climate, soil are list of lists -> MultiSite-Run
-  # 2. any of param or soil are matrices -> Calibration-Run ? Or wrapper? How to get the other parameters? setparamLWFB90()?
-
-
   if (!is.null(paramvar)) {
 
     MultiSiteRun <- FALSE
 
     nRuns <- nrow(paramvar)
-
-    # ---- prepare replacement from paramvar-values in param.b90
 
     # determine list and vector elements in param.b90
     is_ll <- lapply(param.b90, function(x) is.list(x) | length(x) > 1 )
@@ -102,16 +94,26 @@ mrunLWFB90 <- function(param.b90,
                        FUN =  grep,
                        x = paramvar_nms)
 
-    param_ll <- param_ll[sapply(param_ll, function(x) length(x) > 0)]
+    # determine number of nonzero list entries
+    param_ll_len <- length(param_ll[sapply(param_ll, function(x) length(x) > 0)])
 
-    #check if all the names of paramvar can be found in param.b90
-    param.b90_nms <- c(names(param_ll), paramvar_nms[-unlist(param_ll)])
-    if (!all(param.b90_nms %in% names(param.b90))) {
-      stop( paste( "Not all names of 'paramvar' were found in 'param.b90'! Check names:",
-                   param.b90_nms[which(!param.b90_nms %in% names(param.b90))] ))
+    # check if all the names of paramvar can be found in param.b90
+    if (param_ll_len > 0L) { #length > 1 includede in paramvar
+      # remove zeros
+      param_ll <- param_ll[sapply(param_ll, function(x) length(x) > 0)]
+      singlepar_nms <- paramvar_nms[-unlist(param_ll)]
+      nms <- c(names(param_ll), paramvar_nms[-unlist(param_ll)])
+    } else {
+      singlepar_nms <- paramvar_nms
+      nms <- paramvar_nms
     }
 
-  } else { # ---- length of the lists
+    if (!all(nms %in% names(param.b90))) {
+      stop( paste( "Not all names of 'paramvar' were found in 'param.b90'! Check names:",
+                   nms[which(!nms %in% names(param.b90))] ))
+    }
+
+  } else {
 
     MultiSiteRun <- TRUE
 
@@ -150,7 +152,7 @@ mrunLWFB90 <- function(param.b90,
       } else {soil_nms <- names(soil)}
     } else {
       soil_nms <- NULL
-      if( is.data.frame(soil)) {soil <- list(soil)}
+      if (is.data.frame(soil)) {soil <- list(soil)}
     }
 
     if (clim_len > 1) {
@@ -165,7 +167,6 @@ mrunLWFB90 <- function(param.b90,
 
 
     # ---- set up multirun-combinations climate, soil, param, options
-
     combinations <- setup_combinations(param_len,options_len,soil_len,clim_len,
                                        all_combinations = all_combinations)
     nRuns <- nrow(combinations)
@@ -209,21 +210,19 @@ mrunLWFB90 <- function(param.b90,
                                 .errorhandling = "pass",
                                 .options.snow = opts) %dopar% {
 
-                                  # replace values in param.b90:
-                                  # single parameters
-                                  param.b90[match(paramvar_nms[-unlist(param_ll)],names(param.b90))] <- paramvar[i,-unlist(param_ll)]
+                                  # replace single parameters
+                                  param.b90[match(singlepar_nms,names(param.b90))] <- paramvar[i,singlepar_nms]
 
                                   # replace list parameters
-                                  if (length(param_ll) > 0) {
+                                  if (param_ll_len > 0) {
                                     for (l in 1:length(param_ll)){
                                       param.b90[[ names(param_ll)[l] ]] <- replace_vecelements(param.b90[[ names(param_ll)[l] ]],
-                                                                                             varnms = paramvar_nms[ param_ll[[l]] ],
-                                                                                             unlist(paramvar[i, unlist(param_ll[[l]])])
-                                                                                             )
+                                                                                               varnms = paramvar_nms[ param_ll[[l]] ],
+                                                                                               unlist(paramvar[i, unlist(param_ll[[l]])]))
 
                                     }
                                   }
-
+                                  # Set up directory name
                                   proj.dir <- file.path(multirun.dir,paste0("RunNo.",i))
 
                                   # Run LWFBrook90
@@ -241,12 +240,14 @@ mrunLWFB90 <- function(param.b90,
                                 }
 
   } else {
+    # outer loop iterates over climate -> result nested
     results <- foreach::foreach(thisclim = iterators::iter(climate),
-                                clim_no = iterators::icount(), thisname = iterators::iter(clim_nms), #use thisname for proj.dir
+                                clim_no = iterators::icount(),
+                                thisname = iterators::iter(clim_nms), #use thisname for proj.dir
                                 .final = function(x) setNames(x, clim_nms),
                                 .errorhandling = "pass",
                                 .options.snow = opts) %:%
-
+      # inner loop iterates over the combinations using thisclim
       foreach::foreach(i = 1:nrow(combinations[which(combinations$clim == clim_no),]),
                        .errorhandling = "pass") %dopar% {
 
@@ -284,5 +285,8 @@ mrunLWFB90 <- function(param.b90,
 
   return(results)
 }
+
+
+
 
 

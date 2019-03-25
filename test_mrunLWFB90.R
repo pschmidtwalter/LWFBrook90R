@@ -3,6 +3,9 @@ library(LWFBrook90R)
 options.b90 <- setoptions_LWFB90()
 param.b90 <- setparam_LWFB90()
 
+
+
+
 options_list <- list(options.b90,options.b90,options.b90)
 
 paramlist <- list(no1 = param.b90, no2 = param.b90, no3 =param.b90)
@@ -34,15 +37,30 @@ param.b90$soil_materials <- soillaymat$soil_materials
 
 # data.frame
 n = 10
-paramvar <- data.frame(cintrl = runif(n, 0.1,0.5),
-                       maxlai = runif(n,3,7),
+
+
+options.b90 <- setoptions_LWFB90(startdate = as.Date("2001-01-01"),
+                                 enddate = as.Date("2010-12-31"))
+param.b90 <- setparam_LWFB90()
+soil <- cbind(slb1_soil, hydpar_wessolek_mvg(tex.KA5 = slb1_soil$texture))
+output <- setoutput_LWFB90()
+output[,] <- 0
+output["Evap", "Ann"] <- 1
+
+N = 10
+param_var <- data.frame(glmax  = runif(N,0.0025,0.01),
+                        maxlai = runif(N,3,7)
+                        )
+param_var <- data.frame(cintrl = runif(n, 0.1,0.5),
+                        maxlai = runif(n,3,7),
                         soil_materials.ths3 = runif(n,0.3,0.4),
                         soil_materials.ths1 = runif(n,0.4,0.5))
 
-results <- mrunLWFB90(param.b90 = param.b90,
-           options.b90 = options.b90,
-          climate = slb1_meteo,
-          paramvar = paramvar)
+results <- mrunLWFB90(paramvar  = param_var,
+                      param.b90 = param.b90,
+                      options.b90 = options.b90,
+                      climate = slb1_meteo,
+                      soil = soil)
 
 
 

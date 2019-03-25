@@ -191,7 +191,7 @@ runLWFB90 <- function(project.dir,
     try(file.remove(list.files(options.b90$out.dir, pattern = ".csv", full.names = T)))
   }
 
-  # ---- Simulation period ----------------------------------------------------------------
+  # ---- Simulation period ----------------------------------------------------------
   climyears <- unique(year(climate$dates))
   simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
                   to = as.integer(format(options.b90$enddate,"%Y")),
@@ -209,7 +209,7 @@ runLWFB90 <- function(project.dir,
   param.b90$ndays <-  as.integer(difftime(options.b90$enddate,options.b90$startdate)) + 1
 
 
-  # ---- Vegetation-Period  ----------------------------------------------------------
+  # ---- Vegetation-Period  ---------------------------------------------------------
   # check length of fixed leaffall
   if (options.b90$leaffall.method %in% c("constant", "fixed")) {
     if (length(param.b90$leaffalldoy) > 1 & length(param.b90$leaffalldoy) != length(simyears)) {
