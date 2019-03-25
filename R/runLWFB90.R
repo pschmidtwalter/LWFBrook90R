@@ -29,6 +29,7 @@
 #' In case of simulation errors the 'output.log' file (if specified) is kept anyway for inspection purposes.
 #' @param keep.outputfiles keep the model .asc output files after running and
 #' returning the output?
+#' @param read.output if the output shall be read to the environment. Default is TRUE>
 #' @param verbose print messages to the console? Default is TRUE.
 #' @param run run the LWFBrook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
@@ -74,6 +75,7 @@ runLWFB90 <- function(project.dir,
                       output.param.options = TRUE,
                       keep.outputfiles = TRUE,
                       run = T,
+                      read.output = TRUE,
                       verbose = TRUE
 ){
 
@@ -476,8 +478,11 @@ runLWFB90 <- function(project.dir,
     }
 
     # ---- Read output files ----------------------------------------------------------
-    simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
-    names(simres) <- list.files(out.dir, pattern = ".csv")
+    if ( read.output ) {
+      simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
+      names(simres) <- list.files(out.dir, pattern = ".csv")
+    }
+
 
   } else { #'dry' run
     simres <- list(options.b90 = options.b90,
