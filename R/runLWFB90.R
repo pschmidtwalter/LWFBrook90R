@@ -481,6 +481,8 @@ runLWFB90 <- function(project.dir,
     if ( read.output ) {
       simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
       names(simres) <- list.files(out.dir, pattern = ".csv")
+    } else {
+      simres <- NULL
     }
 
 
