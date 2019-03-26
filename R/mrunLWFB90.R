@@ -211,14 +211,15 @@ mrunLWFB90 <- function(param.b90,
                                 .options.snow = opts) %dopar% {
 
                                   # replace single parameters
-                                  param.b90[match(singlepar_nms,names(param.b90))] <- paramvar[i,singlepar_nms]
+                                  param.b90[match(singlepar_nms,names(param.b90))] <- paramvar[i,match(singlepar_nms, paramvar_nms, nomatch = 0)]
 
                                   # replace list parameters
                                   if (param_ll_len > 0) {
                                     for (l in 1:length(param_ll)){
-                                      param.b90[[ names(param_ll)[l] ]] <- replace_vecelements(param.b90[[ names(param_ll)[l] ]],
-                                                                                               varnms = paramvar_nms[ param_ll[[l]] ],
-                                                                                               unlist(paramvar[i, unlist(param_ll[[l]])]))
+                                      list_ind <- which(names(param.b90) == names(param_ll)[l])
+                                      param.b90[[ list_ind ]] <- replace_vecelements(param.b90[[ list_ind ]],
+                                                                                     varnms = paramvar_nms[ param_ll[[l]] ],
+                                                                                     vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
 
                                     }
                                   }
@@ -277,10 +278,7 @@ mrunLWFB90 <- function(param.b90,
                                                 param_nms[combinations$param[which(combinations$clim == clim_no)]],
                                                 options_nms[combinations$options[which(combinations$clim == clim_no)]]))
     }
-    if (clim_len == 1) { # remove climate nesting if any
-      results <- results[[1]]
-    }
-
+    results <- unlist(results, recursive = F)
   }
 
   return(results)

@@ -27,6 +27,8 @@ replace_vecelements <- function(x, varnms, vals) {
     x_m <- stack(x)
     x_m$ind <- as.character(x_m$ind)
     x_m$var <- paste0(x_m$ind,ave(x_m$ind,x_m$ind, FUN = seq_along))
+    stopifnot( identical( length(x_m$values[which(x_m$var %in% varnms)]),
+                          length(vals)) )
     x_m$values[which(x_m$var %in% varnms)] <- vals
     unstack(x_m, values~ind)
   } else {
