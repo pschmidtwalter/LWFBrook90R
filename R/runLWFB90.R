@@ -411,7 +411,7 @@ runLWFB90 <- function(project.dir,
 
   param.b90$soil_nodes$thick <- param.b90$soil_nodes$upper - param.b90$soil_nodes$lower
   param.b90$soil_nodes$midpoint <- param.b90$soil_nodes$lower + param.b90$soil_nodes$thick/2
-  param.b90$soil_nodes$thick <- param.b90$soil_nodes$thick * 1000 # mm
+  param.b90$soil_nodes$thick <- round(param.b90$soil_nodes$thick * 1000) # mm
   param.b90$soil_nodes$layer <- 1:nrow(param.b90$soil_nodes)
   param.b90$soil_nodes$psiini <- param.b90$psiini
 
