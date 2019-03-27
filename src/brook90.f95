@@ -496,9 +496,9 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
                     THR=Par(10,i)
                     WETNES(I) = (THS * SWATI(I) / SWATMX(I) -THR) / (THS - THR)
 !       Strange behaviour under LINUX -> WETNES can be 1.00002, which is not allowed!
-!               if(WETNES(I).gt.1.0) then
-!                   WETNES(I) = 1.0
-!               end if
+                    if( WETNES(I) .gt. 1.0d0 ) then
+                        WETNES(I) = 1.0d0
+                    end if
                 end if
                 PSIM(I) = FPSIM(WETNES(I),Par(1,i),iModel)
 91          CONTINUE
