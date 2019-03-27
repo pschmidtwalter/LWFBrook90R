@@ -27,6 +27,7 @@
 #'
 extract_from_swatday.asc <- function(dat, layers = NULL, vars=NULL){
   if (!is.data.table(dat)) {setDT(dat) }
+  setnames(dat, names(dat), tolower(names(dat)))
   if (is.null(layers)) { layers <- unique(dat$nl)}
   if (is.null(vars)) {
     vars <- c("swati","theta", "wetnes","psimi","psiti")
