@@ -7,7 +7,8 @@
 runLWFB90(project.dir, options.b90, param.b90, climate, soil = NULL,
   outputmat = setoutput_LWFB90(), keep.log.on.success = T,
   out.dir = "out/", output.param.options = TRUE,
-  keep.outputfiles = TRUE, run = T, verbose = TRUE)
+  keep.outputfiles = TRUE, run = T, read.output = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{options.b90}{named list of model control options. Use
@@ -45,6 +46,8 @@ returning the output?}
 
 \item{run}{run the LWFBrook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
+
+\item{read.output}{if the output shall be read to the environment. Default is TRUE>}
 
 \item{verbose}{print messages to the console? Default is TRUE.}
 }
