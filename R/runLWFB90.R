@@ -66,8 +66,9 @@ runLWFB90 <- function(project.dir,
                       soil = NULL,
                       outputmat = setoutput_LWFB90(),
                       output.param.options = TRUE,
-                      run = T,
+                      run = TRUE,
                       read.output = TRUE,
+                      output_log = TRUE,
                       verbose = TRUE
 ){
 
@@ -156,8 +157,7 @@ runLWFB90 <- function(project.dir,
 
     setwd(project.dir) # set the working directory to the project folder
     try(file.remove(list.files(project.dir, pattern = ".ASC", full.names = T)))
-    try(file.remove("Log.txt"))
-
+    try(file.remove(list.files("Log.txt")))
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -415,7 +415,7 @@ runLWFB90 <- function(project.dir,
                         param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
                         options.b90$prec.interval),
 
-      climate = climate[, list(year(dates), month(dates), mday(dates), # should be defined in advance.
+      climate = climate[, list(year(dates), month(dates), mday(dates),
                                globrad,
                                tmax,
                                tmin,
@@ -433,7 +433,8 @@ runLWFB90 <- function(project.dir,
       paramYear = param.b90$pdur,
       materials = param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)],
       soil = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
-      output = outputmat
+      output = outputmat,
+      output_log = output_log
     )
 
     simtime <- Sys.time() - start
@@ -469,8 +470,8 @@ runLWFB90 <- function(project.dir,
   if (verbose == T) {
     message("Finished!")
   }
-  simres$finishing.time <- Sys.time()
-  simres$sim.time <- simtime
+  simres$finishing_time <- Sys.time()
+  simres$sim_duration <- simtime
   return(simres)
 }
 

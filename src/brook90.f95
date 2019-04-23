@@ -9,7 +9,7 @@ module fbrook_mod
 IMPLICIT NONE
 contains
 
-subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, output) &
+subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, output, output_log) &
                     bind(C, name="fbrook90_")
 
     use iso_c_binding, only: c_double, c_int
@@ -27,11 +27,11 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
     real(kind=c_double), dimension( INT(param(65)),6), intent(in) :: soil
     real(kind=c_double), dimension( INT(param(1)),15), intent(in) :: climate
 
-     real(kind=c_double), dimension( INT(param(1)*site(6)),6), intent(in) :: pfile
+    real(kind=c_double), dimension( INT(param(1)*site(6)),6), intent(in) :: pfile
 
     ! Output files
     integer(kind=c_int), dimension(10,5), intent(in) :: output
-
+	integer(kind=c_int), dimension(1), intent(in) :: output_log
     ! Output files to close
     ! Those are the files of output, and we close them in the end
     integer :: nfiles
@@ -48,10 +48,11 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
     include 'PFILE.h'
 
     ! Temporal file for storing information
-    OPEN (UNIT = 20, FILE = 'Contr.tmp', STATUS='REPLACE')
+    !OPEN (UNIT = 20, FILE = 'Contr.tmp', STATUS='REPLACE')
     ! Log file
-    OPEN (UNIT = 10, FILE = 'Log.txt', STATUS='REPLACE')
-
+	if(output_log(1) .EQ. INT(1)) then
+		OPEN (UNIT = 10, FILE = 'Log.txt', STATUS='REPLACE')
+	end if
     ! Site level information
     YEAR = INT( site( 1 ) )
     DOY = INT( site( 2 ) )
@@ -81,7 +82,7 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
 
     ! soil water parameters and initial variables
     CALL SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
-        PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML)
+        PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, output_log(1))
 
     ! more initial soil water variables
     CALL SOILVAR(NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
@@ -461,7 +462,7 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
 61          CONTINUE
 
             CALL ITER(NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, &
-                Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN)
+                Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN, output_log(1))
 
             IF (DTINEW .LT. DTI) THEN
 !              recalculate flow rates with new DTI
@@ -744,21 +745,23 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
         DOM = DOM + 1
         DOY = DOY + 1
         IDAY = IDAY + 1
+		
+		if(output_log(1) .EQ. INT(1)) then
+			if(MOD(IDAY,20).eq.2) then
+				write(10,*)
+				write(10,*)'date     ',' store','  inter','   snow','   rain', &
+					'    et',' drain','   lat','    ep','    tp','  mbal error'
+				write(10,*)'          ------------------------- mm -------------',&
+					'---------------------------'
+				!write(20,*)
+				!write(20,*)'    date  ','  SNOW  ','     Tsnow','   TA   ','   tTop '
+				!write(20,*)'------------------ ∞ C ---------------------'
+			end if
 
-        if(MOD(IDAY,20).eq.2) then
-            write(10,*)
-            write(10,*)'date     ',' store','  inter','   snow','   rain', &
-                '    et',' drain','   lat','    ep','    tp','  mbal error'
-            write(10,*)'          ------------------------- mm -------------',&
-                '---------------------------'
-            write(20,*)
-            write(20,*)'    date  ','  SNOW  ','     Tsnow','   TA   ','   tTop '
-            write(20,*)'------------------ ∞ C ---------------------'
-        end if
-
-        write(20,'(I2,A1,I2,A1,I4,F6.0,2F7.2,F7.1,5F6.1,F12.3)') dd,'.',mm,'.',yy, SWAT, &
-            IRVPD+ISVPD,SNOW,PRECD,EVAPD,Flowd,DSFLD, PSLVP,PTRAN,BALERD
-        write(20,'(2X,I2,A1,I2,A1,I4,4F9.2)') dd,'.',mm,'.',yy,SNOW,TSNOW,TA,tTop
+			write(10,'(I2,A1,I2,A1,I4,F6.0,2F7.2,F7.1,5F6.1,F12.3)') dd,'.',mm,'.',yy, SWAT, &
+				IRVPD+ISVPD,SNOW,PRECD,EVAPD,Flowd,DSFLD, PSLVP,PTRAN,BALERD
+			!write(20,'(2X,I2,A1,I2,A1,I4,4F9.2)') dd,'.',mm,'.',yy,SNOW,TSNOW,TA,tTop
+		end if 	
 
         TInt=TInt+IRVPD+ISVPD
         TSno=TSno+SNOW
@@ -770,22 +773,22 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
         go to 500
 
     end if
-
-    write(10,*)
-    write(10,*)'total    ','      ','    inter','     snow','     rain','      et','   drain','     lat'
-    write(10,*)'          ------------------------- mm ----------------------------------------'
-    write(10,'(16X,2F9.2,F9.1,3F8.1)') TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD
-
+		if(output_log(1) .EQ. INT(1)) then
+		write(10,*)
+		write(10,*)'total    ','      ','    inter','     snow','     rain','      et','   drain','     lat'
+		write(10,*)'          ------------------------- mm ----------------------------------------'
+		write(10,'(16X,2F9.2,F9.1,3F8.1)') TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD
+	end if
 !     ***************   E N D    D A Y   L O O P    **************************
 
     ! Close all the open files
     do i = 1, size(outfile)
         CLOSE( UNIT = outfile(i) )
     end do
-
-    write(10,*)'that is the end'
-    CLOSE( UNIT = 10 )
-
+	if(output_log(1) .EQ. INT(1)) then
+		write(10,*)'that is the end'
+		CLOSE( UNIT = 10 )
+	end if
 end subroutine fbrook90
 
 
@@ -1306,7 +1309,7 @@ subroutine INTER24 (RFAL, PINT, LAI, SAI, FRINTL, FRINTS, CINTRL, CINTRS, DURATN
 end subroutine INTER24
 
 subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, &
-     Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN)
+     Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN, output_log)
 ! subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, SWATI, &
 !      Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN)
     IMPLICIT NONE
@@ -1331,6 +1334,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                            ! SWATMX(i)
     real(kind=8) :: DPSIMX    ! maximum potential difference considered
                            ! "equal", kPa
+    integer :: output_log  ! write output_log file? 
 !     output
     real(kind=8) :: DTINEW    ! second estimate of DTI
 !     local
@@ -1374,8 +1378,10 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     Thr=Par(10,j)
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
-                    write(10,*)'xxx i=',j,' th=',th,' thr=',thr, ' netflow=',NTFLI(j), &
-                        ' thick=',Thick(j),' K=',K,' Psi=',PSI
+					if (output_log .EQ. INT(1)) then
+						write(10,*)'xxx i=',j,' th=',th,' thr=',thr, ' netflow=',NTFLI(j), &
+							' thick=',Thick(j),' K=',K,' Psi=',PSI
+					end if
 21              continue
                 DTINEW=DTIMIN
                 TRANI(i)=0
@@ -1391,8 +1397,10 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     Thr=Par(10,j)
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
-                    write(10,*)'xxx i=',j,' th=',Th, ' netflow=',NTFLI(j), &
-                        ' thick=',Thick(j), ' K=',K,' Psi=',PSI
+					if (output_log .EQ. INT(1)) then
+						write(10,*)'xxx i=',j,' th=',Th, ' netflow=',NTFLI(j), &
+							' thick=',Thick(j), ' K=',K,' Psi=',PSI
+					end if
 22              continue
                 DTINEW=DTIMIN
                 TRANI(i)=0
@@ -1887,7 +1895,7 @@ subroutine SNOWPACK (RTHR, STHR, PSNVP, SNOEN, CC, SNOW, SNOWLQ, DTP, TA, MAXLQF
 end subroutine SNOWPACK
 
 subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
-    PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML)
+    PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, output_log)
 !       calculated soil water parameters and initial variables
     IMPLICIT NONE
 !       input
@@ -1907,6 +1915,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: PSICR     ! minimum plant leaf water potential, MPa
     integer :: iModel    ! parameterization of hydraulic functions
     real(kind=8) :: Par(MPar,ML)  ! parameter array
+	integer :: output_log
 !       output
     real(kind=8) :: PSIG(*)   ! gravity potential, kPa
     real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
@@ -1969,7 +1978,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
         end if
 
         if (imodel .eq. 1) then
-            Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel)
+            Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel, output_log)
             Par(4,i)=FPSIM(Par(5,i),Par(1,i),iModel)
             Par(2,i)=FTheta(Par(5,i),Par(1,i),iModel)
             THS=Par(1,i)
@@ -2519,7 +2528,7 @@ subroutine Temper(N,NMat,THICK,ZL,MUE,STEP,MatNum,TempO,TempN, &
 !                       vNew,inFil,ThNew,CapNew,CapOld,Cond,Sink,&
 !                       tTop,tBot)
 
-
+	
     integer :: i, M, N, NMat, MatNum(N)
     double precision      A(N), B(N), C(N), D(N)
     real(kind=8) :: THICK(N), ZL(N), MUE(N), &
@@ -2593,8 +2602,9 @@ subroutine Temper(N,NMat,THICK,ZL,MUE,STEP,MatNum,TempO,TempN, &
     CALL TRIDIG(N,A,B,C,D,TempN,IFEHL)
 !
 !
-    if(ifehl.eq.1) write(10,*)'tridig failed'
-!      DO 160 I=1,N
+    if(ifehl.eq.1) 	write(10,*)'tridig failed'
+	
+!   DO 160 I=1,N
 !       write(10,*) i, TempN(i)
 !160   CONTINUe
     RETURN
@@ -3051,11 +3061,12 @@ function FUNC3 (DEC, L2, L1, T3, T2)
 
 end function FUNC3
 
-function FWETK (K, Par, iModel)
+function FWETK (K, Par, iModel, output_log)
 !     wetness from conductivity solved iteratively by Newton method
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
+	integer :: output_log !write output_log file?
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation
@@ -3108,7 +3119,9 @@ function FWETK (K, Par, iModel)
             goto 10
         end if
         if(Konver .gt. 1.0d0) then
-            write(10,*)'FWETK: no convergence, stopping programm!'
+			if (output_log .EQ. INT(1)) then
+				write(10,*)'FWETK: no convergence, stopping programm!'
+			end if
             K=K/2.0d0
             Goto 5
 !               stop
@@ -3122,7 +3135,9 @@ function FWETK (K, Par, iModel)
         if(dKdS1 .ne. 0.0d0) then
             WetNew=WetOld-KOld/dKdS1
         else
-            write(10,*)'FWETK: slope is zero, stopping programm!'
+			if (output_log .EQ. INT(1)) then
+				write(10,*)'FWETK: slope is zero, stopping programm!'
+			end if
             stop
         end if
         KNew=FK(WetNew,Par,iModel)-K
@@ -3131,8 +3146,10 @@ function FWETK (K, Par, iModel)
         It=It+1
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
         if(It .eq. ItMax) then
-            write(10,*)'FWETK: maximum number of iterations exceeded,'
-            write(10,*)' stopping programm!'
+			if (output_log .EQ. INT(1)) then
+				write(10,*)'FWETK: maximum number of iterations exceeded,'
+				write(10,*)' stopping programm!'
+			end if
             K=K/2.0d0
             Goto 5
 !              stop

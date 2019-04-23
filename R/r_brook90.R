@@ -1,4 +1,4 @@
-#' Define the function to run 3PGN in R
+#' Define the function to run LWFBrook90 in R
 #'
 #' @param site a one row matrix with site level information
 #' @param climate a matrix with 15 columns of climatic data
@@ -22,10 +22,9 @@ r_brook90 <- function(
   materials,
   soil,
   pfile = NULL,
-  output
+  output,
+  output_log = TRUE
   ){
-
-  if(!dir.exists('out')) dir.create('out')
 
   # Adjust the parameters vector based on the materials and soil matrix
   # param[ 1 ] <- nrow( climate )
@@ -33,7 +32,7 @@ r_brook90 <- function(
   param[ 66 ] <- nrow( materials )
 
   # make a matrix of precipitation fille
-  if( is.null(pfile) ){
+  if ( is.null(pfile) ){
     pfile <- matrix(-999, nrow = param[1] * site[[6]], ncol = 6)
   }
 
@@ -47,7 +46,8 @@ r_brook90 <- function(
     materials = as.matrix( materials, ncol = 8 ),
     soil = as.matrix( soil, ncol = 6 ),
     pfile = as.matrix( pfile, ncol = 6),
-    output = as.integer( as.matrix( output, ncol = 5, nrow = 10) )
+    output = as.integer( as.matrix( output, ncol = 5, nrow = 10)),
+    output_log = as.integer(output_log)
     )
 
   # return(NULL)
