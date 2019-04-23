@@ -3,7 +3,7 @@
 !     Modified: 2.4.04 bsc, comma separated
 IF (OP(2, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 31, FILE = 'out/BUDGDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 31, FILE = 'BUDGDAY.csv', STATUS='REPLACE')
         WRITE (31,'(''YR,MO,DA,DOY,PREC,MESFL,FLOW,EVAP,SEEP,SNOW,SWAT,GWAT,INTR+S'')')
     END IF
     WRITE (31,'(I4,A1,2(I3,A1),I4,A1,9(F7.1,A1))') YY,',', MONTH,',',DOM,',',DOY,',',PRECD,&
@@ -13,7 +13,7 @@ END IF
 
 IF (OP(3, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 32, FILE = 'out/FLOWDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 32, FILE = 'FLOWDAY.csv', STATUS='REPLACE')
         WRITE (32,'(''YR,MO,DA,DOY,MESFL,FLOW,SEEP,SRFL,SLFL,BYFL,DSFL,GWFL,VRFLN'')')
     END IF
     WRITE (32,'(I4,A1,2(I3,A1),I4,A1,9(F7.1,A1))') YY,',', MONTH,',',DOM,',',DOY,',',MESFLD,&
@@ -22,7 +22,7 @@ END IF
 
 IF (OP(1, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 39, FILE = 'out/EVALDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 39, FILE = 'EVALDAY.csv', STATUS='REPLACE')
         WRITE (39,'(''YR,MO,DA,DOY,MESFL,FLOW,SNOW,SWAT'')')
     END IF
     WRITE (39,'(I4,A1,2(I3,A1),I4,A1,2(F9.3,A1),2(F8.0,A1))') YY,',',MONTH,',',DOM,',',DOY,&
@@ -31,7 +31,7 @@ END IF
 
 IF (OP(4, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 33, FILE = 'out/EVAPDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 33, FILE = 'EVAPDAY.csv', STATUS='REPLACE')
         WRITE (33,'(''YR,MO,DA,DOY,MESFL,FLOW,EVAP,TRAN,IRVP,ISVP,SLVP,SNVP,PINT,PTRAN,PSLVP'')')
     END IF
     WRITE (33,'(I4,A1,2(I3,A1),I4,A1,11(F7.3,A1))') YY,',',MONTH,',',DOM,',',DOY,',',MESFLD,&
@@ -41,7 +41,7 @@ END IF
 
 IF (OP(5, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 34, FILE = 'out/ABOVDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 34, FILE = 'ABOVDAY.csv', STATUS='REPLACE')
         WRITE (34,'(''YR,MO,DA,DOY,RFAL,RINT,SFAL,SINT,RSNO,RNET,SMLT,SLFL,SRFL'')')
     END IF
     WRITE (34,'(I4,A1,2(I3,A1),I4,A1,9(F7.1,A1))') YY,',',MONTH,',',DOM,',',DOY,',',RFALD,&
@@ -92,7 +92,7 @@ IF (OP(9, 3) .EQ. 1) THEN
     AWATFK = 0.0d0
     IF (IDAY .EQ. 1) THEN
 !         AWATFK = 0.0d0
-        OPEN (UNIT = 35, FILE = 'out/MISCDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 35, FILE = 'MISCDAY.csv', STATUS='REPLACE')
         WRITE (35,'(''YR,MO,DA,DOY,VRFLN,SAFRAC,STRES,ADEF,AWAT,RELAWAT,AWAT40,NITS,BALERR'')')
         DO 16 I = 1, NLAYER
             dummy =FWETNES(-6.180d0,Par(1,i),iModel)
@@ -115,7 +115,7 @@ END IF
 
 IF (OP(6, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 36, FILE = 'out/BELODAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 36, FILE = 'BELODAY.csv', STATUS='REPLACE')
         WRITE (36,'(''YR,MO,DA,DOY,NL,INFL,BYFL,TRAN,SLVP,VRFL,DSFL,NTFL'')')
     END IF
     WRITE (36,'(I4,A1,2(I3,A1),I4,A1,I3,A1,7(F7.1,A1))') YY,',',MONTH,',',DOM,',',DOY,',',&
@@ -131,7 +131,7 @@ END IF
 
 IF (OP(8, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 37, FILE = 'out/PSITDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 37, FILE = 'PSITDAY.csv', STATUS='REPLACE')
         WRITE (37,'(''YR,MO,DA,DOY,PSIT1,PSIT2,PSIT3,PSIT4,PSIT5,PSIT6,PSIT7'')')
         WRITE (37,'(''       PSIG  '',50F8.1)') (PSIG(I),I=1,NLAYER)
     END IF
@@ -140,7 +140,7 @@ END IF
 
 IF (OP(7, 3) .EQ. 1) THEN
     IF (IDAY .EQ. 1) THEN
-        OPEN (UNIT = 38, FILE = 'out/SWATDAY.csv', STATUS='REPLACE')
+        OPEN (UNIT = 38, FILE = 'SWATDAY.csv', STATUS='REPLACE')
         WRITE (38,'(''YR,MO,DA,DOY,NL,SWATI,THETA,WETNES,PSIMI,PSITI,TEMPERATURE'')')
     END IF
     DO 33 I = 1, NLAYER

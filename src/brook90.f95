@@ -48,9 +48,9 @@ subroutine fbrook90( site, climate, param, paramYear, materials, soil, pfile, ou
     include 'PFILE.h'
 
     ! Temporal file for storing information
-    OPEN (UNIT = 20, FILE = 'out/Contr.tmp', STATUS='REPLACE')
+    OPEN (UNIT = 20, FILE = 'Contr.tmp', STATUS='REPLACE')
     ! Log file
-    OPEN (UNIT = 10, FILE = 'out/Log.txt', STATUS='REPLACE')
+    OPEN (UNIT = 10, FILE = 'Log.txt', STATUS='REPLACE')
 
     ! Site level information
     YEAR = INT( site( 1 ) )
