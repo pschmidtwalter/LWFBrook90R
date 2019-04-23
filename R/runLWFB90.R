@@ -3,7 +3,7 @@
 #' Takes all necessary information needed to run the LWF-Brook90 hydrological model,
 #' writes input files, starts the external executable via a system-call and returns
 #' the results.
-#' #' @param project.dir directory-name of the project where the input and output files
+#' #' @param project.dir directory-name of the project where the output files
 #' are located. Will be created, if not existing.
 #' @param options.b90 named list of model control options. Use
 #' \code{\link{MakeOptions.B90}} to generate a list with default model control options.
@@ -22,20 +22,15 @@
 #'  These have to be set up in advance.
 #' @param outputmat a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{choose_output.B90}} to generate and edit default output matrix.
-#' @param out.dir path where to write the output-files.
 #' @param output.param.options append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?
-#' @param keep.log.on.success keep the file 'output.log' after a successful simulation?
-#' In case of simulation errors the 'output.log' file (if specified) is kept anyway for inspection purposes.
-#' @param keep.outputfiles keep the model .asc output files after running and
-#' returning the output?
-#' @param read.output if the output shall be read to the environment. Default is TRUE>
+#' @param read.output read and return simulation results from out.dir? Default is TRUE.
 #' @param verbose print messages to the console? Default is TRUE.
 #' @param run run the LWFBrook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
 #'
-#' @return Returns the model-output from the files found in 'out.dir' as a list of data.tables,
-#' along with the execution time of the simulation, and model inpt if desired.
+#' @return Returns the model-output from the files found in 'project.dir' as a list of data.tables,
+#' along with the execution time of the simulation, and model input if desired.
 #' @export
 #' @import vegperiod
 #' @examples
@@ -70,10 +65,7 @@ runLWFB90 <- function(project.dir,
                       climate,
                       soil = NULL,
                       outputmat = setoutput_LWFB90(),
-                      keep.log.on.success = T,
-                      out.dir = "out/",
                       output.param.options = TRUE,
-                      keep.outputfiles = TRUE,
                       run = T,
                       read.output = TRUE,
                       verbose = TRUE
@@ -110,7 +102,7 @@ runLWFB90 <- function(project.dir,
   if (!(options.b90$startdate < options.b90$enddate)) {
     stop("Invalid arguments: 'startdate > enddate ")}
 
-  if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_material))){
+  if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_material))) {
     stop("Please provide soil data, either via the argument 'soil' or as list items 'soil_nodes' and 'soil_materials' in param.b90 ")
   }
 
@@ -138,7 +130,7 @@ runLWFB90 <- function(project.dir,
   #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
   # }
   #
-  if (!any( names(climate) == "mesfl") ){
+  if (!any( names(climate) == "mesfl") ) {
     climate$mesfl <- 0
   }
 
@@ -163,34 +155,9 @@ runLWFB90 <- function(project.dir,
     }
 
     setwd(project.dir) # set the working directory to the project folder
+    try(file.remove(list.files(project.dir, pattern = ".ASC", full.names = T)))
+    try(file.remove("Log.txt"))
 
-    # output-directory: variable! But, in Param.in needs to be shorter than 80 characters!
-    options.b90$out.dir <- normalizePath(out.dir, mustWork = FALSE)
-
-    # if normalized output-name too long, and not inside 'project.dir' make out.dir within 'project.dir':
-    if (nchar(options.b90$out.dir) > 80 &
-        options.b90$out.dir != normalizePath(file.path(getwd(), basename(options.b90$out.dir)), mustWork = F) ) {
-      warning(paste0("The specified output directory (",options.b90$out.dir,") is too long
-                   and could not be read by the model. Find the results in ",basename(options.b90$out.dir),
-                     " within the project directory instead!"))
-      options.b90$out.dir <- basename(options.b90$out.dir)
-    }
-
-    #Create output directory:
-    if (!dir.exists(options.b90$out.dir) ) {
-      tryCatch( {
-        dir.create(options.b90$out.dir)
-      }, warning = function(wrn){
-        options.b90$out.dir <- basename(options.b90$out.dir)
-        dir.create(options.b90$out.dir)
-        warning(paste0("The specified output directory (",options.b90$out.dir,") could
-                     not be created. Find the results in ",basename(options.b90$out.dir),
-                       " within the project directory instead!"))
-      })
-    }
-
-    #clear output and log
-    try(file.remove(list.files(options.b90$out.dir, pattern = ".csv", full.names = T)))
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -479,18 +446,16 @@ runLWFB90 <- function(project.dir,
 
     # ---- Read output files ----------------------------------------------------------
     if ( read.output ) {
-      simres <- lapply(list.files(out.dir, pattern = ".csv", full.names = T), fread, fill = T,stringsAsFactors = F)
-      names(simres) <- list.files(out.dir, pattern = ".csv")
+      simres <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T), fread, fill = T, stringsAsFactors = F)
+      names(simres) <- list.files(project.dir, pattern = ".ASC")
     } else {
-      simres <- NULL
+      simres <- simtime
     }
-
 
   } else { #'dry' run
     simres <- list(options.b90 = options.b90,
                    param.b90 = param.b90,
-                   plant.devt = data.table(standprop_daily)
-                   )
+                   plant.devt = data.table(standprop_daily))
     return(simres)
   }
 
@@ -500,10 +465,6 @@ runLWFB90 <- function(project.dir,
                                param.b90 = param.b90,
                                plant.devt = data.table(standprop_daily))
   }
-
-  #remove output
-  if (!keep.outputfiles) { try(file.remove(list.files(options.b90$out.dir, pattern = ".csv", full.names = T))) }
-  if (!keep.log.on.success) { try(file.remove("b90.log"))}
 
   if (verbose == T) {
     message("Finished!")
