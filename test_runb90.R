@@ -2,21 +2,35 @@ library(LWFBrook90R)
 
 options.b90 <- setoptions_LWFB90()
 param.b90 <- setparam_LWFB90()
-soil <- cbind(slb1_soil, hydpar_wessolek_mvg(tex.KA5 = slb1_soil$texture))
-
-options.b90$lai.method <- 'Coupmodel'
-options.b90$budburst.method <- 'fixed'
-options.b90$leaffall.method <- 'fixed'
+soil <- cbind(slb1_soil, with(slb1_soil, hydpar_puh2(sand,silt, clay, bd, c_org)))
 
 soillaymat <- soil_to_param(soil)
 param.b90$soil_nodes <- soillaymat$soil_nodes
 param.b90$soil_materials <- soillaymat$soil_materials
+
 b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
                             options.b90 = options.b90,
                             param.b90 = param.b90,
                             climate = slb1_meteo,
-                            soil = soil,
-                            run = F)
+                            output.log = T
+                            )
+
+soil <- read.csv("C:/Users/pschmidtwalter/Desktop/soil_slb1.csv", stringsAsFactors = F)
+options.b90$imodel <- "CH"
+b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
+                              options.b90 = options.b90,
+                              param.b90 = param.b90,
+                              climate = slb1_meteo,
+                              soil =soil)
+
+
+
+names(b90.results.slb1)
+#####
+
+
+
+
 
 
 

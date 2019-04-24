@@ -1,14 +1,13 @@
 #' Run the LWF-Brook90 hydrological model and return results
 #'
-#' Takes all necessary information needed to run the LWF-Brook90 hydrological model,
-#' writes input files, starts the external executable via a system-call and returns
-#' the results.
-#' #' @param project.dir directory-name of the project where the output files
-#' are located. Will be created, if not existing.
+#' Sets up the input objects for LWF-Brook90 hydrological model, starts the model,
+#' and returns the results.
+#' #' @param project.dir directory-name of the project to which output files
+#' are written. Will be created, if not existing.
 #' @param options.b90 named list of model control options. Use
-#' \code{\link{MakeOptions.B90}} to generate a list with default model control options.
+#' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
 #' @param param.b90 Named list of model input parameters. Use
-#' \code{\link{MakeParam.B90}} to generate a list with default model parameters.
+#' \code{\link{setparam_LWFB90}} to generate a list with default model parameters.
 #' @param climate data.frame with daily climate data. The names of climate have to
 #' correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
 #' \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.
@@ -21,12 +20,13 @@
 #'  If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
 #'  These have to be set up in advance.
 #' @param outputmat a [10,5]-matrix flagging the desired model-output. Use
-#' \code{\link{choose_output.B90}} to generate and edit default output matrix.
+#' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
 #' @param output.param.options append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?
 #' @param read.output read and return simulation results from out.dir? Default is TRUE.
+#' @param output.log write the logfile Log.txt? Default is TRUE.
 #' @param verbose print messages to the console? Default is TRUE.
-#' @param run run the LWFBrook90 or only return model input objects?
+#' @param run run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
 #'
 #' @return Returns the model-output from the files found in 'project.dir' as a list of data.tables,
@@ -37,8 +37,8 @@
 #'
 #' #Set up lists containing model control options and model parameters:
 #'
-#' param.b90 <- MakeParam.B90()
-#' options.b90 <- MakeOptions.B90()
+#' param.b90 <- setparam_LWFB90()
+#' options.b90 <- setoptions_LWFB90()
 #'
 #' # Set start and end Dates for the simulation
 #'
@@ -55,8 +55,7 @@
 #'                       options.b90 = options.b90,
 #'                       param.b90 = param.b90.b90,
 #'                       climate = meteo_slb1,
-#'                       soil = soil,
-#'                       path_b90.exe = "b90.exe")
+#'                       soil = soil)
 
 
 runLWFB90 <- function(project.dir,
@@ -68,7 +67,7 @@ runLWFB90 <- function(project.dir,
                       output.param.options = TRUE,
                       run = TRUE,
                       read.output = TRUE,
-                      output_log = TRUE,
+                      output.log = TRUE,
                       verbose = TRUE
 ){
 
@@ -103,7 +102,7 @@ runLWFB90 <- function(project.dir,
   if (!(options.b90$startdate < options.b90$enddate)) {
     stop("Invalid arguments: 'startdate > enddate ")}
 
-  if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_material))) {
+  if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_materials))) {
     stop("Please provide soil data, either via the argument 'soil' or as list items 'soil_nodes' and 'soil_materials' in param.b90 ")
   }
 
@@ -373,9 +372,15 @@ runLWFB90 <- function(project.dir,
   # ---- Make soilnodes & soil materials --------------------------------------------
   # soil provided as argument -> create soil nodes and materials and add them to param.b90
   if (!is.null(soil)) {
-    soil_nodes_mat <- soil_to_param(soil)
+    soil_nodes_mat <- soil_to_param(soil, options.b90$imodel)
     param.b90$soil_nodes <- soil_nodes_mat$soil_nodes
     param.b90$soil_materials <- soil_nodes_mat$soil_materials
+  }
+
+  if (options.b90$imodel == "MvG") {
+    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)]
+  } else {
+    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,thsat,thetaf,psif,bexp,kf,wetinf,gravel)]
   }
 
   param.b90$soil_nodes$thick <- param.b90$soil_nodes$upper - param.b90$soil_nodes$lower
@@ -383,6 +388,7 @@ runLWFB90 <- function(project.dir,
   param.b90$soil_nodes$thick <- round(param.b90$soil_nodes$thick * 1000) # mm
   param.b90$soil_nodes$layer <- 1:nrow(param.b90$soil_nodes)
   param.b90$soil_nodes$psiini <- param.b90$psiini
+
 
   # Make Roots ----------------------------------------------------------------------
   if (options.b90$root.method != "soilvar") {
@@ -409,13 +415,13 @@ runLWFB90 <- function(project.dir,
     }
 
     start <- Sys.time()
-    r_brook90(
-      site = data.frame(simyears[1],
-                        as.integer(format(options.b90$startdate, "%j")),
-                        param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
-                        options.b90$prec.interval),
+    r_lwfbrook90(
+      siteparam = data.frame(simyears[1],
+                             as.integer(format(options.b90$startdate, "%j")),
+                             param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
+                             options.b90$prec.interval),
 
-      climate = climate[, list(year(dates), month(dates), mday(dates),
+      climveg = climate[, list(year(dates), month(dates), mday(dates),
                                globrad,
                                tmax,
                                tmin,
@@ -428,13 +434,12 @@ runLWFB90 <- function(project.dir,
                                standprop_daily$lai,
                                standprop_daily$sai,
                                standprop_daily$age)],
-
       param = param_to_rbrook90(param.b90, options.b90$imodel),
-      paramYear = param.b90$pdur,
-      materials = param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)],
-      soil = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
+      pdur = param.b90$pdur,
+      soil_materials = param.b90$soil_materials,
+      soil_nodes = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
       output = outputmat,
-      output_log = output_log
+      output_log = output.log
     )
 
     simtime <- Sys.time() - start

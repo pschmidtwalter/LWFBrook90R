@@ -1,27 +1,31 @@
 load("H:/Schreiben/EnvModSoft/LWFB90_suppl/DataAndPreparedResults/sample_data.rda")
 library(LWFBrook90R)
-options.b90 <- setoptions_LWFB90()
+
 param.b90 <- setparam_LWFB90()
+soils <- soils[order(id, -lower), ]
+setDT(clim)
+setDT(soils)
+clim <- split(clim, by = "id", keep.by = F)
+soils <- split(soils, by = "id", keep.by = F)
+names(soils)
+res <- mrunLWFB90(param.b90 = param.b90,
+                  options.b90 = options.b90,
+                  soil = soils,
+                  climate = clim,
+                  multirun.dir = "3veg_multirun")
+lapply(res, FUN = function(x) class(x) == "error")
 
 
+res1 <- unlist(res,recursive = F)
+str(res, max.level = 2)
+str(res1, max.level = 1)
+names(res1[[1]])
+str(res1[[1]],max.level = 1)
+evapann <- rbindlist(lapply(unlist(res, recursive = F), function(x) (x[["EVAPANN.csv"]])), idcol = "clim_soil_parm_options.combi")
+str(evapann
 
+    )
 
-options_list <- list(options.b90,options.b90,options.b90)
-
-paramlist <- list(no1 = param.b90, no2 = param.b90, no3 =param.b90)
-str(param.b90, max.level = 1)
-str(paramlist,max.level = 1)
-
-clim_list <- split(clim, by = "id", keep.by = F)
-soil_list <- split(soils, by = "id", keep.by = F)
-
-res <- mrunLWFB90(param.b90 = paramlist,
-                  options.b90 = options_list,
-                  soil = soil_list[1:2],
-                  climate = clim_list[1:2],
-                  all_combination = F,
-                  multirun.dir = "test")
-str(res, max.level =2)
 
 setup_combinations(3,3,1,2, all_combinations = T)
 is.data.frame(data.table(soil_list[[1]]))

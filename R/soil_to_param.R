@@ -7,12 +7,16 @@
 #' @export
 #'
 #' @examples
-soil_to_param <- function(soil) {
+soil_to_param <- function(soil, imodel="MvG") {
   setDT(soil)
+  if (imodel == "MvG") {
   dubl <- duplicated(soil[,c("ths","thr","alpha","npar","ksat","tort","gravel")])
   materials <- soil[!dubl,c("ths","thr","alpha","npar","ksat","tort","gravel")]
+  } else {
+    dubl <- duplicated(soil[,c("thsat","thetaf","psif","bexp","kf","wetinf","gravel")])
+    materials <- soil[!dubl,c("thsat","thetaf","psif","bexp","kf","wetinf","gravel")]
+  }
   materials$mat <- 1:nrow(materials)
-  materials <- materials[,c("mat","ths","thr","alpha","npar","ksat","tort","gravel")]
   #add material-identifier to soil
   seqalong <- 2:length(dubl)
   soil$mat[1] <- 1

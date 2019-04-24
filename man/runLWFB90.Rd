@@ -5,17 +5,16 @@
 \title{Run the LWF-Brook90 hydrological model and return results}
 \usage{
 runLWFB90(project.dir, options.b90, param.b90, climate, soil = NULL,
-  outputmat = setoutput_LWFB90(), keep.log.on.success = T,
-  out.dir = "out/", output.param.options = TRUE,
-  keep.outputfiles = TRUE, run = T, read.output = TRUE,
+  outputmat = setoutput_LWFB90(), output.param.options = TRUE,
+  run = TRUE, read.output = TRUE, output.log = TRUE,
   verbose = TRUE)
 }
 \arguments{
 \item{options.b90}{named list of model control options. Use
-\code{\link{MakeOptions.B90}} to generate a list with default model control options.}
+\code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
 
 \item{param.b90}{Named list of model input parameters. Use
-\code{\link{MakeParam.B90}} to generate a list with default model parameters.}
+\code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
 
 \item{climate}{data.frame with daily climate data. The names of climate have to
 correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
@@ -31,43 +30,36 @@ the parameters of the van Genuchten retention functions are \emph{ths}, \emph{th
  These have to be set up in advance.}
 
 \item{outputmat}{a [10,5]-matrix flagging the desired model-output. Use
-\code{\link{choose_output.B90}} to generate and edit default output matrix.}
-
-\item{keep.log.on.success}{keep the file 'output.log' after a successful simulation?
-In case of simulation errors the 'output.log' file (if specified) is kept anyway for inspection purposes.}
-
-\item{out.dir}{path where to write the output-files.}
+\code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
 
 \item{output.param.options}{append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?}
 
-\item{keep.outputfiles}{keep the model .asc output files after running and
-returning the output?}
-
 \item{run}{run the LWFBrook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
-\item{read.output}{if the output shall be read to the environment. Default is TRUE>}
+\item{read.output}{read and return simulation results from out.dir? Default is TRUE.}
+
+\item{output.log}{write the logfile Log.txt? Default is TRUE.}
 
 \item{verbose}{print messages to the console? Default is TRUE.}
 }
 \value{
-Returns the model-output from the files found in 'out.dir' as a list of data.tables,
-along with the execution time of the simulation, and model inpt if desired.
+Returns the model-output from the files found in 'project.dir' as a list of data.tables,
+along with the execution time of the simulation, and model input if desired.
 }
 \description{
-Takes all necessary information needed to run the LWF-Brook90 hydrological model,
-writes input files, starts the external executable via a system-call and returns
-the results.
-#' @param project.dir directory-name of the project where the input and output files
-are located. Will be created, if not existing.
+Sets up the input objects for LWF-Brook90 hydrological model, starts the model,
+and returns the results.
+#' @param project.dir directory-name of the project to which output files
+will be written. Will be created, if not existing.
 }
 \examples{
 
 #Set up lists containing model control options and model parameters:
 
-param.b90 <- MakeParam.B90()
-options.b90 <- MakeOptions.B90()
+param.b90 <- setparam_LWFB90()
+options.b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
 
@@ -84,6 +76,5 @@ b90.result <- Run.B90(project.dir = "example_run_b90",
                       options.b90 = options.b90,
                       param.b90 = param.b90.b90,
                       climate = meteo_slb1,
-                      soil = soil,
-                      path_b90.exe = "b90.exe")
+                      soil = soil)
 }

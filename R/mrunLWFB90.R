@@ -19,7 +19,7 @@
 #' @param paramvar_nms names of the parameters in paramvar to be replaced in param.b90
 #' @param all_combinations logical wether to set up all possible combinations of lists param.b90, options, climate and soil. See details.
 #' @param multirun.dir the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'
-#' @param keep.subdirs keep sub-directories of the single runs? Defeault is FALSE
+#' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE
 #' @param cores number of cores to use for parallel processing
 #' @param showProgress Show progressbar?
 #' @param ... Further arguments passed to \code{\link[runLWFB90]{runLWFB90}}.
