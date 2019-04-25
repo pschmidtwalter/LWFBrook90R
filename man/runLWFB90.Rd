@@ -4,12 +4,15 @@
 \alias{runLWFB90}
 \title{Run the LWF-Brook90 hydrological model and return results}
 \usage{
-runLWFB90(project.dir, options.b90, param.b90, climate, soil = NULL,
-  outputmat = setoutput_LWFB90(), output.param.options = TRUE,
-  run = TRUE, read.output = TRUE, output.log = TRUE,
-  verbose = TRUE)
+runLWFB90(project.dir, options.b90, param.b90, climate, precip = NULL,
+  soil = NULL, outputmat = setoutput_LWFB90(),
+  output.param.options = TRUE, run = TRUE, read.output = TRUE,
+  output.log = TRUE, verbose = TRUE)
 }
 \arguments{
+\item{project.dir}{directory-name of the project to which output files
+are written. Will be created, if not existing.}
+
 \item{options.b90}{named list of model control options. Use
 \code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
 
@@ -19,6 +22,9 @@ runLWFB90(project.dir, options.b90, param.b90, climate, soil = NULL,
 \item{climate}{data.frame with daily climate data. The names of climate have to
 correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
 \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.}
+
+\item{precip}{data.frame to supply precipitation data separately from climate data.
+Can be used to provide sub-day resolution precipitation data to LWFBrook90.}
 
 \item{soil}{data.frame containing the hydraulic properties of the soil layers.
 Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
@@ -35,7 +41,7 @@ the parameters of the van Genuchten retention functions are \emph{ths}, \emph{th
 \item{output.param.options}{append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?}
 
-\item{run}{run the LWFBrook90 or only return model input objects?
+\item{run}{run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
 \item{read.output}{read and return simulation results from out.dir? Default is TRUE.}
@@ -51,8 +57,6 @@ along with the execution time of the simulation, and model input if desired.
 \description{
 Sets up the input objects for LWF-Brook90 hydrological model, starts the model,
 and returns the results.
-#' @param project.dir directory-name of the project to which output files
-will be written. Will be created, if not existing.
 }
 \examples{
 
@@ -72,7 +76,7 @@ options.b90$enddate <- as.Date("2004-12-31")
 soil <- cbind(soil_slb1, hydpar_wessolek_mvg(soil_slb1$texture))
 
 # Run LWF-Brook90
-b90.result <- Run.B90(project.dir = "example_run_b90",
+b90.result <- runLWFB90(project.dir = "example_run_b90",
                       options.b90 = options.b90,
                       param.b90 = param.b90.b90,
                       climate = meteo_slb1,

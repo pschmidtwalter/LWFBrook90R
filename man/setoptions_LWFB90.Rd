@@ -23,7 +23,8 @@ Create a list of model control options
   hours (="sunhour") for net radiation calculation?}
   \item{prec.interval}{number of precipitation intervals per day (default is 1).
   If prec.interval > 1, a separate file ("in/PRFILE.DAT") has to be provided manually!}
-  \item{richter.prec.corr}{correct precipitation data for wind and evaporation losses (not implented yet)}
+  \item{prec.corr}{correct precipitation data for wind and evaporation losses using \code{\link{prec_corr}}?}
+  \item{prec.exposure}{station exposure situation of prec measurements (passed to \code{\link{prec_corr}})}
   \item{budburst.method}{name of method for budburst calculation. If
   'constant' or 'fixed', budburst day of year from parameters is used.
   All other methods calculate budburst day of year dynamically from temperatures, and
@@ -34,7 +35,7 @@ Create a list of model control options
   the method name is passed to the 'end.method'-argument of  \code{\link[vegperiod]{vegperiod}}.}
   \item{standprop.input}{name of input for longterm (interannual) plant development.
   'parameters': yearly values of stand properties height, sai, densef, lai come from
-  parameters, 'table':  values come from a table, see 'longtermdev'-argument of \code{\link{Run.B90}.}}
+  parameters, 'table':  values come from a table, see 'longtermdev'-argument of \code{\link{runLWFB90}.}}
   \item{standprop.interp}{interpolation method for aboveground stand properties.
   'linear' or 'constant', see 'approx.method'-argument of \code{\link{approx_standprop}}.}
   \item{standprop.use_growthperiod}{Should yearly changes of stand properties (growth)
@@ -43,7 +44,7 @@ Create a list of model control options
   See 'use_growthperiod'-argument of \code{\link{approx_standprop}}.}
   \item{lai.method}{name of method for constructing seasonal course leaf area index development from parameters.
   Passed to 'method'-argument of \code{\link{MakeSeasLAI}}. }
-  \item{imodel}{name of hydraulic parameterization: "CH" for Clapp/Hornberger, "MvG" for Mualem/van Genuchten}
+  \item{imodel}{name of retention & conductivity model: "CH" for Clapp/Hornberger, "MvG" for Mualem/van Genuchten}
   \item{root.method}{method name of the root length density depth distribution function. Any of the names accepted by \code{\link{MakeRelRootDens}} are allowed.
   Additionally, "soilvar" can be used if the root length density depth distribution is specified in column 'rootden' in the soil-data.frame}
 }

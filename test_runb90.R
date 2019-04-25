@@ -23,9 +23,33 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
                               climate = slb1_meteo,
                               soil =soil)
 
+prec <- slb1_meteo[,list(dates, prec)]
+clim <- slb1_meteo
+clim[, prec := NULL]
+options.b90$prec.corr = FALSE
+options.b90$prec.exposure = "mg"
+options.b90$startdate <- as.Date("2010-01-01")
+options.b90$enddate <- as.Date("2011-12-31")
+options.b90$prec.interval <- 24
 
 
-names(b90.results.slb1)
+precip <- read.csv("prfile.csv")
+setDT(precip)
+precip[, dates := as.Date(paste(YY,MM,DD, sep = "-"))]
+precip <- precip[, list(dates, prec = PREINT)]
+precip[,ii:= rep(1:24), by = dates]
+
+
+runLWFB90(project.dir = "example_run_b90",
+          options.b90 = options.b90,
+          param.b90 = param.b90,
+          climate = clim,
+          soil = soil,
+          precip = precip)
+
+
+
+
 #####
 
 

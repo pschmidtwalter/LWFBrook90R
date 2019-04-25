@@ -2,7 +2,7 @@
 #'
 #' Sets up the input objects for LWF-Brook90 hydrological model, starts the model,
 #' and returns the results.
-#' #' @param project.dir directory-name of the project to which output files
+#' @param project.dir directory-name of the project to which output files
 #' are written. Will be created, if not existing.
 #' @param options.b90 named list of model control options. Use
 #' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
@@ -11,6 +11,8 @@
 #' @param climate data.frame with daily climate data. The names of climate have to
 #' correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
 #' \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.
+#' @param precip data.frame to supply precipitation data separately from climate data.
+#' Can be used to provide sub-day resolution precipitation data to LWFBrook90.
 #' @param soil data.frame containing the hydraulic properties of the soil layers.
 #' Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
 #' The columns names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards),
@@ -51,17 +53,16 @@
 #' soil <- cbind(soil_slb1, hydpar_wessolek_mvg(soil_slb1$texture))
 #'
 #' # Run LWF-Brook90
-#' b90.result <- Run.B90(project.dir = "example_run_b90",
+#' b90.result <- runLWFB90(project.dir = "example_run_b90",
 #'                       options.b90 = options.b90,
 #'                       param.b90 = param.b90.b90,
 #'                       climate = meteo_slb1,
 #'                       soil = soil)
-
-
 runLWFB90 <- function(project.dir,
                       options.b90,
                       param.b90,
                       climate,
+                      precip = NULL,
                       soil = NULL,
                       outputmat = setoutput_LWFB90(),
                       output.param.options = TRUE,
@@ -92,6 +93,36 @@ runLWFB90 <- function(project.dir,
   options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
 
   options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
+  options.b90$imodel <- match.arg(options.b90$imodel, choices = c("MvG", "CH"))
+
+  # climate name checks
+
+
+  stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% names(climate)))
+
+  if (is.null(precip) ){
+    stopifnot("prec" %in% names(climate))
+  } else {
+    names(precip) <- tolower(names(precip))
+    stopifnot(all(c("dates","prec") %in% names(precip)))
+  }
+
+  # soil names
+  if (is.null(soil)) {
+    stopifnot(all(c( "upper", "lower", "mat") %in% names(param.b90$soil_nodes)))
+    if (options.b90$imodel == "MvG" ) {
+      stopifnot(all(c("mat","ths","thr","alpha","npar","ksat","tort","gravel") %in% names(param.b90$soil_materials)))
+    } else {
+      stopifnot(all(c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(param.b90$soil_materials)))
+    }
+  } else {
+    if (options.b90$imodel == "MvG") {
+      stopifnot(all(c("upper","lower", "ths","thr","alpha","npar","ksat","tort","gravel") %in% names(soil)))
+    } else {
+      stopifnot(all(c("upper","lower", "thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(soil)))
+    }
+  }
+
 
   # ---- Input checks ---------------------------------------------------------------
 
@@ -101,6 +132,7 @@ runLWFB90 <- function(project.dir,
     stop("Invalid argument: 'options.b90$enddate'")}
   if (!(options.b90$startdate < options.b90$enddate)) {
     stop("Invalid arguments: 'startdate > enddate ")}
+
 
   if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_materials))) {
     stop("Please provide soil data, either via the argument 'soil' or as list items 'soil_nodes' and 'soil_materials' in param.b90 ")
@@ -116,22 +148,27 @@ runLWFB90 <- function(project.dir,
     }
   }
 
-  # # Climate
+  # Climate
   # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
   #   if (any( names(climate) == "sunhour" )) {
   #     options.b90$fornetrad <- "sunhour"
   #     warning("Global radiation missing, will be calculated from sunshine duration!")
   #   } else {
-  #     stop("Please either provide globarad or sunhours with your climate file!")
+  #     stop("Please either provide globrad or sunhour with your climate data!")
   #   }
   # } else {
   #   if (any( names(climate) == "globrad" )) {
   #     options.b90$fornetrad <- "globrad"
   #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
   # }
-  #
+
   if (!any( names(climate) == "mesfl") ) {
     climate$mesfl <- 0
+  }
+  if (!is.null(precip)){
+    if (!any( names(precip) == "mesfl") ) {
+      precip$mesfl <- 0
+    }
   }
 
   # ---- clean file paths and set up directories -----------------------------------------
@@ -354,21 +391,39 @@ runLWFB90 <- function(project.dir,
 
   # ---- Prepare climate for input----------------------------------------------------
 
-  # Precipitation corrrection (Richter)
-  if (options.b90$richter.prec.corr==TRUE){
-    warning("Richter correction of precipitation is not impemented yet. No correction is done!")
-    #clim$Precip <- with(clim, RichterKorrPrec(dates=datum,tavg=tmean,precip=prec,exp=b90ini$richterexposition) )
+  # Precipitation correction (Richter)
+  if (options.b90$prec.corr == TRUE) {
+    climate[, prec := prec_corr(dates = dates, tavg = tmean, prec = prec,
+                                station.exposure = options.b90$exposure.prec)]
   }
 
+  #Calculate global radiation from sunshine duration
   if (options.b90$fornetrad == "sunhour") {
     climate[,globrad := CalcGlobRad( yday(dates), sunhours, param.b90$coords_y )]
   }
 
-  #constrain to simulation period
+  # constrain data to simulation period
   climate <- climate[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
 
-
-
+  if (!is.null(precip)) {
+    precip <- precip[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
+    if (nrow(climate)*options.b90$prec.interval != nrow(precip)) {
+      warning("The precipitation data provided via precip does not fit to the precipitation interval defined in options.b90$prec.interval.
+              Precip-argument will be ignored and prec from climate data will be used.")
+      options.b90$prec.interval <- 1
+      precip <- NULL
+      stopifnot("prec" %in% names(climate))
+    } else {
+      if (options.b90$prec.interval == 1) {
+        climate$prec <- precip$prec
+        precip <- NULL
+      } else {
+        precip[,ii := rep(1:options.b90$prec.interval,param.b90$ndays)]
+        precip <- precip[, list(year(dates), month(dates), mday(dates), ii, prec, mesfl)]
+        climate$prec <- -999
+      }
+    }
+  }
   # ---- Make soilnodes & soil materials --------------------------------------------
   # soil provided as argument -> create soil nodes and materials and add them to param.b90
   if (!is.null(soil)) {
@@ -420,7 +475,6 @@ runLWFB90 <- function(project.dir,
                              as.integer(format(options.b90$startdate, "%j")),
                              param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
                              options.b90$prec.interval),
-
       climveg = climate[, list(year(dates), month(dates), mday(dates),
                                globrad,
                                tmax,
@@ -434,6 +488,7 @@ runLWFB90 <- function(project.dir,
                                standprop_daily$lai,
                                standprop_daily$sai,
                                standprop_daily$age)],
+      precdat = precip,
       param = param_to_rbrook90(param.b90, options.b90$imodel),
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
