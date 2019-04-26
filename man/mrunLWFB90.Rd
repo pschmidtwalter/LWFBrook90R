@@ -22,10 +22,10 @@ mrunLWFB90(param.b90, options.b90, climate, soil = NULL,
 The ith values replace the list elements in param.b90 of the ith simulation,
 with the column names of paramvar being matched to the names in param.b90.
 In order to match values from paramvar to data.frame or vector elements in param.b90,
-the respective column name of paramvar has to setup from the name and index.
+the respective column name of paramvar has to be setup from the name and index.
 E.g., in order to place the 2nd value of 'ths' in the soil_materials data.frame,
 the respective column name of paramvar has to be called 'soil_materials.ths2'.
-In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.#'}
+In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.}
 
 \item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90}
 
@@ -33,7 +33,7 @@ In order to replace the 3 value of pdur in param.b90, the column name has to be 
 
 \item{multirun.dir}{the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'}
 
-\item{keep.subdirs}{keep sub-directories of the single runs? Defeault is FALSE}
+\item{keep.subdirs}{keep sub-directories of the single runs? Default is FALSE}
 
 \item{cores}{number of cores to use for parallel processing}
 

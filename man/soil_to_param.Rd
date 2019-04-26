@@ -4,7 +4,7 @@
 \alias{soil_to_param}
 \title{Split up soil into materials and soil nodes.}
 \usage{
-soil_to_param(soil)
+soil_to_param(soil, imodel = "MvG")
 }
 \arguments{
 \item{soil}{data.frame with soil soil depths ('upper', 'lower') and

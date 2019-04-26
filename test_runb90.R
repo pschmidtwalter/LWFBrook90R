@@ -2,21 +2,59 @@ library(LWFBrook90R)
 
 options.b90 <- setoptions_LWFB90()
 param.b90 <- setparam_LWFB90()
-soil <- cbind(slb1_soil, hydpar_wessolek_mvg(tex.KA5 = slb1_soil$texture))
-
-options.b90$lai.method <- 'Coupmodel'
-options.b90$budburst.method <- 'fixed'
-options.b90$leaffall.method <- 'fixed'
+soil <- cbind(slb1_soil, with(slb1_soil, hydpar_puh2(sand,silt, clay, bd, c_org)))
 
 soillaymat <- soil_to_param(soil)
 param.b90$soil_nodes <- soillaymat$soil_nodes
 param.b90$soil_materials <- soillaymat$soil_materials
+
 b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
                             options.b90 = options.b90,
                             param.b90 = param.b90,
                             climate = slb1_meteo,
-                            soil = soil,
-                            run = F)
+                            output.log = T
+                            )
+
+soil <- read.csv("C:/Users/pschmidtwalter/Desktop/soil_slb1.csv", stringsAsFactors = F)
+options.b90$imodel <- "CH"
+b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90",
+                              options.b90 = options.b90,
+                              param.b90 = param.b90,
+                              climate = slb1_meteo,
+                              soil =soil)
+
+prec <- slb1_meteo[,list(dates, prec)]
+clim <- slb1_meteo
+clim[, prec := NULL]
+options.b90$prec.corr = FALSE
+options.b90$prec.exposure = "mg"
+options.b90$startdate <- as.Date("2010-01-01")
+options.b90$enddate <- as.Date("2011-12-31")
+options.b90$prec.interval <- 24
+
+
+precip <- read.csv("prfile.csv")
+setDT(precip)
+precip[, dates := as.Date(paste(YY,MM,DD, sep = "-"))]
+precip <- precip[, list(dates, prec = PREINT)]
+precip[,ii:= rep(1:24), by = dates]
+
+
+runLWFB90(project.dir = "example_run_b90",
+          options.b90 = options.b90,
+          param.b90 = param.b90,
+          climate = clim,
+          soil = soil,
+          precip = precip)
+
+
+
+
+#####
+
+
+
+
 
 
 
