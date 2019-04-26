@@ -31,7 +31,7 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
 
     ! Output files
     integer(kind=c_int), dimension(10,5), intent(in) :: output
-	integer(kind=c_int), dimension(1), intent(in) :: output_log
+    integer(kind=c_int), dimension(1), intent(in) :: output_log
     ! Output files to close
     ! Those are the files of output, and we close them in the end
     integer :: nfiles
@@ -50,9 +50,9 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
     ! Temporal file for storing information
     !OPEN (UNIT = 20, FILE = 'Contr.tmp', STATUS='REPLACE')
     ! Log file
-	if(output_log(1) .EQ. INT(1)) then
-		OPEN (UNIT = 10, FILE = 'Log.txt', STATUS='REPLACE')
-	end if
+    if(output_log(1) .EQ. INT(1)) then
+        OPEN (UNIT = 10, FILE = 'Log.txt', STATUS='REPLACE')
+    end if
     ! Site level information
     YEAR = INT( siteparam( 1 ) )
     DOY = INT( siteparam( 2 ) )
@@ -746,22 +746,22 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
         DOY = DOY + 1
         IDAY = IDAY + 1
 
-		if(output_log(1) .EQ. INT(1)) then
-			if(MOD(IDAY,20).eq.2) then
-				write(10,*)
-				write(10,*)'date     ',' store','  inter','   snow','   rain', &
-					'    et',' drain','   lat','    ep','    tp','  mbal error'
-				write(10,*)'          ------------------------- mm -------------',&
-					'---------------------------'
-				!write(20,*)
-				!write(20,*)'    date  ','  SNOW  ','     Tsnow','   TA   ','   tTop '
-				!write(20,*)'------------------ ∞ C ---------------------'
-			end if
+        if(output_log(1) .EQ. INT(1)) then
+            if(MOD(IDAY,20).eq.2) then
+                write(10,*)
+                write(10,*)'date     ',' store','  inter','   snow','   rain', &
+                    '    et',' drain','   lat','    ep','    tp','  mbal error'
+                write(10,*)'          ------------------------- mm -------------',&
+                    '---------------------------'
+                !write(20,*)
+                !write(20,*)'    date  ','  SNOW  ','     Tsnow','   TA   ','   tTop '
+                !write(20,*)'------------------ ∞ C ---------------------'
+            end if
 
-			write(10,'(I2,A1,I2,A1,I4,F6.0,2F7.2,F7.1,5F6.1,F12.3)') dd,'.',mm,'.',yy, SWAT, &
-				IRVPD+ISVPD,SNOW,PRECD,EVAPD,Flowd,DSFLD, PSLVP,PTRAN,BALERD
-			!write(20,'(2X,I2,A1,I2,A1,I4,4F9.2)') dd,'.',mm,'.',yy,SNOW,TSNOW,TA,tTop
-		end if
+            write(10,'(I2,A1,I2,A1,I4,F6.0,2F7.2,F7.1,5F6.1,F12.3)') dd,'.',mm,'.',yy, SWAT, &
+                IRVPD+ISVPD,SNOW,PRECD,EVAPD,Flowd,DSFLD, PSLVP,PTRAN,BALERD
+            !write(20,'(2X,I2,A1,I2,A1,I4,4F9.2)') dd,'.',mm,'.',yy,SNOW,TSNOW,TA,tTop
+        end if
 
         TInt=TInt+IRVPD+ISVPD
         TSno=TSno+SNOW
@@ -773,22 +773,22 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
         go to 500
 
     end if
-		if(output_log(1) .EQ. INT(1)) then
-		write(10,*)
-		write(10,*)'total    ','      ','    inter','     snow','     rain','      et','   drain','     lat'
-		write(10,*)'          ------------------------- mm ----------------------------------------'
-		write(10,'(16X,2F9.2,F9.1,3F8.1)') TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD
-	end if
+        if(output_log(1) .EQ. INT(1)) then
+        write(10,*)
+        write(10,*)'total    ','      ','    inter','     snow','     rain','      et','   drain','     lat'
+        write(10,*)'          ------------------------- mm ----------------------------------------'
+        write(10,'(16X,2F9.2,F9.1,3F8.1)') TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD
+    end if
 !     ***************   E N D    D A Y   L O O P    **************************
 
     ! Close all the open files
     do i = 1, size(outfile)
         CLOSE( UNIT = outfile(i) )
     end do
-	if(output_log(1) .EQ. INT(1)) then
-		write(10,*)'that is the end'
-		CLOSE( UNIT = 10 )
-	end if
+    if(output_log(1) .EQ. INT(1)) then
+        write(10,*)'that is the end'
+        CLOSE( UNIT = 10 )
+    end if
 end subroutine fbrook90
 
 
@@ -1378,10 +1378,10 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     Thr=Par(10,j)
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
-					if (output_log .EQ. INT(1)) then
-						write(10,*)'xxx i=',j,' th=',th,' thr=',thr, ' netflow=',NTFLI(j), &
-							' thick=',Thick(j),' K=',K,' Psi=',PSI
-					end if
+                    if (output_log .EQ. INT(1)) then
+                        write(10,*)'xxx i=',j,' th=',th,' thr=',thr, ' netflow=',NTFLI(j), &
+                            ' thick=',Thick(j),' K=',K,' Psi=',PSI
+                    end if
 21              continue
                 DTINEW=DTIMIN
                 TRANI(i)=0
@@ -1397,10 +1397,10 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     Thr=Par(10,j)
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
-					if (output_log .EQ. INT(1)) then
-						write(10,*)'xxx i=',j,' th=',Th, ' netflow=',NTFLI(j), &
-							' thick=',Thick(j), ' K=',K,' Psi=',PSI
-					end if
+                    if (output_log .EQ. INT(1)) then
+                        write(10,*)'xxx i=',j,' th=',Th, ' netflow=',NTFLI(j), &
+                            ' thick=',Thick(j), ' K=',K,' Psi=',PSI
+                    end if
 22              continue
                 DTINEW=DTIMIN
                 TRANI(i)=0
@@ -1915,7 +1915,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: PSICR     ! minimum plant leaf water potential, MPa
     integer :: iModel    ! parameterization of hydraulic functions
     real(kind=8) :: Par(MPar,ML)  ! parameter array
-	integer :: output_log
+    integer :: output_log
 !       output
     real(kind=8) :: PSIG(*)   ! gravity potential, kPa
     real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
@@ -2602,7 +2602,7 @@ subroutine Temper(N,NMat,THICK,ZL,MUE,STEP,MatNum,TempO,TempN, &
     CALL TRIDIG(N,A,B,C,D,TempN,IFEHL)
 !
 !
-    if(ifehl.eq.1) 	write(10,*)'tridig failed'
+    if(ifehl.eq.1)     write(10,*)'tridig failed'
 
 !   DO 160 I=1,N
 !       write(10,*) i, TempN(i)
@@ -3066,7 +3066,7 @@ function FWETK (K, Par, iModel, output_log)
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
-	integer :: output_log !write output_log file?
+    integer :: output_log !write output_log file?
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation
@@ -3119,9 +3119,9 @@ function FWETK (K, Par, iModel, output_log)
             goto 10
         end if
         if(Konver .gt. 1.0d0) then
-			if (output_log .EQ. INT(1)) then
-				write(10,*)'FWETK: no convergence, stopping programm!'
-			end if
+            if (output_log .EQ. INT(1)) then
+                write(10,*)'FWETK: no convergence, stopping programm!'
+            end if
             K=K/2.0d0
             Goto 5
 !               stop
@@ -3135,9 +3135,9 @@ function FWETK (K, Par, iModel, output_log)
         if(dKdS1 .ne. 0.0d0) then
             WetNew=WetOld-KOld/dKdS1
         else
-			if (output_log .EQ. INT(1)) then
-				write(10,*)'FWETK: slope is zero, stopping programm!'
-			end if
+            if (output_log .EQ. INT(1)) then
+                write(10,*)'FWETK: slope is zero, stopping programm!'
+            end if
             stop
         end if
         KNew=FK(WetNew,Par,iModel)-K
@@ -3146,10 +3146,10 @@ function FWETK (K, Par, iModel, output_log)
         It=It+1
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
         if(It .eq. ItMax) then
-			if (output_log .EQ. INT(1)) then
-				write(10,*)'FWETK: maximum number of iterations exceeded,'
-				write(10,*)' stopping programm!'
-			end if
+            if (output_log .EQ. INT(1)) then
+                write(10,*)'FWETK: maximum number of iterations exceeded,'
+                write(10,*)' stopping programm!'
+            end if
             K=K/2.0d0
             Goto 5
 !              stop
