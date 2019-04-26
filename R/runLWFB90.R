@@ -510,7 +510,7 @@ runLWFB90 <- function(project.dir,
       simres <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T), fread, fill = T, stringsAsFactors = F)
       names(simres) <- list.files(project.dir, pattern = ".ASC")
     } else {
-      simres <- simtime
+      simres <- list()
     }
 
   } else { #'dry' run
