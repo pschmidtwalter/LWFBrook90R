@@ -312,7 +312,7 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
 ! vt this part is commented as I don't have PFILE.DAT file for now
 ! !               more than one precip interval in day, read line from PRFILE.DAT
 !                 READ (10, *) YY, MM, DD, II, PREINT, MESFLP
-                J = IDAY * (NPINT - 1) + N
+                J = N + NPINT * (IDAY - 1)
                 YY = INT( precdat( J, 1 ) )
                 MM = INT( precdat( J, 2 ) )
                 DD = INT( precdat( J, 3 ) )
