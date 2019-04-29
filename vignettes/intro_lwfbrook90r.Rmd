@@ -100,21 +100,21 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
                             soil = soil,
                             outputmat = output)
 ```
-`runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passed climate, vegetation properties and parameters to the fortran model code. The model saves the selected output data set to the specified folder `out.dir` (defaults to 'out/' within `project.dir`). As a last step, `runLWFB90` returns the contents of the output files. While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `outputmat`-argument and named according to the .csv files in the `out.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`output.param.options = T`). Let us have a look at the `evapday.asc`-item of `b90.results.slb1` containing daily evaporation fluxes:
+`runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passed climate, vegetation properties and parameters to the fortran model code. The model saves the selected output data set to the specified folder `out.dir` (defaults to 'out/' within `project.dir`). As a last step, `runLWFB90` returns the contents of the output files. While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `outputmat`-argument and named according to the .ASC files in the `out.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`output.param.options = T`). Let us have a look at the `evapday.asc`-item of `b90.results.slb1` containing daily evaporation fluxes:
 
 ```{r}
-str(b90.results.slb1$EVAPDAY.csv)
+str(b90.results.slb1$EVAPDAY.ASC)
 ```
-`EVAPDAY.csv` is a data.table-object and contains date variables ('YR', 'MO', 'DA', 'DOY'), actual evaporation fluxes ('EVAP', 'TRAN', 'IRVP', 'ISVP', 'SLVP', 'SNVP'), potential evaporation fluxes ('PINT', 'PTRAN', 'PSLVP') and total runoff ('FLOW'). For a detailed description of all output variables refer to the list of parameters and variables on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html). 
+`EVAPDAY.ASC` is a data.table-object and contains date variables ('YR', 'MO', 'DA', 'DOY'), actual evaporation fluxes ('EVAP', 'TRAN', 'IRVP', 'ISVP', 'SLVP', 'SNVP'), potential evaporation fluxes ('PINT', 'PTRAN', 'PSLVP') and total runoff ('FLOW'). For a detailed description of all output variables refer to the list of parameters and variables on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html). 
 To plot the evaporation data, it is convenient to derive a Date object from the date variables. We use the data.table syntax to do so:
 ```{r}
-b90.results.slb1$EVAPDAY.csv[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
+b90.results.slb1$EVAPDAY.ASC[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
 ```
-Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `out.dir`-folder is named 'SWATDAY.csv' and returned as data.table-object, containing the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90.results.slb1$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers. Again, we use data.table syntax:
+Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `out.dir`-folder is named 'SWATDAY.ASC' and returned as data.table-object, containing the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90.results.slb1$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers. Again, we use data.table syntax:
 
 ```{r}
-b90.results.slb1$SWATDAY.csv[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
-swat100cm <- b90.results.slb1$SWATDAY.csv[NL <= 14, 
+b90.results.slb1$SWATDAY.ASC[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
+swat100cm <- b90.results.slb1$SWATDAY.ASC[NL <= 14, 
                                           list(swat100_mm = sum(SWATI)), 
                                           by = dates]
 ```
@@ -122,8 +122,8 @@ Now we can plot the soil water storage along with transpiration:
 
 ```{r, fig.height=5, fig.width=7, echo =F, fig.cap="Simulation results for sample data"}
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-plot(b90.results.slb1$EVAPDAY.csv$dates, 
-     b90.results.slb1$EVAPDAY.csv$TRAN, type ='l',
+plot(b90.results.slb1$EVAPDAY.ASC$dates, 
+     b90.results.slb1$EVAPDAY.ASC$TRAN, type ='l',
      col = "green", ylab = "tran [mm]", xlab = "")
 par(new =T)
 plot(swat100cm$dates,
