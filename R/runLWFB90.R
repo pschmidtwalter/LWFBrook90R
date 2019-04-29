@@ -82,12 +82,6 @@ runLWFB90 <- function(project.dir,
 
   options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
 
-  options.b90$budburst.method <- match.arg(options.b90$budburst.method,
-                                           choices = c("fixed", "constant","Menzel","StdMeteo", "ETCCDI", "Ribes uva-crispa"))
-
-  options.b90$leaffall.method <- match.arg(options.b90$leaffall.method,
-                                           choices = c("fixed", "constant","vonWilpert", "LWF-BROOK90", "NuskeAlbert", "StdMeteo","ETCCDI"))
-
   options.b90$standprop.input <- match.arg(options.b90$standprop.input, choices = c("parameters", "table"))
 
   options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
@@ -95,9 +89,10 @@ runLWFB90 <- function(project.dir,
   options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
   options.b90$imodel <- match.arg(options.b90$imodel, choices = c("MvG", "CH"))
 
-  # climate name checks
+  if (options.b90$budburst.method %in% c("const", "const.", "constant")) options.b90$budburst.method <- "fixed"
+  if (options.b90$leaffall.method %in% c("const", "const.", "constant")) options.b90$leaffall.method <- "fixed"
 
-
+    # climate name checks
   stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% names(climate)))
 
   if (is.null(precip) ){
@@ -214,68 +209,18 @@ runLWFB90 <- function(project.dir,
   param.b90$ndays <-  as.integer(difftime(options.b90$enddate,options.b90$startdate)) + 1
 
 
-  # ---- Vegetation-Period  ---------------------------------------------------------
-  # check length of fixed leaffall
-  if (options.b90$leaffall.method %in% c("constant", "fixed")) {
-    if (length(param.b90$leaffalldoy) > 1 & length(param.b90$leaffalldoy) != length(simyears)) {
-      stop("When options.b90$leaffall.method == 'fixed', either provide a single value
-           for param.b90$leaffall or a sequence of values, one for each year of the simulation period.")
-    }
-  }
-  #check length of fixed budburst
-  if (options.b90$budburst.method %in% c("constant", "fixed") ) {
-    if (length(param.b90$budburstdoy) > 1 & length(param.b90$budburstdoy) != length(simyears)) {
-      stop("When options.b90$budburst.method == 'fixed', either provide a single value
-           for param.b90$budburstdoy or a sequence of values, one for each year of the simulation period.")
-    }
-  }
-
-  # Extend budburst
-  if (length(param.b90$budburstdoy) == 1) {
-    param.b90$budburstdoy <- rep(param.b90$budburstdoy,times = length(simyears))
-  }
-  if (length(param.b90$leaffalldoy) == 1) {
-    param.b90$leaffalldoy <- rep(param.b90$leaffalldoy,times = length(simyears))
-  }
-
-  # start and end dynamic
-  if (!options.b90$budburst.method %in% c("constant", "fixed") &
-      !options.b90$leaffall.method %in% c("constant", "fixed")) {
-    budburst_leaffall <- with(climate, vegperiod::vegperiod(dates = dates,
-                                                            Tavg = tmean,
-                                                            start.method = as.character(options.b90$budburst.method),
-                                                            species = as.character(param.b90$budburst.species),
-                                                            end.method = as.character(options.b90$leaffall.method),
-                                                            est.prev = ifelse(length(climyears) <= 5, length(climyears) - 1, 5))
-    )
-    budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% simyears),]
-    param.b90$budburstdoy <- budburst_leaffall$start
-    param.b90$leaffalldoy <- budburst_leaffall$end
-  } else {
-    # only budburst is dynamic:
-    if (!options.b90$budburst.method %in% c("constant", "fixed") & options.b90$leaffall.method %in% c("constant", "fixed"))   {
-      budburst_leaffall <- with(climate,
-                                vegperiod::vegperiod(dates = dates,
-                                                     Tavg = tmean,
-                                                     start.method = as.character(options.b90$budburst.method),
-                                                     species = as.character(param.b90$budburst.species),
-                                                     end.method = "StdMeteo",
-                                                     est.prev = ifelse(length(climyears) <= 5, length(climyears) - 1, 5))
-      )
-      param.b90$budburstdoy <- budburst_leaffall$start[which(budburst_leaffall$year %in% simyears)]
-    } else {
-      # only end dynamic
-      if (options.b90$budburst.method %in% c("constant", "fixed") & !options.b90$leaffall.method %in% c("constant", "fixed"))   {
-        budburst_leaffall <- with(climate,
-                                  vegperiod::vegperiod(dates = dates,
-                                                       Tavg = tmean,
-                                                       start.method = "StdMeteo",
-                                                       end.method = options.b90$leaffall.method))
-        options.b90$leaffalldoy <- budburst_leaffall$end[which(budburst_leaffall$year %in% simyears)]
-      }
-    }
-  }
-
+  # Vegetation-Period: calculate budburst and leaffall-doys  ------------------------
+  budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
+                                      out.years = simyears,
+                                      budburst.method = options.b90$budburst.method,
+                                      leaffall.method = options.b90$leaffall.method,
+                                      budburstdoy.fixed = param.b90$budburstdoy,
+                                      leaffalldoy.fixed = param.b90$leaffalldoy,
+                                      species = param.b90$budburst.species,
+                                      est.prev = ifelse(length(climyears) <= 5,
+                                                        length(climyears) - 1, 5))
+  param.b90$budburstdoy <- budburst_leaffall$start
+  param.b90$leaffalldoy <- budburst_leaffall$end
 
   # ---- Make Stand --------------------------------------------------------------------
   if (tolower(options.b90$standprop.input) == "table") {
