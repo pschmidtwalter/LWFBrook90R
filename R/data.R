@@ -48,8 +48,6 @@
 #'   \item{maxlai}{maximum leaf area index, m2 m-2}
 #'   \item{sai}{stem area index, m2 m-2 }
 #'   \item{densef}{stand density}
-#'   \item{clay}{clay content, mass-\% }
-#'   \item{c_org}{organic carbon content, mass-\%}
 #' }
 "slb1_standprop"
 
