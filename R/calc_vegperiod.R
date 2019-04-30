@@ -74,8 +74,7 @@ calc_vegperiod <- function(budburst.method,
 
   # both fixed
   if (budburst.method == "fixed" & leaffall.method == "fixed") {
-    if(length(budburstdoy.fixed) != length(leaffalldoy.fixed))
-      budburst_leaffall <- data.frame(year = out.years,
+    budburst_leaffall <- data.frame(year = out.years,
                                       start = budburstdoy.fixed,
                                       end = leaffalldoy.fixed)
 
