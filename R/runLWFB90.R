@@ -456,13 +456,7 @@ runLWFB90 <- function(project.dir,
   } else {
     param.b90$soil_nodes$rootden <- soil$rootden
   }
-  if (!is.data.table(param.b90$soil_nodes)) {
-    setDT(param.b90$soil_nodes)
-  }
 
-  if (!is.data.table(param.b90$soil_materials)) {
-    setDT(param.b90$soil_materials)
-  }
   # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (run) {
     if (verbose == T) {

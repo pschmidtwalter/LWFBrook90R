@@ -31,7 +31,12 @@ replace_vecelements <- function(x, varnms, vals) {
                           length(vals)) )
     x_m <- x_m[order(x_m$var),]
     x_m$values[which(x_m$var %in% varnms)] <- vals
-    unstack(x_m, values~ind)
+
+    x_wide <- unstack(x_m, values~ind)
+    if (is.data.table(x)) {
+      setDT(x_wide)
+    }
+    x_wide
   } else {
     x[as.integer(gsub("[^[:digit:].]", "",  varnms))] <- vals
     x
