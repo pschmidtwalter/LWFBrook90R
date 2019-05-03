@@ -76,31 +76,9 @@ runLWFB90 <- function(project.dir,
   on.exit(setwd(oldWD))
 
   #name-checks ----------------------------------------------------------------------
-  names(options.b90) <- tolower(names(options.b90))
-  names(param.b90) <- tolower(names(param.b90))
-  names(climate) <- tolower(names(climate))
 
-  options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
 
-  options.b90$standprop.input <- match.arg(options.b90$standprop.input, choices = c("parameters", "table"))
 
-  options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
-
-  options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
-  options.b90$imodel <- match.arg(options.b90$imodel, choices = c("MvG", "CH"))
-
-  if (options.b90$budburst.method %in% c("const", "const.", "constant")) options.b90$budburst.method <- "fixed"
-  if (options.b90$leaffall.method %in% c("const", "const.", "constant")) options.b90$leaffall.method <- "fixed"
-
-  # climate name checks
-  stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% names(climate)))
-
-  if (is.null(precip) ){
-    stopifnot("prec" %in% names(climate))
-  } else {
-    names(precip) <- tolower(names(precip))
-    stopifnot(all(c("dates","prec") %in% names(precip)))
-  }
 
   # soil names
   if (is.null(soil)) {
@@ -121,12 +99,7 @@ runLWFB90 <- function(project.dir,
 
   # ---- Input checks ---------------------------------------------------------------
 
-  if (!inherits(options.b90$startdate, "Date")) {
-    stop("Invalid argument: 'options.b90$startdate'")}
-  if (!inherits(options.b90$enddate, "Date")) {
-    stop("Invalid argument: 'options.b90$enddate'")}
-  if (!(options.b90$startdate < options.b90$enddate)) {
-    stop("Invalid arguments: 'startdate > enddate ")}
+
 
 
   if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_materials))) {
@@ -143,28 +116,19 @@ runLWFB90 <- function(project.dir,
     }
   }
 
-  # Climate
-  # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
-  #   if (any( names(climate) == "sunhour" )) {
-  #     options.b90$fornetrad <- "sunhour"
-  #     warning("Global radiation missing, will be calculated from sunshine duration!")
-  #   } else {
-  #     stop("Please either provide globrad or sunhour with your climate data!")
-  #   }
-  # } else {
-  #   if (any( names(climate) == "globrad" )) {
-  #     options.b90$fornetrad <- "globrad"
-  #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
-  # }
 
-  if (!any( names(climate) == "mesfl") ) {
-    climate$mesfl <- 0
+  # Precipitation correction (Richter)
+  if (options.b90$prec.corr == TRUE) {
+    climate[, prec := prec_corr(dates = dates, tavg = tmean, prec = prec,
+                                station.exposure = options.b90$exposure.prec)]
   }
-  if (!is.null(precip)){
-    if (!any( names(precip) == "mesfl") ) {
-      precip$mesfl <- 0
-    }
+
+  #Calculate global radiation from sunshine duration
+  if (options.b90$fornetrad == "sunhour") {
+    climate[,globrad := CalcGlobRad( yday(dates), sunhours, param.b90$coords_y )]
   }
+
+
 
   # ---- clean file paths and set up directories -----------------------------------------
 
@@ -196,14 +160,6 @@ runLWFB90 <- function(project.dir,
   simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
                   to = as.integer(format(options.b90$enddate,"%Y")),
                   by = 1)
-
-  if (length(simyears[which(simyears %in% climyears)]) < length(simyears)) {
-    if (length(simyears[which(simyears %in% climyears)]) == 0) {
-      stop("Your climate data does not include the simulation period. Change startdate and enddate!")
-    } else {
-      warning("climate not covering simulation period completely, period was cut!")
-    }
-  }
 
   # Number of Simulation days
   param.b90$ndays <-  as.integer(difftime(options.b90$enddate,options.b90$startdate)) + 1
@@ -251,16 +207,6 @@ runLWFB90 <- function(project.dir,
 
   # ---- Prepare climate for input----------------------------------------------------
 
-  # Precipitation correction (Richter)
-  if (options.b90$prec.corr == TRUE) {
-    climate[, prec := prec_corr(dates = dates, tavg = tmean, prec = prec,
-                                station.exposure = options.b90$exposure.prec)]
-  }
-
-  #Calculate global radiation from sunshine duration
-  if (options.b90$fornetrad == "sunhour") {
-    climate[,globrad := CalcGlobRad( yday(dates), sunhours, param.b90$coords_y )]
-  }
 
   # constrain data to simulation period
   climate <- climate[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
@@ -395,3 +341,102 @@ runLWFB90 <- function(project.dir,
   return(simres)
 }
 
+chk_options <- function(options.b90){
+
+  names(options.b90) <- tolower(names(options.b90))
+
+  stopifnot(all(names(options.b90) %in% c("startdate","enddate","fornetrad","prec.interval",
+                                          "prec.corr","prec.exposure","budburst.method",
+                                          "leaffall.method", "standprop.input", "standprop.interp",
+                                          "standprop.use_growthperiod","lai.method","imodel", "root.method")))
+
+  options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
+  options.b90$standprop.input <- match.arg(options.b90$standprop.input, choices = c("parameters", "table"))
+  options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
+  options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
+  options.b90$imodel <- match.arg(options.b90$imodel, choices = c("MvG", "CH"))
+
+  if (!inherits(options.b90$startdate, "Date")) {
+    stop("Please provide 'options.b90$startdate' as Date-object")}
+  if (!inherits(options.b90$enddate, "Date")) {
+    stop("Please provide 'options.b90$enddate' as Date-object")}
+  if (!(options.b90$startdate < options.b90$enddate)) {
+    stop("Check options.b90: 'startdate > enddate ")}
+
+  if (options.b90$budburst.method %in% c("const", "const.", "constant")) options.b90$budburst.method <- "fixed"
+  if (options.b90$leaffall.method %in% c("const", "const.", "constant")) options.b90$leaffall.method <- "fixed"
+
+  return(options.b90)
+}
+
+chk_param <- function(param.b90) {
+
+  nms <- c("maxlai","sai","sai.ini","height","height.ini","densef",
+    "densef.ini","age.ini","winlaifrac","budburst.species","budburstdoy",
+    "leaffalldoy","shape.budburst","shape.leaffall","shape.optdoy","emergedur","leaffalldur",
+    "lai.doy","lai.frac","alb","albsn","ksnvp","fxylem",
+    "mxkpl","lwidth","psicr","nooutf","lpc","cs",
+    "czs","czr","hs","hr","rhotp","nn",
+    "maxrlen","initrlen","initrdep","rrad","rgrorate","rgroper",
+    "maxrootdepth","betaroot","radex","glmax","glmin",
+    "rm","r5","cvpd","tl","t1","t2",
+    "th","frintlai","frintsai","fsintlai","fsintsai","cintrl",
+    "cintrs","cintsl","cintss","infexp","bypar","qfpar",
+    "qffc","imperv","drain","gsc","gsp","ilayer",
+    "qlayer","z0s","rstemp","melfac","ccfac","laimlt",
+    "saimlt","grdmlt","maxlqf","snoden","obsheight","rssa",
+    "rssb","dtimax","dswmax","dpsimax",
+    "wndrat","fetch","z0w","zw","zminh","coords_x",
+    "coords_y","c1","c2","c3","pdur","eslope",
+    "aspect","dslope","slopelen","intrainini","intsnowini","gwatini",
+    "snowini","psiini")
+  names(param.b90) <- tolower(names(param.b90))
+  if ( any(!names(param.b90) %in% nms )) {
+    stop(paste("param.b90-list is incomplete. Missing list items:",
+               paste(nms[which(!nms %in% names(param.b90))], collapse = ", ")))
+  }
+  return(param.b90)
+}
+
+chk_clim <- function(options.b90, climate, precip) {
+  # climate name checks
+  names(climate) <- eval(quote(tolower(names(climate))), parent.frame())
+
+  stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% names(climate)))
+
+  if (min(climate$dates) > options.b90$startdate | max(climate$dates) > options.b90$enddate){
+    stop("climate not covering requested simulation period completely! Check startdate and enddate in options.b90")
+  }
+
+  # Climate
+  # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
+  #   if (any( names(climate) == "sunhour" )) {
+  #     options.b90$fornetrad <- "sunhour"
+  #     warning("Global radiation missing, will be calculated from sunshine duration!")
+  #   } else {
+  #     stop("Please either provide globrad or sunhour with your climate data!")
+  #   }
+  # } else {
+  #   if (any( names(climate) == "globrad" )) {
+  #     options.b90$fornetrad <- "globrad"
+  #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
+  # }
+
+
+  if (is.null(precip) ){
+    stopifnot("prec" %in% names(climate))
+  } else {
+    names(precip) <- tolower(names(precip))
+    stopifnot(all(c("dates","prec") %in% names(precip)))
+    if (!any( names(precip) == "mesfl") ) {
+      precip$mesfl <- 0
+    }
+  }
+
+  if (!any( names(climate) == "mesfl") ) {
+    climate$mesfl <- 0
+  }
+
+
+
+}
