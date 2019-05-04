@@ -28,6 +28,11 @@ soil_to_param <- function(soil, imodel="MvG") {
     } else soil$mat[i] <- m
   }
 
-  return(list(soil_nodes = soil[,list(upper, lower, mat)],
+  soil$thick <- soil$upper - soil$lower
+  soil$midpoint <- soil$lower + soil$thick/2
+  soil$thick <- round(soil$thick * 1000) # mm
+  soil$layer <- 1:nrow(soil)
+
+  return(list(soil_nodes = soil[,list(layer, upper,lower,thick, midpoint, mat)],
               soil_materials = materials))
 }

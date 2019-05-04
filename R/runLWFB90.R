@@ -21,9 +21,9 @@
 #'  \emph{ksat} [mm d-1] and \emph{tort}. The volume fraction of stones has to be named \emph{gravel}.
 #'  If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
 #'  These have to be set up in advance.
-#' @param outputmat a [10,5]-matrix flagging the desired model-output. Use
+#' @param output a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
-#' @param output.param.options append 'param.b90', 'options.b90', 'soil' and daily plant
+#' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?
 #' @param read.output read and return simulation results from out.dir? Default is TRUE.
 #' @param output.log write the logfile Log.txt? Default is TRUE.
@@ -64,58 +64,79 @@ runLWFB90 <- function(project.dir,
                       climate,
                       precip = NULL,
                       soil = NULL,
-                      outputmat = setoutput_LWFB90(),
-                      output.param.options = TRUE,
-                      run = TRUE,
+                      output = setoutput_LWFB90(),
+                      rtrn.input = TRUE,
                       read.output = TRUE,
                       output.log = TRUE,
-                      verbose = TRUE
+                      chk.input = TRUE,
+                      verbose = TRUE,
+                      run = TRUE
 ){
 
   oldWD <- getwd()
   on.exit(setwd(oldWD))
 
-  #name-checks ----------------------------------------------------------------------
+  # input checks ------------------------------------------------------------
+  if (chk.input) {
+    chk_options()
+    chk_param()
+    chk_clim()
+    chk_soil()
+  }
+
+  # ---- Simulation period ----------------------------------------------------------
+  climyears <- unique(year(climate$dates))
+  simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
+                  to = as.integer(format(options.b90$enddate,"%Y")),
+                  by = 1)
+
+  # Number of Simulation days
+  param.b90$ndays <-  as.integer(difftime(options.b90$enddate,options.b90$startdate)) + 1
 
 
+  # Vegetation-Period: calculate budburst and leaffall days of year  ----------------
+  budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
+                                      out.years = simyears,
+                                      budburst.method = options.b90$budburst.method,
+                                      leaffall.method = options.b90$leaffall.method,
+                                      budburstdoy.fixed = param.b90$budburstdoy,
+                                      leaffalldoy.fixed = param.b90$leaffalldoy,
+                                      species = param.b90$budburst.species,
+                                      est.prev = ifelse(length(climyears) <= 5,
+                                                        length(climyears) - 1, 5))
+  param.b90$budburstdoy <- budburst_leaffall$start
+  param.b90$leaffalldoy <- budburst_leaffall$end
 
-
-  # soil names
-  if (is.null(soil)) {
-    stopifnot(all(c( "upper", "lower", "mat") %in% names(param.b90$soil_nodes)))
-    if (options.b90$imodel == "MvG" ) {
-      stopifnot(all(c("mat","ths","thr","alpha","npar","ksat","tort","gravel") %in% names(param.b90$soil_materials)))
-    } else {
-      stopifnot(all(c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(param.b90$soil_materials)))
-    }
+  # ---- Vegetation -----------------------------------------------------------------
+  # Prepare vegetation parameters
+  if (tolower(options.b90$standprop.input) == "table") {
+    if (verbose == T) {message("Creating long term stand dynamics from table 'standprop.table'...")}
+    param.b90 <- standprop_yearly_to_param(param.b90$standprop_yearly,
+                                           param.b90,
+                                           out.years = simyears)
   } else {
-    if (options.b90$imodel == "MvG") {
-      stopifnot(all(c("upper","lower", "ths","thr","alpha","npar","ksat","tort","gravel") %in% names(soil)))
-    } else {
-      stopifnot(all(c("upper","lower", "thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(soil)))
-    }
+    if (verbose == T) {message("Creating stand properties from parameters...")}
+    # derive age from age.ini for simyears
+    param.b90$age <- seq(from = param.b90$age.ini + 1,
+                         by = 1, length.out = length(simyears))
+
   }
 
+  # ---- Create daily standproperties from parameters
+  standprop_daily <- make_standprop(options.b90, param.b90, out.years = simyears)
 
-  # ---- Input checks ---------------------------------------------------------------
+  # constrain to simulation period
+  standprop_daily <- standprop_daily[which(dates >= options.b90$startdate
+                                           & dates <= options.b90$enddate),]
 
-
-
-
-  if ( is.null(soil) & (is.null(param.b90$soil_nodes) || is.null(param.b90$soil_materials))) {
-    stop("Please provide soil data, either via the argument 'soil' or as list items 'soil_nodes' and 'soil_materials' in param.b90 ")
+  if (verbose == T) {
+    message("Standproperties created succesfully")
   }
 
-  if (options.b90$root.method == "soilvar") {
-    if (is.null(soil)) {
-      stop("Please provide the 'soil'-argument when using options.b90$root.method = 'soilvar'.")
-    } else {
-      if (is.null(soil$rootden)) {
-        stop("Please provide the column 'rootden' in 'soil'-data.frame")
-      }
-    }
-  }
+  # ---- Prepare climate for input----------------------------------------------------
 
+  # constrain data to simulation period
+  climate <- climate[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
 
   # Precipitation correction (Richter)
   if (options.b90$prec.corr == TRUE) {
@@ -128,12 +149,49 @@ runLWFB90 <- function(project.dir,
     climate[,globrad := CalcGlobRad( yday(dates), sunhours, param.b90$coords_y )]
   }
 
+  # ---- Make soilnodes & soil materials --------------------------------------------
+  # soil provided as argument -> create soil nodes and materials and add them to param.b90
+  if (!is.null(soil)) {
+    param.b90[c("soil_nodes","soil_materials" )] <- soil_to_param(soil, options.b90$imodel)
+  }
+
+  if (options.b90$imodel == "MvG") {
+    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)]
+  } else {
+    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,thsat,thetaf,psif,bexp,kf,wetinf,gravel)]
+  }
+
+  # add initial water potential from parameters
+  param.b90$soil_nodes$psiini <- param.b90$psiini
+
+  # Make Roots ----------------------------------------------------------------------
+  if (options.b90$root.method != "soilvar") {
+    param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = param.b90$soil_nodes$lower,
+                                                    maxrootdepth = param.b90$maxrootdepth,
+                                                    method = options.b90$root.method,
+                                                    beta = param.b90$betaroot,
+                                                    relrootden = param.b90$rootden.tab$rootden,
+                                                    rootdepths = param.b90$rootden.tab$depth)
+  } else {
+    if (!is.null(soil)) {
+      param.b90$soil_nodes$rootden <- soil$rootden
+    } else {
+      stopifnot(!is.null(param.b90$soil_nodes$rootden))
+    }
+  }
+
+  if (!is.data.table(param.b90$soil_nodes)) {
+    setDT(param.b90$soil_nodes)
+  }
+
+  if (!is.data.table(param.b90$soil_materials)) {
+    setDT(param.b90$soil_materials)
+  }
 
 
-  # ---- clean file paths and set up directories -----------------------------------------
-
-  # create project-directory
+  # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (run) {
+    # create project-directory
     project.dir <- normalizePath(project.dir, mustWork = FALSE)
 
     if (!dir.exists(project.dir)) {
@@ -153,124 +211,7 @@ runLWFB90 <- function(project.dir,
     setwd(project.dir) # set the working directory to the project folder
     try(file.remove(list.files(project.dir, pattern = ".ASC", full.names = T)))
     try(file.remove(list.files("Log.txt")))
-  }
 
-  # ---- Simulation period ----------------------------------------------------------
-  climyears <- unique(year(climate$dates))
-  simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
-                  to = as.integer(format(options.b90$enddate,"%Y")),
-                  by = 1)
-
-  # Number of Simulation days
-  param.b90$ndays <-  as.integer(difftime(options.b90$enddate,options.b90$startdate)) + 1
-
-
-  # Vegetation-Period: calculate budburst and leaffall-doys  ------------------------
-  budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
-                                      out.years = simyears,
-                                      budburst.method = options.b90$budburst.method,
-                                      leaffall.method = options.b90$leaffall.method,
-                                      budburstdoy.fixed = param.b90$budburstdoy,
-                                      leaffalldoy.fixed = param.b90$leaffalldoy,
-                                      species = param.b90$budburst.species,
-                                      est.prev = ifelse(length(climyears) <= 5,
-                                                        length(climyears) - 1, 5))
-  param.b90$budburstdoy <- budburst_leaffall$start
-  param.b90$leaffalldoy <- budburst_leaffall$end
-
-  # ---- Make Stand --------------------------------------------------------------------
-  # Prepare parameters
-  if (tolower(options.b90$standprop.input) == "table") {
-    if (verbose == T) {message("Creating long term stand dynamics from table 'standprop.table'...")}
-    param.b90 <- standprop_yearly_to_param(param.b90$standprop_yearly,
-                                           param.b90,
-                                           out.years = simyears)
-  } else {
-    if (verbose == T) {message("Creating constant stand properties from parameters...")}
-    # derive age from age.ini for simyears
-    param.b90$age <- seq(from = param.b90$age.ini + 1,
-                         by = 1, length.out = length(simyears))
-
-  }
-
-  # ---- Create standproperties from parameters
-
-  standprop_daily <- make_standprop(options.b90, param.b90, out.years = simyears )
-
-  # constrain to simulation period
-  standprop_daily <- standprop_daily[which(dates >= options.b90$startdate
-                                           & dates <= options.b90$enddate),]
-
-  if (verbose == T) {
-    message("Standproperties created succesfully")
-  }
-
-  # ---- Prepare climate for input----------------------------------------------------
-
-
-  # constrain data to simulation period
-  climate <- climate[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
-
-  if (!is.null(precip)) {
-    precip <- precip[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
-    if (nrow(climate)*options.b90$prec.interval != nrow(precip)) {
-      warning("The precipitation data provided via precip does not fit to the precipitation interval defined in options.b90$prec.interval.
-              Precip-argument will be ignored and prec from climate data will be used.")
-      options.b90$prec.interval <- 1
-      precip <- NULL
-      stopifnot("prec" %in% names(climate))
-    } else {
-      if (options.b90$prec.interval == 1) {
-        climate$prec <- precip$prec
-        precip <- NULL
-      } else {
-        precip[,ii := rep(1:options.b90$prec.interval,param.b90$ndays)]
-        precip <- precip[, list(year(dates), month(dates), mday(dates), ii, prec, mesfl)]
-        climate$prec <- -999
-      }
-    }
-  }
-  # ---- Make soilnodes & soil materials --------------------------------------------
-  # soil provided as argument -> create soil nodes and materials and add them to param.b90
-  if (!is.null(soil)) {
-    soil_nodes_mat <- soil_to_param(soil, options.b90$imodel)
-    param.b90$soil_nodes <- soil_nodes_mat$soil_nodes
-    param.b90$soil_materials <- soil_nodes_mat$soil_materials
-  }
-
-  if (options.b90$imodel == "MvG") {
-    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)]
-  } else {
-    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,thsat,thetaf,psif,bexp,kf,wetinf,gravel)]
-  }
-
-  param.b90$soil_nodes$thick <- param.b90$soil_nodes$upper - param.b90$soil_nodes$lower
-  param.b90$soil_nodes$midpoint <- param.b90$soil_nodes$lower + param.b90$soil_nodes$thick/2
-  param.b90$soil_nodes$thick <- round(param.b90$soil_nodes$thick * 1000) # mm
-  param.b90$soil_nodes$layer <- 1:nrow(param.b90$soil_nodes)
-  param.b90$soil_nodes$psiini <- param.b90$psiini
-
-
-  # Make Roots ----------------------------------------------------------------------
-  if (options.b90$root.method != "soilvar") {
-    param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = param.b90$soil_nodes$lower,
-                                                    maxrootdepth = param.b90$maxrootdepth,
-                                                    method = options.b90$root.method,
-                                                    beta = param.b90$betaroot,
-                                                    relrootden = param.b90$rootden.tab$rootden,
-                                                    rootdepths = param.b90$rootden.tab$depth)
-  } else {
-    param.b90$soil_nodes$rootden <- soil$rootden
-  }
-  if (!is.data.table(param.b90$soil_nodes)) {
-    setDT(param.b90$soil_nodes)
-  }
-
-  if (!is.data.table(param.b90$soil_materials)) {
-    setDT(param.b90$soil_materials)
-  }
-  # ---- Execute LWF-Brook90  -------------------------------------------------------
-  if (run) {
     if (verbose == T) {
       message("Running model..." )
     }
@@ -299,7 +240,7 @@ runLWFB90 <- function(project.dir,
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
       soil_nodes = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
-      output = outputmat,
+      output = output,
       output_log = output.log
     )
 
@@ -327,10 +268,10 @@ runLWFB90 <- function(project.dir,
   }
 
   # append model input
-  if (output.param.options == TRUE){
+  if (rtrn.input == TRUE){
     simres$model_input <- list(options.b90 = options.b90,
                                param.b90 = param.b90,
-                               plant.devt = data.table(standprop_daily))
+                               standprop_daily = data.table(standprop_daily))
   }
 
   if (verbose == T) {
@@ -341,102 +282,157 @@ runLWFB90 <- function(project.dir,
   return(simres)
 }
 
-chk_options <- function(options.b90){
 
-  names(options.b90) <- tolower(names(options.b90))
+chk_options <- function(){
+  eval.parent(quote({
+    names(options.b90) <- tolower(names(options.b90))
 
-  stopifnot(all(names(options.b90) %in% c("startdate","enddate","fornetrad","prec.interval",
-                                          "prec.corr","prec.exposure","budburst.method",
-                                          "leaffall.method", "standprop.input", "standprop.interp",
-                                          "standprop.use_growthperiod","lai.method","imodel", "root.method")))
+    stopifnot(all(names(options.b90) %in% c("startdate","enddate","fornetrad","prec.interval",
+                                            "prec.corr","prec.exposure","budburst.method",
+                                            "leaffall.method", "standprop.input", "standprop.interp",
+                                            "standprop.use_growthperiod","lai.method","imodel", "root.method")))
 
-  options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
-  options.b90$standprop.input <- match.arg(options.b90$standprop.input, choices = c("parameters", "table"))
-  options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
-  options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
-  options.b90$imodel <- match.arg(options.b90$imodel, choices = c("MvG", "CH"))
+    options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
+    options.b90$standprop.input <- match.arg(options.b90$standprop.input, choices = c("parameters", "table"))
+    options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
+    options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))
+    options.b90$imodel <- match.arg(options.b90$imodel, choices = c("MvG", "CH"))
 
-  if (!inherits(options.b90$startdate, "Date")) {
-    stop("Please provide 'options.b90$startdate' as Date-object")}
-  if (!inherits(options.b90$enddate, "Date")) {
-    stop("Please provide 'options.b90$enddate' as Date-object")}
-  if (!(options.b90$startdate < options.b90$enddate)) {
-    stop("Check options.b90: 'startdate > enddate ")}
+    if (!inherits(options.b90$startdate, "Date")) {
+      stop("Please provide 'options.b90$startdate' as Date-object")}
+    if (!inherits(options.b90$enddate, "Date")) {
+      stop("Please provide 'options.b90$enddate' as Date-object")}
+    if (!(options.b90$startdate < options.b90$enddate)) {
+      stop("Check options.b90: 'startdate > enddate ")}
 
-  if (options.b90$budburst.method %in% c("const", "const.", "constant")) options.b90$budburst.method <- "fixed"
-  if (options.b90$leaffall.method %in% c("const", "const.", "constant")) options.b90$leaffall.method <- "fixed"
-
-  return(options.b90)
+    if (options.b90$budburst.method %in% c("const", "const.", "constant")) options.b90$budburst.method <- "fixed"
+    if (options.b90$leaffall.method %in% c("const", "const.", "constant")) options.b90$leaffall.method <- "fixed"
+  }))
 }
 
-chk_param <- function(param.b90) {
+## check-functions for input
 
-  nms <- c("maxlai","sai","sai.ini","height","height.ini","densef",
-    "densef.ini","age.ini","winlaifrac","budburst.species","budburstdoy",
-    "leaffalldoy","shape.budburst","shape.leaffall","shape.optdoy","emergedur","leaffalldur",
-    "lai.doy","lai.frac","alb","albsn","ksnvp","fxylem",
-    "mxkpl","lwidth","psicr","nooutf","lpc","cs",
-    "czs","czr","hs","hr","rhotp","nn",
-    "maxrlen","initrlen","initrdep","rrad","rgrorate","rgroper",
-    "maxrootdepth","betaroot","radex","glmax","glmin",
-    "rm","r5","cvpd","tl","t1","t2",
-    "th","frintlai","frintsai","fsintlai","fsintsai","cintrl",
-    "cintrs","cintsl","cintss","infexp","bypar","qfpar",
-    "qffc","imperv","drain","gsc","gsp","ilayer",
-    "qlayer","z0s","rstemp","melfac","ccfac","laimlt",
-    "saimlt","grdmlt","maxlqf","snoden","obsheight","rssa",
-    "rssb","dtimax","dswmax","dpsimax",
-    "wndrat","fetch","z0w","zw","zminh","coords_x",
-    "coords_y","c1","c2","c3","pdur","eslope",
-    "aspect","dslope","slopelen","intrainini","intsnowini","gwatini",
-    "snowini","psiini")
-  names(param.b90) <- tolower(names(param.b90))
-  if ( any(!names(param.b90) %in% nms )) {
-    stop(paste("param.b90-list is incomplete. Missing list items:",
-               paste(nms[which(!nms %in% names(param.b90))], collapse = ", ")))
-  }
-  return(param.b90)
-}
-
-chk_clim <- function(options.b90, climate, precip) {
-  # climate name checks
-  names(climate) <- eval(quote(tolower(names(climate))), parent.frame())
-
-  stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% names(climate)))
-
-  if (min(climate$dates) > options.b90$startdate | max(climate$dates) > options.b90$enddate){
-    stop("climate not covering requested simulation period completely! Check startdate and enddate in options.b90")
-  }
-
-  # Climate
-  # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
-  #   if (any( names(climate) == "sunhour" )) {
-  #     options.b90$fornetrad <- "sunhour"
-  #     warning("Global radiation missing, will be calculated from sunshine duration!")
-  #   } else {
-  #     stop("Please either provide globrad or sunhour with your climate data!")
-  #   }
-  # } else {
-  #   if (any( names(climate) == "globrad" )) {
-  #     options.b90$fornetrad <- "globrad"
-  #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
-  # }
-
-
-  if (is.null(precip) ){
-    stopifnot("prec" %in% names(climate))
-  } else {
-    names(precip) <- tolower(names(precip))
-    stopifnot(all(c("dates","prec") %in% names(precip)))
-    if (!any( names(precip) == "mesfl") ) {
-      precip$mesfl <- 0
+chk_param <- function() {
+  eval.parent(quote({
+    names(param.b90) <- tolower(names(param.b90))
+    nms <- c("maxlai","sai","sai.ini","height","height.ini","densef",
+             "densef.ini","age.ini","winlaifrac","budburst.species","budburstdoy",
+             "leaffalldoy","shape.budburst","shape.leaffall","shape.optdoy","emergedur","leaffalldur",
+             "lai.doy","lai.frac","alb","albsn","ksnvp","fxylem",
+             "mxkpl","lwidth","psicr","nooutf","lpc","cs",
+             "czs","czr","hs","hr","rhotp","nn",
+             "maxrlen","initrlen","initrdep","rrad","rgrorate","rgroper",
+             "maxrootdepth","betaroot","radex","glmax","glmin",
+             "rm","r5","cvpd","tl","t1","t2",
+             "th","frintlai","frintsai","fsintlai","fsintsai","cintrl",
+             "cintrs","cintsl","cintss","infexp","bypar","qfpar",
+             "qffc","imperv","drain","gsc","gsp","ilayer",
+             "qlayer","z0s","rstemp","melfac","ccfac","laimlt",
+             "saimlt","grdmlt","maxlqf","snoden","obsheight","rssa",
+             "rssb","dtimax","dswmax","dpsimax",
+             "wndrat","fetch","z0w","zw","zminh","coords_x",
+             "coords_y","c1","c2","c3","pdur","eslope",
+             "aspect","dslope","slopelen","intrainini","intsnowini","gwatini",
+             "snowini","psiini")
+    if ( any(!nms %in% names(param.b90) )) {
+      stop(paste("param.b90-list is incomplete. Missing list items:",
+                 paste(nms[which(!nms %in% names(param.b90))], collapse = ", ")))
     }
-  }
-
-  if (!any( names(climate) == "mesfl") ) {
-    climate$mesfl <- 0
-  }
-
-
+  }))
 
 }
+
+chk_clim <- function() {
+
+  eval.parent(quote({ # manipualte the calling environment
+
+    # climate name checks
+    names(climate) <- tolower(names(climate))
+    stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% tolower(names(climate))))
+    stopifnot(inherits(climate$dates, "Date"))
+    if (min(climate$dates) > options.b90$startdate | max(climate$dates) < options.b90$enddate){
+      stop("climate not covering requested simulation period completely.")
+    }
+
+    # Climate
+    # if (options.b90$fornetrad == "globrad" & !any( names(climate) == "globrad" )) {
+    #   if (any( names(climate) == "sunhour" )) {
+    #     options.b90$fornetrad <- "sunhour"
+    #     warning("Global radiation missing, will be calculated from sunshine duration!")
+    #   } else {
+    #     stop("Please either provide globrad or sunhour with your climate data!")
+    #   }
+    # } else {
+    #   if (any( names(climate) == "globrad" )) {
+    #     options.b90$fornetrad <- "globrad"
+    #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
+    # }
+
+    if (!any( names(climate) == "mesfl") ) {
+      climate$mesfl <- 0
+    }
+
+    if (is.null(precip) ){
+      stopifnot("prec" %in% names(climate))
+
+    } else {
+      names(precip) <- tolower(names(precip))
+      stopifnot(all(c("dates","prec") %in% tolower(names(precip))))
+      if (!any( names(precip) == "mesfl") ) {
+        precip$mesfl <- 0
+      }
+      if (nrow(climate)*options.b90$prec.interval != nrow(precip)) {
+        stop("Climate and Precipitation data provided do not fit to the precipitation
+             interval defined in options.b90$prec.interval.")
+      } else {
+        if (options.b90$prec.interval == 1) {
+          climate$prec <- precip$prec
+          precip <- NULL
+        } else {
+          precip$ii <- rep(1:options.b90$prec.interval,nrow(climate))
+          precip <- precip[, list(year(dates), month(dates), mday(dates), ii, prec, mesfl)]
+          climate$prec <- -999
+        }
+      }
+  }
+  }))
+}
+
+chk_soil <- function(){
+
+  eval.parent(quote({
+    # soil names
+    if (is.null(soil)) {
+      if (is.null(param.b90$soil_nodes) | is.null(param.b90$soil_materials)){
+        stop("Please provide soil parameters as items 'soil_nodes' and 'soil_materials' via 'param.b90',
+           when not using 'soil'-argument in runLWFB90.")
+      }
+
+      names(param.b90$soil_nodes) <- tolower(names(param.b90$soil_nodes))
+      names(param.b90$soil_materials) <- tolower(names(param.b90$soil_materials))
+
+      stopifnot(all(c( "upper", "lower", "mat") %in% names(param.b90$soil_nodes)))
+      if (options.b90$imodel == "MvG" ) {
+        stopifnot(all(c("mat","ths","thr","alpha","npar","ksat","tort","gravel") %in% names(param.b90$soil_materials)))
+      } else {
+        stopifnot(all(c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(param.b90$soil_materials)))
+      }
+      if (options.b90$root.method == "soilvar" & is.null(param.b90$soil_nodes$rootden)) {
+        stop("Please provide column 'rootden' in param.b90$soil_nodes when using options.b90$root.method = 'soilvar'.")
+      }
+    } else {
+      names(soil) <- tolower(names(soil))
+      if (options.b90$imodel == "MvG") {
+        stopifnot(all(c("upper","lower", "ths","thr","alpha","npar","ksat","tort","gravel") %in% names(soil)))
+      } else {
+        stopifnot(all(c("upper","lower", "thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(soil)))
+      }
+
+      if (options.b90$root.method == "soilvar" & is.null(soil$rootden)) {
+        stop("Please provide column 'rootden' in 'soil'-data.frame when using options.b90$root.method = 'soilvar'.")
+      }
+    }
+  }))
+
+}
+
