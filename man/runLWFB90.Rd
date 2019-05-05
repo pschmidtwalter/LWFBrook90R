@@ -5,9 +5,9 @@
 \title{Run the LWF-Brook90 hydrological model and return results}
 \usage{
 runLWFB90(project.dir, options.b90, param.b90, climate, precip = NULL,
-  soil = NULL, outputmat = setoutput_LWFB90(),
-  output.param.options = TRUE, run = TRUE, read.output = TRUE,
-  output.log = TRUE, verbose = TRUE)
+  soil = NULL, output = setoutput_LWFB90(), rtrn.input = TRUE,
+  read.output = TRUE, output.log = TRUE, chk.input = TRUE,
+  verbose = TRUE, run = TRUE)
 }
 \arguments{
 \item{project.dir}{directory-name of the project to which output files
@@ -35,20 +35,20 @@ the parameters of the van Genuchten retention functions are \emph{ths}, \emph{th
  If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
  These have to be set up in advance.}
 
-\item{outputmat}{a [10,5]-matrix flagging the desired model-output. Use
+\item{output}{a [10,5]-matrix flagging the desired model-output. Use
 \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
 
-\item{output.param.options}{append 'param.b90', 'options.b90', 'soil' and daily plant
+\item{rtrn.input}{append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?}
-
-\item{run}{run LWF-Brook90 or only return model input objects?
-Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
 \item{read.output}{read and return simulation results from out.dir? Default is TRUE.}
 
 \item{output.log}{write the logfile Log.txt? Default is TRUE.}
 
 \item{verbose}{print messages to the console? Default is TRUE.}
+
+\item{run}{run LWF-Brook90 or only return model input objects?
+Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 }
 \value{
 Returns the model-output from the files found in 'project.dir' as a list of data.tables,

@@ -4,6 +4,7 @@ output:
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
+bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{"Introduction to LWFBrook90R"}
   %\VignetteEngine{knitr::rmarkdown}
@@ -32,12 +33,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette gives a brief introduction to the usage of the *LWFBrook90R* R-package. The package serves as an interface between R and the executable code of the hydrological model LWF-BROOK90 [@hammel_charakterisierung_2001]. The model code reside in a separate R-package which is available at the [Bavarian State Institute of Forestry](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php). The functionality is presented on a working example.
+This vignette gives a brief introduction to the usage of the *LWFBrook90R* R-package. The package serves as an interface between R and the executable code of the hydrological model LWF-BROOK90 [@hammel_charakterisierung_2001]. The functionality is presented on a working example.
 
 ***
 
 # Introduction
-LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions (@van_genuchten_closed-form_1980; @mualem_new_1976), and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
+LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions [@mualem_new_1976; @van_genuchten_closed-form_1980], and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
 
 * write input files from climate driving data, model control options and parameters,
 * execute the model code,
@@ -45,7 +46,7 @@ LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculat
 
 The model control options thereby let you select different functions for defining aboveground stand dynamics, phenology, and root length density depth distributions. Additionally, a set of pedotransfer functions is provided to derive hydraulic parameters from soil physical properties.
 
-##Installation {#installation}
+## Installation {#installation}
 
 Before installing the *LWFBrook90R* R-package, be sure to download and install the 'data.table' packages, as *LWFBrook90R* depends on it:
 
@@ -98,23 +99,23 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
                             param.b90 = param.b90,
                             climate = slb1_meteo,
                             soil = soil,
-                            outputmat = output)
+                            output = output)
 ```
-`runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passed climate, vegetation properties and parameters to the fortran model code. The model saves the selected output data set to the specified folder `out.dir` (defaults to 'out/' within `project.dir`). As a last step, `runLWFB90` returns the contents of the output files. While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `outputmat`-argument and named according to the .csv files in the `out.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`output.param.options = T`). Let us have a look at the `evapday.asc`-item of `b90.results.slb1` containing daily evaporation fluxes:
+`runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passes climate, vegetation properties and parameters to the Fortran model code. The model saves the selected output data set to the specified folder `project.dir`. As a last step, `runLWFB90` returns the contents of the output files (if `read.output = TRUE` ). While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `output`-argument and named according to the '.ASC' files in the `project.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`rtrn.input = T`). Let us have a look at the `EVAPDAY.ASC`-item of `b90.results.slb1` containing daily evaporation fluxes:
 
 ```{r}
-str(b90.results.slb1$EVAPDAY.csv)
+str(b90.results.slb1$EVAPDAY.ASC)
 ```
-`EVAPDAY.csv` is a data.table-object and contains date variables ('YR', 'MO', 'DA', 'DOY'), actual evaporation fluxes ('EVAP', 'TRAN', 'IRVP', 'ISVP', 'SLVP', 'SNVP'), potential evaporation fluxes ('PINT', 'PTRAN', 'PSLVP') and total runoff ('FLOW'). For a detailed description of all output variables refer to the list of parameters and variables on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html). 
+`EVAPDAY.ASC` is a data.table-object and contains date variables ('YR', 'MO', 'DA', 'DOY'), actual evaporation fluxes ('EVAP', 'TRAN', 'IRVP', 'ISVP', 'SLVP', 'SNVP'), potential evaporation fluxes ('PINT', 'PTRAN', 'PSLVP') and total runoff ('FLOW'). For a detailed description of all output variables refer to the list of parameters and variables on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html). 
 To plot the evaporation data, it is convenient to derive a Date object from the date variables. We use the data.table syntax to do so:
 ```{r}
-b90.results.slb1$EVAPDAY.csv[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
+b90.results.slb1$EVAPDAY.ASC[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
 ```
-Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `out.dir`-folder is named 'SWATDAY.csv' and returned as data.table-object, containing the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90.results.slb1$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers. Again, we use data.table syntax:
+Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `project.dir`-folder is named 'SWATDAY.ASC' and returned as data.table-object, containing the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90.results.slb1$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers. Again, we use data.table syntax:
 
 ```{r}
-b90.results.slb1$SWATDAY.csv[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
-swat100cm <- b90.results.slb1$SWATDAY.csv[NL <= 14, 
+b90.results.slb1$SWATDAY.ASC[, dates := as.Date(paste(YR, MO, DA, sep = "-"))]
+swat100cm <- b90.results.slb1$SWATDAY.ASC[NL <= 14, 
                                           list(swat100_mm = sum(SWATI)), 
                                           by = dates]
 ```
@@ -122,8 +123,8 @@ Now we can plot the soil water storage along with transpiration:
 
 ```{r, fig.height=5, fig.width=7, echo =F, fig.cap="Simulation results for sample data"}
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-plot(b90.results.slb1$EVAPDAY.csv$dates, 
-     b90.results.slb1$EVAPDAY.csv$TRAN, type ='l',
+plot(b90.results.slb1$EVAPDAY.ASC$dates, 
+     b90.results.slb1$EVAPDAY.ASC$TRAN, type ='l',
      col = "green", ylab = "tran [mm]", xlab = "")
 par(new =T)
 plot(swat100cm$dates,
@@ -139,7 +140,7 @@ legend("bottom",inset = -0.25,
 ```
 
 # Options and parameters {#options}
-The model control options (`options.b90`-argument in `runLWFB90`) let you select basic information about the simulation like start and end dates of the simulation (`startdate`, `enddate`), the radiation input (global radiation or sunshine duration, `fornetrad`), the precipitation interval (`prec.interval`), correction for evaporation bias of precipitation (`richter.prec.corr`, not implemented yet), and which  water retention and hydraulic conductivity models to use (`imodel`, Mualem/van Genuchten or Clapp/Hornberger). 
+The model control options (`options.b90`-argument in `runLWFB90`) let you select basic information about the simulation like start and end dates of the simulation (`startdate`, `enddate`), the radiation input (global radiation or sunshine duration, `fornetrad`), the precipitation interval (`prec.interval`), correction for evaporation bias of precipitation (`prec.corr`), and which  water retention and hydraulic conductivity model to use (`imodel`, Mualem/van Genuchten or Clapp/Hornberger). 
 
 Aside from the basic technical information, the options control the basic shape of the annual course of leaf area index, which phenology model, and which root density depth distribution function to use. The interplay of options and parameters is shown briefly in the following paragraphs, by describing how options and parameters are passed from the `options.b90` and `param.b90` arguments to the individual functions that are called from within `runLWFB90`.
 
