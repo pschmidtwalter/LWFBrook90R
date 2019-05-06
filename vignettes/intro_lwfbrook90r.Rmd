@@ -4,6 +4,7 @@ output:
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
+bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{"Introduction to LWFBrook90R"}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +38,7 @@ This vignette gives a brief introduction to the usage of the *LWFBrook90R* R-pac
 ***
 
 # Introduction
-LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions (@van_genuchten_closed-form_1980; @mualem_new_1976), and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
+LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions [@van_genuchten_closed-form_1980; @mualem_new_1976)], and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
 
 * write input files from climate driving data, model control options and parameters,
 * execute the model code,
@@ -98,7 +99,7 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
                             param.b90 = param.b90,
                             climate = slb1_meteo,
                             soil = soil,
-                            outputmat = output)
+                            output = output)
 ```
 `runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passed climate, vegetation properties and parameters to the fortran model code. The model saves the selected output data set to the specified folder `out.dir` (defaults to 'out/' within `project.dir`). As a last step, `runLWFB90` returns the contents of the output files. While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `outputmat`-argument and named according to the .ASC files in the `out.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`output.param.options = T`). Let us have a look at the `evapday.asc`-item of `b90.results.slb1` containing daily evaporation fluxes:
 
