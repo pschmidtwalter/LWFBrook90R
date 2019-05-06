@@ -4,38 +4,36 @@
 \alias{mrunLWFB90}
 \title{Make a multirun simulation using a variable input parameters.}
 \usage{
-mrunLWFB90(param.b90, options.b90, climate, soil = NULL,
-  paramvar = NULL, paramvar_nms = names(paramvar),
-  all_combinations = F, multirun.dir = "MultiRuns/",
+mrunLWFB90(paramvar, param.b90, options.b90, climate, soil = NULL,
+  paramvar_nms = names(paramvar), multirun.dir = "MultiRuns/",
   keep.subdirs = FALSE, cores = 3, showProgress = TRUE, ...)
 }
 \arguments{
-\item{param.b90}{Named list of parameters to be used in all simulations, or list of lists with different parameter sets.}
-
-\item{options.b90}{Named list of model control option to be used in all simulations, or list of lists with different options sets.}
-
-\item{climate}{data.frame with climate data passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of climate data.frames}
-
-\item{soil}{data.frame with soil properties passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of lists with different soil profiles}
-
 \item{paramvar}{data.frame of variable input parameters with realisations for each single run.
 The ith values replace the list elements in param.b90 of the ith simulation,
 with the column names of paramvar being matched to the names in param.b90.
 In order to match values from paramvar to data.frame or vector elements in param.b90,
 the respective column name of paramvar has to be setup from the name and index.
-E.g., in order to place the 2nd value of 'ths' in the soil_materials data.frame,
+For example, to place the 2nd value of 'ths' in the soil_materials data.frame,
 the respective column name of paramvar has to be called 'soil_materials.ths2'.
-In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.}
+In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.
+The function for replacing values in vector element and data.frames is \code{\link[replace_vecelements]{replace_vecelements}}.}
+
+\item{param.b90}{Named list of parameters, in which the parameters defined in paramvar will be replaced.}
+
+\item{options.b90}{Named list of model control option to be used in all simulations.}
+
+\item{climate}{data.frame with climate data passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of climate data.frames}
+
+\item{soil}{data.frame with soil properties passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of lists with different soil profiles}
 
 \item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90}
-
-\item{all_combinations}{logical wether to set up all possible combinations of lists param.b90, options, climate and soil. See details.}
 
 \item{multirun.dir}{the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'}
 
 \item{keep.subdirs}{keep sub-directories of the single runs? Default is FALSE}
 
-\item{cores}{number of cores to use for parallel processing}
+\item{cores}{number of cores to use for parallel processing. Default is 3.}
 
 \item{showProgress}{Show progressbar?}
 

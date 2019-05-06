@@ -2,16 +2,16 @@
 % Please edit documentation in R/runLWFB90.R
 \name{runLWFB90}
 \alias{runLWFB90}
-\title{Run the LWF-Brook90 hydrological model and return results}
+\title{Run the LWF-Brook90 hydrological model}
 \usage{
-runLWFB90(project.dir, options.b90, param.b90, climate, precip = NULL,
-  soil = NULL, outputmat = setoutput_LWFB90(),
-  output.param.options = TRUE, run = TRUE, read.output = TRUE,
-  output.log = TRUE, verbose = TRUE)
+runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90, climate,
+  precip = NULL, soil = NULL, output = setoutput_LWFB90(),
+  rtrn.input = TRUE, read.output = TRUE, output.log = TRUE,
+  chk.input = TRUE, verbose = TRUE, run = TRUE)
 }
 \arguments{
 \item{project.dir}{directory-name of the project to which output files
-are written. Will be created, if not existing.}
+are written. Will be created, if not existing. Defaults to 'runLWFB90/'}
 
 \item{options.b90}{named list of model control options. Use
 \code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
@@ -23,40 +23,43 @@ are written. Will be created, if not existing.}
 correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
 \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.}
 
-\item{precip}{data.frame to supply precipitation data separately from climate data.
-Can be used to provide sub-day resolution precipitation data to LWFBrook90.}
+\item{precip}{data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+1 (daily resolution) to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.}
 
 \item{soil}{data.frame containing the hydraulic properties of the soil layers.
 Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
-The columns names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards),
-the parameters of the van Genuchten retention functions are \emph{ths}, \emph{thr},
- \emph{alpha} [m-1], \emph{npar}, and the parameters of the Mualem conductivity function
- \emph{ksat} [mm d-1] and \emph{tort}. The volume fraction of stones has to be named \emph{gravel}.
- If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
- These have to be set up in advance.}
+The column names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards).
+When using options.b90$imodel = 'MvG', the hydraulic parameters are  \emph{ths}, \emph{thr},
+ \emph{alpha} [m-1], \emph{npar}, \emph{ksat} [mm d-1] and \emph{tort}.  With options.b90$imodel = 'CH',
+ the parameters are \emph{thsat} , \emph{thetaf},\emph{psif} [kPa], \emph{bexp},
+ \emph{kf} (mm d-1), and \emph{wetinf}. For both parameterizations, the volume fraction of stones has to be named \emph{gravel}.
+ If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials' of param.b90 are used for the simulation.
+ These have to be set up in advance, see \code{\link{soil_to_param}}.}
 
-\item{outputmat}{a [10,5]-matrix flagging the desired model-output. Use
+\item{output}{a [10,5]-matrix flagging the desired model-output. Use
 \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
 
-\item{output.param.options}{append 'param.b90', 'options.b90', 'soil' and daily plant
-properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?}
+\item{rtrn.input}{append 'param.b90', 'options.b90', 'soil' and daily plant
+properties ('standprop_daily', as derived from parameters) to the result?}
+
+\item{read.output}{read and return simulation results from project.dir? When FALSE,
+simulation duration and finishing time are returned. Default is TRUE.}
+
+\item{output.log}{write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
+
+\item{verbose}{print messages to the console? Default is TRUE.}
 
 \item{run}{run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
-
-\item{read.output}{read and return simulation results from out.dir? Default is TRUE.}
-
-\item{output.log}{write the logfile Log.txt? Default is TRUE.}
-
-\item{verbose}{print messages to the console? Default is TRUE.}
 }
 \value{
 Returns the model-output from the files found in 'project.dir' as a list of data.tables,
 along with the execution time of the simulation, and model input if desired.
 }
 \description{
-Sets up the input objects for LWF-Brook90 hydrological model, starts the model,
-and returns the results.
+Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
+and returns the results if desired.
 }
 \examples{
 
