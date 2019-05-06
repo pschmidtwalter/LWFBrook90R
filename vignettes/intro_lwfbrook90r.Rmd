@@ -38,6 +38,7 @@ This vignette gives a brief introduction to the usage of the *LWFBrook90R* R-pac
 ***
 
 # Introduction
+
 LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions [@van_genuchten_closed-form_1980; @mualem_new_1976], and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
 
 * write input files from climate driving data, model control options and parameters,
