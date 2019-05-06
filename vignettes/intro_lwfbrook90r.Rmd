@@ -226,7 +226,7 @@ legend("topleft",c("'b90'","'linear'", "'Coupmodel'"), pch = NULL, lwd =2, col =
 
 ### Inter-annual variation of leaf area index 
 By passing a single value via `param.b90$maxlai` we used the same maximum leaf area index for each year of the simulation period. In order to incorporate between-year variation of the leaf area index, we can simply assign vectors of values for each year of the simulation period to any of the parameters used by function `MakeSeasLAI()`. In the following example, we pass three values for maxlai and shape.optdoy, to get different seasonal courses of leaf area index for the three years of the simulation period. Additionally, we add variation to the dates of budburst, by assigning a vector of values to the parameter `budburstdoy`.
-```{r,echo = 1:5, results = 'hide',fig.height=5, fig.width=7, fig.cap = "Options and parameters affecting interannual variation of leaf area index."}
+```{r,echo = 1:6, results = 'hide',fig.height=5, fig.width=7, fig.cap = "Options and parameters affecting interannual variation of leaf area index."}
 years <- 2001:2003
 param.b90$maxlai <- c(4,6,5)
 param.b90$shape.optdoy <- c(210,180,240)
@@ -310,7 +310,7 @@ text(x = as.Date(paste(param.b90$leaffalldoy, years), format = "%j %Y"),
 ```
 
 Another option for incorporating between-year variation of plant properties is to provide a table with yearly values of 'height', 'maxlai', 'sai', 'densef' and 'age'  via the list element `standprop.table` of the `param.b90`-argument of `Run.B90`. To take effect, the option `options.b90$standprop.input` has to be set to 'table'. In this case, the values passed via parameters `height`, `sai`, `densef` and `age.ini` are ignored. As `maxlai` is also provided via the table, the `maxlai` value from parameters is ignored as well, while the other parameters that affect intra-annual leaf area development (e.g., `shape.budburst`) are still active.
-For demonstration purposes we use the table `slb1_standprop`, that contains observed stand data of the Solling Beech Experimental site from 1966 to 2014, along with estimated leaf and stem area index from allometric functions.
+For demonstration purposes we use the table `slb1_standprop`, that contains observed stand data of the Solling Beech Experimental site from 1966 to 2014, along with estimated leaf and stem area index derived using allometric functions. For creating the daily timeseries of stand properties, we use the runLWFB90, and make use of the option to not run the model (`run = FALSE`), but only return the model input.
 ```{r, eval = F, messages = F}
 #Extend simulation period
 options.b90$startdate <- as.Date("1980-01-01")
@@ -325,16 +325,20 @@ options.b90$budburst.method <- "Menzel"
 options.b90$leaffall.method <- "vonWilpert"
 param.b90$budburst.species <- "Fagus sylvatica"
 
-#run LWF-Brook90
+#run LWF-Brook90 without simulation
 b90.results.slb1.standtable <- runLWFB90(project.dir = "example_run_b90/",
                                        options.b90 = options.b90,
                                        param.b90 = param.b90,
                                        climate = slb1_meteo,
                                        soil = soil,
-                                       outputmat = output)
-png("longtermdev.png", units = "in", width = 7, height = 5, res = 300)
+                                       output = output, 
+                                       run = F,
+                                       verbose = F)
+# png("longtermdev.png", units = "in", width = 7, height = 5, res = 300)
+
+
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-with(b90.results.slb1.standtable$plant.devt,{
+with(b90.results.slb1.standtable$standprop_daily,{
   plot(dates, lai, 
        type = "l", lwd = 2, col = "green", 
        ylab = "lai, sai m²/m²", xlab = "")
@@ -351,11 +355,8 @@ mtext("height [m]", side = 4, line = 3)
 legend("bottom",horiz = T, bty = "n",inset = -0.3, xpd =T,
        legend = c("lai", "sai", "height"), 
        col  = c("green","brown", "blue"), lwd = 2, pch = NULL)
-dev.off()
 ```
-```{r, echo = F, fig.height=5, fig.width=7}
-knitr::include_graphics("longtermdev.png")
-```
+
 
 
 ## Root density depth distribution

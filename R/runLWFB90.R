@@ -1,7 +1,8 @@
-#' Run the LWF-Brook90 hydrological model and return results
+#' Run the LWF-Brook90 hydrological model
 #'
-#' Sets up the input objects for LWF-Brook90 hydrological model, starts the model,
-#' and returns the results.
+#' Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
+#' and returns the results if desired.
+#'
 #' @param project.dir directory-name of the project to which output files
 #' are written. Will be created, if not existing.
 #' @param options.b90 named list of model control options. Use
@@ -11,22 +12,25 @@
 #' @param climate data.frame with daily climate data. The names of climate have to
 #' correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
 #' \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.
-#' @param precip data.frame to supply precipitation data separately from climate data.
-#' Can be used to provide sub-day resolution precipitation data to LWFBrook90.
+#' @param precip data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+#' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+#' 1 to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.
 #' @param soil data.frame containing the hydraulic properties of the soil layers.
 #' Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
-#' The columns names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards),
-#' the parameters of the van Genuchten retention functions are \emph{ths}, \emph{thr},
-#'  \emph{alpha} [m-1], \emph{npar}, and the parameters of the Mualem conductivity function
-#'  \emph{ksat} [mm d-1] and \emph{tort}. The volume fraction of stones has to be named \emph{gravel}.
-#'  If the soil data.frame is not provided, list items soil_nodes and soil_materials of param.b90 are used for the simulation.
-#'  These have to be set up in advance.
+#' The column names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards).
+#' When using options.b90$imodel = 'MvG', the hydraulic parameters are  \emph{ths}, \emph{thr},
+#'  \emph{alpha} [m-1], \emph{npar}, \emph{ksat} [mm d-1] and \emph{tort}.  With options.b90$imodel = 'CH',
+#'  the parameters are \emph{thsat} , \emph{thetaf},\emph{psif} [kPa], \emph{bexp},
+#'  \emph{kf} (mm d-1), and \emph{wetinf}. For both parameterizations, the volume fraction of stones has to be named \emph{gravel}.
+#'  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials' of param.b90 are used for the simulation.
+#'  These have to be set up in advance, see \code{\link{soil_to_param}}.
 #' @param output a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
 #' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
-#' properties ('plant.devt', as derived from parameters and written to 'climate.in') to the result?
-#' @param read.output read and return simulation results from out.dir? Default is TRUE.
-#' @param output.log write the logfile Log.txt? Default is TRUE.
+#' properties ('standprop_daily', as derived from parameters) to the result?
+#' @param read.output read and return simulation results from project.dir? When FALSE,
+#' simulation duration and finishing time are returned. Default is TRUE.
+#' @param output.log write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.
 #' @param verbose print messages to the console? Default is TRUE.
 #' @param run run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
@@ -111,7 +115,7 @@ runLWFB90 <- function(project.dir,
   # Prepare vegetation parameters
   if (tolower(options.b90$standprop.input) == "table") {
     if (verbose == T) {message("Creating long term stand dynamics from table 'standprop.table'...")}
-    param.b90 <- standprop_yearly_to_param(param.b90$standprop_yearly,
+    param.b90 <- standprop_yearly_to_param(param.b90$standprop.table,
                                            param.b90,
                                            out.years = simyears)
   } else {
@@ -259,11 +263,13 @@ runLWFB90 <- function(project.dir,
     } else {
       simres <- list()
     }
+    simres$finishing_time <- Sys.time()
+    simres$simulation_duration <- simtime
 
   } else { #'dry' run
-    simres <- list(options.b90 = options.b90,
+    simres <- list(model_input = list(options.b90 = options.b90,
                    param.b90 = param.b90,
-                   plant.devt = data.table(standprop_daily))
+                   standprop_daily = data.table(standprop_daily)))
     return(simres)
   }
 
@@ -277,8 +283,7 @@ runLWFB90 <- function(project.dir,
   if (verbose == T) {
     message("Finished!")
   }
-  simres$finishing_time <- Sys.time()
-  simres$sim_duration <- simtime
+
   return(simres)
 }
 
@@ -403,7 +408,7 @@ chk_soil <- function(){
   eval.parent(quote({
     # soil names
     if (is.null(soil)) {
-      if (is.null(param.b90$soil_nodes) | is.null(param.b90$soil_materials)){
+      if (is.null(param.b90$soil_nodes) | is.null(param.b90$soil_materials)) {
         stop("Please provide soil parameters as items 'soil_nodes' and 'soil_materials' via 'param.b90',
            when not using 'soil'-argument in runLWFB90.")
       }
