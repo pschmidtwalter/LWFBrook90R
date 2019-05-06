@@ -4,7 +4,7 @@
 #' and returns the results if desired.
 #'
 #' @param project.dir directory-name of the project to which output files
-#' are written. Will be created, if not existing.
+#' are written. Will be created, if not existing. Defaults to 'runLWFB90/'
 #' @param options.b90 named list of model control options. Use
 #' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
 #' @param param.b90 Named list of model input parameters. Use
@@ -14,7 +14,7 @@
 #' \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.
 #' @param precip data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 #' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-#' 1 to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.
+#' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.
 #' @param soil data.frame containing the hydraulic properties of the soil layers.
 #' Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
 #' The column names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards).
@@ -38,7 +38,6 @@
 #' @return Returns the model-output from the files found in 'project.dir' as a list of data.tables,
 #' along with the execution time of the simulation, and model input if desired.
 #' @export
-#' @import vegperiod
 #' @examples
 #'
 #' #Set up lists containing model control options and model parameters:
@@ -62,7 +61,7 @@
 #'                       param.b90 = param.b90.b90,
 #'                       climate = meteo_slb1,
 #'                       soil = soil)
-runLWFB90 <- function(project.dir,
+runLWFB90 <- function(project.dir = "runLWFB90/",
                       options.b90,
                       param.b90,
                       climate,
@@ -145,11 +144,11 @@ runLWFB90 <- function(project.dir,
   # Precipitation correction (Richter)
   if (options.b90$prec.corr == TRUE) {
     climate[, prec := prec_corr(dates = dates, tavg = tmean, prec = prec,
-                                station.exposure = options.b90$exposure.prec)]
+                                station.exposure = param.b90$prec.corr.statexp)]
   }
 
   #Calculate global radiation from sunshine duration
-  if (options.b90$fornetrad == "sunhour") {
+  if (options.b90$fornetrad == "sunhours") {
     climate[,globrad := CalcGlobRad( yday(dates), sunhours, param.b90$coords_y )]
   }
 
@@ -297,7 +296,7 @@ chk_options <- function(){
                                             "leaffall.method", "standprop.input", "standprop.interp",
                                             "standprop.use_growthperiod","lai.method","imodel", "root.method")))
 
-    options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhour"))
+    options.b90$fornetrad <- match.arg(options.b90$fornetrad, choices = c("globrad","sunhours"))
     options.b90$standprop.input <- match.arg(options.b90$standprop.input, choices = c("parameters", "table"))
     options.b90$lai.method <- match.arg(options.b90$lai.method, choices = c("b90", "linear", "Coupmodel"))
     options.b90$root.method <- match.arg(options.b90$root.method, choices = c("betamodel", "table", "linear", "constant", "soilvar"))

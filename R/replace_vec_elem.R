@@ -8,17 +8,17 @@
 #' @export
 #'
 #' @examples
+#' soil_materials <- data.frame(ths = rep(0.4,3), alpha = rep(23.1, 3))
+#' varnms = c("soil_materials.ths3", "soil_materials.ths1", "soil_materials.alpha2")
+#' vals = c(0.999, 0.001, 99)
+#' replace_vecelements(soil_materials, varnms, vals)
 #'
-#'
-#' x =param.b90[["soil_materials"]]
-#' varnms = "soil_materials.ths1"
-#' vals = 0.999
-#' replace_vecelements(x, varnms, vals)
-
-#' x <- param.b90[["pdur"]]
+#' x <- setparam_LWFB90()[["pdur"]]
 #' varnms <- c("pdur2", "pdur12")
 #' vals <- c(0,10)
 #' replace_vecelements(x, varnms, vals)
+
+
 replace_vecelements <- function(x, varnms, vals) {
   if (is.data.frame(x)) {
     varnms <- unlist(strsplit(varnms, split = ".", fixed  =T))[2*(1:length(varnms))]
@@ -31,9 +31,14 @@ replace_vecelements <- function(x, varnms, vals) {
                           length(vals)) )
     x_m <- x_m[order(x_m$var),]
     x_m$values[which(x_m$var %in% varnms)] <- vals
-    unstack(x_m, values~ind)
+
+    x_wide <- unstack(x_m, values~ind)
+    if (is.data.table(x)) {
+      setDT(x_wide)
+    }
+    return(x_wide)
   } else {
     x[as.integer(gsub("[^[:digit:].]", "",  varnms))] <- vals
-    x
+    return(x)
   }
 }

@@ -14,13 +14,13 @@ Depends: data.table (>= 1.10.4)
 Imports:
     vegperiod (>= 0.2.1),
     foreach,
-    doSNOW,
-    sirad
+    doSNOW
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests:
+    sirad,
     testthat,
     knitr,
     rmarkdown,

@@ -7,11 +7,10 @@
 #'   \item{startdate}{start date of the simulation.}
 #'   \item{enddate}{end date of the simulation.}
 #'   \item{fornetrad}{use global solar radiation (="globrad") or sunshine duration
-#'   hours (="sunhour") for net radiation calculation?}
+#'   hours (="sunhours") for net radiation calculation?}
 #'   \item{prec.interval}{number of precipitation intervals per day (default is 1).
 #'   If prec.interval > 1, a separate file ("in/PRFILE.DAT") has to be provided manually!}
 #'   \item{prec.corr}{correct precipitation data for wind and evaporation losses using \code{\link{prec_corr}}?}
-#'   \item{prec.exposure}{station exposure situation of prec measurements (passed to \code{\link{prec_corr}})}
 #'   \item{budburst.method}{name of method for budburst calculation. If
 #'   'constant' or 'fixed', budburst day of year from parameters is used.
 #'   All other methods calculate budburst day of year dynamically from temperatures, and
@@ -47,7 +46,6 @@ setoptions_LWFB90 <- function(...) {
                fornetrad = "globrad", #"sunhour"
                prec.interval = 1,
                prec.corr = FALSE,
-               prec.exposure = "mg",
                budburst.method = "fixed",
                leaffall.method = "fixed",
                standprop.input = "parameters", #table
