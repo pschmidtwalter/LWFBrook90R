@@ -4,6 +4,7 @@ output:
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
+bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{"Introduction to LWFBrook90R"}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +38,7 @@ This vignette gives a brief introduction to the usage of the *LWFBrook90R* R-pac
 ***
 
 # Introduction
-LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions (@van_genuchten_closed-form_1980; @mualem_new_1976), and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
+LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and pressure heads of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions [@van_genuchten_closed-form_1980; @mualem_new_1976], and the option to take interannual variation of aboveground vegetation characteristics into account when calculating evapotranspiration. Originally, LWF-BROOK90 is used together with an MS ACCESS GUI to organize model input, select model options and parameters and run the model. The basic functionality of the GUI is covered by *LWFBrook90R*, and with one function call it will:
 
 * write input files from climate driving data, model control options and parameters,
 * execute the model code,
@@ -45,32 +46,13 @@ LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculat
 
 The model control options thereby let you select different functions for defining aboveground stand dynamics, phenology, and root length density depth distributions. Additionally, a set of pedotransfer functions is provided to derive hydraulic parameters from soil physical properties.
 
-##Installation {#installation}
+## Data
+In this vignette, we will use meteorological and soil data from the longterm monitoring beech forest site SLB1 in the Solling mountains, Germany. The datasets are directly available after loading the package. Use `?slb1_soil` and `?slb1_meteo` to see the meaning of the variables and their units.
 
-Before installing the *LWFBrook90R* R-package, be sure to download and install the 'data.table' packages, as *LWFBrook90R* depends on it:
-
-```{r, eval = F}
-install.packages("data.table", repos="https://cran.rstudio.com/")
-```
-
-Please also install the suggested R-packages to get the full functionality of *LWFBrook90R*:
-```{r, eval = F}
-install.packages("vegperiod")
-install.packages("sirad", repos="https://cran.rstudio.com/")
-install.packages("foreach", repos="https://cran.rstudio.com/")
-install.packages("doSNOW", repos="https://cran.rstudio.com/")
-```
-Now you can install *LWFBrook90R*. The package is not available on CRAN, you have to install it directly from GitHub, using the *devtools*-package:
-```{r, eval = F}
-devtools::install_github(repo = "pschmidtwalter/LWFBrook90R")
-```
-Now load the *LWFBrook90R* package:
+First of all, load the *LWFBrook90R* package:
 ```{r}
 library(LWFBrook90R)
 ```
-
-## Data
-In this vignette, we will use meteorological and soil data from the longterm monitoring beech forest site SLB1 in the Solling mountains, Germany. The datasets are directly available after loading the package. Use `?slb1_soil` and `?slb1_meteo` to see the meaning of the variables and their units.
 
 ## Basic usage
 The central function to run LWF-BROOK90 from within R is `runLWFB90`. Before we use it, we need to set up the required input objects that are passed as arguments. Aside from meteorological and soil data, we need to define lists containing the model control options and model parameters. The list of model options contains basic information about the simulation and which submodels to use (e.g. the start and end dates of the simulation, the precipitation interval, the phenology model, root length density depth distribution function, etc). The model parameter list contains about 100 parameters, of which most are required to run the model, but some only take effect if certain model options are selected (see sections [Model control options](#options). Two functions are defined in LWFBrook90 that can be used to generate default lists of model options and parameters:
@@ -98,7 +80,7 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
                             param.b90 = param.b90,
                             climate = slb1_meteo,
                             soil = soil,
-                            outputmat = output)
+                            output = output)
 ```
 `runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passed climate, vegetation properties and parameters to the fortran model code. The model saves the selected output data set to the specified folder `out.dir` (defaults to 'out/' within `project.dir`). As a last step, `runLWFB90` returns the contents of the output files. While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `outputmat`-argument and named according to the .ASC files in the `out.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`output.param.options = T`). Let us have a look at the `evapday.asc`-item of `b90.results.slb1` containing daily evaporation fluxes:
 
