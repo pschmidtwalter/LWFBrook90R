@@ -101,6 +101,7 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
                             soil = soil,
                             output = output)
 ```
+
 `runLWFB90` thereby creates the project directory (`project.dir`), derives the daily stand properties (densef, height, lai, sai, age) and root distribution from parameters and passes climate, vegetation properties and parameters to the Fortran model code. The model saves the selected output data set to the specified folder `project.dir`. As a last step, `runLWFB90` returns the contents of the output files (if `read.output = TRUE` ). While running, several progress messages are printed to the R-console (if `verbose = TRUE`). The returned object `b90.results.slb1` is a list containing the model output (as specified by the `output`-argument and named according to the '.ASC' files in the `project.dir`-folder), along with the options, parameters and derived daily vegetation properties used in the simulation, if desired (`rtrn.input = T`). Let us have a look at the `EVAPDAY.ASC`-item of `b90.results.slb1` containing daily evaporation fluxes:
 
 ```{r}
