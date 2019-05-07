@@ -10,8 +10,9 @@ Description: Run the LWF-BROOK90 hydrological model inside R. The central
     climate data, runs the LWF-BROOK90 hydrological model and returns the created output files. 
     Additionally, submodels for defining vegetation dynamics and pedotransfer functions 
     for deriving soil hydraulic parameters are provided.
-Depends: data.table (>= 1.10.4)
+Depends: R (>= 3.1.0)
 Imports:
+    data.table (>= 1.10.4),
     vegperiod (>= 0.2.1),
     foreach,
     doSNOW

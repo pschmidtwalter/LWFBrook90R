@@ -30,7 +30,7 @@ If TRUE, yearly changes take place between startdoy and enddoy, other wise from 
 
 \item{approx.method}{name of interpolation method ('constant' or 'linear').}
 
-\item{return_xout}{logical. If true, daily values of y AND a date vector are returned in a data.table.}
+\item{return_xout}{logical. If true, daily values of y AND a date vector are returned in data.frame.}
 }
 \value{
 A vector of interpolated daily values

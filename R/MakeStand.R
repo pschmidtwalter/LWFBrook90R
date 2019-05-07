@@ -16,7 +16,7 @@ make_standprop <- function(options.b90,
                            param.b90,
                            out.years) {
 
-standprop_daily <- data.table(
+standprop_daily <- data.frame(
   dates = seq.Date(from = as.Date(paste0(min(out.years),"-01-01")),
                    to = as.Date(paste0(max(out.years),"-12-31")),
                    by = "day"),
@@ -51,7 +51,7 @@ standprop_daily <- data.table(
 )
 
 # daily leaf area index from parameters
-standprop_daily[, lai := MakeSeasLAI(out.years,
+standprop_daily$lai <- MakeSeasLAI(out.years,
                                      method = options.b90$lai.method,
                                      maxlai = param.b90$maxlai,
                                      winlaifrac = param.b90$winlaifrac,
@@ -63,6 +63,6 @@ standprop_daily[, lai := MakeSeasLAI(out.years,
                                      shape.leaffall = param.b90$shape.leaffall,
                                      shape.optdoy = param.b90$shape.optdoy,
                                      lai.doy = param.b90$lai.doy,
-                                     lai.frac = param.b90$lai.frac)]
+                                     lai.frac = param.b90$lai.frac)
 return(standprop_daily)
 }

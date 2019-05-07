@@ -90,6 +90,7 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
 The package works as intended and is fully documented. However, there are some points to be accomplish in the near future:
 
 - [x] enable use of Clapp-Horneberg hydraulics in addition to the default Mualem-van Genuchten
+- [x] Use of sub-day resolution precipitation interval data.
 - [ ] Run the `check` with Travis.
 - [ ] implement Goodness-of-fit measures with respect to observations that can be returned on top / instead of actual simulation results.
 

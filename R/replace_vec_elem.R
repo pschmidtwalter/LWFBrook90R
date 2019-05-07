@@ -18,7 +18,6 @@
 #' vals <- c(0,10)
 #' replace_vecelements(x, varnms, vals)
 
-
 replace_vecelements <- function(x, varnms, vals) {
   if (is.data.frame(x)) {
     varnms <- unlist(strsplit(varnms, split = ".", fixed  =T))[2*(1:length(varnms))]
@@ -31,14 +30,9 @@ replace_vecelements <- function(x, varnms, vals) {
                           length(vals)) )
     x_m <- x_m[order(x_m$var),]
     x_m$values[which(x_m$var %in% varnms)] <- vals
-
-    x_wide <- unstack(x_m, values~ind)
-    if (is.data.table(x)) {
-      setDT(x_wide)
-    }
-    return(x_wide)
-  } else {
+    unstack(x_m, values~ind)
+    } else {
     x[as.integer(gsub("[^[:digit:].]", "",  varnms))] <- vals
-    return(x)
+    x
   }
 }

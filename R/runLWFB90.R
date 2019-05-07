@@ -88,7 +88,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   }
 
   # ---- Simulation period ----------------------------------------------------------
-  climyears <- unique(year(climate$dates))
+  climyears <- unique(climate$yr)
   simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
                   to = as.integer(format(options.b90$enddate,"%Y")),
                   by = 1)
@@ -129,8 +129,8 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   standprop_daily <- make_standprop(options.b90, param.b90, out.years = simyears)
 
   # constrain to simulation period
-  standprop_daily <- standprop_daily[which(dates >= options.b90$startdate
-                                           & dates <= options.b90$enddate),]
+  standprop_daily <- standprop_daily[which(standprop_daily$dates >= options.b90$startdate
+                                           & standprop_daily$dates <= options.b90$enddate),]
 
   if (verbose == T) {
     message("Standproperties created succesfully")
@@ -139,17 +139,20 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   # ---- Prepare climate for input----------------------------------------------------
 
   # constrain data to simulation period
-  climate <- climate[which(dates >= options.b90$startdate & dates <= options.b90$enddate),]
+  climate <- climate[which(climate$dates >= options.b90$startdate
+                           & climate$dates <= options.b90$enddate),]
 
   # Precipitation correction (Richter)
   if (options.b90$prec.corr == TRUE) {
-    climate[, prec := prec_corr(dates = dates, tavg = tmean, prec = prec,
-                                station.exposure = param.b90$prec.corr.statexp)]
+    climate$prec <- with(climate, prec_corr(month, tmean, prec,
+                                station.exposure = param.b90$prec.corr.statexp))
   }
 
   #Calculate global radiation from sunshine duration
   if (options.b90$fornetrad == "sunhours") {
-    climate[,globrad := CalcGlobRad( yday(dates), sunhours, param.b90$coords_y )]
+    climate$globrad <- with(climate,
+                            CalcGlobRad( as.integer(format(dates, "%j")),
+                                         sunhours, param.b90$coords_y ))
   }
 
   # ---- Make soilnodes & soil materials --------------------------------------------
@@ -159,9 +162,9 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   }
 
   if (options.b90$imodel == "MvG") {
-    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,ths,thr,alpha,npar,ksat,tort,gravel)]
+    param.b90$soil_materials <- param.b90$soil_materials[,c("mat","ths","thr","alpha","npar","ksat","tort","gravel")]
   } else {
-    param.b90$soil_materials <- param.b90$soil_materials[,list(mat,thsat,thetaf,psif,bexp,kf,wetinf,gravel)]
+    param.b90$soil_materials <- param.b90$soil_materials[,c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel")]
   }
 
   # add initial water potential from parameters
@@ -183,13 +186,6 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
   }
 
-  if (!is.data.table(param.b90$soil_nodes)) {
-    setDT(param.b90$soil_nodes)
-  }
-
-  if (!is.data.table(param.b90$soil_materials)) {
-    setDT(param.b90$soil_materials)
-  }
 
   # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (run) {
@@ -224,24 +220,14 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
                              as.integer(format(options.b90$startdate, "%j")),
                              param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
                              options.b90$prec.interval),
-      climveg = climate[, list(year(dates), month(dates), mday(dates),
-                               globrad,
-                               tmax,
-                               tmin,
-                               vappres,
-                               wind,
-                               prec,
-                               mesfl,
-                               standprop_daily$densef,
-                               standprop_daily$height,
-                               standprop_daily$lai,
-                               standprop_daily$sai,
-                               standprop_daily$age)],
-      precdat = precip,
+      climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
+                                  "vappres","wind","prec","mesfl")],
+                      standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
+                               precdat = precip,
       param = param_to_rbrook90(param.b90, options.b90$imodel),
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
-      soil_nodes = param.b90$soil_nodes[,list(layer,midpoint, thick, mat, psiini, rootden)],
+      soil_nodes = param.b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
       output = output,
       output_log = output.log
     )
@@ -256,7 +242,9 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
 
     # ---- Read output files ----------------------------------------------------------
     if ( read.output ) {
-      simres <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T), fread, fill = T, stringsAsFactors = F)
+      simres <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
+                       data.table::fread,
+                       fill = T, stringsAsFactors = F)
       names(simres) <- list.files(project.dir, pattern = ".ASC")
     } else {
       simres <- list()
@@ -267,7 +255,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   } else { #'dry' run
     simres <- list(model_input = list(options.b90 = options.b90,
                    param.b90 = param.b90,
-                   standprop_daily = data.table(standprop_daily)))
+                   standprop_daily = standprop_daily))
     return(simres)
   }
 
@@ -275,7 +263,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   if (rtrn.input == TRUE){
     simres$model_input <- list(options.b90 = options.b90,
                                param.b90 = param.b90,
-                               standprop_daily = data.table(standprop_daily))
+                               standprop_daily = standprop_daily)
   }
 
   if (verbose == T) {
@@ -371,9 +359,17 @@ chk_clim <- function() {
     #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
     # }
 
+
+    if (any(!c("yr", "mo", "da") %in% names(climate))) {
+      climate$yr <- as.integer(format(climate$dates, "%Y"))
+      climate$mo <- as.integer(format(climate$dates, "%m"))
+      climate$da <- as.integer(format(climate$dates, "%d"))
+    }
+
     if (!any( names(climate) == "mesfl") ) {
       climate$mesfl <- 0
     }
+
 
     if (is.null(precip) ){
       stopifnot("prec" %in% names(climate))
@@ -393,7 +389,10 @@ chk_clim <- function() {
           precip <- NULL
         } else {
           precip$ii <- rep(1:options.b90$prec.interval,nrow(climate))
-          precip <- precip[, list(year(dates), month(dates), mday(dates), ii, prec, mesfl)]
+          precip$yr <- as.integer(format(precip$dates, "%Y"))
+          precip$mo <- as.integer(format(precip$dates, "%m"))
+          precip$da <- as.integer(format(precip$dates, "%d"))
+          precip <- precip[, c("yr","mo","da", "ii", "prec", "mesfl")]
           climate$prec <- -999
         }
       }

@@ -7,11 +7,11 @@
 soil_to_param(soil, imodel = "MvG")
 }
 \arguments{
-\item{soil}{data.frame with soil soil depths ('upper', 'lower') and
+\item{soil}{data.frame with soil depths ('upper', 'lower') and
 hydraulic parameters ('ths', 'thr', 'alpha', 'npar', 'ksat', 'tort', 'gravel')}
 }
 \value{
-a list with data.table objects 'soil_nodes' and 'soil_materials'
+a list with data.frames 'soil_nodes' and 'soil_materials'
 }
 \description{
 Split up soil into materials and soil nodes.

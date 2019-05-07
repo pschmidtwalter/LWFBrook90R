@@ -16,7 +16,7 @@
 #' @param startdoy a single value or vector of the same length as x.years, with the day of year when growth begins.
 #' @param enddoy a single value or vector of the same length as x.years, with the day of year when growth cessates.
 #' @param approx.method name of interpolation method ('constant' or 'linear').
-#' @param return_xout logical. If true, daily values of y AND a date vector are returned in a data.table.
+#' @param return_xout logical. If true, daily values of y AND a date vector are returned in data.frame.
 #'
 #' @return A vector of interpolated daily values
 #'
@@ -108,7 +108,7 @@ approx_standprop <- function(x.years,
   if (return_xout == F) {
     return(yout)
   } else {
-    return(data.table(xout = xout.dates, yout))
+    return(data.frame(xout = xout.dates, yout))
   }
 
 }
