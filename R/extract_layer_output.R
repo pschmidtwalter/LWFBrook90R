@@ -13,7 +13,7 @@
 #' @import data.table
 #' @examples
 
-extract_from_swatday.asc <- function(dat, layers = NULL, vars=NULL){
+extract_layer_output <- function(dat, layers = NULL, vars=NULL){
   if (!is.data.table(dat)) {setDT(dat) }
   setnames(dat, names(dat), tolower(names(dat)))
   if (is.null(layers)) { layers <- unique(dat$nl)}
