@@ -68,13 +68,13 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
                       precip = NULL,
                       soil = NULL,
                       output = setoutput_LWFB90(),
-                      rtrn.input = TRUE,
+                      # obs = NULL, #swatday.psimi6 #include in checks: simperiod~obsperiod
+                      rtrn.input = TRUE, # return.vals = list(result = T, model_input=T, gof =F)
                       read.output = TRUE,
-                      output.log = TRUE,
                       chk.input = TRUE,
                       verbose = TRUE,
-                      run = TRUE
-){
+                      output.log = TRUE,
+                      run = TRUE){
 
   oldWD <- getwd()
   on.exit(setwd(oldWD))
