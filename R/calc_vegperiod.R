@@ -1,18 +1,18 @@
 #' Calculate vegetation period start and end days of year)
 #'
 #' @param budburst.method name of model for estimating budburst day of year. Either 'fixed'
-#' or one of the values accepted by the 'start.method'-argument of the function \code{\link{vegperiod}[vegperiod].
+#' or one of the values accepted by the 'start.method'-argument of the function \code{\link{vegperiod}[vegperiod]}.
 #' @param leaffall.method name of model for estimating day of year when leaffall begin. Either 'fixed'
-#' or one of the values accepted by the 'end.method'-argument of the function \code{\link{vegperiod}[vegperiod].
-#' @param dates date vector passed to \code{\link{vegperiod}[vegperiod],
-#' ignored if both leaffall.method and budburst.method = 'fixed'}
-#' @param tavg vector or daily mean air temperature passed to \code{\link{vegperiod}[vegperiod],
-#' ignored both if leaffall.method and budburst.method = 'fixed'}
+#' or one of the values accepted by the 'end.method'-argument of the function \code{\link{vegperiod}[vegperiod]}.
+#' @param dates date vector passed to \code{\link{vegperiod}[vegperiod]},
+#' ignored if both leaffall.method and budburst.method = 'fixed'
+#' @param tavg vector or daily mean air temperature passed to \code{\link{vegperiod}[vegperiod]},
+#' ignored both if leaffall.method and budburst.method = 'fixed'
 #' @param out.years integer vector of the years to be returned. If not specified,
 #' values for the years in dates will be returned.
 #' @param budburstdoy.fixed vector of values to be returned if budburst.method = 'fixed'.
 #' @param leaffalldoy.fixed vector of values to be returned if leaffall.method = 'fixed'.
-#' @param ... additional argument passed to \code{\link{vegperiod}[vegperiod].
+#' @param ... additional argument passed to \code{\link{vegperiod}[vegperiod]}.
 #'
 #' @return a data.frame with columns 'year', 'start', 'end'. if budburst.method = 'fixed' or leaffall.method = 'fixed',
 #' 'start' and 'end' contain the values specified in budburstdoy.fixed and leaffalldoy.fixed respectively.

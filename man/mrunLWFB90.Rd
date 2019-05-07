@@ -72,7 +72,7 @@ vary_parms <- data.frame(maxlai = runif(n,4,8),
                          optdoy =runif(n,180,240))
 
 # Make a Multirun-Simulation
-b90.multi <- MultiRun.B90(nRuns = n,
+b90.multi <- mrunLWFB90(nRuns = n,
                      param_var = vary_parms,
                      param_const = param.b90,
                      options.b90 = options.b90,

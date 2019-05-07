@@ -9,7 +9,7 @@
 #'   \item{tmax}{daily maximum temperature, degC}
 #'   \item{tmean}{daily mean temperature, degC}
 #'   \item{prec}{daily sum of precipitation, mm}
-#'   \item{relhum}{relative Humidity, %}
+#'   \item{relhum}{relative Humidity, \%}
 #'   \item{globrad}{daily sum of global radiation, MJ m-2}
 #'   \item{wind}{daily mean wind speed measured at 10 m above ground, m s-2}
 #'   \item{vappres}{daily vapour pressure, kPa}

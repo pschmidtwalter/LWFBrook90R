@@ -10,7 +10,7 @@ setoptions_LWFB90(...)
 \item{...}{named values to be included in return value}
 }
 \value{
-Returns a list of default model control options for use as 'options.b90'-argument in \code{\link{Run.B90}}.
+Returns a list of default model control options for use as 'options.b90'-argument in \code{\link{runLWFB90}}.
 }
 \description{
 Create a list of model control options

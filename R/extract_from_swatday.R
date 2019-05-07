@@ -1,6 +1,6 @@
 #'  Extract variables from swatday.asc data.tables and organize layer-wise values in columns
 #'
-#' @param dat swatday.asc data.table as returned from \code{\link{readOutput.B90}}:
+#' @param dat swatday.asc data.table as returned from \code{\link{runLWFB90}}:
 #' @param layers integer vector addressing the layer numbers (nl) to be extracted
 #'                   from dat. If not supplied, values from all layers will be returned
 #' @param vars character vector containing variable names (out of "swati","theta",
@@ -12,19 +12,7 @@
 #' @export
 #'
 #' @examples
-#' # Read files from LWF-Brook90 output directory
-#'
-#' output <- readOutput.B90("tests/out/")
-#'
-#' # Reorganize all variables for all layers
-#'
-#' swati_wide <- extract_from_swatday.asc(output$swatday.asc)
-#'
-#' # select single variables and layers:
-#' swati_wide <- extract_from_swatday.asc(output$swatday.asc,
-#'                                        layers =1:10,
-#'                                        vars = c("swat", "psim", "theta"))
-#'
+
 extract_from_swatday.asc <- function(dat, layers = NULL, vars=NULL){
   if (!is.data.table(dat)) {setDT(dat) }
   setnames(dat, names(dat), tolower(names(dat)))

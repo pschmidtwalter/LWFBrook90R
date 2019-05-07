@@ -9,9 +9,9 @@
 #' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
 #' @param param.b90 Named list of model input parameters. Use
 #' \code{\link{setparam_LWFB90}} to generate a list with default model parameters.
-#' @param climate data.frame with daily climate data. The names of climate have to
-#' correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
-#' \emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.
+#' @param climate data.frame with daily climate data with columns named according to
+#'  \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{tmean}, \emph{wind}, \emph{prec}, \emph{vappres},
+#' and either \emph{globrad} or \emph{sunhours}).
 #' @param precip data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 #' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 #' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.

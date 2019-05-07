@@ -19,9 +19,9 @@ are written. Will be created, if not existing. Defaults to 'runLWFB90/'}
 \item{param.b90}{Named list of model input parameters. Use
 \code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
 
-\item{climate}{data.frame with daily climate data. The names of climate have to
-correspond to arguments \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{wind}, \emph{prec}, \emph{vappres},
-\emph{globrad}, \emph{sunhours}) of \code{\link{writeClimate.in}}.}
+\item{climate}{data.frame with daily climate data with columns named according to
+ \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{tmean}, \emph{wind}, \emph{prec}, \emph{vappres},
+and either \emph{globrad} or \emph{sunhours}).}
 
 \item{precip}{data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,

@@ -7,7 +7,7 @@
 extract_from_swatday.asc(dat, layers = NULL, vars = NULL)
 }
 \arguments{
-\item{dat}{swatday.asc data.table as returned from \code{\link{readOutput.B90}}:}
+\item{dat}{swatday.asc data.table as returned from \code{\link{runLWFB90}}:}
 
 \item{layers}{integer vector addressing the layer numbers (nl) to be extracted
 from dat. If not supplied, values from all layers will be returned}
@@ -22,19 +22,4 @@ a data.table with the layers' daily values of the variables organized in columns
 }
 \description{
 Extract variables from swatday.asc data.tables and organize layer-wise values in columns
-}
-\examples{
-# Read files from LWF-Brook90 output directory
-
-output <- readOutput.B90("tests/out/")
-
-# Reorganize all variables for all layers
-
-swati_wide <- extract_from_swatday.asc(output$swatday.asc)
-
-# select single variables and layers:
-swati_wide <- extract_from_swatday.asc(output$swatday.asc,
-                                       layers =1:10,
-                                       vars = c("swat", "psim", "theta"))
-
 }
