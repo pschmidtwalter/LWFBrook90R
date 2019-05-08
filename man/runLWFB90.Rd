@@ -6,8 +6,8 @@
 \usage{
 runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90, climate,
   precip = NULL, soil = NULL, output = setoutput_LWFB90(),
-  rtrn.input = TRUE, read.output = TRUE, output.log = TRUE,
-  chk.input = TRUE, verbose = TRUE, run = TRUE)
+  rtrn.input = TRUE, read.output = TRUE, chk.input = TRUE,
+  verbose = TRUE, output.log = TRUE, run = TRUE)
 }
 \arguments{
 \item{project.dir}{directory-name of the project to which output files
@@ -46,9 +46,9 @@ properties ('standprop_daily', as derived from parameters) to the result?}
 \item{read.output}{read and return simulation results from project.dir? When FALSE,
 simulation duration and finishing time are returned. Default is TRUE.}
 
-\item{output.log}{write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
-
 \item{verbose}{print messages to the console? Default is TRUE.}
+
+\item{output.log}{write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
 
 \item{run}{run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}

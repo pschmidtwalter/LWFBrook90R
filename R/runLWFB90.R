@@ -186,7 +186,6 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
   }
 
-
   # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (run) {
     # create project-directory
@@ -251,6 +250,14 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
     simres$finishing_time <- Sys.time()
     simres$simulation_duration <- simtime
+
+    # ---- Observations: Goodness-of-fit --------------------------------------------
+    if (!is.null(obs)) {
+      #constrain obs to simulation output
+      gofm <-calc_gof(simres = simres, obs = obs, gof_fun = gof_fun)
+      #rtrn?
+    }
+
 
   } else { #'dry' run
     simres <- list(model_input = list(options.b90 = options.b90,
@@ -437,4 +444,6 @@ chk_soil <- function(){
   }))
 
 }
+
+
 

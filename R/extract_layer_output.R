@@ -1,30 +1,62 @@
-#'  Extract variables from swatday.asc data.tables and organize layer-wise values in columns
+#'  Extract values from layer data and organize layer-wise variables in columns
 #'
-#' @param dat swatday.asc data.table as returned from \code{\link{runLWFB90}}:
+#'  Reorganizes layer data such as BELO and SWAT to the wide format
+#'  by casting variables with the layer number, using data.table's dcast function.
+#'
+#' @param dat data.frame with layer data organized in rows and identified by a layer number column nl.
 #' @param layers integer vector addressing the layer numbers (nl) to be extracted
-#'                   from dat. If not supplied, values from all layers will be returned
-#' @param vars character vector containing variable names (out of "swati","theta",
-#'                 "wetnes","psimi","psiti" to be extracted from dat. If not supplied
-#'                 all 5 variables will be returned.
+#' from dat. If not supplied, values from all layers will be returned
+#' @param value.vars character vector containing names of value-variables to be extracted from dat.
+#' If not supplied, value.var will be guessed.
 #'
-#' @return a data.table with the layers' daily values of the variables organized in columns
+#' @return a data.table with the layers' values of the variables organized in columns
 #'     (wide format) with the names being made up of the variable name and layer number.
 #' @export
-#' @import data.table
 #' @examples
+#' # create a data.frame with monthly values
+#' # identifiers: layer number, yr and mo
+#' df <- expand.grid(nl = 1:5,
+#'                   yr = 2002:2003,
+#'                   mo = 1:12)
+#' #value.var
+#' df$var <- runif(nrow(df), -1,0)
+#'
+#' extract_layer_output(df)
+#'
+#' #more variables
+#' df$var1 <- runif(nrow(df), 1,2)
+#' df$var2 <- runif(nrow(df), 2,3)
+#' # extract specific layers
+#' extract_layer_output(df,layers = 2:4, sep = "_")
+#' #extract specific variables
+#' extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
+#' @import data.table
+extract_layer_output <- function(dat, layers = NULL, value.vars=NULL, sep = ""){
 
-extract_layer_output <- function(dat, layers = NULL, vars=NULL){
   if (!is.data.table(dat)) {setDT(dat) }
+
   setnames(dat, names(dat), tolower(names(dat)))
-  if (is.null(layers)) { layers <- unique(dat$nl)}
-  if (is.null(vars)) {
-    vars <- c("swati","theta", "wetnes","psimi","psiti")
-  } else {
-    vars <- match.arg(vars, choices = c("swati","theta", "wetnes","psimi","psiti"), several.ok = T)
+
+  if (!"nl" %in% names(dat)) {
+    stop("No layer data. Missing column name 'nl' (layer-number 1:nrow(soil_nodes))")
   }
+  if (is.null(layers)) {
+    layers <- unique(dat$nl)
+  }
+
+  # value and id vars
+  if (is.null(value.vars)) {
+    value.vars <- names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))]
+  } else {
+    value.vars <- match.arg(tolower(value.vars), choices = names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))], several.ok = T)
+  }
+  id.vars <- names(dat)[which(names(dat) %in% c("yr","mo","da","doy"))]
+
   setkey(dat, nl)
-  dat <- dat[list(layers), ]
-  dat[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
-  datm <- melt(dat, id.vars = c("dates", "nl"), measure.vars = vars )
-  dcast(datm, dates~variable+nl)
+
+  datm <- melt(dat[list(layers), ], # extract layers of interest
+               id.vars = c(id.vars,"nl"),
+               measure.vars = value.vars)
+  castf <- paste(paste(id.vars, collapse = "+"), "~ variable+nl")
+  dcast(datm, as.formula(castf), sep = sep)
 }
