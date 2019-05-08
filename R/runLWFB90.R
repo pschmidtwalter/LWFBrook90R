@@ -64,17 +64,18 @@
 runLWFB90 <- function(project.dir = "runLWFB90/",
                       options.b90,
                       param.b90,
+                      soil = NULL,
                       climate,
                       precip = NULL,
-                      soil = NULL,
                       output = setoutput_LWFB90(),
-                      # obs = NULL, #swatday.psimi6 #include in checks: simperiod~obsperiod
-                      rtrn.input = TRUE, # return.vals = list(result = T, model_input=T, gof =F)
+                      obs = NULL,
+                      gof_fun = NULL,
+                      rtrn.input = TRUE,
                       read.output = TRUE,
                       chk.input = TRUE,
                       verbose = TRUE,
                       output.log = TRUE,
-                      run = TRUE){
+                      run = TRUE) {
 
   oldWD <- getwd()
   on.exit(setwd(oldWD))
@@ -145,7 +146,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   # Precipitation correction (Richter)
   if (options.b90$prec.corr == TRUE) {
     climate$prec <- with(climate, prec_corr(month, tmean, prec,
-                                station.exposure = param.b90$prec.corr.statexp))
+                                            station.exposure = param.b90$prec.corr.statexp))
   }
 
   #Calculate global radiation from sunshine duration
@@ -222,7 +223,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
                                   "vappres","wind","prec","mesfl")],
                       standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
-                               precdat = precip,
+      precdat = precip,
       param = param_to_rbrook90(param.b90, options.b90$imodel),
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
@@ -231,52 +232,63 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       output_log = output.log
     )
 
-    simtime <- Sys.time() - start
+    finishing_time <- Sys.time()
+    simtime <- finishing_time - start
     units(simtime) <- "secs"
 
     if (verbose == T) {
       message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
-      message("Reading output...")
     }
+
+    # initialize return ---------------------------------------------------------------
+    simres <- list(simtime, finishing_time)
 
     # ---- Read output files ----------------------------------------------------------
     if ( read.output ) {
-      simres <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
+      if (verbose == T) {
+        message("Reading output...")
+      }
+      simout <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
                        data.table::fread,
                        fill = T, stringsAsFactors = F)
-      names(simres) <- list.files(project.dir, pattern = ".ASC")
-    } else {
-      simres <- list()
+      names(simout) <- list.files(project.dir, pattern = ".ASC")
+
+      # append results
+      if (rtrn.output) {
+        simres <- list(simres, unlist(simout, recursive = F))
+      }
+
+      # ---- Observations: Goodness-of-fit --------------------------------------------
+      if (!is.null(obs)) {
+        if (verbose == T) {
+          message("Calculating goodness-of-fit...")
+        }
+
+        # constrain to simulation period
+        obs <- obs[which(obs$dates >= options.b90$startdate &
+                           obs$dates <= opitons.b90$enddate),]
+        simres$gof <- calc_gof(obs = obs,
+                               simres = simout,
+                               gof_fun = gof_fun)
+      }
     }
-    simres$finishing_time <- Sys.time()
-    simres$simulation_duration <- simtime
 
-    # ---- Observations: Goodness-of-fit --------------------------------------------
-    if (!is.null(obs)) {
-      #constrain obs to simulation output
-      gofm <-calc_gof(simres = simres, obs = obs, gof_fun = gof_fun)
-      #rtrn?
+    if (rtrn.input) {
+      simres$model_input <- list(options.b90,
+                                 param.b90,
+                                 standprop_daily)
     }
 
-
-  } else { #'dry' run
-    simres <- list(model_input = list(options.b90 = options.b90,
-                   param.b90 = param.b90,
-                   standprop_daily = standprop_daily))
-    return(simres)
-  }
-
-  # append model input
-  if (rtrn.input == TRUE){
-    simres$model_input <- list(options.b90 = options.b90,
-                               param.b90 = param.b90,
-                               standprop_daily = standprop_daily)
+  } else {
+    # 'dry' run = F
+    return(list(options.b90,
+                param.b90,
+                standprop_daily))
   }
 
   if (verbose == T) {
     message("Finished!")
   }
-
   return(simres)
 }
 
@@ -403,7 +415,7 @@ chk_clim <- function() {
           climate$prec <- -999
         }
       }
-  }
+    }
   }))
 }
 
