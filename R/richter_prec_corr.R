@@ -37,27 +37,21 @@
 #' lines(prec$dates, cumsum(prec$meas))
 #' legend('bottomright', c('frei', "lg", "mg", "sg"), col = c("violet", "blue", "green", "red", "black"), lty = 1, pch = NULL )
 
-prec_corr <-  function(dates,tavg,prec,
+prec_corr <-  function(month,tavg,prec,
                        station.exposure = "mg",
                        full.output = FALSE
 ){
 
-  if (missing(dates) || missing(tavg) || missing(prec))
-    stop("dates, tavg, prec must be given!")
-  if (length(dates) != length(tavg))
+  if (length(month) != length(tavg))
     stop("data vectors have to be of the same lengths")
-  if (length(dates) != length(prec))
+  if (length(month) != length(prec))
     stop("data vectors have to be of the same lengths")
-  if (class(dates) != "Date") {
-    stop("Please provide dates as Date object!")
-  }
 
   station.exposure <- match.arg(station.exposure, choices = c("frei","lg","mg","sg"))
 
   #----------------------------------------------------------------------------
 
-  dat <- data.table(dates,tavg,prec)
-  dat[, month := month(dates)]
+  dat <- data.frame(month,tavg,prec)
 
   # epsilon
   eps <- c(N4So=0.38, N4Wi=0.46, N8=0.55,N7=0.82)
@@ -70,17 +64,16 @@ prec_corr <-  function(dates,tavg,prec,
                                   c("frei","lg","mg","sg")))
 
   #precipitation types
-  dat[, prectype := ifelse(tavg >= 3,
+  dat$prectype <- ifelse(tavg >= 3,
                            ifelse(month %in% 5:10,  #liquid
                                   "N4So", "N4Wi"), #summer/winter
                            ifelse(tavg < 0.7, #not liquid
                                   "N7", "N8")) #snow / sleet
-      ]
 
   # Niederschlag korrigieren
-  dat[, b := bcoeff[prectype, station.exposure]]
-  dat[, eps := stack(eps[prectype])$values]
-  dat[, preccorr := prec + b * prec**eps]
+  dat$b <- bcoeff[prectype, station.exposure]
+  dat$eps <- stack(eps[prectype])$values
+  dat$preccorr <- prec + b * prec**eps
 
   #output
   if (full.output == FALSE) {

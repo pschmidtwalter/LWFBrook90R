@@ -2,7 +2,7 @@
 #'
 #' A dataset containing daily weather variables for the period 1960-2013
 #'
-#' @format A data.table with 19724 rows and 9 variables
+#' @format A data.frame with 19724 rows and 9 variables
 #' \describe{
 #'   \item{dates}{date}
 #'   \item{tmin}{daily minimum temperature, degC}
@@ -20,7 +20,7 @@
 #'
 #' A dataset containing the soil horizons' physical properties
 #'
-#' @format A data.table with 17 rows and 10 variables
+#' @format A data.frame with 17 rows and 10 variables
 #' \describe{
 #'   \item{horizon}{horizon symbol}
 #'   \item{upper}{upper layer boundary, m}
@@ -39,7 +39,7 @@
 #'
 #' A dataset containing the forests's stand properties
 #'
-#' @format A data.table with 49 rows and 7 variables
+#' @format A data.frame with 49 rows and 7 variables
 #' \describe{
 #'   \item{year}{Year of observation}
 #'   \item{species}{Tree species}

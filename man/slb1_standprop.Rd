@@ -4,7 +4,7 @@
 \name{slb1_standprop}
 \alias{slb1_standprop}
 \title{Annual stand properties of the Solling Beech experimental site 'SLB1'}
-\format{A data.table with 49 rows and 7 variables
+\format{A data.frame with 49 rows and 7 variables
 \describe{
   \item{year}{Year of observation}
   \item{species}{Tree species}

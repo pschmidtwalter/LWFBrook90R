@@ -79,5 +79,4 @@ budburst.doy = param.b90$budburstdoy,
 leaffall.doy = param.b90$leaffalldoy,
 emerge.dur = param.b90$emergedur,
 leaffall.dur = param.b90$leaffalldur))
-
 }

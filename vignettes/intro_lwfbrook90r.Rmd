@@ -241,7 +241,7 @@ Like the leaf area index parameters and budburst/leaffall-dates, it is also poss
 # constant 'interpolation'
 options.b90$standprop.interp <- 'constant'
 param.b90$height <- c(20.2,20.8,21.3)
-simyears <- year(seq.Date(options.b90$startdate,options.b90$enddate, "year"))
+simyears <- 2002:2003
 height_c <- approx_standprop(x.years=years,
                                  y = param.b90$height,
                                  approx.method = options.b90$standprop.interp)
@@ -319,7 +319,7 @@ b90.results.slb1.standtable <- runLWFB90(project.dir = "example_run_b90/",
                                        verbose = F)
 
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-with(b90.results.slb1.standtable$standprop_daily,{
+with(b90.results.slb1.standtable$model_input$standprop_daily,{
   plot(dates, lai, 
        type = "l", lwd = 2, col = "green", 
        ylab = "lai, sai m²/m²", xlab = "")

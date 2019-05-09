@@ -10,7 +10,7 @@
 #' @return a data.table with the layers' daily values of the variables organized in columns
 #'     (wide format) with the names being made up of the variable name and layer number.
 #' @export
-#'
+#' @import data.table
 #' @examples
 
 extract_from_swatday.asc <- function(dat, layers = NULL, vars=NULL){

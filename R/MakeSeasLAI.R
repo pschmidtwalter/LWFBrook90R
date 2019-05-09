@@ -19,8 +19,8 @@
 #' to lai.doy (required when method = "linear")
 #'
 #' @return  a vector of daily lai values covering the years specified
+#'
 #' @examples
-
 #' # leaf area index for a single year
 #'
 #' param.b90 <- MakeParam.B90()
@@ -54,7 +54,6 @@
 #' leaffall.doy = param.b90$leaffalldoy,
 #' emerge.dur = param.b90$emergedur,
 #' leaffall.dur = param.b90$leaffalldur))
-#'
 #' @export
 MakeSeasLAI <- function(method="b90",
                         year,
@@ -74,7 +73,7 @@ MakeSeasLAI <- function(method="b90",
   if (method %in% c("b90", "Coupmodel")) {
 
     dat <- suppressWarnings(
-      data.table(year = year, maxlai = maxlai, winlaifrac = winlaifrac,
+      data.table::data.table(year = year, maxlai = maxlai, winlaifrac = winlaifrac,
                  budburst.doy = budburst.doy, leaffall.doy = leaffall.doy,
                  emerge.dur = emerge.dur, leaffall.dur = leaffall.dur,
                  shape.optdoy = shape.optdoy, shape.budburst = shape.budburst,
@@ -85,31 +84,32 @@ MakeSeasLAI <- function(method="b90",
                            366, 365)]
     dat[, minlai := winlaifrac*maxlai]
 
-    if (method == "b90") {
-      out <- dat[, plant.b90(minval = minlai, maxval = maxlai,
-                                        doy.incr = budburst.doy, incr.dur = emerge.dur,
-                                        doy.decr = leaffall.doy, decr.dur = leaffall.dur,
-                                        maxdoy = maxdoy),
-                 by = year]$V1
-    }
-    if (method == "Coupmodel") {
-      out <- dat[, plant.coupmodel(minval = minlai, maxval = maxlai,
-                                              doy.incr = budburst.doy,
-                                              doy.max = shape.optdoy,
-                                              doy.min = leaffall.doy + leaffall.dur,
-                                              shape.incr = shape.budburst, shape.decr = shape.leaffall,
-                                              maxdoy = maxdoy),
-                 by = year]$V1
-    }
 
-  } else {
+     if (method == "b90") {
+       out <- dat[, plant.b90(minval = minlai, maxval = maxlai,
+                                         doy.incr = budburst.doy, incr.dur = emerge.dur,
+                                         doy.decr = leaffall.doy, decr.dur = leaffall.dur,
+                                         maxdoy = maxdoy),
+                  by = year]$V1
+     }
+     if (method == "Coupmodel") {
+       out <- dat[, plant.coupmodel(minval = minlai, maxval = maxlai,
+                                               doy.incr = budburst.doy,
+                                               doy.max = shape.optdoy,
+                                               doy.min = leaffall.doy + leaffall.dur,
+                                               shape.incr = shape.budburst, shape.decr = shape.leaffall,
+                                               maxdoy = maxdoy),
+                  by = year]$V1
+     }
 
-    dat <- data.table(year,
-                      maxdoy = ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
-                                       366, 365),
-                      maxlai = maxlai)
-    out <- dat[, plant.linear(doys = lai.doy, values = lai.frac*maxlai, maxdoy = maxdoy),
-               by = year]$V1
+   } else {
+
+     dat <- data.table::data.table(year,
+                       maxdoy = ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
+                                        366, 365),
+                       maxlai = maxlai)
+     out <- dat[, plant.linear(doys = lai.doy, values = lai.frac*maxlai, maxdoy = maxdoy),
+                by = year]$V1
 
   }
 

@@ -17,7 +17,7 @@ test <- runLWFB90("testrun",
 plot(test$model_input$standprop_daily$lai)
 
 
-n=10
+n=5
 param_var <- data.frame(cintrl = runif(n, 0.1,0.5),
                         soil_materials.ths3 = runif(n,0.3,0.4),
                         soil_materials.ths1 = runif(n,0.4,0.5),
@@ -28,5 +28,7 @@ results <- mrunLWFB90(paramvar  = param_var,
                       param.b90 = param.b90,
                       options.b90 = options.b90,
                       climate = slb1_meteo,
-                      rtrn.input = F)
-results[[1]]
+                      run = T,
+                      cores = 2)
+
+names(results[[1]])

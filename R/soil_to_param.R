@@ -1,14 +1,14 @@
 #' Split up soil into materials and soil nodes.
 #'
-#' @param soil data.frame with soil soil depths ('upper', 'lower') and
+#' @param soil data.frame with soil depths ('upper', 'lower') and
 #' hydraulic parameters ('ths', 'thr', 'alpha', 'npar', 'ksat', 'tort', 'gravel')
 #'
-#' @return a list with data.table objects 'soil_nodes' and 'soil_materials'
+#' @return a list with data.frames 'soil_nodes' and 'soil_materials'
 #' @export
 #'
 #' @examples
 soil_to_param <- function(soil, imodel="MvG") {
-  setDT(soil)
+
   if (imodel == "MvG") {
   dubl <- duplicated(soil[,c("ths","thr","alpha","npar","ksat","tort","gravel")])
   materials <- soil[!dubl,c("ths","thr","alpha","npar","ksat","tort","gravel")]
@@ -33,6 +33,6 @@ soil_to_param <- function(soil, imodel="MvG") {
   soil$thick <- round(soil$thick * 1000) # mm
   soil$layer <- 1:nrow(soil)
 
-  return(list(soil_nodes = soil[,list(layer, upper,lower,thick, midpoint, mat)],
+  return(list(soil_nodes = soil[,c("layer", "upper","lower","thick", "midpoint", "mat")],
               soil_materials = materials))
 }

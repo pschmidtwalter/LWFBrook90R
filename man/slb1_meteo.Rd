@@ -4,7 +4,7 @@
 \name{slb1_meteo}
 \alias{slb1_meteo}
 \title{Meteorological Data from the Solling Beech and Spruce experimental site}
-\format{A data.table with 19724 rows and 9 variables
+\format{A data.frame with 19724 rows and 9 variables
 \describe{
   \item{dates}{date}
   \item{tmin}{daily minimum temperature, degC}

@@ -11,11 +11,12 @@ options.b90$enddate <- as.Date("2001-12-31")
 options.b90$prec.corr = F
 soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 
+str(soil)
 # Run LWF-Brook90
 b90.result <- runLWFB90(project.dir = "example_run_b90",
                         options.b90 = options.b90,
                         param.b90 = param.b90,
-                        climate = slb1_meteo,
+                        climate = data.frame(slb1_meteo),
                         soil = soil)
 b90.result$EVAPANN.ASC$FLOW
 # different return values

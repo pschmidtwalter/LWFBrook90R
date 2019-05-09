@@ -4,12 +4,10 @@
 \alias{prec_corr}
 \title{Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)}
 \usage{
-prec_corr(dates, tavg, prec, station.exposure = "mg",
+prec_corr(month, tavg, prec, station.exposure = "mg",
   full.output = FALSE)
 }
 \arguments{
-\item{dates}{a vector of Dates}
-
 \item{tavg}{a vector of air temperature}
 
 \item{prec}{a vector of rainfall}
@@ -18,6 +16,8 @@ prec_corr(dates, tavg, prec, station.exposure = "mg",
 (corresponding to full exposure, low protected, moderate protected, strong protected situation)}
 
 \item{full.output}{logical wether to return the full data set additionally including input data, correction coefficients.}
+
+\item{dates}{a vector of Dates}
 }
 \value{
 a vector of corrected rainfall data, or (if full.output == TRUE) a data.table containing the input objects, the month,
