@@ -64,17 +64,19 @@
 runLWFB90 <- function(project.dir = "runLWFB90/",
                       options.b90,
                       param.b90,
+                      soil = NULL,
                       climate,
                       precip = NULL,
-                      soil = NULL,
                       output = setoutput_LWFB90(),
+                      obs = NULL,
+                      gof_fun = NULL,
                       rtrn.input = TRUE,
+                      rtrn.output = TRUE,
                       read.output = TRUE,
-                      output.log = TRUE,
                       chk.input = TRUE,
                       verbose = TRUE,
-                      run = TRUE
-){
+                      output.log = TRUE,
+                      run = TRUE) {
 
   oldWD <- getwd()
   on.exit(setwd(oldWD))
@@ -85,6 +87,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     chk_param()
     chk_clim()
     chk_soil()
+    chk_obs()
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -145,7 +148,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   # Precipitation correction (Richter)
   if (options.b90$prec.corr == TRUE) {
     climate$prec <- with(climate, prec_corr(month, tmean, prec,
-                                station.exposure = param.b90$prec.corr.statexp))
+                                            station.exposure = param.b90$prec.corr.statexp))
   }
 
   #Calculate global radiation from sunshine duration
@@ -186,7 +189,6 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
   }
 
-
   # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (run) {
     # create project-directory
@@ -223,7 +225,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
                                   "vappres","wind","prec","mesfl")],
                       standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
-                               precdat = precip,
+      precdat = precip,
       param = param_to_rbrook90(param.b90, options.b90$imodel),
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
@@ -232,44 +234,69 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       output_log = output.log
     )
 
-    simtime <- Sys.time() - start
+    finishing_time <- Sys.time()
+    simtime <- finishing_time - start
     units(simtime) <- "secs"
 
     if (verbose == T) {
       message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
-      message("Reading output...")
     }
 
-    # ---- Read output files ----------------------------------------------------------
+    # initialize return ---------------------------------------------------------------
+    simres <- list(simulation_duration = simtime,
+                   finishing_time = finishing_time)
+
+    # ---- Read output files --------------------------------------------------------
     if ( read.output ) {
-      simres <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
+      if (verbose == T) {
+        message("Reading output...")
+      }
+      simout <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
                        data.table::fread,
                        fill = T, stringsAsFactors = F)
-      names(simres) <- list.files(project.dir, pattern = ".ASC")
-    } else {
-      simres <- list()
+      names(simout) <- list.files(project.dir, pattern = ".ASC")
+
+      # append results
+      if (rtrn.output) {
+        simres[names(simout)] <- simout
+      }
+
+      # ---- Observations: Goodness-of-fit ------------------------------------------
+      if (!is.null(obs)) {
+        if (verbose == T) {
+          message("Calculating goodness-of-fit...")
+        }
+
+        simres$gof <- tryCatch( {
+          # constrain to simulation period
+          obs <- obs[which(obs$dates >= options.b90$startdate &
+                             obs$dates <= options.b90$enddate),]
+          simres$gof <- calc_gof(obs = obs,
+                                 simres = simout,
+                                 gof_fun = gof_fun)
+        },
+        warning = function(wrn){return(wrn)},
+        error = function(err){return(err)})
+      }
     }
-    simres$finishing_time <- Sys.time()
-    simres$simulation_duration <- simtime
 
-  } else { #'dry' run
-    simres <- list(model_input = list(options.b90 = options.b90,
-                   param.b90 = param.b90,
-                   standprop_daily = standprop_daily))
-    return(simres)
-  }
+    # ---- append model input -------------------------------------------------------
+    if (rtrn.input) {
+      simres$model_input <- list(options.b90,
+                                 param.b90,
+                                 standprop_daily)
+    }
 
-  # append model input
-  if (rtrn.input == TRUE){
-    simres$model_input <- list(options.b90 = options.b90,
-                               param.b90 = param.b90,
-                               standprop_daily = standprop_daily)
+  } else {
+    # 'dry' run = F -> always return model input
+    return(list(options.b90,
+                param.b90,
+                standprop_daily))
   }
 
   if (verbose == T) {
     message("Finished!")
   }
-
   return(simres)
 }
 
@@ -396,7 +423,25 @@ chk_clim <- function() {
           climate$prec <- -999
         }
       }
-  }
+    }
+  }))
+}
+
+chk_obs <- function(){
+  eval.parent(quote({
+    if (!is.null(obs)) {
+      names(obs) <- tolower(names(obs))
+      stopifnot("dates" %in% names(obs),
+                inherits(obs$dates, "Date"),
+                length(obs) > 1)
+      if (min(obs$dates) > options.b90$startdate & max(obs$dates) < options.b90$enddate) {
+        stop("Your observations are not within the simulation period.")
+      }
+      if (is.null(gof_fun)) {
+        stop("Please provide a function(sim, obs) or list of functions to calculate
+           goodness-of-fit measures for observed variables.")
+      }
+    }
   }))
 }
 
@@ -437,4 +482,8 @@ chk_soil <- function(){
   }))
 
 }
+
+
+
+
 
