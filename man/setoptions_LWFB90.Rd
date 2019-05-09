@@ -52,5 +52,6 @@ Create a list of model control options
 # Default options
 options.b90 <- setoptions_LWFB90()
 # Include specific options
-options.b90_dynamic_phenology <- setoptions_LWFB90(budburst.method = 'Menzel', leaffall.method ='vonWilpert')
+options.b90_dynamic_phenology <- setoptions_LWFB90(budburst.method = 'Menzel',
+leaffall.method ='vonWilpert')
 }

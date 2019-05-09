@@ -4,14 +4,14 @@
 \alias{setoutput_LWFB90}
 \title{Select output for LWF-Brook90}
 \usage{
-setoutput_LWFB90(outputmat = NULL, edit = FALSE)
+setoutput_LWFB90(output = NULL, edit = FALSE)
 }
 \arguments{
-\item{edit}{open R's data-editor ?}
-
 \item{output}{optional [5,10]-matrix, opened for editing.
 If no matrix is passed, a default selection of output values is opened in R's data-editor or returned
 instantly, if edit=FALSE.}
+
+\item{edit}{open R's data-editor ?}
 }
 \value{
 a [5,10]-matrix containing 0 and 1 for use as 'output'-argument in \code{\link{runLWFB90}}

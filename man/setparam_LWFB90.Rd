@@ -10,7 +10,7 @@ setparam_LWFB90(...)
 \item{...}{named arguments to be included in return value}
 }
 \value{
-returns a list with model parameters for use as 'param.b90'-argument in \code{\link[runLWFB90]{Run.B90}}.
+returns a list with model parameters for use as 'param.b90'-argument in \code{\link{runLWFB90}}.
 }
 \description{
 Create the list of model parameters

@@ -4,14 +4,17 @@
 #' which is then used to calculate global radiation using angström formula
 #'
 #' @param doy day of year
-#' @param SunHour sunshine duration hours, same length as doy
+#' @param sunhours sunshine duration hours, same length as doy
 #' @param lat latitude in decimal degrees
 #' @param a0 angström parameter a, defaults to 0.25
 #' @param b0 angström parameter b, defaults to 0.5
 #'
-#' @return a sequence of global radiation in \eqn{MJ m^-2 d^-1} with the length of doy
+#' @return a sequence of global radiation in \eqn{MJ m^{-2} d^{-1}} with the length of doy
+#'
 #' @export
-CalcGlobRad <- function(doy, SunHour, lat,
+#' @examples
+#' calc_globrad(doy = 1:365, sunhours = runif(365, 0, 8),lat = 52.8)
+calc_globrad <- function(doy, sunhours, lat,
                         a0=0.25,
                         b0=0.5
 ) {
@@ -26,6 +29,6 @@ CalcGlobRad <- function(doy, SunHour, lat,
                             ExtraTerrestrialSolarRadiationDaily = sirad:::exd(latrad, i = doy))
 
 
-  return( (a0 + b0 * SunHour / exterr.DayL$DayLength) * exterr.DayL$ExtraTerrestrialSolarRadiationDaily )
+  return( (a0 + b0 * sunhours / exterr.DayL$DayLength) * exterr.DayL$ExtraTerrestrialSolarRadiationDaily )
 }
 

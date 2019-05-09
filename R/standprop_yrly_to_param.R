@@ -1,16 +1,28 @@
 #' Transfer standproperties height, maxlai, sai, densef, age to parameter-list
 #'
 #' Takes a data.frame of yearly standproperties, trims/extends the columns height, maxlai,
-#' sai, densef, and age for the years in out.years, and updates
+#' sai, densef, and age for the years in out.years, and updates the provided parameter list
 #'
 #' @param standprop_yearly a data.frame or data.table with columns 'year', 'height', 'maxlai', 'sai', 'densef', 'age'
-#' @param out.years
+#' @param param.b90 a list object to update
+#' @param out.years the years for which parameters should be updated
 #'
 #' @return the param.b90 list-object with updated items maxlai, height, height.ini,
 #' sai, sai.ini, densef, densef.ini, age, age.ini.
 #' @export
 #'
 #' @examples
+#' param.b90 <- setparam_LWFB90()
+#' dat <- slb1_standprop
+#'
+#' years <- 2002:2005
+#' param.new <- standprop_yearly_to_param(dat,
+#'                                        param.b90,
+#'                                        years)
+#'
+#' identical(param.new$maxlai, dat$maxlai[dat$year %in% years])
+#' identical(param.new$height, dat$height[dat$year %in% years])
+
 standprop_yearly_to_param <- function(standprop_yearly,
                                            param.b90,
                                            out.years) {

@@ -30,10 +30,13 @@ layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).}
 year, month, day, interval-number (1:precint), prec, meslflp}
 
 \item{output}{a [12,5] matrix of output selection settings}
+
+\item{output_log}{logical wether to write the output-logfile 'Log.txt'. This is where the
+commandline-feed of the original fortan program is written.}
 }
 \description{
 Define the function to run LWFBrook90 in R
 }
 \details{
-output is written to comma-separated files (.ASC) in the working directory.
+model output is written to comma-separated files (.ASC) in the working directory.
 }

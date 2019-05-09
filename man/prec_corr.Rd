@@ -8,16 +8,16 @@ prec_corr(month, tavg, prec, station.exposure = "mg",
   full.output = FALSE)
 }
 \arguments{
-\item{tavg}{a vector of air temperature}
+\item{month}{vector of months of the same length as tavg and prec}
 
-\item{prec}{a vector of rainfall}
+\item{tavg}{vector of air temperature values (deg C)}
+
+\item{prec}{vector of measured rainfall vales (mm)}
 
 \item{station.exposure}{situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
 (corresponding to full exposure, low protected, moderate protected, strong protected situation)}
 
 \item{full.output}{logical wether to return the full data set additionally including input data, correction coefficients.}
-
-\item{dates}{a vector of Dates}
 }
 \value{
 a vector of corrected rainfall data, or (if full.output == TRUE) a data.table containing the input objects, the month,
@@ -28,23 +28,28 @@ correction coefficients epsilon and b, and the corrected rainfall.
 Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)
 }
 \examples{
+clim <- slb1_meteo[as.integer(format(slb1_meteo$dates,"\%Y")) \%in\% 2001:2005,]
+clim$month <- as.integer(format(clim$dates, "\%m"))
 
-prec_corr(slb1_meteo$dates, slb1_meteo$tmean, slb1_meteo$prec)
-prec <- with(slb1_meteo[year(dates) \%in\% 2001:2010,],
-             data.frame(dates = dates, meas = prec,
-                        frei = prec_corr(dates, tmean, prec, station.exposure = "frei"),
-                        lg = prec_corr(dates, tmean, prec, station.exposure = "lg"),
-                        mg = prec_corr(dates, tmean, prec, station.exposure = "mg"),
-                        sg = prec_corr(dates, tmean, prec, station.exposure = "sg"))
-)
+prec_meas <- clim$prec
+prec_corr_frei <- with(clim,
+                       prec_corr(month, tmean, prec, station.exposure = "frei"))
+prec_corr_lg <- with(clim,
+                     prec_corr(month, tmean, prec, station.exposure = "lg"))
+prec_corr_mg <- with(clim,
+                     prec_corr(month, tmean, prec, station.exposure = "mg"))
+prec_corr_sg <- with(clim,
+                     prec_corr(month, tmean, prec, station.exposure = "sg"))
 
-
-plot(prec$dates, cumsum(prec$frei), type = "l", col = "violet", xlab = "dates", ylab = "cum. precipitation (mm)")
-lines(prec$dates, cumsum(prec$lg), col = "blue")
-lines(prec$dates, cumsum(prec$mg), col = "green")
-lines(prec$dates, cumsum(prec$sg), col = "red")
-lines(prec$dates, cumsum(prec$meas))
-legend('bottomright', c('frei', "lg", "mg", "sg"), col = c("violet", "blue", "green", "red", "black"), lty = 1, pch = NULL )
+plot(clim$dates, cumsum(prec_corr_frei),
+type = "l", col = "violet", xlab = "dates", ylab = "cum. precipitation (mm)")
+lines(clim$dates, cumsum(prec_corr_lg), col = "blue")
+lines(clim$dates, cumsum(prec_corr_mg), col = "green")
+lines(clim$dates, cumsum(prec_corr_sg), col = "red")
+lines(clim$dates, cumsum(prec_meas))
+legend('bottomright', c('frei', "lg", "mg", "sg"),
+       col = c("violet", "blue", "green", "red", "black"),
+       lty = 1, pch = NULL )
 }
 \references{
 Richter, D. (1995): "Ergebnisse methodischer Untersuchungen

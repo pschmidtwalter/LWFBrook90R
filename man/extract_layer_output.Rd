@@ -14,10 +14,12 @@ from dat. If not supplied, values from all layers will be returned}
 
 \item{value.vars}{character vector containing names of value-variables to be extracted from dat.
 If not supplied, value.var will be guessed.}
+
+\item{sep}{separation character for constructig names from variable name and layer index.}
 }
 \value{
 a data.table with the layers' values of the variables organized in columns
-    (wide format) with the names being made up of the variable name and layer number.
+(wide format) with the names being made up of the variable name and layer number.
 }
 \description{
 Reorganizes layer data such as BELO and SWAT to the wide format

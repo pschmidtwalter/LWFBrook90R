@@ -10,15 +10,15 @@ calc_vegperiod(budburst.method, leaffall.method, dates = NULL,
 }
 \arguments{
 \item{budburst.method}{name of model for estimating budburst day of year. Either 'fixed'
-or one of the values accepted by the 'start.method'-argument of the function \code{\link{vegperiod}[vegperiod]}.}
+or one of the values accepted by the 'start.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.}
 
 \item{leaffall.method}{name of model for estimating day of year when leaffall begin. Either 'fixed'
-or one of the values accepted by the 'end.method'-argument of the function \code{\link{vegperiod}[vegperiod]}.}
+or one of the values accepted by the 'end.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.}
 
-\item{dates}{date vector passed to \code{\link{vegperiod}[vegperiod]},
+\item{dates}{date vector passed to \code{\link[vegperiod]{vegperiod}},
 ignored if both leaffall.method and budburst.method = 'fixed'}
 
-\item{tavg}{vector or daily mean air temperature passed to \code{\link{vegperiod}[vegperiod]},
+\item{tavg}{vector or daily mean air temperature passed to \code{\link[vegperiod]{vegperiod}},
 ignored both if leaffall.method and budburst.method = 'fixed'}
 
 \item{out.years}{integer vector of the years to be returned. If not specified,
@@ -28,7 +28,7 @@ values for the years in dates will be returned.}
 
 \item{leaffalldoy.fixed}{vector of values to be returned if leaffall.method = 'fixed'.}
 
-\item{...}{additional argument passed to \code{\link{vegperiod}[vegperiod]}.}
+\item{...}{additional argument passed to \code{\link[vegperiod]{vegperiod}}.}
 }
 \value{
 a data.frame with columns 'year', 'start', 'end'. if budburst.method = 'fixed' or leaffall.method = 'fixed',
@@ -39,11 +39,14 @@ Calculate vegetation period start and end days of year)
 }
 \examples{
 
+# fixed budburst and leaffall doy
 calc_vegperiod(out.years = 2001:2010,
                budburst.method = "fixed",
                leaffall.method = "fixed",
                budburstdoy.fixed = floor(runif(10, 120,130)),
                leaffalldoy.fixed = floor(runif(2, 260,280)))
+
+# dynamic budburst and leaffall using air temperature
 climate <- LWFBrook90R::slb1_meteo
 
 calc_vegperiod(budburst.method = "Menzel",

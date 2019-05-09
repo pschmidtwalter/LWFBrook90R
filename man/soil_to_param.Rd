@@ -8,11 +8,23 @@ soil_to_param(soil, imodel = "MvG")
 }
 \arguments{
 \item{soil}{data.frame with soil depths ('upper', 'lower') and
-hydraulic parameters ('ths', 'thr', 'alpha', 'npar', 'ksat', 'tort', 'gravel')}
+hydraulic parameters. When imodel = 'MvG', columns of soil have to be named 'ths', 'thr',
+'alpha', 'npar', 'ksat', 'tort', 'gravel'. When imodel = 'CH', columns have to be named
+thsat , 'thetaf','psif', 'bexp','kf', 'wetinf', 'gravel'.}
+
+\item{imodel}{name of the hydraulic model}
 }
 \value{
 a list with data.frames 'soil_nodes' and 'soil_materials'
 }
 \description{
 Split up soil into materials and soil nodes.
+}
+\examples{
+soil <- slb1_soil
+soil <- cbind(soil, hydpar_wessolek_mvg(soil$texture))
+str(soil)
+
+soil_layers_materials <- soil_to_param(soil)
+soil_layers_materials
 }

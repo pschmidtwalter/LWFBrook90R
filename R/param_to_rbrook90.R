@@ -3,10 +3,8 @@
 #' The parameter-vector for r_brook90 is created from the lists of model controls options, parameters, and soil.
 #'
 #'
-#' @param options.b90 a named list of model control options.
 #' @param param.b90 a named list of model parameters.
-#' @param n_soillays number of model soil layers.
-#' @param n_materials number of soil materials
+#' @param imodel name of hydraulic model ('MvG' or 'CH')
 #'
 #' @return a numerical vector with the parameters in the right order for r_brook90
 #' @export

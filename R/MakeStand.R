@@ -1,17 +1,23 @@
-#' Create the daily standproperties from parameters
+#' Create the daily standproperties from parameters and options
 #'
 #' Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from parameter and options
 #' using \code{\link{approx_standprop}} and \code{\link{MakeSeasLAI}}.
-#'
 #'
 #' @param options.b90 a list of model control options
 #' @param param.b90 a parameter list-object
 #' @param out.years years for which values are returned.
 #'
-#' @return a data.table containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
+#' @return a data.frame containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
 #' @export
 #'
 #' @examples
+#' options.b90 <- setoptions_LWFB90()
+#' param.b90 <- setparam_LWFB90()
+#'
+#' standprop <- make_standprop(options.b90,
+#'                             param.b90,
+#'                             out.years = 2002:2004)
+#' plot(standprop$dates, standprop$lai, type = "l")
 make_standprop <- function(options.b90,
                            param.b90,
                            out.years) {

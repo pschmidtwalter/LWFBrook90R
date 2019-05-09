@@ -1,5 +1,5 @@
 Package: LWFBrook90R
-Title: Run the LWF-Brook90 hydrological model inside R.
+Title: Run the LWF-Brook90 hydrological model inside R
 Version: 1.2.0
 Authors@R: c(
         person("Paul", "Schmidt-Walter", email = "paul.schmidt-walter@nw-fva.de", role = c("aut", "cre")),
@@ -21,6 +21,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests:
+    hydroGOF,
     sirad,
     testthat,
     knitr,

@@ -8,9 +8,10 @@
 #' from dat. If not supplied, values from all layers will be returned
 #' @param value.vars character vector containing names of value-variables to be extracted from dat.
 #' If not supplied, value.var will be guessed.
+#' @param sep separation character for constructig names from variable name and layer index.
 #'
 #' @return a data.table with the layers' values of the variables organized in columns
-#'     (wide format) with the names being made up of the variable name and layer number.
+#' (wide format) with the names being made up of the variable name and layer number.
 #' @export
 #' @examples
 #' # create a data.frame with monthly values
@@ -31,7 +32,10 @@
 #' #extract specific variables
 #' extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
 #' @import data.table
-extract_layer_output <- function(dat, layers = NULL, value.vars=NULL, sep = ""){
+extract_layer_output <- function(dat,
+                                 layers = NULL,
+                                 value.vars=NULL,
+                                 sep = ""){
 
   if (!is.data.table(dat)) {setDT(dat) }
 

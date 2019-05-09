@@ -1,18 +1,18 @@
 #' Calculate vegetation period start and end days of year)
 #'
 #' @param budburst.method name of model for estimating budburst day of year. Either 'fixed'
-#' or one of the values accepted by the 'start.method'-argument of the function \code{\link{vegperiod}[vegperiod]}.
+#' or one of the values accepted by the 'start.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.
 #' @param leaffall.method name of model for estimating day of year when leaffall begin. Either 'fixed'
-#' or one of the values accepted by the 'end.method'-argument of the function \code{\link{vegperiod}[vegperiod]}.
-#' @param dates date vector passed to \code{\link{vegperiod}[vegperiod]},
+#' or one of the values accepted by the 'end.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.
+#' @param dates date vector passed to \code{\link[vegperiod]{vegperiod}},
 #' ignored if both leaffall.method and budburst.method = 'fixed'
-#' @param tavg vector or daily mean air temperature passed to \code{\link{vegperiod}[vegperiod]},
+#' @param tavg vector or daily mean air temperature passed to \code{\link[vegperiod]{vegperiod}},
 #' ignored both if leaffall.method and budburst.method = 'fixed'
 #' @param out.years integer vector of the years to be returned. If not specified,
 #' values for the years in dates will be returned.
 #' @param budburstdoy.fixed vector of values to be returned if budburst.method = 'fixed'.
 #' @param leaffalldoy.fixed vector of values to be returned if leaffall.method = 'fixed'.
-#' @param ... additional argument passed to \code{\link{vegperiod}[vegperiod]}.
+#' @param ... additional argument passed to \code{\link[vegperiod]{vegperiod}}.
 #'
 #' @return a data.frame with columns 'year', 'start', 'end'. if budburst.method = 'fixed' or leaffall.method = 'fixed',
 #' 'start' and 'end' contain the values specified in budburstdoy.fixed and leaffalldoy.fixed respectively.
@@ -20,11 +20,14 @@
 #'
 #' @examples
 #'
+#' # fixed budburst and leaffall doy
 #' calc_vegperiod(out.years = 2001:2010,
 #'                budburst.method = "fixed",
 #'                leaffall.method = "fixed",
 #'                budburstdoy.fixed = floor(runif(10, 120,130)),
 #'                leaffalldoy.fixed = floor(runif(2, 260,280)))
+#'
+#' # dynamic budburst and leaffall using air temperature
 #' climate <- LWFBrook90R::slb1_meteo
 #'
 #' calc_vegperiod(budburst.method = "Menzel",
@@ -55,7 +58,8 @@ calc_vegperiod <- function(budburst.method,
 
   leaffall.method <- match.arg(leaffall.method,
                                choices = c("fixed", "vonWilpert", "LWF-BROOK90", "NuskeAlbert", "StdMeteo","ETCCDI"))
-  if (is.null(dates) & is.null(dates) & any(c(budburst.method, leaffall.method) != "fixed")) {
+
+  if (is.null(dates) & is.null(tavg) & any(c(budburst.method, leaffall.method) != "fixed")) {
     stop("Please provide 'dates' and 'tavg' for using the specified methods!")
   }
   if (is.null(out.years) & is.null(dates)) {
@@ -65,8 +69,10 @@ calc_vegperiod <- function(budburst.method,
   if (is.null(out.years)) {
     out.years <- as.integer(unique(format(dates, "%Y")))
   } else {
-    if (!all(out.years %in% as.integer(unique(format(dates, "%Y"))))) {
-      stop("date vector not covering out.years")
+    if (!is.null(dates)) {
+      if (!all(out.years %in% as.integer(unique(format(dates, "%Y"))))) {
+        stop("date vector not covering out.years")
+      }
     }
   }
   stopifnot(length(dates) == length(tavg))

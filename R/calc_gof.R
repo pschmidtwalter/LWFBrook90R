@@ -15,6 +15,39 @@
 #' @export
 #'
 #' @examples
+#' # Set up lists containing model control options and model parameters:
+#' param.b90 <- setparam_LWFB90()
+#' options.b90 <- setoptions_LWFB90()
+#'
+#' # Set start and end Dates for the simulation
+#' options.b90$startdate <- as.Date("2002-2-15")
+#' options.b90$enddate <- as.Date("2003-07-5")
+#'
+#' # Derive soil hydraulic properties from soil physical properties
+#' # using pedotransfer functions
+#' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
+#'
+#' # Run LWF-Brook90
+#' b90.result <- runLWFB90(project.dir = "example_run_b90",
+#'                         options.b90 = options.b90,
+#'                         param.b90 = param.b90,
+#'                         climate = slb1_meteo,
+#'                         soil = soil)
+#'
+#' # prepare observations
+#' observations <- slb1_mpot #'daily water potential in different soil depths
+#' names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
+#'
+#' observations <- observations[observations$dates >= options.b90$startdate
+#'                              & observations$dates <= options.b90$enddate,]
+#' # calculate gof- easure using simulation results and observations
+#' calc_gof(obs = observations,
+#'          b90.result,
+#'          gof_fun = function(sim, obs) {mean(obs-sim, na.rm = T)})
+#' # multiple gof-measures
+#' calc_gof(obs = observations, b90.result,
+#'          gof_fun = list(WilmD = hydroGOF::d, bR2 = hydroGOF::br2))
+
 calc_gof <- function(obs,
                      simres,
                      gof_fun) {

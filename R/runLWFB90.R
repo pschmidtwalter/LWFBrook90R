@@ -11,10 +11,11 @@
 #' \code{\link{setparam_LWFB90}} to generate a list with default model parameters.
 #' @param climate data.frame with daily climate data with columns named according to
 #'  \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{tmean}, \emph{wind}, \emph{prec}, \emph{vappres},
-#' and either \emph{globrad} or \emph{sunhours}).
+#' and either \emph{globrad} or \emph{sunhours}). When using 'sunhours', please set options.b90$fornetrad = 'sunhours'
 #' @param precip data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 #' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-#' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.
+#' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
+#' per day defined in options.b90$prec.interval.
 #' @param soil data.frame containing the hydraulic properties of the soil layers.
 #' Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
 #' The column names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards).
@@ -22,51 +23,77 @@
 #'  \emph{alpha} [m-1], \emph{npar}, \emph{ksat} [mm d-1] and \emph{tort}.  With options.b90$imodel = 'CH',
 #'  the parameters are \emph{thsat} , \emph{thetaf},\emph{psif} [kPa], \emph{bexp},
 #'  \emph{kf} (mm d-1), and \emph{wetinf}. For both parameterizations, the volume fraction of stones has to be named \emph{gravel}.
-#'  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials' of param.b90 are used for the simulation.
-#'  These have to be set up in advance, see \code{\link{soil_to_param}}.
+#'  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
+#'   of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
 #' @param output a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
+#' @param obs a data.frame with observations. The names of observations are looked up
+#' in the list of simulation output data.frames, and goodness-of-fit measures are calculated for each
+#' equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = F.
+#' @param gof_fun a function of form function(sim,obs) or list of functions passed to \code{\link{calc_gof}}.
+#' Disabled when read.output = F.
 #' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('standprop_daily', as derived from parameters) to the result?
-#' @param read.output read and return simulation results from project.dir? When FALSE,
-#' simulation duration and finishing time are returned. Default is TRUE.
+#' @param rtrn.output return the simulation results? Disabled when read.output = F.
+#' @param read.output read the simulation result files from project.dir? Default is TRUE.
+#' @param chk.input logical wether to check param.b90, options.b90, climate, precip, soil, and obs
+#' for completeness and consistency.
 #' @param output.log write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.
-#' @param verbose print messages to the console? Default is TRUE.
 #' @param run run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
+#' @param verbose print messages to the console? Default is TRUE.
 #'
-#' @return Returns the model-output from the files found in 'project.dir' as a list of data.tables,
-#' along with the execution time of the simulation, and model input if desired.
+#' @return A list containing the contents of the LWF-Brook90 output files found in 'project.dir' along with model_input,
+#' goodness-of-fit measures, and duration and finishing time of the simulation.
+#'
 #' @export
 #' @examples
-#'
-#' #Set up lists containing model control options and model parameters:
-#'
+#' # Set up lists containing model control options and model parameters:
 #' param.b90 <- setparam_LWFB90()
 #' options.b90 <- setoptions_LWFB90()
 #'
 #' # Set start and end Dates for the simulation
-#'
-#' options.b90$startdate <- as.Date("2000-01-01")
-#' options.b90$enddate <- as.Date("2004-12-31")
+#' options.b90$startdate <- as.Date("2002-2-15")
+#' options.b90$enddate <- as.Date("2005-07-5")
 #'
 #' # Derive soil hydraulic properties from soil physical properties
 #' # using pedotransfer functions
-#'
-#' soil <- cbind(soil_slb1, hydpar_wessolek_mvg(soil_slb1$texture))
+#' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 #'
 #' # Run LWF-Brook90
 #' b90.result <- runLWFB90(project.dir = "example_run_b90",
-#'                       options.b90 = options.b90,
-#'                       param.b90 = param.b90.b90,
-#'                       climate = meteo_slb1,
-#'                       soil = soil)
+#'                         options.b90 = options.b90,
+#'                         param.b90 = param.b90,
+#'                         climate = slb1_meteo,
+#'                         soil = soil)
+#'
+#' # use observations to calculate goodness of fit
+#' observations <- slb1_mpot #'daily water potential in different soil depths
+#' # prepare data: names have to be found in simulation output.
+#' names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
+#'
+#' # Fit-functions
+#' gof <- list(nse = hydroGOF::NSE,
+#'             me = function(sim,obs){mean(sim-obs, na.rm=T)})
+#'
+#' # run model, but only return gof-function results
+#' b90.gofmpot <- runLWFB90(project.dir = "example_run_b90",
+#'                          options.b90 = options.b90,
+#'                          param.b90 = param.b90,
+#'                          climate = slb1_meteo,
+#'                          soil = soil,
+#'                          obs = observations,
+#'                          gof_fun = gof,
+#'                          rtrn.output = F,
+#'                          rtrn.input = F)
+#' b90.gofmpot
+#'
 runLWFB90 <- function(project.dir = "runLWFB90/",
                       options.b90,
                       param.b90,
-                      soil = NULL,
                       climate,
                       precip = NULL,
+                      soil = NULL,
                       output = setoutput_LWFB90(),
                       obs = NULL,
                       gof_fun = NULL,
@@ -74,9 +101,9 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
                       rtrn.output = TRUE,
                       read.output = TRUE,
                       chk.input = TRUE,
-                      verbose = TRUE,
                       output.log = TRUE,
-                      run = TRUE) {
+                      run = TRUE,
+                      verbose = TRUE) {
 
   oldWD <- getwd()
   on.exit(setwd(oldWD))
@@ -154,7 +181,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   #Calculate global radiation from sunshine duration
   if (options.b90$fornetrad == "sunhours") {
     climate$globrad <- with(climate,
-                            CalcGlobRad( as.integer(format(dates, "%j")),
+                            calc_globrad( as.integer(format(dates, "%j")),
                                          sunhours, param.b90$coords_y ))
   }
 
@@ -306,7 +333,7 @@ chk_options <- function(){
     names(options.b90) <- tolower(names(options.b90))
 
     stopifnot(all(names(options.b90) %in% c("startdate","enddate","fornetrad","prec.interval",
-                                            "prec.corr","prec.exposure","budburst.method",
+                                            "prec.corr","budburst.method",
                                             "leaffall.method", "standprop.input", "standprop.interp",
                                             "standprop.use_growthperiod","lai.method","imodel", "root.method")))
 

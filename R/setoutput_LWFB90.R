@@ -24,10 +24,10 @@
 #'outmat <- setoutput_LWFB90(edit = T)
 #'
 #' @export
-setoutput_LWFB90 <- function(outputmat = NULL,
+setoutput_LWFB90 <- function(output = NULL,
                               edit = FALSE) {
-  if (is.null(outputmat)) {
-    outputmat <- matrix(ncol = 5,nrow = 10,
+  if (is.null(output)) {
+    output <- matrix(ncol = 5,nrow = 10,
                         byrow = TRUE,
                         dimnames = list(c("Eval", "Budg","Flow","Evap","Abov","Belo","Swat","Psit","Misc","User"),
                                         c("Ann","Mon","Day","Pre","ITR")),
@@ -45,15 +45,15 @@ setoutput_LWFB90 <- function(outputmat = NULL,
                         )
     )
     if (edit == T) {
-      outputmat <- edit(outputmat)}
+      output <- edit(output)}
   } else {
-    if (all(dim(outputmat) == c(10,5)) ) {
-      outputmat <- edit(outputmat)
+    if (all(dim(output) == c(10,5)) ) {
+      output <- edit(output)
     }
     else {
       stop("Please provide a [10,5] matrix for editing!")
     }
   }
-  outputmat[which(outputmat != 0)] <- 1
-  outputmat
+  output[which(output != 0)] <- 1
+  output
 }

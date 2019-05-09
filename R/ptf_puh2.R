@@ -23,7 +23,8 @@
 #' @references Puhlmann H, von Wilpert K (2011) Testing and development of pedotransfer
 #'                 functions for water retention and hydraulic conductivity of forest soils.
 #'                 Wald?kologie, Landschaftsforschung und Naturschutz 12, pp. 61-71
-#' @examples hydpar_puh2(20,20,60,1.5)
+#' @examples
+#' hydpar_puh2(20,20,60,1.5)
 #' @export
 #'
 hydpar_puh2 <- function(clay, silt, sand, bd, oc.pct=0.5){

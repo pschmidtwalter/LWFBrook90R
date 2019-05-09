@@ -11,14 +11,14 @@ approx_standprop(x.years, y, y.ini = NULL, xout.years = x.years,
 \arguments{
 \item{x.years}{A sequence of years or a single year}
 
-\item{y}{vector of the same length as x.years. If aprox.method = 'linear',
+\item{y}{vector of the same length as x.years. If approx.method = 'linear',
 the values are interpreted to be valid at the end of the respective year in x.years.}
 
 \item{y.ini}{initial value used as a starting point for linear interpolation.
 Interpreted to be valid at the 1st of January of the first year in x.years.
 Ignored if approx.method = 'constant'.}
 
-\item{xout.years}{years for which ouput is generated, maybe longer or shorter than
+\item{xout.years}{years for which output is generated, maybe longer or shorter than
 x.years. For years outside x.years, the value of the closest data extrem is returned.}
 
 \item{use_growthperiod}{logical: Use startdoy and enddoy for linear interpolation?
@@ -30,7 +30,7 @@ If TRUE, yearly changes take place between startdoy and enddoy, other wise from 
 
 \item{approx.method}{name of interpolation method ('constant' or 'linear').}
 
-\item{return_xout}{logical. If true, daily values of y AND a date vector are returned in data.frame.}
+\item{return_xout}{logical. If true, daily values of y and a date vector are returned in data.frame.}
 }
 \value{
 A vector of interpolated daily values
@@ -43,7 +43,51 @@ and interpolates them to a daily sequence.
 For \code{approx.method = 'constant'}, the value of y is returned for the whole respective year in x.years,
 which results in a yearly changing step function. If \code{approx.method = 'linear'},
 the values of y are interpolated between the years in x.years, and interpreted to be reached
-at the 31st of December of the respective x.years. In this case, y.ini is required as the initial value,
+at the 31st of December of the respective x.years. In this case, y.ini is required as an initial value,
 from which the sequence is interpolated to the first value of y. The linear changes are either accomplished
-between 31st to 31st of December of the years in x.years, or during the growing season only (use_growingseason = TRUE).
+between 31st to 31st of December of the years in x.years, or during the growing season only (use_growingperiod = TRUE).
+}
+\examples{
+options.b90 <- setoptions_LWFB90()
+param.b90 <- setparam_LWFB90()
+
+years <- 2002:2004
+options.b90$standprop.interp <- 'constant'
+param.b90$height <- c(20.2,20.8,21.3)
+height_c <- approx_standprop(x.years=years,
+                             y = param.b90$height,
+                             approx.method = options.b90$standprop.interp)
+
+# linear interpolation
+options.b90$standprop.interp <- 'linear'
+param.b90$height.ini <- 19.1
+height_l <- approx_standprop(x.years=years,
+                             y = param.b90$height,
+                             y.ini = param.b90$height.ini,
+                             approx.method = options.b90$standprop.interp)
+
+# use growthperiod
+options.b90$standprop.use_growthperiod <- TRUE
+height_l_gp <- approx_standprop(x.years = years,
+                                y = param.b90$height,
+                                y.ini = param.b90$height.ini,
+                                use_growthperiod = options.b90$standprop.use_growthperiod,
+                                startdoy = param.b90$budburstdoy,
+                                enddoy = param.b90$leaffalldoy,
+                                approx.method = options.b90$standprop.interp)
+
+dates <- seq.Date(from = as.Date(paste0(min(years),"-01-01")),
+                  to = as.Date(paste0(max(years),"-12-31")),
+                  by = "day")
+plot(dates, height_c,
+     type = "l", lwd = 2, col = "black",
+     ylim = c(19,22), ylab = "height [m]", xlab = "", xpd = TRUE)
+lines(dates, height_l,
+      col = "blue", lwd = 2)
+lines(dates, height_l_gp,
+      col = "green", lwd = 2)
+legend("topleft", legend = c("'constant'",
+                             "'linear'", "'linear', 'use_growthperiod'"),
+       col  = c("black", "blue", "green"),  lwd = 2, pch = NULL,
+       bty = "n")
 }

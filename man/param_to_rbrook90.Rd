@@ -9,11 +9,7 @@ param_to_rbrook90(param.b90, imodel)
 \arguments{
 \item{param.b90}{a named list of model parameters.}
 
-\item{options.b90}{a named list of model control options.}
-
-\item{n_soillays}{number of model soil layers.}
-
-\item{n_materials}{number of soil materials}
+\item{imodel}{name of hydraulic model ('MvG' or 'CH')}
 }
 \value{
 a numerical vector with the parameters in the right order for r_brook90

@@ -24,7 +24,8 @@
 #' @references Woesten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of
 #'                 a database of hydraulic properties of European soils. Geoderma 90, pp. 169-185
 #' @export
-#' @examples hydpar_hypres(20,20,1.5,2)
+#' @examples
+#' hydpar_hypres(20,20,1.5,2)
 #'
 hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72 ){
 #Woesten et al. (Geoderma (90) 169-185, 1999):  Development and use of a database of hydraulic properties of European soils

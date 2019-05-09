@@ -21,12 +21,15 @@ Replace elements in a data.frame or vector of length > 1 by name
 }
 \examples{
 soil_materials <- data.frame(ths = rep(0.4,3), alpha = rep(23.1, 3))
+
 varnms = c("soil_materials.ths3", "soil_materials.ths1", "soil_materials.alpha2")
 vals = c(0.999, 0.001, 99)
+soil_materials
 replace_vecelements(soil_materials, varnms, vals)
 
 x <- setparam_LWFB90()[["pdur"]]
 varnms <- c("pdur2", "pdur12")
 vals <- c(0,10)
+x
 replace_vecelements(x, varnms, vals)
 }

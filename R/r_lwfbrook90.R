@@ -15,8 +15,10 @@
 #' @param precdat a matrix precipitation interval data with 6 columns:
 #' year, month, day, interval-number (1:precint), prec, meslflp
 #' @param output a [12,5] matrix of output selection settings
-
-#' @details output is written to comma-separated files (.ASC) in the working directory.
+#' @param output_log logical wether to write the output-logfile 'Log.txt'. This is where the
+#' commandline-feed of the original fortan program is written.
+#'
+#' @details model output is written to comma-separated files (.ASC) in the working directory.
 #'
 #' @export
 #' @useDynLib LWFBrook90R

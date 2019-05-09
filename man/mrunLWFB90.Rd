@@ -17,15 +17,15 @@ the respective column name of paramvar has to be setup from the name and index.
 For example, to place the 2nd value of 'ths' in the soil_materials data.frame,
 the respective column name of paramvar has to be called 'soil_materials.ths2'.
 In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.
-The function for replacing values in vector element and data.frames is \code{\link[replace_vecelements]{replace_vecelements}}.}
+The function for replacing values in vector element and data.frames is \code{\link{replace_vecelements}}.}
 
 \item{param.b90}{Named list of parameters, in which the parameters defined in paramvar will be replaced.}
 
 \item{options.b90}{Named list of model control option to be used in all simulations.}
 
-\item{climate}{data.frame with climate data passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of climate data.frames}
+\item{climate}{data.frame with climate data passed to \code{\link{runLWFB90}}, or a list of climate data.frames}
 
-\item{soil}{data.frame with soil properties passed to \code{\link[runLWFB90]{runLWFB90}}, or a list of lists with different soil profiles}
+\item{soil}{data.frame with soil properties passed to \code{\link{runLWFB90}}, or a list of lists with different soil profiles}
 
 \item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90}
 
@@ -37,50 +37,82 @@ The function for replacing values in vector element and data.frames is \code{\li
 
 \item{showProgress}{Show progressbar?}
 
-\item{...}{Further arguments passed to \code{\link[runLWFB90]{runLWFB90}}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
 }
 \value{
 A named list with the results for the single runs. Simulation errors are passed on.
 }
 \description{
-Repeatedly calls \code{\link[runLWFB90]{runLWFB90}} with varying input parameters in parallel,
+Repeatedly calls \code{\link{runLWFB90}} with varying input parameters in parallel,
 stores the single run results in subdirectories and returns the results as a named list.
 }
 \examples{
 #Set up lists containing model control options and model parameters:
-param.b90 <- MakeParam.B90()
-options.b90 <- MakeOptions.B90()
+param.b90 <- setparam_LWFB90()
+options.b90 <- setoptions_LWFB90()
 
 # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
-soil <- cbind(soil_slb1, hydpar_wessolek_mvg(soil_slb1$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2000-01-01")
-options.b90$enddate <- as.Date("2004-12-31")
+options.b90$startdate <- as.Date("2002-01-01")
+options.b90$enddate <- as.Date("2003-12-31")
 
-# choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
-options.b90$annuallaidyn <- 'Coupmodel'
-options.b90$budburst <- 'fixed'
-options.b90$leaffall <- 'fixed'
+# 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates
+options.b90$lai.method <- 'Coupmodel'
+options.b90$budburst.method <- 'fixed'
+options.b90$leaffall.method <- 'fixed'
 
-#set up data.frame with variable leaf area index parameters
+#set up data.frame with variable parameters
 n <- 10
-vary_parms <- data.frame(maxlai = runif(n,4,8),
-                         shapestart = runif(n, 0.1,1),
+vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
+                         shape.budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
-                         optdoy =runif(n,180,240))
+                         soil_materials.ths3 = runif(n, 0.3,0.5),
+                         maxlai2 = runif(n,4,8))
+
+
+# soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
+param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+# set up maxlai with length 2, so maxlai2 of paramvar can be looked up
+param.b90$maxlai <- c(5, 5)
 
 # Make a Multirun-Simulation
-b90.multi <- mrunLWFB90(nRuns = n,
-                     param_var = vary_parms,
-                     param_const = param.b90,
-                     options.b90 = options.b90,
-                     soil = soil,
-                     climate = meteo_slb1,
-                     multirun.dir = "MultiRuns",
-                     keep.subdirs = FALSE,
-                     singlerun_names = paste0("result.",1:n),
-                     cores = 3
-                     )
+b90.multi <- mrunLWFB90(paramvar = vary_parms,
+                        param.b90 = param.b90,
+                        options.b90 = options.b90,
+                        climate = slb1_meteo)
+names(b90.multi)
+
+#extract results: EVAPDAY.ASC
+evapday <- data.table::rbindlist(lapply(b90.multi,
+                                        FUN = function(x) {x[["EVAPDAY.ASC"]]}),
+                                 idcol = "srun")
+evapday$dates <- with(evapday, as.Date(paste(YR,MO,DA), "\%Y \%m \%d"))
+
+with(evapday[evapday$srun == "RunNo.1", ],
+     plot(dates, cumsum(EVAP))
+)
+
+# same simulation, but return goodnes-fit-measure only.
+# prepare observations
+observations <- slb1_mpot #'daily water potential in different soil depths
+# names of observations have to be found in simulation output.
+names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
+
+# run
+b90.gofmpot <- mrunLWFB90(paramvar = vary_parms,
+                          options.b90 = options.b90,
+                          param.b90 = param.b90,
+                          climate = slb1_meteo,
+                          soil = soil,
+                          obs = observations,
+                          gof_fun = hydroGOF::NSE, #' Nash-Sutcliff efficiency
+                          rtrn.output = F,
+                          rtrn.input = F)
+# collect the NSE-values
+nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
+                             idcol = "srun")
+hist(nse$SWATDAY.ASC.psimi5)
 }
