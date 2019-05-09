@@ -114,6 +114,8 @@ b90.gofmpot <- mrunLWFB90(paramvar = vary_parms,
 # collect the NSE-values
 nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
                              idcol = "srun")
+
 #hist(nse$SWATDAY.ASC.psimi5)
+
 
 }
