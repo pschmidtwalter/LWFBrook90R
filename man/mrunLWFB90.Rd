@@ -6,7 +6,7 @@
 \usage{
 mrunLWFB90(paramvar, param.b90, options.b90, climate, soil = NULL,
   paramvar_nms = names(paramvar), multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE, cores = 3, showProgress = TRUE, ...)
+  keep.subdirs = FALSE, cores = 2, showProgress = TRUE, ...)
 }
 \arguments{
 \item{paramvar}{data.frame of variable input parameters with realisations for each single run.
@@ -115,4 +115,5 @@ b90.gofmpot <- mrunLWFB90(paramvar = vary_parms,
 nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
                              idcol = "srun")
 hist(nse$SWATDAY.ASC.psimi5)
+
 }

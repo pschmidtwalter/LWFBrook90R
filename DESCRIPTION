@@ -15,7 +15,8 @@ Imports:
     data.table (>= 1.10.4),
     vegperiod (>= 0.2.1),
     foreach,
-    doSNOW
+    doSNOW,
+	snow
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

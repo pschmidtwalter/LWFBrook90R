@@ -95,8 +95,8 @@
 #' # collect the NSE-values
 #' nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
 #'                              idcol = "srun")
-#' hist(nse$SWATDAY.ASC.psimi5)
-
+#' #hist(nse$SWATDAY.ASC.psimi5)
+#'
 mrunLWFB90 <- function(paramvar,
                        param.b90,
                        options.b90,
@@ -105,7 +105,7 @@ mrunLWFB90 <- function(paramvar,
                        paramvar_nms = names(paramvar),
                        multirun.dir = "MultiRuns/",
                        keep.subdirs = FALSE,
-                       cores = 3,
+                       cores = 2,
                        showProgress = TRUE,
                        ...){
 
