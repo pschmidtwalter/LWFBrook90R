@@ -25,7 +25,7 @@ hydpar_forestfloor_hamken <- function(n=1) {
   if (length(n) > 1) {
     warning("Only the first element of the supplied vector will be used." )
   }
-  out <- LWFBrook90R:::hydpar_forestfloor[rep(1,n[1]),]
+  out <- hydpar_forestfloor[rep(1,n[1]),]
   out$alpha <- out$alpha*100
   out
 }

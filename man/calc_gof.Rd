@@ -53,7 +53,7 @@ observations <- observations[observations$dates >= options.b90$startdate
 # calculate gof- easure using simulation results and observations
 calc_gof(obs = observations,
          b90.result,
-         gof_fun = function(sim, obs) {mean(obs-sim, na.rm = T)})
+         gof_fun = function(sim, obs) {mean(obs-sim, na.rm = TRUE)})
 # multiple gof-measures
 calc_gof(obs = observations, b90.result,
          gof_fun = list(WilmD = hydroGOF::d, bR2 = hydroGOF::br2))

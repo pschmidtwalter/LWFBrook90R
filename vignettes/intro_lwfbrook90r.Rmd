@@ -1,9 +1,6 @@
 ---
 title: "Introduction to LWFBrook90R"
-output:
-  prettydoc::html_pretty:
-    theme: cayman
-    highlight: github
+output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{"Introduction to LWFBrook90R"}
