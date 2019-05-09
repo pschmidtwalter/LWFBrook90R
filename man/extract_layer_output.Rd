@@ -2,24 +2,43 @@
 % Please edit documentation in R/extract_layer_output.R
 \name{extract_layer_output}
 \alias{extract_layer_output}
-\title{Extract variables from swatday.asc data.tables and organize layer-wise values in columns}
+\title{Extract values from layer data and organize layer-wise variables in columns}
 \usage{
-extract_layer_output(dat, layers = NULL, vars = NULL)
+extract_layer_output(dat, layers = NULL, value.vars = NULL, sep = "")
 }
 \arguments{
-\item{dat}{swatday.asc data.table as returned from \code{\link{runLWFB90}}:}
+\item{dat}{data.frame with layer data organized in rows and identified by a layer number column nl.}
 
 \item{layers}{integer vector addressing the layer numbers (nl) to be extracted
 from dat. If not supplied, values from all layers will be returned}
 
-\item{vars}{character vector containing variable names (out of "swati","theta",
-"wetnes","psimi","psiti" to be extracted from dat. If not supplied
-all 5 variables will be returned.}
+\item{value.vars}{character vector containing names of value-variables to be extracted from dat.
+If not supplied, value.var will be guessed.}
 }
 \value{
-a data.table with the layers' daily values of the variables organized in columns
+a data.table with the layers' values of the variables organized in columns
     (wide format) with the names being made up of the variable name and layer number.
 }
 \description{
-Extract variables from swatday.asc data.tables and organize layer-wise values in columns
+Reorganizes layer data such as BELO and SWAT to the wide format
+ by casting variables with the layer number, using data.table's dcast function.
+}
+\examples{
+# create a data.frame with monthly values
+# identifiers: layer number, yr and mo
+df <- expand.grid(nl = 1:5,
+                  yr = 2002:2003,
+                  mo = 1:12)
+#value.var
+df$var <- runif(nrow(df), -1,0)
+
+extract_layer_output(df)
+
+#more variables
+df$var1 <- runif(nrow(df), 1,2)
+df$var2 <- runif(nrow(df), 2,3)
+# extract specific layers
+extract_layer_output(df,layers = 2:4, sep = "_")
+#extract specific variables
+extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
 }

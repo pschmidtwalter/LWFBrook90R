@@ -13,11 +13,20 @@ output <- setoutput_LWFB90()
 output[,] <- 0L
 output[c("Swat", "Evap", "Flow", "Budg"),3] <- 1L
 # Run LWF-Brook90
+
+mpot <- slb1_mpot
+str(slb1_mpot)
+names(mpot)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16", "psimi21")
 b90.result <- runLWFB90(project.dir = "example_run_b90",
                         options.b90 = options.b90,
                         param.b90 = param.b90,
                         climate = data.frame(slb1_meteo),
                         soil = soil,
+                        obs = obserr,
+                        gof_fun = list(wilmD = hydroGOF::d, bR2 = hydroGOF::br2),
+                        read.output = T,
+                        rtrn.input = F,
+                        rtrn.output = F,
                         output = output)
 
 b90.result$EVAPANN.ASC$FLOW

@@ -1,20 +1,3 @@
-#' Calculate Goodness-of-fit for simulation result using observations
-#'
-#'
-#' @param simres list of data.frames with simulation results
-#' @param obs data.frame of observations, with the names being looked up in simres.
-#' One of the columns has to refer to the dates of observations. Soil layer-specific
-#' values are identified by the layer number appended to the variable name. E.g., to match
-#' the water potential obsvered in th 4 layer, the column has to be named psimi4.
-#' @param gof_fun function with arguments sim, obs
-#'
-#' @return named vector or list of named vectors with the Goodness-of-fit measure(s)
-#' of the variables found in simres and matched to the names of observations.
-#' If multiple equivalents for the names in obs are found in simres, multiple values are returned.
-#'
-#' @export
-#'
-#' @examples
 calc_gof <- function(obs,
                      simres,
                      gof_fun) {
@@ -45,9 +28,6 @@ calc_gof <- function(obs,
   },obs = obs)
 
   sim <- as.data.frame(unlist(sim[lapply(sim,length) >0], recursive = F))
-  if (length(sim) == 0L) {
-    warning("No matching variable names between sim and obs!")
-  }
 
   # match observations to sim-output vars (maybe longer, due to redundancy in simres)
   obs <- obs[, match(sapply(strsplit(names(sim), "[.]"), tail, 1),names(obs))]

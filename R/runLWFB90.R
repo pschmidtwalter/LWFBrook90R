@@ -71,6 +71,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
                       obs = NULL,
                       gof_fun = NULL,
                       rtrn.input = TRUE,
+                      rtrn.output = TRUE,
                       read.output = TRUE,
                       chk.input = TRUE,
                       verbose = TRUE,
@@ -86,6 +87,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     chk_param()
     chk_clim()
     chk_soil()
+    chk_obs()
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -241,9 +243,10 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
 
     # initialize return ---------------------------------------------------------------
-    simres <- list(simtime, finishing_time)
+    simres <- list(simulation_duration = simtime,
+                   finishing_time = finishing_time)
 
-    # ---- Read output files ----------------------------------------------------------
+    # ---- Read output files --------------------------------------------------------
     if ( read.output ) {
       if (verbose == T) {
         message("Reading output...")
@@ -255,24 +258,29 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
 
       # append results
       if (rtrn.output) {
-        simres <- list(simres, unlist(simout, recursive = F))
+        simres[names(simout)] <- simout
       }
 
-      # ---- Observations: Goodness-of-fit --------------------------------------------
+      # ---- Observations: Goodness-of-fit ------------------------------------------
       if (!is.null(obs)) {
         if (verbose == T) {
           message("Calculating goodness-of-fit...")
         }
 
-        # constrain to simulation period
-        obs <- obs[which(obs$dates >= options.b90$startdate &
-                           obs$dates <= opitons.b90$enddate),]
-        simres$gof <- calc_gof(obs = obs,
-                               simres = simout,
-                               gof_fun = gof_fun)
+        simres$gof <- tryCatch( {
+          # constrain to simulation period
+          obs <- obs[which(obs$dates >= options.b90$startdate &
+                             obs$dates <= options.b90$enddate),]
+          simres$gof <- calc_gof(obs = obs,
+                                 simres = simout,
+                                 gof_fun = gof_fun)
+        },
+        warning = function(wrn){return(wrn)},
+        error = function(err){return(err)})
       }
     }
 
+    # ---- append model input -------------------------------------------------------
     if (rtrn.input) {
       simres$model_input <- list(options.b90,
                                  param.b90,
@@ -280,7 +288,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
 
   } else {
-    # 'dry' run = F
+    # 'dry' run = F -> always return model input
     return(list(options.b90,
                 param.b90,
                 standprop_daily))
@@ -419,6 +427,24 @@ chk_clim <- function() {
   }))
 }
 
+chk_obs <- function(){
+  eval.parent(quote({
+    if (!is.null(obs)) {
+      names(obs) <- tolower(names(obs))
+      stopifnot("dates" %in% names(obs),
+                inherits(obs$dates, "Date"),
+                length(obs) > 1)
+      if (min(obs$dates) > options.b90$startdate & max(obs$dates) < options.b90$enddate) {
+        stop("Your observations are not within the simulation period.")
+      }
+      if (is.null(gof_fun)) {
+        stop("Please provide a function(sim, obs) or list of functions to calculate
+           goodness-of-fit measures for observed variables.")
+      }
+    }
+  }))
+}
+
 chk_soil <- function(){
 
   eval.parent(quote({
@@ -456,6 +482,8 @@ chk_soil <- function(){
   }))
 
 }
+
+
 
 
 

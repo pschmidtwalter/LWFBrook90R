@@ -4,9 +4,10 @@
 \alias{runLWFB90}
 \title{Run the LWF-Brook90 hydrological model}
 \usage{
-runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90, climate,
-  precip = NULL, soil = NULL, output = setoutput_LWFB90(),
-  rtrn.input = TRUE, read.output = TRUE, chk.input = TRUE,
+runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90,
+  soil = NULL, climate, precip = NULL, output = setoutput_LWFB90(),
+  obs = NULL, gof_fun = NULL, rtrn.input = TRUE,
+  rtrn.output = TRUE, read.output = TRUE, chk.input = TRUE,
   verbose = TRUE, output.log = TRUE, run = TRUE)
 }
 \arguments{
@@ -19,14 +20,6 @@ are written. Will be created, if not existing. Defaults to 'runLWFB90/'}
 \item{param.b90}{Named list of model input parameters. Use
 \code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
 
-\item{climate}{data.frame with daily climate data with columns named according to
- \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{tmean}, \emph{wind}, \emph{prec}, \emph{vappres},
-and either \emph{globrad} or \emph{sunhours}).}
-
-\item{precip}{data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
-Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-1 (daily resolution) to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.}
-
 \item{soil}{data.frame containing the hydraulic properties of the soil layers.
 Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
 The column names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards).
@@ -36,6 +29,14 @@ When using options.b90$imodel = 'MvG', the hydraulic parameters are  \emph{ths},
  \emph{kf} (mm d-1), and \emph{wetinf}. For both parameterizations, the volume fraction of stones has to be named \emph{gravel}.
  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials' of param.b90 are used for the simulation.
  These have to be set up in advance, see \code{\link{soil_to_param}}.}
+
+\item{climate}{data.frame with daily climate data with columns named according to
+ \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{tmean}, \emph{wind}, \emph{prec}, \emph{vappres},
+and either \emph{globrad} or \emph{sunhours}).}
+
+\item{precip}{data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+1 (daily resolution) to 240 values of precipitation can be provided, with the number of values per day defined in options.b90$prec.interval.}
 
 \item{output}{a [10,5]-matrix flagging the desired model-output. Use
 \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
