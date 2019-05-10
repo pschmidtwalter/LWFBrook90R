@@ -9,9 +9,15 @@
 #' @return numeric vector of length maxdoy
 #'
 #' @examples
-#' plot(plant.linear(c(110,200,250,280), c(0,0.8,1,0)), 365)
+#' doys <- c(110,200,250,280)
+#' values <-  c(0,0.8,1,0)
+#' maxdoy <- 365
+#' plot(plant.linear(doys = doys, values = values, maxdoy = 365))
+#'
 #' @export
 plant.linear <- function(doys, values, maxdoy) {
-  inddays <- unique(c(1,doys,maxdoy))
-  approx(x = inddays, y = values, method = "linear", rule = 2, xout = 1:maxdoy)$y
+  stopifnot(all(doys %in% 1:maxdoy))
+  approx(x = doys, y = values,
+         method = "linear", rule = 2,
+         xout = 1:maxdoy)$y
 }

@@ -77,7 +77,7 @@ calc_gof <- function(obs,
     }
   },obs = obs)
 
-  sim <- as.data.frame(unlist(sim[lapply(sim,length) >0], recursive = F))
+  sim <- as.data.frame(unlist(sim[lapply(sim,length) >0], recursive = FALSE))
   if (length(sim) == 0L) {
     warning("No matching variable names between sim and obs!")
   }

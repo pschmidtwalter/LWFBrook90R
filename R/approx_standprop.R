@@ -77,11 +77,11 @@ approx_standprop <- function(x.years,
                              y,
                              y.ini = NULL,
                              xout.years = x.years,
-                             use_growthperiod = F,
+                             use_growthperiod = FALSE,
                              startdoy = 121,
                              enddoy = 279,
                              approx.method = "constant",
-                             return_xout = F) {
+                             return_xout = FALSE) {
 
   # Repeat y for x.years, if it is a single value
   if (length(y) == 1) {
@@ -147,7 +147,7 @@ approx_standprop <- function(x.years,
     yout <- approx(x.dates, y, xout = xout.dates, rule = 2, f = 1, method = approx.method)$y
   }
 
-  if (return_xout == F) {
+  if (!return_xout) {
     return(yout)
   } else {
     return(data.frame(xout = xout.dates, yout))

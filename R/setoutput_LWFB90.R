@@ -3,26 +3,22 @@
 #' Returns a [5,10] matrix with a default selection of LWF-Brook90 output data sets for the use
 #' as 'output'-argument \code{\link{runLWFB90}}.
 #'
-#' @param output optional [5,10]-matrix, opened for editing.
-#' If no matrix is passed, a default selection of output values is opened in R's data-editor or returned
-#' instantly, if edit=FALSE.
+#' @param output optional [5,10]-matrix, which is opened on R's data-editor if edit = T.
+#' If no matrix is passed, a default selection of output values is returned opened in R's data-editor.
 #' @param edit open R's data-editor ?
 #'
 #' @return a [5,10]-matrix containing 0 and 1 for use as 'output'-argument in \code{\link{runLWFB90}}
 #' @examples
 #'
 #' # create matrix with default selection
-#'outmat <- choose_output.B90()
+#' output <- setoutput_LWFB90()
+#' output
 #'
-# modify
-#'outmat[6,] <- 1
-#'
-# open modified
-#'outmat_new <- setoutput_LWFB90(outmat)
-#'
-# open a default output matrix in data editor
-#'outmat <- setoutput_LWFB90(edit = T)
-#'
+#' # modify
+#' output[,] <- 0L
+#' output[,3] <- 1L
+#' output["Evap", c("Ann","Mon")] <- 1
+#' output
 #' @export
 setoutput_LWFB90 <- function(output = NULL,
                               edit = FALSE) {

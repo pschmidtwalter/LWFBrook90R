@@ -29,12 +29,12 @@
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
 #' @param obs a data.frame with observations. The names of observations are looked up
 #' in the list of simulation output data.frames, and goodness-of-fit measures are calculated for each
-#' equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = F.
+#' equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = FALSE.
 #' @param gof_fun a function of form function(sim,obs) or list of functions passed to \code{\link{calc_gof}}.
-#' Disabled when read.output = F.
+#' Disabled when read.output = FALSE.
 #' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('standprop_daily', as derived from parameters) to the result?
-#' @param rtrn.output return the simulation results? Disabled when read.output = F.
+#' @param rtrn.output return the simulation results? Disabled when read.output = FALSE.
 #' @param read.output read the simulation result files from project.dir? Default is TRUE.
 #' @param chk.input logical wether to check param.b90, options.b90, climate, precip, soil, and obs
 #' for completeness and consistency.
@@ -84,8 +84,8 @@
 #'                          soil = soil,
 #'                          obs = observations,
 #'                          gof_fun = gof,
-#'                          rtrn.output = F,
-#'                          rtrn.input = F)
+#'                          rtrn.output = FALSE,
+#'                          rtrn.input = FALSE)
 #' b90.gofmpot
 #'
 runLWFB90 <- function(project.dir = "runLWFB90/",
@@ -280,7 +280,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       }
       simout <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
                        data.table::fread,
-                       fill = T, stringsAsFactors = F)
+                       fill = T, stringsAsFactors = FALSE)
       names(simout) <- list.files(project.dir, pattern = ".ASC")
 
       # append results
@@ -315,7 +315,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
 
   } else {
-    # 'dry' run = F -> always return model input
+    # 'dry' run = FALSE -> always return model input
     return(list(options.b90,
                 param.b90,
                 standprop_daily))

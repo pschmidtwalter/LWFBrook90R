@@ -7,9 +7,8 @@
 setoutput_LWFB90(output = NULL, edit = FALSE)
 }
 \arguments{
-\item{output}{optional [5,10]-matrix, opened for editing.
-If no matrix is passed, a default selection of output values is opened in R's data-editor or returned
-instantly, if edit=FALSE.}
+\item{output}{optional [5,10]-matrix, which is opened on R's data-editor if edit = T.
+If no matrix is passed, a default selection of output values is returned opened in R's data-editor.}
 
 \item{edit}{open R's data-editor ?}
 }
@@ -23,12 +22,12 @@ as 'output'-argument \code{\link{runLWFB90}}.
 \examples{
 
 # create matrix with default selection
-outmat <- choose_output.B90()
+output <- setoutput_LWFB90()
+output
 
-outmat[6,] <- 1
-
-outmat_new <- setoutput_LWFB90(outmat)
-
-outmat <- setoutput_LWFB90(edit = T)
-
+# modify
+output[,] <- 0L
+output[,3] <- 1L
+output["Evap", c("Ann","Mon")] <- 1
+output
 }

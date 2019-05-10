@@ -28,7 +28,7 @@
 #' @export
 
 #' @examples
-#' #Set up lists containing model control options and model parameters:
+#' # Set up lists containing model control options and model parameters:
 #' param.b90 <- setparam_LWFB90()
 #' options.b90 <- setoptions_LWFB90()
 #'
@@ -39,13 +39,13 @@
 #' options.b90$startdate <- as.Date("2002-01-01")
 #' options.b90$enddate <- as.Date("2003-12-31")
 #'
-#' # 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates
+#' # choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
 #' options.b90$lai.method <- 'Coupmodel'
 #' options.b90$budburst.method <- 'fixed'
 #' options.b90$leaffall.method <- 'fixed'
 #'
-#' #set up data.frame with variable parameters
-#' n <- 10
+#' # set up data.frame with variable parameters
+#' n <- 5
 #' vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
 #'                          shape.budburst = runif(n, 0.1,1),
 #'                          winlaifrac = runif(n, 0,0.5),
@@ -53,36 +53,37 @@
 #'                          soil_materials.ths3 = runif(n, 0.3,0.5),
 #'                          maxlai2 = runif(n,4,8))
 #'
-#'
 #' # soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 #' param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 #' # set up maxlai with length 2, so maxlai2 of paramvar can be looked up
 #' param.b90$maxlai <- c(5, 5)
 #'
-#' # Make a Multirun-Simulation
+#' \dontrun{
+#' # Make a Multirun-Simulation (this takes a while)
 #' b90.multi <- mrunLWFB90(paramvar = vary_parms,
 #'                         param.b90 = param.b90,
 #'                         options.b90 = options.b90,
 #'                         climate = slb1_meteo)
 #' names(b90.multi)
 #'
-#' #extract results: EVAPDAY.ASC
+#' # extract results: EVAPDAY.ASC
 #' evapday <- data.table::rbindlist(lapply(b90.multi,
 #'                                         FUN = function(x) {x[["EVAPDAY.ASC"]]}),
 #'                                  idcol = "srun")
 #' evapday$dates <- with(evapday, as.Date(paste(YR,MO,DA), "%Y %m %d"))
 #'
 #' with(evapday[evapday$srun == "RunNo.1", ],
-#'      plot(dates, cumsum(EVAP))
-#' )
+#'      plot(dates, cumsum(EVAP)))
+#' }
 #'
 #' # same simulation, but return goodnes-fit-measure only.
 #' # prepare observations
-#' observations <- slb1_mpot #'daily water potential in different soil depths
-#' # names of observations have to be found in simulation output.
+#' observations <- slb1_mpot # daily water potential in different soil depths
+#' # prepare data: names have to be found in simulation output.
 #' names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
 #'
-#' # run
+#' \dontrun{
+#' # run model, but only return gof-function results
 #' b90.gofmpot <- mrunLWFB90(paramvar = vary_parms,
 #'                           options.b90 = options.b90,
 #'                           param.b90 = param.b90,
@@ -90,13 +91,13 @@
 #'                           soil = soil,
 #'                           obs = observations,
 #'                           gof_fun = hydroGOF::NSE, #' Nash-Sutcliff efficiency
-#'                           rtrn.output = F,
-#'                           rtrn.input = F)
-#' # collect the NSE-values
+#'                           rtrn.output = FALSE,
+#'                           rtrn.input = FALSE)
+#' # collect gof from simulations results
 #' nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
 #'                              idcol = "srun")
-#' #hist(nse$SWATDAY.ASC.psimi5)
-#'
+#' hist(nse$SWATDAY.ASC.psimi5)}
+
 mrunLWFB90 <- function(paramvar,
                        param.b90,
                        options.b90,
@@ -116,7 +117,7 @@ mrunLWFB90 <- function(paramvar,
 
   # which of the columns in paramvar belong to the list-parameters?
   param_ll <- sapply(names(param.b90[names(is_ll)[which(is_ll == TRUE)]]),
-                     simplify = F,
+                     simplify = FALSE,
                      FUN =  grep,
                      x = paramvar_nms)
 
@@ -140,7 +141,7 @@ mrunLWFB90 <- function(paramvar,
   }
 
   # set up multirun-directory -------------------------------------------------------
-  multirun.dir <- normalizePath(multirun.dir, mustWork = F)
+  multirun.dir <- normalizePath(multirun.dir, mustWork = FALSE)
   if (!dir.exists(multirun.dir)) {
     dir.create(multirun.dir)
   }
@@ -158,7 +159,7 @@ mrunLWFB90 <- function(paramvar,
     opts <- list(progress = NULL)
   }
   #
-  cl <- snow::makeSOCKcluster(cores)
+  cl <- snow::makeCluster(cores)
   doSNOW::registerDoSNOW(cl)
   snow::clusterEvalQ(cl, library("LWFBrook90R"))
   on.exit(snow::stopCluster(cl), add = T)

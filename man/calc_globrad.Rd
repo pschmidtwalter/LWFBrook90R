@@ -4,26 +4,34 @@
 \alias{calc_globrad}
 \title{Calculate global solar radiation from sunshine duration hours}
 \usage{
-calc_globrad(doy, sunhours, lat, a0 = 0.25, b0 = 0.5)
+calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5,
+  full.output = FALSE)
 }
 \arguments{
-\item{doy}{day of year}
+\item{dates}{Date vector}
 
-\item{sunhours}{sunshine duration hours, same length as doy}
+\item{sunhours}{vector of sunshine duration hours, same length as dates}
 
 \item{lat}{latitude in decimal degrees}
 
 \item{a0}{angström parameter a, defaults to 0.25}
 
 \item{b0}{angström parameter b, defaults to 0.5}
+
+\item{full.output}{return extraterrestrial radiation and daylength along with global radiation?}
 }
 \value{
-a sequence of global radiation in \eqn{MJ m^{-2} d^{-1}} with the length of doy
+a sequence of global radiation in \eqn{MJ m^{-2} d^{-1}} with the length of dates,
+or (if full.output = TRUE) a data.frame holding day of year, dates, sunhours, daylength, and
+extraterrestrial and calculated global solar radiation.
+A warning is generated if some sunshine duration hours are higher than the
+expected daylength at the specified latitude.
 }
 \description{
-Uses day of year (doy) and latitude to determine extraterrestrial solar radiation and daylength,
-which is then used to calculate global radiation using angström formula
+Uses \code{\link[sirad]{extrat}} to determine daylength and extraterrestrial radiation,
+from which global radiation is calculated using the angström formula.
 }
 \examples{
-calc_globrad(doy = 1:365, sunhours = runif(365, 0, 8),lat = 52.8)
+dates <- seq.Date(as.Date("2002-01-01"), as.Date("2003-12-31"), by = 'day')
+calc_globrad(dates, sunhours = runif(365, 0, 8),lat = 52.8)
 }

@@ -44,15 +44,15 @@ When using options.b90$imodel = 'MvG', the hydraulic parameters are  \emph{ths},
 
 \item{obs}{a data.frame with observations. The names of observations are looked up
 in the list of simulation output data.frames, and goodness-of-fit measures are calculated for each
-equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = F.}
+equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = FALSE.}
 
 \item{gof_fun}{a function of form function(sim,obs) or list of functions passed to \code{\link{calc_gof}}.
-Disabled when read.output = F.}
+Disabled when read.output = FALSE.}
 
 \item{rtrn.input}{append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('standprop_daily', as derived from parameters) to the result?}
 
-\item{rtrn.output}{return the simulation results? Disabled when read.output = F.}
+\item{rtrn.output}{return the simulation results? Disabled when read.output = FALSE.}
 
 \item{read.output}{read the simulation result files from project.dir? Default is TRUE.}
 
@@ -111,8 +111,8 @@ b90.gofmpot <- runLWFB90(project.dir = "example_run_b90",
                          soil = soil,
                          obs = observations,
                          gof_fun = gof,
-                         rtrn.output = F,
-                         rtrn.input = F)
+                         rtrn.output = FALSE,
+                         rtrn.input = FALSE)
 b90.gofmpot
 
 }

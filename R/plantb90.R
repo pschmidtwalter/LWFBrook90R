@@ -13,12 +13,19 @@
 #' @return numeric vector of length maxdoy
 #'
 #' @examples
-#' plot(plant.b90(0,5, 121, 20, 270, 50,365))
+#' plot(plant.b90(minval = 0,maxval=1,
+#'                doy.incr = 121,incr.dur = 28,
+#'                doy.decr = 280, decr.dur = 50,
+#'                maxdoy = 365))
 #' @export
 plant.b90 <- function(minval, maxval,
                       doy.incr,incr.dur,
                       doy.decr, decr.dur,
                       maxdoy) {
+  stopifnot(doy.incr > 0,
+            doy.decr > (doy.incr+incr.dur),
+            (doy.decr+decr.dur) <= maxdoy)
+
   ind <- c(1,doy.incr, doy.incr + incr.dur,
            doy.decr, doy.decr + decr.dur,
            maxdoy)
