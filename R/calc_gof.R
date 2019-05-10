@@ -53,6 +53,7 @@ calc_gof <- function(obs,
                      gof_fun) {
 
   stopifnot(!is.null(obs))
+  obs <- data.frame(obs)
   names(obs) <- tolower(names(obs))
 
   # Extract equivalents of obs from sim results
