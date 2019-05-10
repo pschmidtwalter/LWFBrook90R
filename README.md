@@ -93,8 +93,10 @@ R-Code
 
 The package works as intended and is fully documented. However, there are some points to be accomplish in the near future:
 
+-   \[x\] enable use of Clapp-Horneberg hydraulics in addition to the default Mualem-van Genuchten
+-   \[x\] Use of sub-day resolution precipitation interval data.
+-   \[x\] implement Goodness-of-fit measures with respect to observations that can be returned on top / instead of actual simulation results.
 -   \[ \] Run the `check` with Travis.
--   \[ \] implement Goodness-of-fit measures with respect to observations that can be returned on top / instead of actual simulation results.
 
 Fortran-Code
 ------------
@@ -102,14 +104,14 @@ Fortran-Code
 -   \[x\] Use of sub-day resolution precipitation interval data.
 -   \[x\] Model output results tested against the output from the original b90.exe commandline tool.
 -   \[x\] Cleaning up `declared but not used` variables
--   \[x\] Making the writing of model log-file that contains the former commandline-feed optional.
+-   \[x\] Optional writing of model log-file that contains the former commandline-feed.
 
 Authors
 =======
 
-Paul Schmidt-Walter & Volodymyr Trotsiuk
+Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Tony Federer. Tony Federer's original Brook90 Fortran 77 code was enhanced by Klaus Hammel and Martin Kennel around the year 2000 and distributed as LWF-Brook90 Fortran program together with in MS Access User Interface. In 2019, Volodymyr Trotsiuk converted the code to Fortran 95 and implemented the connection to R. Paul Schmidt-Walter created the R functions for input data generation, model execution and result processing.
 
 License
 =======
 
-GPL-3 for the package. License for LWF-BROOK90 is unknown.
+GPL-3
