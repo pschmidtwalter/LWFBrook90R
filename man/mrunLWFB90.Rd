@@ -2,7 +2,7 @@
 % Please edit documentation in R/mrunLWFB90.R
 \name{mrunLWFB90}
 \alias{mrunLWFB90}
-\title{Make a multirun simulation using a variable input parameters.}
+\title{Make a multirun simulation using a set of variable input parameters.}
 \usage{
 mrunLWFB90(paramvar, param.b90, options.b90, climate, soil = NULL,
   paramvar_nms = names(paramvar), multirun.dir = "MultiRuns/",
@@ -29,22 +29,28 @@ The function for replacing values in vector element and data.frames is \code{\li
 
 \item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90}
 
-\item{multirun.dir}{the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'}
+\item{multirun.dir}{the directory where to create the subdirectories for the the single runs. Default is 'MultiRuns/'.}
 
-\item{keep.subdirs}{keep sub-directories of the single runs? Default is FALSE}
+\item{keep.subdirs}{keep sub-directories of the single runs? Default is FALSE.}
 
-\item{cores}{number of cores to use for parallel processing. Default is 3.}
+\item{cores}{number of CPUs to use for parallel processing. Default is 2.}
 
-\item{showProgress}{Show progressbar?}
+\item{showProgress}{Show progressbar? Default is TRUE.}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}} for selecting output and return values of the single runs.}
 }
 \value{
-A named list with the results for the single runs. Simulation errors are passed on.
+A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
+Simulation errors or processing errrors are passed on.
 }
 \description{
-Repeatedly calls \code{\link{runLWFB90}} with varying input parameters in parallel,
-stores the single run results in subdirectories and returns the results as a named list.
+Repeatedly calls \code{\link{runLWFB90}} in parallel, with varying input parameters.
+}
+\details{
+The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+If \code{keep.subdirs=FALSE}, they are deleted after successful singlerun simulation. In case of an error,
+the respective subdirectory is not deleted. The returned list of single run results can become very large,
+if many simulations are done and the selected output contains daily resolution datasets.
 }
 \examples{
 # Set up lists containing model control options and model parameters:
