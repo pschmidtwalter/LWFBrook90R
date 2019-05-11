@@ -14,8 +14,8 @@ knitr::opts_chunk$set(
 LWFBrook90R: Run the LWF-BROOK90 hydrological model from within R.
 
 # Motivation
-In hydrology, many R-packages exist that deal with pre- and post-processing of input data and results of hydrological process models. In addition, many ready-to-use algorithms exist in R providing automatic calibration, sensitivity analysis, and parallelisation techniques. In order to make the vast resources of R directly available to the 1D-SVAT model [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php), *LWFBrook90R* was developed. The Fortran model code is integrated into the package as dynamic library and compiles, when installing *LWFBrook90R*. 
-Basically, *LWFBrook90R* features the following functionality in one function call to the package core function `runLWFB90()`:
+In hydrology, many R-packages exist that deal with pre- and post-processing of input data and results of hydrological process models. In addition, many ready-to-use algorithms exist in R providing automatic calibration, sensitivity analysis, and parallelisation techniques. In order to make the vast resources of R directly available to the 1D-SVAT model [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php), *LWFBrook90R* was developed. The Fortran model code is integrated into the package as dynamic library and compiles when the package is installed. 
+*LWFBrook90R* features the following functionality in one function call to the package core function `runLWFB90()`:
 
 * create model input objects from climate driving data, model control options and parameters,
 * execute the LWF-BROOK90 model code,
@@ -107,3 +107,6 @@ Tony Federer's original Brook90 Fortran 77 code was enhanced by Klaus Hammel and
 
 # License
 GPL-3
+
+## Notes
+All changes made to the Fortran code of LWF-Brook90R should be returned to 
