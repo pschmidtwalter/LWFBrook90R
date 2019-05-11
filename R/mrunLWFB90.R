@@ -159,7 +159,7 @@ mrunLWFB90 <- function(paramvar,
     opts <- list(progress = NULL)
   }
   #
-  cl <- snow::makeCluster(cores)
+  cl <- snow::makeSOCKCluster(cores)
   doSNOW::registerDoSNOW(cl)
   snow::clusterEvalQ(cl, library("LWFBrook90R"))
   on.exit(snow::stopCluster(cl), add = T)
