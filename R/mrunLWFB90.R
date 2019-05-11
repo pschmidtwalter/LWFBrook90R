@@ -1,8 +1,6 @@
-#' Make a multirun simulation using a variable input parameters.
+#' Make a multirun simulation using a set of variable input parameters.
 #'
-#' Repeatedly calls \code{\link{runLWFB90}} with varying input parameters in parallel,
-#' stores the single run results in subdirectories and returns the results as a named list.
-#'
+#' Repeatedly calls \code{\link{runLWFB90}} in parallel, with varying input parameters.
 #'
 #' @param paramvar data.frame of variable input parameters with realisations for each single run.
 #' The ith values replace the list elements in param.b90 of the ith simulation,
@@ -18,15 +16,22 @@
 #' @param soil data.frame with soil properties passed to \code{\link{runLWFB90}}, or a list of lists with different soil profiles
 #' @param climate data.frame with climate data passed to \code{\link{runLWFB90}}, or a list of climate data.frames
 #' @param paramvar_nms names of the parameters in paramvar to be replaced in param.b90
-#' @param multirun.dir the directory where to create the subdirectories for the the single runs. Default 'MultiRuns/'
-#' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE
-#' @param cores number of cores to use for parallel processing. Default is 3.
-#' @param showProgress Show progressbar?
-#' @param ... Further arguments passed to \code{\link{runLWFB90}}.
+#' @param multirun.dir the directory where to create the subdirectories for the the single runs. Default is 'MultiRuns/'.
+#' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE.
+#' @param cores number of CPUs to use for parallel processing. Default is 2.
+#' @param showProgress Show progressbar? Default is TRUE.
+#' @param ... Further arguments passed to \code{\link{runLWFB90}} for selecting output and return values of the single runs.
 #'
-#' @return A named list with the results for the single runs. Simulation errors are passed on.
+#' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
+#' Simulation errors or processing errrors are passed on.
+#'
+#' @details The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+#' If \code{keep.subdirs=FALSE}, they are deleted after successful singlerun simulation. In case of an error,
+#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
+#' if many simulations are done and the selected output contains daily resolution datasets.
+#'
 #' @export
-
+#'
 #' @examples
 #' # Set up lists containing model control options and model parameters:
 #' param.b90 <- setparam_LWFB90()
