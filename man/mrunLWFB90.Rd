@@ -9,15 +9,9 @@ mrunLWFB90(paramvar, param.b90, options.b90, climate, soil = NULL,
   keep.subdirs = FALSE, cores = 2, showProgress = TRUE, ...)
 }
 \arguments{
-\item{paramvar}{data.frame of variable input parameters with realisations for each single run.
-The ith values replace the list elements in param.b90 of the ith simulation,
-with the column names of paramvar being matched to the names in param.b90.
-In order to match values from paramvar to data.frame or vector elements in param.b90,
-the respective column name of paramvar has to be setup from the name and index.
-For example, to place the 2nd value of 'ths' in the soil_materials data.frame,
-the respective column name of paramvar has to be called 'soil_materials.ths2'.
-In order to replace the 3 value of pdur in param.b90, the column name has to be named 'pdur3'.
-The function for replacing values in vector element and data.frames is \code{\link{replace_vecelements}}.}
+\item{paramvar}{data.frame of variable input parameters. For each row,
+a simulation is performed, with the elements in param.b90 being replaced by the
+respective column of paramvar. All parameter names (column names) in paramvar must be found in param.b90.}
 
 \item{param.b90}{Named list of parameters, in which the parameters defined in paramvar will be replaced.}
 
@@ -37,20 +31,16 @@ The function for replacing values in vector element and data.frames is \code{\li
 
 \item{showProgress}{Show progressbar? Default is TRUE.}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}} for selecting output and return values of the single runs.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}} to select model output
+and return values for the single run simulations.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
-Simulation errors or processing errrors are passed on.
+Simulation or processing errrors are passed on.
 }
 \description{
-Repeatedly calls \code{\link{runLWFB90}} in parallel, with varying input parameters.
-}
-\details{
-The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-If \code{keep.subdirs=FALSE}, they are deleted after successful singlerun simulation. In case of an error,
-the respective subdirectory is not deleted. The returned list of single run results can become very large,
-if many simulations are done and the selected output contains daily resolution datasets.
+Wrapper function for \code{\link{runLWFB90}} to make multiple simulations parallel,
+with varying input parameters.
 }
 \examples{
 # Set up lists containing model control options and model parameters:
