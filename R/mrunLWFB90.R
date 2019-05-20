@@ -15,8 +15,8 @@
 #' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE.
 #' @param cores number of CPUs to use for parallel processing. Default is 2.
 #' @param showProgress Show progressbar? Default is TRUE.
-#' @param ... Further arguments passed to \code{\link{runLWFB90}} to select model output
-#' and return values for the single run simulations.
+#' @param ... Additional arguments passed to \code{\link{runLWFB90}} for selecting model output
+#' return values and for the single run simulations.
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errrors are passed on.

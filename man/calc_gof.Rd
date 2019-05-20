@@ -4,22 +4,22 @@
 \alias{calc_gof}
 \title{Calculate Goodness-of-fit for simulation result using observations}
 \usage{
-calc_gof(obs, simres, gof_fun)
+calc_gof(x, obs, gof_fun)
 }
 \arguments{
-\item{obs}{data.frame of observations, with the names being looked up in simres.
+\item{x}{list of data.frames with simulation results}
+
+\item{obs}{data.frame of observations, with the names being looked up in x.
 One of the columns has to refer to the dates of observations. Soil layer-specific
 values are identified by the layer number appended to the variable name. E.g., to match
 the water potential obsvered in th 4 layer, the column has to be named psimi4.}
-
-\item{simres}{list of data.frames with simulation results}
 
 \item{gof_fun}{function with arguments sim, obs}
 }
 \value{
 named vector or list of named vectors with the Goodness-of-fit measure(s)
-of the variables found in simres and matched to the names of observations.
-If multiple equivalents for the names in obs are found in simres, multiple values are returned.
+of the variables found in x and matched to the names of observations.
+If multiple equivalents for the names in obs are found in x, multiple values are returned.
 }
 \description{
 Calculate Goodness-of-fit for simulation result using observations
