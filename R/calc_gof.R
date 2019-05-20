@@ -1,16 +1,16 @@
 #' Calculate Goodness-of-fit for simulation result using observations
 #'
 #'
-#' @param simres list of data.frames with simulation results
-#' @param obs data.frame of observations, with the names being looked up in simres.
+#' @param x list of data.frames with simulation results
+#' @param obs data.frame of observations, with the names being looked up in x.
 #' One of the columns has to refer to the dates of observations. Soil layer-specific
 #' values are identified by the layer number appended to the variable name. E.g., to match
 #' the water potential obsvered in th 4 layer, the column has to be named psimi4.
 #' @param gof_fun function with arguments sim, obs
 #'
 #' @return named vector or list of named vectors with the Goodness-of-fit measure(s)
-#' of the variables found in simres and matched to the names of observations.
-#' If multiple equivalents for the names in obs are found in simres, multiple values are returned.
+#' of the variables found in x and matched to the names of observations.
+#' If multiple equivalents for the names in obs are found in x, multiple values are returned.
 #'
 #' @export
 #'
@@ -48,8 +48,8 @@
 #' calc_gof(obs = observations, b90.result,
 #'          gof_fun = list(WilmD = hydroGOF::d, bR2 = hydroGOF::br2))
 
-calc_gof <- function(obs,
-                     simres,
+calc_gof <- function(x,
+                     obs,
                      gof_fun) {
 
   stopifnot(!is.null(obs))
@@ -57,7 +57,7 @@ calc_gof <- function(obs,
   names(obs) <- tolower(names(obs))
 
   # Extract equivalents of obs from sim results
-  sim <- lapply(simres, function(x, obs) {
+  sim <- lapply(x, function(x, obs) {
     names(x) <- tolower(names(x))
     obsnms <- names(obs)
     # vars without index
@@ -83,7 +83,7 @@ calc_gof <- function(obs,
     warning("No matching variable names between sim and obs!")
   }
 
-  # match observations to sim-output vars (maybe longer, due to redundancy in simres)
+  # match observations to sim-output vars (maybe longer, due to redundancy in x)
   obs <- obs[, match(sapply(strsplit(names(sim), "[.]"), tail, 1),names(obs))]
 
   if (!is.list(gof_fun)){

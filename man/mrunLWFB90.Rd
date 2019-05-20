@@ -31,8 +31,8 @@ respective column of paramvar. All parameter names (column names) in paramvar mu
 
 \item{showProgress}{Show progressbar? Default is TRUE.}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}} to select model output
-and return values for the single run simulations.}
+\item{...}{Additional arguments passed to \code{\link{runLWFB90}} for selecting model output
+return values and for the single run simulations.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.

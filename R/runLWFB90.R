@@ -27,10 +27,8 @@
 #'   of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
 #' @param output a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
-#' @param obs a data.frame with observations. The names of observations are looked up
-#' in the list of simulation output data.frames, and goodness-of-fit measures are calculated for each
-#' equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = FALSE.
-#' @param gof_fun a function of form function(sim,obs) or list of functions passed to \code{\link{calc_gof}}.
+#' @param output_fun a function or a list of functions to be performed on the output objects selected by \code{output}.
+#' Can be used to aggregate output or calculate goodness of fit measures.
 #' Disabled when read.output = FALSE.
 #' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('standprop_daily', as derived from parameters) to the result?
@@ -42,9 +40,10 @@
 #' @param run run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
 #' @param verbose print messages to the console? Default is TRUE.
+#' @param ... additional arguments passed to \code{output_fun}.
 #'
 #' @return A list containing the contents of the LWF-Brook90 output files found in 'project.dir' along with model_input,
-#' goodness-of-fit measures, and duration and finishing time of the simulation.
+#' return values of \code{output_fun}, and duration and finishing time of the simulation.
 #'
 #' @export
 #' @examples
@@ -95,15 +94,15 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
                       precip = NULL,
                       soil = NULL,
                       output = setoutput_LWFB90(),
-                      obs = NULL,
-                      gof_fun = NULL,
+                      output_fun = NULL,
                       rtrn.input = TRUE,
                       rtrn.output = TRUE,
                       read.output = TRUE,
                       chk.input = TRUE,
                       output.log = TRUE,
                       run = TRUE,
-                      verbose = TRUE) {
+                      verbose = TRUE,
+                      ...) {
 
   oldWD <- getwd()
   on.exit(setwd(oldWD))
@@ -114,7 +113,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     chk_param()
     chk_clim()
     chk_soil()
-    chk_obs()
+    #chk_obs()
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -288,19 +287,20 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
         simres[names(simout)] <- simout
       }
 
-      # ---- Observations: Goodness-of-fit ------------------------------------------
-      if (!is.null(obs)) {
+
+      # ---- apply functions on simuation output -------------------------------
+      if (!is.null(output_fun)) {
         if (verbose == T) {
-          message("Calculating goodness-of-fit...")
+          message("Applying function on simulation output files..")
+        }
+        if (!is.list(output_fun)){
+          output_fun <- list(output_fun)
         }
 
-        simres$gof <- tryCatch( {
-          # constrain to simulation period
-          obs <- obs[which(obs$dates >= options.b90$startdate &
-                             obs$dates <= options.b90$enddate),]
-          simres$gof <- calc_gof(obs = obs,
-                                 simres = simout,
-                                 gof_fun = gof_fun)
+        simres$output_fun <- tryCatch( {
+
+          lapply(output_fun, do.call, args = list(simout, ...))
+
         },
         warning = function(wrn){return(wrn)},
         error = function(err){return(err)})

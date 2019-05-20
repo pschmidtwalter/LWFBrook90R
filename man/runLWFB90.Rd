@@ -6,9 +6,9 @@
 \usage{
 runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90, climate,
   precip = NULL, soil = NULL, output = setoutput_LWFB90(),
-  obs = NULL, gof_fun = NULL, rtrn.input = TRUE,
-  rtrn.output = TRUE, read.output = TRUE, chk.input = TRUE,
-  output.log = TRUE, run = TRUE, verbose = TRUE)
+  output_fun = NULL, rtrn.input = TRUE, rtrn.output = TRUE,
+  read.output = TRUE, chk.input = TRUE, output.log = TRUE,
+  run = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{project.dir}{directory-name of the project to which output files
@@ -42,11 +42,8 @@ When using options.b90$imodel = 'MvG', the hydraulic parameters are  \emph{ths},
 \item{output}{a [10,5]-matrix flagging the desired model-output. Use
 \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
 
-\item{obs}{a data.frame with observations. The names of observations are looked up
-in the list of simulation output data.frames, and goodness-of-fit measures are calculated for each
-equivalant found. See \code{\link{calc_gof}}. Disabled when read.output = FALSE.}
-
-\item{gof_fun}{a function of form function(sim,obs) or list of functions passed to \code{\link{calc_gof}}.
+\item{output_fun}{a function or a list of functions to be performed on the output objects selected by \code{output}.
+Can be used to aggregate output or calculate goodness of fit measures.
 Disabled when read.output = FALSE.}
 
 \item{rtrn.input}{append 'param.b90', 'options.b90', 'soil' and daily plant
@@ -65,10 +62,12 @@ for completeness and consistency.}
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
 \item{verbose}{print messages to the console? Default is TRUE.}
+
+\item{...}{additional arguments passed to \code{output_fun}.}
 }
 \value{
 A list containing the contents of the LWF-Brook90 output files found in 'project.dir' along with model_input,
-goodness-of-fit measures, and duration and finishing time of the simulation.
+return values of \code{output_fun}, and duration and finishing time of the simulation.
 }
 \description{
 Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
