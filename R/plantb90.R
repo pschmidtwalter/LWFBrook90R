@@ -23,8 +23,13 @@ plant.b90 <- function(minval, maxval,
                       doy.decr, decr.dur,
                       maxdoy) {
   stopifnot(doy.incr > 0,
-            doy.decr > (doy.incr+incr.dur),
-            (doy.decr+decr.dur) <= maxdoy)
+            doy.decr > (doy.incr+incr.dur))
+
+
+  if ((doy.decr+decr.dur) > maxdoy) {
+    decr.dur <- maxdoy - doy.decr
+    warning("shortened decr.dur, due to doy.decr+decr.dur > maxdoy")
+  }
 
   ind <- c(1,doy.incr, doy.incr + incr.dur,
            doy.decr, doy.decr + decr.dur,
