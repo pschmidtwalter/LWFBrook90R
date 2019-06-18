@@ -1,7 +1,7 @@
 #' Run the LWF-Brook90 hydrological model
 #'
 #' Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
-#' and returns the results if desired.
+#' and returns the selected results.
 #'
 #' @param project.dir directory-name of the project to which output files
 #' are written. Will be created, if not existing. Defaults to 'runLWFB90/'
