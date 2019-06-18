@@ -95,8 +95,8 @@ b90res$EVAPDAY.ASC$dates <- with(b90res$EVAPDAY.ASC,
 Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `project.dir`-folder is named 'SWATDAY.ASC' and returned as data.table-object, containing the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90res$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers:
 
 ```{r}
-b90res$SWATDAY.ASC$dates <- with(b90res$SWATDAY.ASC,
-                                           as.Date(paste(YR, MO, DA, sep = "-")))
+b90res$SWATDAY.ASC$dates <- as.Date(with(b90res$SWATDAY.ASC, paste(YR, MO, DA, sep = "-")))
+
 swat100cm <- aggregate(SWATI~dates, 
                        data = b90res$SWATDAY.ASC[which(b90res$SWATDAY.ASC$NL <= 14),],
                        FUN = sum)
