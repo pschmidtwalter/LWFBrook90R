@@ -32,16 +32,36 @@ respective column of paramvar. All parameter names (column names) in paramvar mu
 \item{showProgress}{Show progressbar? Default is TRUE.}
 
 \item{...}{Additional arguments passed to \code{\link{runLWFB90}} for selecting model output
-return values and for the single run simulations.}
+and returned objects for the single run simulations.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
-Simulation or processing errrors are passed on.
+Simulation or processing errors are passed on.
+
+ @section File management:
+The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+If \code{keep.subdirs=FALSE}, they are deleted after successful singlerun simulation. In case of an error,
+the respective subdirectory is not deleted. Care must be taken, as the returned list of single run results can become very large,
+if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer data.
+Please carefully select the output, and make use of the option to pass a list of functions
+to \code{\link{runLWFB90}} (argument \code{output_fun}) to be performed on the output of a simulation.
 }
 \description{
 Wrapper function for \code{\link{runLWFB90}} to make multiple simulations parallel,
 with varying input parameters.
 }
+\section{Parameter updating in param.b90}{
+
+The transfer of values from a row in paramvar to param.b90 before each single run
+simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
+or vector elements in \code{param.b90} by a column name in \code{paramvar}, the respective column name
+has to be setup from its name and index in param.b90. To replace e.g., the 2nd value of \code{ths}
+in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
+has to be called 'soil_materials.ths2'. In order to replace the 3rd value of vector element \code{maxlai} in \code{param.b90},
+the column name has to be named 'maxlai3'. The function used for replacing values in vector elements
+and data.frames is \code{\link{replace_vecelements}}.
+}
+
 \examples{
 # Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()
@@ -97,19 +117,4 @@ observations <- slb1_mpot # daily water potential in different soil depths
 # prepare data: names have to be found in simulation output.
 names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
 
-\dontrun{
-# run model, but only return gof-function results
-b90.gofmpot <- mrunLWFB90(paramvar = vary_parms,
-                          options.b90 = options.b90,
-                          param.b90 = param.b90,
-                          climate = slb1_meteo,
-                          soil = soil,
-                          obs = observations,
-                          gof_fun = hydroGOF::NSE, #' Nash-Sutcliff efficiency
-                          rtrn.output = FALSE,
-                          rtrn.input = FALSE)
-# collect gof from simulations results
-nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
-                             idcol = "srun")
-hist(nse$SWATDAY.ASC.psimi5)}
 }

@@ -20,24 +20,14 @@ are written. Will be created, if not existing. Defaults to 'runLWFB90/'}
 \item{param.b90}{Named list of model input parameters. Use
 \code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
 
-\item{climate}{data.frame with daily climate data with columns named according to
- \emph{dates}, \emph{tmax}, \emph{tmin}, \emph{tmean}, \emph{wind}, \emph{prec}, \emph{vappres},
-and either \emph{globrad} or \emph{sunhours}). When using 'sunhours', please set options.b90$fornetrad = 'sunhours'}
+\item{climate}{data.frame with daily climate data. See details for the required variables.}
 
 \item{precip}{data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
-per day defined in options.b90$prec.interval.}
+per day defined in \code{options.b90$prec.interval}.}
 
-\item{soil}{data.frame containing the hydraulic properties of the soil layers.
-Each row represents one layer, containing the layers' boundaries and soil hydraulic parameters.
-The column names for the upper and lower layer boundaries are \emph{upper} and \emph{lower} (m, negative downwards).
-When using options.b90$imodel = 'MvG', the hydraulic parameters are  \emph{ths}, \emph{thr},
- \emph{alpha} [m-1], \emph{npar}, \emph{ksat} [mm d-1] and \emph{tort}.  With options.b90$imodel = 'CH',
- the parameters are \emph{thsat} , \emph{thetaf},\emph{psif} [kPa], \emph{bexp},
- \emph{kf} (mm d-1), and \emph{wetinf}. For both parameterizations, the volume fraction of stones has to be named \emph{gravel}.
- If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
-  of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.}
+\item{soil}{data.frame containing the hydraulic properties of the soil layers. See details.}
 
 \item{output}{a [10,5]-matrix flagging the desired model-output. Use
 \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
@@ -66,13 +56,33 @@ Useful to inspect the effects of options and parameters on model input. Default 
 \item{...}{additional arguments passed to \code{output_fun}.}
 }
 \value{
-A list containing the contents of the LWF-Brook90 output files found in 'project.dir' along with model_input,
-return values of \code{output_fun}, and duration and finishing time of the simulation.
+A list containing the model input (except for climate), the contents of
+the LWF-Brook90 output files found in 'project.dir', and the return values of \code{output_fun}.
 }
 \description{
 Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
 and returns the results if desired.
 }
+\section{Climate data}{
+
+The \code{climate} data.frame must contain the following variable in columns named
+\code{dates} (Date), \code{tmax} (deg C), \code{tmin} (deg C), \code{tmean} (deg C),
+\code{wind} (m s-1), \code{prec} (mm) , \code{vappres} (kPa), and either \code{globrad} (MJ d-1 m-2)
+or \code{sunhours} (hours). When using \code{sunhours}, please set \code{options.b90$fornetrad = 'sunhours'}.
+}
+
+\section{Soil parameters}{
+
+Each row of \code{soil} represents one layer, containing the layers' boundaries and soil hydraulic parameters.
+The column names for the upper and lower layer boundaries are \code{upper} and \code{lower} (m, negative downwards).
+When using options.b90$imodel = 'MvG', the hydraulic parameters are  \code{ths}, \code{thr},
+ \code{alpha} (m-1), \code{npar}, \code{ksat} (mm d-1) and \code{tort}.  With options.b90$imodel = 'CH',
+ the parameters are \code{thsat}, \code{thetaf}, \code{psif}(kPa), \code{bexp},
+ \code{kf} (mm d-1), and \code{wetinf}. For both parameterizations, the volume fraction of stones has to be named \code{gravel}.
+ If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
+ of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
+}
+
 \examples{
 # Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()
@@ -93,25 +103,24 @@ b90.result <- runLWFB90(project.dir = "example_run_b90",
                         climate = slb1_meteo,
                         soil = soil)
 
-# use observations to calculate goodness of fit
-observations <- slb1_mpot #'daily water potential in different soil depths
-# prepare data: names have to be found in simulation output.
-names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
+# use a function to be performed on the output:
+# aggregate soil water storage down to a specific layer
+agg_swat <- function(x, layer) {
+  out <- aggregate(SWATI~YR+DOY,
+                   x$SWATDAY.ASC,
+                   FUN = sum,
+                   subset = NL <= layer)
+  out[order(out$YR, out$DOY),]}
 
-# Fit-functions
-gof <- list(nse = hydroGOF::NSE,
-            me = function(sim,obs){mean(sim-obs, na.rm=T)})
-
-# run model, but only return gof-function results
-b90.gofmpot <- runLWFB90(project.dir = "example_run_b90",
+# run model, without returning the original output.
+b90.aggswat <- runLWFB90(project.dir = "example_run_b90",
                          options.b90 = options.b90,
                          param.b90 = param.b90,
                          climate = slb1_meteo,
                          soil = soil,
-                         obs = observations,
-                         gof_fun = gof,
-                         rtrn.output = FALSE,
-                         rtrn.input = FALSE)
-b90.gofmpot
+                         output_fun = list(swat = agg_swat),
+                         rtrn.output = F,
+                         layer = 10) #' passed to output_fun
+str(b90.aggswat$output_fun$swat)
 
 }
