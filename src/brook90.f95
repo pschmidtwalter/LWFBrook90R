@@ -166,7 +166,7 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
         DENSEF=MAX(0.050d0,DENSEF)
 
         IF (YEAR .NE. YY .OR. MONTH .NE. MM .OR. DOM .NE. DD) THEN
-            PRINT*, 'STOP - DFILE error, expected', YEAR, MONTH, DOM, ' but got', YY, MM, DD
+            write(10,*) 'STOP - DFILE error, expected', YEAR, MONTH, DOM, ' but got', YY, MM, DD
 !           STOP
         END IF
 
@@ -1966,7 +1966,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             CHN = 2.0d0 * WETINF - 1.0d0 - (-PSIINF(I) * BEXP / (CHM * WETINF))
             Par(8,i) = CHN
             IF (PSIM(I) .GT. 0.0d0) THEN
-                PRINT*, 'matrix psi must be negative or zero'
+                write(10,*) 'matrix psi must be negative or zero'
                 STOP
             ELSEIF (PSIM(I) .EQ. 0.0d0) THEN
                 WETNES(I) = 1.0d0
@@ -1993,7 +1993,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             SWATMX(I) = THICK(I) * THS * (1.0d0 - STONEF(I))
 
             IF (PSIM(I) .GT. 0.) THEN
-                PRINT*, 'matrix psi must be negative or zero'
+                write(10,*) 'matrix psi must be negative or zero'
                 STOP
             ELSE
                 WETNES(I) =FWETNES(PSIM(i),Par(1,i),iModel)
