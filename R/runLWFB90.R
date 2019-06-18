@@ -66,26 +66,25 @@
 #'                         climate = slb1_meteo,
 #'                         soil = soil)
 #'
-#' # use observations to calculate goodness of fit
-#' observations <- slb1_mpot #'daily water potential in different soil depths
-#' # prepare data: names have to be found in simulation output.
-#' names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
+#' # use a function to be performed on the output:
+#' # aggregate soil water storage down to a specific layer
+#' agg_swat <- function(x, layer) {
+#'   out <- aggregate(SWATI~YR+DOY,
+#'                    x$SWATDAY.ASC,
+#'                    FUN = sum,
+#'                    subset = NL <= layer)
+#'   out[order(out$YR, out$DOY),]}
 #'
-#' # Fit-functions
-#' gof <- list(nse = hydroGOF::NSE,
-#'             me = function(sim,obs){mean(sim-obs, na.rm=T)})
-#'
-#' # run model, but only return gof-function results
-#' b90.gofmpot <- runLWFB90(project.dir = "example_run_b90",
+#' # run model, without returning the original output.
+#' b90.aggswat <- runLWFB90(project.dir = "example_run_b90",
 #'                          options.b90 = options.b90,
 #'                          param.b90 = param.b90,
 #'                          climate = slb1_meteo,
 #'                          soil = soil,
-#'                          obs = observations,
-#'                          gof_fun = gof,
-#'                          rtrn.output = FALSE,
-#'                          rtrn.input = FALSE)
-#' b90.gofmpot
+#'                          output_fun = list(swat = agg_swat),
+#'                          rtrn.output = F,
+#'                          layer = 10) #' passed to output_fun
+#' str(b90.aggswat$output_fun$swat)
 #'
 runLWFB90 <- function(project.dir = "runLWFB90/",
                       options.b90,
@@ -309,9 +308,9 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
 
     # ---- append model input -------------------------------------------------------
     if (rtrn.input) {
-      simres$model_input <- list(options.b90,
-                                 param.b90,
-                                 standprop_daily)
+      simres$model_input <- list(options.b90 = options.b90,
+                                 param.b90 = param.b90,
+                                 standprop_daily = standprop_daily)
     }
 
   } else {

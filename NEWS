@@ -1,0 +1,11 @@
+LWFBrook90R v0.2.0 (Release date: 2019-06-18)
+==============
+
+  Changes:
+  * minor bugs fixed
+  * 'output_fun' argument replaces 'gof_fun'-argument in runLWFB90() for more flexible output.
+
+
+LWF-Brook90R v0.1.0 (Release date: 2019-05-13)
+==============
+ first beta release

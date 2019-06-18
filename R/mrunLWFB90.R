@@ -93,21 +93,6 @@
 #' # prepare data: names have to be found in simulation output.
 #' names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
 #'
-#' \dontrun{
-#' # run model, but only return gof-function results
-#' b90.gofmpot <- mrunLWFB90(paramvar = vary_parms,
-#'                           options.b90 = options.b90,
-#'                           param.b90 = param.b90,
-#'                           climate = slb1_meteo,
-#'                           soil = soil,
-#'                           obs = observations,
-#'                           gof_fun = hydroGOF::NSE, #' Nash-Sutcliff efficiency
-#'                           rtrn.output = FALSE,
-#'                           rtrn.input = FALSE)
-#' # collect gof from simulations results
-#' nse <- data.table::rbindlist(lapply(b90.gofmpot, function(x) {as.list(x$gof)}),
-#'                              idcol = "srun")
-#' hist(nse$SWATDAY.ASC.psimi5)}
 
 mrunLWFB90 <- function(paramvar,
                        param.b90,
