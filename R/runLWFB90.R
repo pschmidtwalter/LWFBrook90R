@@ -309,9 +309,9 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
 
     # ---- append model input -------------------------------------------------------
     if (rtrn.input) {
-      simres$model_input <- list(options.b90,
-                                 param.b90,
-                                 standprop_daily)
+      simres$model_input <- list(options.b90 = options.b90,
+                                 param.b90 = param.b90,
+                                 standprop_daily = standprop_daily)
     }
 
   } else {
