@@ -32,10 +32,12 @@
 #' #extract specific variables
 #' extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
 #' @import data.table
+#' @importFrom stats as.formula
 extract_layer_output <- function(dat,
                                  layers = NULL,
                                  value.vars=NULL,
                                  sep = ""){
+  nl <- NULL #pass CRAN check NOTES
 
   if (!is.data.table(dat)) {setDT(dat) }
 

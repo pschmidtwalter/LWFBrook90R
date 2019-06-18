@@ -22,7 +22,7 @@
 #'
 #' identical(param.new$maxlai, dat$maxlai[dat$year %in% years])
 #' identical(param.new$height, dat$height[dat$year %in% years])
-
+#'@importFrom stats approx
 standprop_yearly_to_param <- function(standprop_yearly,
                                            param.b90,
                                            out.years) {

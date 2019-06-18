@@ -41,7 +41,7 @@
 #' legend('bottomright', c('frei', "lg", "mg", "sg"),
 #'        col = c("violet", "blue", "green", "red", "black"),
 #'        lty = 1, pch = NULL )
-
+#' @importFrom utils stack
 prec_corr <-  function(month,tavg,prec,
                        station.exposure = "mg",
                        full.output = FALSE

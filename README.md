@@ -24,8 +24,7 @@ install.packages("doSNOW")
 
 ### Recommended installation
 
-It is recommended to download and install the latest stable release from
-<https://github.com/pschmidtwalter/LWFBrook90R/releases>
+It is recommended to download and install the latest stable release from ...
 
 ``` r
 install.packages("path/to/package/LWFBrook90R_0.1.0.tar.gz", repos = NULL, type = "source")

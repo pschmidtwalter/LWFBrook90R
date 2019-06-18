@@ -89,8 +89,9 @@ str(b90res$EVAPDAY.ASC)
 `EVAPDAY.ASC` is a data.table-object and contains date variables ('YR', 'MO', 'DA', 'DOY'), actual evaporation fluxes ('EVAP', 'TRAN', 'IRVP', 'ISVP', 'SLVP', 'SNVP'), potential evaporation fluxes ('PINT', 'PTRAN', 'PSLVP') and total runoff ('FLOW'). For a detailed description of all output variables refer to the list of parameters and variables on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html). 
 To plot the evaporation data, it is convenient to derive a Date object from the date variables:
 ```{r}
-b90res$EVAPDAY.ASC$dates <- with(b90res$EVAPDAY.ASC,
-                                           as.Date(paste(YR, MO, DA, sep = "-")))
+b90res$EVAPDAY.ASC$dates <- as.Date(paste(b90res$EVAPDAY.ASC$YR, 
+                                          b90res$EVAPDAY.ASC$MO, 
+                                          b90res$EVAPDAY.ASC$DA, sep = "-"))
 ```
 Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `project.dir`-folder is named 'SWATDAY.ASC' and returned as data.table-object, containing the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90res$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers:
 

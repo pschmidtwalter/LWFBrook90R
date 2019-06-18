@@ -47,7 +47,7 @@
 #' # multiple gof-measures
 #' calc_gof(obs = observations, b90.result,
 #'          gof_fun = list(WilmD = hydroGOF::d, bR2 = hydroGOF::br2))
-
+#' @importFrom utils tail
 calc_gof <- function(x,
                      obs,
                      gof_fun) {
@@ -55,6 +55,8 @@ calc_gof <- function(x,
   stopifnot(!is.null(obs))
   obs <- data.frame(obs)
   names(obs) <- tolower(names(obs))
+
+  yr <- NULL; mo <- NULL; da <- NULL # pass CRAN check Notes
 
   # Extract equivalents of obs from sim results
   sim <- lapply(x, function(x, obs) {

@@ -28,9 +28,11 @@
 #' hydpar_hypres(20,20,1.5,2)
 #'
 hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72 ){
-#Woesten et al. (Geoderma (90) 169-185, 1999):  Development and use of a database of hydraulic properties of European soils
+  h <- NULL #pass CRAN check Notes
 
-  out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000, h=ifelse(oc.pct==0,0.001,oc.pct/100), topsoil, stringsAsFactors=F )
+  out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,
+                    h=ifelse(oc.pct==0,0.001,oc.pct/100), topsoil,
+                    stringsAsFactors=F )
 
   #constrains
   out$h <- ifelse( (out$clay >0.6 & out$h>0.18) ,0.18, out$h )

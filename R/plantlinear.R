@@ -13,8 +13,8 @@
 #' values <-  c(0,0.8,1,0)
 #' maxdoy <- 365
 #' plot(plant.linear(doys = doys, values = values, maxdoy = 365))
-#'
 #' @export
+#'@importFrom stats approx
 plant.linear <- function(doys, values, maxdoy) {
   stopifnot(all(doys %in% 1:maxdoy))
   approx(x = doys, y = values,

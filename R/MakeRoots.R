@@ -53,10 +53,8 @@
 #'
 #' legend("bottomright", c("'betamodel'","'table'","'linear'", "'constant'"),seg.len = 1.5,
 #'        pch = NULL, lwd =1.5, col = c("brown", "green", "blue", "red"), bty = "n")
-
-
-
 #' @export
+#' @importFrom stats approx approxfun
 MakeRelRootDens <- function(soilnodes,
                             maxrootdepth = min(soilnodes),
                             method = "betamodel",

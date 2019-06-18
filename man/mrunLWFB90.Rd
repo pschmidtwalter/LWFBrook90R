@@ -74,7 +74,8 @@ soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 options.b90$startdate <- as.Date("2002-01-01")
 options.b90$enddate <- as.Date("2003-12-31")
 
-# choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
+# choose the 'Coupmodel' shape option for the annual lai dynamic,
+# with fixed budburst and leaf fall dates:
 options.b90$lai.method <- 'Coupmodel'
 options.b90$budburst.method <- 'fixed'
 options.b90$leaffall.method <- 'fixed'

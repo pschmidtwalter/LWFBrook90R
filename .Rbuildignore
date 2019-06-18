@@ -2,3 +2,8 @@
 ^\.Rproj\.user$
 ^doc$
 ^Meta$
+README.*
+NEWS
+examples_all.R
+^example_run_b90$
+^MultiRuns$

@@ -96,12 +96,14 @@ MakeSeasLAI <- function(method="b90",
                  shape.leaffall = shape.leaffall)
     )
 
-    dat[,maxdoy := ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
-                           366, 365)]
-    dat[, minlai := winlaifrac*maxlai]
+    dat$maxdoy <- with(dat, ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
+                          366, 365))
+    dat$minlai <- with(dat, winlaifrac*maxlai)
+    maxdoy <- NULL; minlai <- NULL # CRAN Check Notes
 
 
-     if (method == "b90") {
+
+    if (method == "b90") {
        out <- dat[, plant.b90(minval = minlai, maxval = maxlai,
                                          doy.incr = budburst.doy, incr.dur = emerge.dur,
                                          doy.decr = leaffall.doy, decr.dur = leaffall.dur,

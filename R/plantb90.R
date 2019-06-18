@@ -18,6 +18,7 @@
 #'                doy.decr = 280, decr.dur = 50,
 #'                maxdoy = 365))
 #' @export
+#'@importFrom stats approx
 plant.b90 <- function(minval, maxval,
                       doy.incr,incr.dur,
                       doy.decr, decr.dur,

@@ -72,7 +72,7 @@
 #'        col  = c("black", "blue", "green"),  lwd = 2, pch = NULL,
 #'        bty = "n")
 #'@export
-
+#' @importFrom stats approx
 approx_standprop <- function(x.years,
                              y,
                              y.ini = NULL,

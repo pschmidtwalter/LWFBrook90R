@@ -20,8 +20,8 @@
 #' vals <- c(0,10)
 #' x
 #' replace_vecelements(x, varnms, vals)
-
-
+#' @importFrom utils stack unstack
+#' @importFrom stats ave
 replace_vecelements <- function(x, varnms, vals) {
   if (is.data.frame(x)) {
     varnms <- unlist(strsplit(varnms, split = ".", fixed  =T))[2*(1:length(varnms))]

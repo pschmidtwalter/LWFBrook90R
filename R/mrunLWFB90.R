@@ -53,7 +53,8 @@
 #' options.b90$startdate <- as.Date("2002-01-01")
 #' options.b90$enddate <- as.Date("2003-12-31")
 #'
-#' # choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
+#' # choose the 'Coupmodel' shape option for the annual lai dynamic,
+#' # with fixed budburst and leaf fall dates:
 #' options.b90$lai.method <- 'Coupmodel'
 #' options.b90$budburst.method <- 'fixed'
 #' options.b90$leaffall.method <- 'fixed'
@@ -96,7 +97,8 @@
 #' # prepare data: names have to be found in simulation output.
 #' names(observations)[2:6] <- c("psimi5", "psimi7", "psimi10", "psimi16","psimi21")
 #'
-
+#' @importFrom stats setNames
+#' @importFrom utils txtProgressBar setTxtProgressBar
 mrunLWFB90 <- function(paramvar,
                        param.b90,
                        options.b90,
@@ -108,6 +110,7 @@ mrunLWFB90 <- function(paramvar,
                        cores = 2,
                        showProgress = TRUE,
                        ...){
+  i <- NULL #pass CRAN check Notes
 
   nRuns <- nrow(paramvar)
 

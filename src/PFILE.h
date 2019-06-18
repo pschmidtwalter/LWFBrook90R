@@ -99,8 +99,8 @@
     IMODEL = INT( param( 69 ) )
 
     if ( (NLAYER .GT. ML) .OR. (ILAYER .GT. NLAYER) .OR. (QLAYER .GT. NLAYER)) then
-        PRINT*, 'Failure of QLAYER and ILAYER .LE. NLAYER .LE. ML'
-        STOP
+        write(10,*) 'Failure of QLAYER and ILAYER .LE. NLAYER .LE. ML'
+        go to 999
     end if
 
     DO 201 I=1, nmat
