@@ -1,10 +1,14 @@
+! Tony Federer's original [Brook90 Fortran 77 code](http://www.ecoshift.net/brook/b90doc.html) 
+! (Brook90_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin Kennel at Bavarian State
+! Institute of Forestry (LWF) around the year 2000. Since then, LWF-BROOK90 is distributed by 
+! [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) upon request as a !
+! pre-compiled Fortran command line program together with in MS Access User Interface. 
+! In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented 
+! the connection to R. Paul Schmidt-Walter's *brook90r* package for LWF-Brook90 input data 
+! generation, model execution and result processing was adapted and extended to control this 
+! interface function.
+
 module fbrook_mod
-! This is the main Fortran script for Brook90 model.
-! Created and Modified: Trotsiuk V.
-
-
-! Changes:
-!   PLNTRES D(I) integer -> real(kind=8)
 
 IMPLICIT NONE
 contains
