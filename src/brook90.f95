@@ -777,14 +777,17 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
         go to 500
 
     end if
-        if(output_log(1) .EQ. INT(1)) then
+    
+    
+    if(output_log(1) .EQ. INT(1)) then
         write(10,*)
         write(10,*)'total    ','      ','    inter','     snow','     rain','      et','   drain','     lat'
         write(10,*)'          ------------------------- mm ----------------------------------------'
         write(10,'(16X,2F9.2,F9.1,3F8.1)') TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD
     end if
 !     ***************   E N D    D A Y   L O O P    **************************
-
+    999 write(10,*) 'PARAMETERS COMBINATION ERROR'
+    
     ! Close all the open files
     do i = 1, size(outfile)
         CLOSE( UNIT = outfile(i) )
