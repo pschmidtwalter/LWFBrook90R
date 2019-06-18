@@ -88,7 +88,7 @@
 #'                          climate = slb1_meteo,
 #'                          soil = soil,
 #'                          output_fun = list(swat = agg_swat),
-#'                          rtrn.output = F,
+#'                          rtrn.output = FALSE,
 #'                          layer = 10) #' passed to output_fun
 #' str(b90.aggswat$output_fun$swat)
 #'
