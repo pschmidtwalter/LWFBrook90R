@@ -1,25 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-LWFBrook90R: Run the LWF-BROOK90 hydrological model from within R.
-==================================================================
 
-Motivation
-==========
+# LWFBrook90R
 
-In hydrology, many R-packages exist that deal with pre- and post-processing of input data and results of hydrological process models. In addition, many ready-to-use algorithms exist in R providing inverse calibration, sensitivity analysis, and parallelisation techniques. In order to make the vast resources of R directly available to the 1D-SVAT model [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php), *LWFBrook90R* was developed. The Fortran model code is integrated into the package as dynamic library and compiles when the package is installed.
+-----
 
-With one call to the package core function `runLWFB90()`, *LWFBrook90R* features the following functionality:
+Run the
+[LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
+hydrological model from within R
 
--   create model input objects from climate driving data, model control options and parameters,
--   execute the LWF-BROOK90 model code,
--   read and return the created output files.
+## Installation
 
-The model control options thereby let the user select different functions for defining aboveground stand dynamics, phenology, and root length density depth distributions. For convenience, a set of functions are available to set up the required lists of model control options and parameters, and to derive soil hydraulic parameters from soil physical properties using pedotransfer-functions. In addition, wrapper-functions for `runLWFB90()` are available to facilitate parallel multi-run simulations and multi-site simulations.
-
-Installation
-============
-
-Before installing the *LWFBrook90R* R-package, the following packages have to be installed from CRAN:
+Before installing the package, the following imported packages need to
+be installed from CRAN:
 
 ``` r
 install.packages("data.table")
@@ -29,40 +22,66 @@ install.packages("foreach")
 install.packages("doSNOW")
 ```
 
-Now *LWFBrook90R* can be installed. The package currrently resides in a private repository on Github, but (hopefully) will be available for public on Github and CRAN soon. Then, the latest version can be installed directly from Github.com using the *devtools*-package:
+### Recommended installation
+
+It is recommended to download and install the latest stable release from
+<https://github.com/pschmidtwalter/LWFBrook90R/releases>
+
+``` r
+install.packages("path/to/package/LWFBrook90R_0.1.0.tar.gz", repos = NULL, type = "source")
+```
+
+For installing the source package in R under Windows,
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) is required. If
+Rtools is not available, install the (.zip) binary
+package:
+
+``` r
+install.packages("path/to/package/LWFBrook90R_0.1.0.zip", repos = NULL, type = "binary")
+```
+
+You can also install the latest stable release directly from GitHub,
+using the devtools package:
 
 ``` r
 if (!requireNamespace("devtools")) {
     install.packages("devtools")
-  }
-devtools::install_github(repo = "pschmidtwalter/LWFBrook90R")
+}
+devtools::install_url("https://github.com/biometry/rLPJGUESS/releases/download/v1.1.0/rLPJGUESS_1.1.0.tar.gz",
+                      dependencies = T, build_vignettes = T)
 ```
 
-For now, the package needs to be installed from a source file:
+### Development version
+
+Instead of installing the latest stable release, you can also install
+the latest development version using the devtools package:
 
 ``` r
-install.packages("LWFBrook90R_0.1.0.tar.gz", repos = NULL, type = "source")
+devtools::install_github(repo = "pschmidtwalter/LWFBrook90R", 
+                         dependencies = T, build_vignettes = T)
 ```
 
-After installation, use `vignette("intro_lwfbrook90r")` to see the manual.
+After installation, use `vignette("intro_lwfbrook90r")` to see the
+manual.
 
-Basic usage
-===========
+## Basic usage
 
-Load *LWFBrook90R*:
+Load LWFBrook90R:
 
 ``` r
 library(LWFBrook90R)
 ```
 
-To run an example, load meteorological and soil data from the Solling Beech Experimental site distributed with the package:
+To run an example, load meteorological and soil data from the Solling
+Beech Experimental site distributed with the package:
 
 ``` r
 data("slb1_meteo")
 data("slb1_soil")
 ```
 
-Set up lists containing default model control options and model parameters:
+Set up lists containing default model control options and model
+parameters:
 
 ``` r
 options.b90 <- setoptions_LWFB90()
@@ -76,7 +95,8 @@ options.b90$startdate <- as.Date("2002-01-01")
 options.b90$enddate <- as.Date("2003-12-31")
 ```
 
-Derive soil hydraulic properties from soil physical properties using a pedotransfer function:
+Derive soil hydraulic properties from soil physical properties using a
+pedotransfer function:
 
 ``` r
 soil <- cbind(slb1_soil, hydpar_puh2(clay = slb1_soil$clay,
@@ -86,7 +106,8 @@ soil <- cbind(slb1_soil, hydpar_puh2(clay = slb1_soil$clay,
                                      oc.pct = slb1_soil$c_org))
 ```
 
-Run LWF-Brook90 with the created model input objects and capture results in `b90.results.slb1`:
+Run LWF-Brook90 with the created model input objects and capture results
+in `b90.results.slb1`:
 
 ``` r
 b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
@@ -94,38 +115,57 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
                               options.b90 = options.b90,
                               climate = slb1_meteo,
                               soil = soil)
+str(b90.results.slb1, max.level = 1)
 ```
 
-Status
-======
+## Status
 
-R-Code
-------
+### R-Code
 
-The package works as intended and is fully documented. However, there are some points to be accomplish in the near future:
+The package works as intended and is fully documented. However, there
+are some points to be accomplish in the near future:
 
--   \[x\] enable use of Clapp-Hornberger hydraulic parameterization in addition to the default Mualem-van Genuchten
--   \[x\] Use of sub-day resolution precipitation interval data.
--   \[x\] implement Goodness-of-fit measures with respect to observations that can be returned on top / instead of actual simulation results.
--   \[ \] Run the `check` with Travis.
+  - [x] enable use of Clapp-Hornberger hydraulic parameterization in
+    addition to the default Mualem-van Genuchten
+  - [x] Use of sub-day resolution precipitation interval data.
+  - [ ] implement unit tests (currently functionality is tested mostly
+    through vignette building)
+  - [ ] Run the `check` with Travis.
 
-Fortran-Code
-------------
+### Fortran-Code
 
--   \[x\] Use of sub-day resolution precipitation interval data.
--   \[x\] Model output results tested against the output from the original b90.exe commandline tool.
--   \[x\] Cleaning up `declared but not used` variables
--   \[x\] Optional writing of model log-file that contains the former commandline-feed.
--   \[ \] Implementation of an error-routine. Currently, R crashes when the interface function `f_brook90` is called with wrong parameters. However, this never happens, as `runLWFB90` takes care of correct input for `f_brook90`.
+  - [x] Model output results tested against the output from the original
+    ‘b90.exe’ Windows command line Fortran program.
+  - [x] Cleaning up `declared but not used` variables
+  - [x] Use of sub-day resolution precipitation interval data.
+  - [x] Optional writing of model log-file that contains the former
+    commandline-feed.
+  - [ ] Implementation of an error-routine. Currently, R crashes when
+    the interface function `f_brook90` is called with wrong parameters.
+    However, this never happens, as `runLWFB90` takes care of correct
+    input for `f_brook90`.
 
-Authors
-=======
+## Authors
 
-Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Tony Federer.
+Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel,
+Tony Federer.
 
-Tony Federer's original Brook90 Fortran 77 code was enhanced by Klaus Hammel and Martin Kennel around the year 2000 and distributed as pre-compiled LWF-Brook90 Fortran program, together with in MS Access User Interface. In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented the connection to R. Paul Schmidt-Walter created the R functions for input data generation, model execution and result processing.
+Tony Federer’s original [Brook90 Fortran 77
+code](http://www.ecoshift.net/brook/b90doc.html) (Brook90\_v3.1F,
+License: CC0) was enhanced by Klaus Hammel and Martin Kennel at Bavarian
+State Institute of Forestry (LWF) around the year 2000. Since then,
+LWF-BROOK90 is distributed by
+[LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
+upon request as a pre-compiled Fortran command line program together
+with in MS Access User Interface. In 2019, Volodymyr Trotsiuk converted
+the Fortran 77 code to Fortran 95 and implemented the connection to R.
+Paul Schmidt-Walter’s *brook90r* package for LWF-Brook90 input data
+generation, model execution and result processing was adapted and
+extended to control this interface function.
 
-License
-=======
+## License
 
-GPL-3 for the R-code, as it builds on the former *brook90r*-package. The license for the Fortran code currently is unknown, but the code may be used here with the kind permission of the coyright holders (see the DESCRIPTION-file).
+GPL-3 for all Fortran and R code. brook90r has GPL-3, while LWF-Brook90
+was without license until recently. Lothar Zimmermann and Stephan raspe
+(LWF), as well as all Fortran contributors agreed to assign GPL-3 to the
+Fortran code.
