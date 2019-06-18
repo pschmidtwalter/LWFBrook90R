@@ -61,7 +61,7 @@ the LWF-Brook90 output files found in 'project.dir', and the return values of \c
 }
 \description{
 Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
-and returns the results if desired.
+and returns the selected results.
 }
 \section{Climate data}{
 
@@ -119,7 +119,7 @@ b90.aggswat <- runLWFB90(project.dir = "example_run_b90",
                          climate = slb1_meteo,
                          soil = soil,
                          output_fun = list(swat = agg_swat),
-                         rtrn.output = F,
+                         rtrn.output = FALSE,
                          layer = 10) #' passed to output_fun
 str(b90.aggswat$output_fun$swat)
 
