@@ -30,7 +30,6 @@
 hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72 ){
   h <- NULL #pass CRAN check Notes
 
-  stopifnot( (clay+sand+silt)<102 & (clay+sand+silt)>98 )
   out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,
                     h=ifelse(oc.pct==0,0.001,oc.pct/100), topsoil,
                     stringsAsFactors=F)
