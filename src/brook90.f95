@@ -86,7 +86,10 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
 
     ! soil water parameters and initial variables
     CALL SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
-        PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, output_log(1))
+        PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, output_log(1), error)
+    if ( error == INT(1) ) then
+        go to 999
+    end if
 
     ! more initial soil water variables
     CALL SOILVAR(NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
@@ -1902,7 +1905,7 @@ subroutine SNOWPACK (RTHR, STHR, PSNVP, SNOEN, CC, SNOW, SNOWLQ, DTP, TA, MAXLQF
 end subroutine SNOWPACK
 
 subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
-    PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, output_log)
+    PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, output_log, error)
 !       calculated soil water parameters and initial variables
     IMPLICIT NONE
 !       input
@@ -1933,6 +1936,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: WETNES(*) ! wetness, fraction of saturation
     real(kind=8) :: SWATI(*)  ! water volume in layer, mm
     real(kind=8) :: KSAT      ! saturated hydraulic conductivity, mm/d
+    integer :: error          ! if the program need to be stopped, 1 = yes
 !       function
 !         real(kind=8) :: FWETK, FPSIM, FWETNES, FTHETA
 !       local
@@ -1941,7 +1945,9 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: PSIINF(NLAYER)
 !          potential at dry end of near saturation range, kPa
     include 'CONSTANT.h'
-
+    
+    error = INT(0)
+    
     DO 100 I = 1, NLAYER
 !           gravity potential is negative down from surface
         IF (I .EQ. 1) THEN
@@ -1967,7 +1973,8 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             Par(8,i) = CHN
             IF (PSIM(I) .GT. 0.0d0) THEN
                 write(10,*) 'matrix psi must be negative or zero'
-                STOP
+                error = INT(1)
+                go to 999
             ELSEIF (PSIM(I) .EQ. 0.0d0) THEN
                 WETNES(I) = 1.0d0
             ELSE
@@ -1986,6 +1993,10 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
 
         if (imodel .eq. 1) then
             Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel, output_log)
+            if ( Par(5,i) == -99999.d0 ) then
+                error = INT(1)
+                go to 999
+            end if
             Par(4,i)=FPSIM(Par(5,i),Par(1,i),iModel)
             Par(2,i)=FTheta(Par(5,i),Par(1,i),iModel)
             THS=Par(1,i)
@@ -1994,7 +2005,8 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
 
             IF (PSIM(I) .GT. 0.) THEN
                 write(10,*) 'matrix psi must be negative or zero'
-                STOP
+                error = INT(1)
+                go to 999
             ELSE
                 WETNES(I) =FWETNES(PSIM(i),Par(1,i),iModel)
             END IF
@@ -2002,7 +2014,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             WETC(I) = FWETNES(1000 * PSICR,Par(1,i),iModel)
         end if
     100 CONTINUE
-end subroutine SOILPAR
+999 end subroutine SOILPAR
 
 subroutine SOILVAR (NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
     PSITI, THETA, KK, SWAT, MPar, ML)
@@ -3073,7 +3085,7 @@ function FWETK (K, Par, iModel, output_log)
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
-    integer :: output_log !write output_log file?
+    integer :: output_log !write output_log file?, if 
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation
@@ -3084,7 +3096,7 @@ function FWETK (K, Par, iModel, output_log)
     real(kind=8) :: K        ! hydraulic conductivity, mm/d
 !     real(kind=8) :: A        ! tortuosity parameter (default = 0.5)
 !     output
-    real(kind=8) :: FWETK    ! wetness at KF
+    real(kind=8) :: FWETK    ! wetness at KF if FWETK -99999.d0 then there is error
 !      function
 !         real(kind=8) :: FK
 !      local
@@ -3104,8 +3116,9 @@ function FWETK (K, Par, iModel, output_log)
     FWETK = 0.0d0
 
     if(iModel .eq. 0) then
-!            write(10,*)'Function FWETK can not be called for iModel=0, stopping program'
-        stop
+        write(10,*)'Function FWETK can not be called for iModel=0, stopping program'
+        FWETK = -99999.d0
+        go to 999
     end if
 
     if(iModel .eq. 1) then
@@ -3145,7 +3158,8 @@ function FWETK (K, Par, iModel, output_log)
             if (output_log .EQ. INT(1)) then
                 write(10,*)'FWETK: slope is zero, stopping programm!'
             end if
-            stop
+            FWETK = -99999.d0
+            go to 999
         end if
         KNew=FK(WetNew,Par,iModel)-K
         WetOld=WetNew
@@ -3164,7 +3178,7 @@ function FWETK (K, Par, iModel, output_log)
         if(abs(KNew) .ge. Eps) goto 20
         FWETK=WetOld
     end if
-end function FWETK
+999 end function FWETK
 
 function FWETNES (PSIM,Par,iModel)
 !     wetness from matric potential
