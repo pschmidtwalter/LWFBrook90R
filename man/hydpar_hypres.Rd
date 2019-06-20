@@ -39,7 +39,6 @@ Derives the Mualem - van Genuchten parameters ThetaR, ThetaS, Alpha, n, Tort and
 }
 \examples{
 hydpar_hypres(20,20,1.5,2)
-
 }
 \references{
 Woesten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of

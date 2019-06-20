@@ -6,8 +6,8 @@ param.b90 <- setparam_LWFB90()
 options.b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2002-2-15")
-options.b90$enddate <- as.Date("2005-07-5")
+options.b90$startdate <- as.Date("2002-01-01")
+options.b90$enddate <- as.Date("2003-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions

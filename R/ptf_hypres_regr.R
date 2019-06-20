@@ -24,15 +24,17 @@
 #' @references Woesten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of
 #'                 a database of hydraulic properties of European soils. Geoderma 90, pp. 169-185
 #' @export
+#'
 #' @examples
 #' hydpar_hypres(20,20,1.5,2)
-#'
 hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72 ){
   h <- NULL #pass CRAN check Notes
 
+  stopifnot( (clay+sand+silt)<102 & (clay+sand+silt)>98 )
   out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,
                     h=ifelse(oc.pct==0,0.001,oc.pct/100), topsoil,
-                    stringsAsFactors=F )
+                    stringsAsFactors=F)
+
 
   #constrains
   out$h <- ifelse( (out$clay >0.6 & out$h>0.18) ,0.18, out$h )
