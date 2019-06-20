@@ -47,7 +47,7 @@ The model control options thereby let you select different functions for definin
 ## Data
 In this vignette, we will use meteorological and soil data from the longterm monitoring beech forest site SLB1 in the Solling mountains, Germany. The datasets are directly available after loading the package. Use `?slb1_soil` and `?slb1_meteo` to see the meaning of the variables and their units.
 
-First of all, load the *LWFBrook90R* package. We also load the data.table package:
+First of all, load *LWFBrook90R* package and also the data.table package:
 ```{r}
 library(LWFBrook90R)
 library(data.table)
