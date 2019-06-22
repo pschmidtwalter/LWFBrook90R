@@ -88,6 +88,11 @@ b90res <- runLWFB90(project.dir = "example_run_b90/",
 ```{r}
 str(b90res$EVAPDAY.ASC)
 ```
+```{r, echo = F}
+setDT(b90res$EVAPDAY.ASC)
+setDT(b90res$SWATDAY.ASC)
+```
+
 `EVAPDAY.ASC` is a data.table-object and contains date variables ('YR', 'MO', 'DA', 'DOY'), actual evaporation fluxes ('EVAP', 'TRAN', 'IRVP', 'ISVP', 'SLVP', 'SNVP'), potential evaporation fluxes ('PINT', 'PTRAN', 'PSLVP') and total runoff ('FLOW'). For a detailed description of all output variables refer to the list of parameters and variables on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html). 
 To plot the evaporation data, it is convenient to derive a Date object from the date variables. We used data.table syntax:
 ```{r}
