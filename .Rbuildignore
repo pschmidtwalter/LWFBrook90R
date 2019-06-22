@@ -9,3 +9,4 @@ examples_all.R
 ^MultiRuns$
 ^data-raw$
 ^\src\fbrook90_mod.mod
+^dev$
