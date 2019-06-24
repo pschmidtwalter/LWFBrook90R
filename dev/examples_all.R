@@ -153,8 +153,8 @@ param.b90 <- setparam_LWFB90()
 options.b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2002-2-15")
-options.b90$enddate <- as.Date("2003-07-5")
+options.b90$startdate <- as.Date("2006-01-01")
+options.b90$enddate <- as.Date("2006-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions
@@ -174,17 +174,22 @@ observations <- observations[observations$dates >= options.b90$startdate
                              & observations$dates <= options.b90$enddate,]
 
 # calculate gof-measure using simulation results and observations
+# simulated water tension is in kPa, observed in hPa
 calc_gof(obs = observations,
          b90.result,
-         gof_fun = function(sim, obs) {mean(obs-sim, na.rm = T)})
+         gof_fun = function(sim, obs) {mean(obs-sim/10, na.rm = T)})
+
 # multiple gof-measures
 calc_gof(obs = observations, b90.result,
-         gof_fun = list(WilmD = hydroGOF::d, bR2 = hydroGOF::br2))
+         gof_fun = list(
+           rmse = function(sim, obs) sqrt(mean((obs - sim/10)^2, na.rm =T)),
+           me = function(sim,obs) {mean(obs-sim/10, na.rm = T)}
+         ))
 
 rm(list= ls())
 
 # ---- soil_to_param  ----
-
+rm(list= ls())
 soil <- slb1_soil
 soil <- cbind(soil, hydpar_wessolek_mvg(soil$texture))
 str(soil)
