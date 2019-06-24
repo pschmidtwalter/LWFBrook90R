@@ -240,7 +240,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     }
 
     setwd(project.dir) # set the working directory to the project folder
-    try(file.remove(list.files(project.dir, pattern = ".ASC", full.names = T)))
+    try(file.remove(list.files(".", pattern = ".ASC", full.names = T)))
     try(file.remove(list.files("Log.txt")))
 
     if (verbose == T) {
@@ -282,10 +282,10 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       if (verbose == T) {
         message("Reading output...")
       }
-      simout <- lapply(list.files(project.dir, pattern = ".ASC", full.names = T),
+      simout <- lapply(list.files(".", pattern = ".ASC", full.names = T),
                        data.table::fread,
                        fill = T, stringsAsFactors = FALSE)
-      names(simout) <- list.files(project.dir, pattern = ".ASC")
+      names(simout) <- list.files(".", pattern = ".ASC")
 
       # append results
       if (rtrn.output) {

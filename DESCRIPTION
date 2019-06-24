@@ -17,6 +17,7 @@ Imports:
     vegperiod (>= 0.2.1),
     foreach,
     doSNOW,
+    snow,
 	sirad
 License: GPL-3
 Encoding: UTF-8
