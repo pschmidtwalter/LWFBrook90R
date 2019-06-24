@@ -73,7 +73,7 @@ output <- setoutput_LWFB90()
 output
 ```
 Now we are ready to start the simulation with `runLWFB90`:
-```{r, eval = T}
+```{r, eval = F}
 b90res <- runLWFB90(project.dir = "example_run_b90/",
                             options.b90 = options.b90,
                             param.b90 = param.b90,
@@ -82,7 +82,7 @@ b90res <- runLWFB90(project.dir = "example_run_b90/",
                             output = output)
 ```
 
-```{r, echo = F, eval = F}
+```{r, echo = F}
 b90res <- LWFBrook90R:::b90res
 setDT(b90res$EVAPDAY.ASC)
 setDT(b90res$SWATDAY.ASC)
@@ -99,12 +99,13 @@ To plot the evaporation data, it is convenient to derive a Date object from the 
 ```{r, eval = F}
 b90res$EVAPDAY.ASC[, dates := as.Date(paste(YR, MO,DA, sep = "-"))]
 ```
-```{r, echo =F}
-b90res$EVAPDAY.ASC[, `dates` := as.Date(paste(`YR`, `MO`,`DA`, sep = "-"))]
-b90res$SWATDAY.ASC[, `dates` := as.Date(paste(`YR`, `MO`,`DA`, sep = "-"))]
 
-swat100cm <- b90res$SWATDAY.ASC[which(`NL` <= 14), list(swat100cm = sum(`SWATI`)),
-                                by  = `dates`]
+```{r, echo =F}
+b90res$EVAPDAY.ASC[, `:=`(dates =  as.Date(paste(YR, MO,DA, sep = "-")))]
+b90res$SWATDAY.ASC[, `:=`(dates =  as.Date(paste(YR, MO,DA, sep = "-")))]
+swat100cm <- b90res$SWATDAY.ASC[which(b90res$SWATDAY.ASC$NL <= 14), 
+                                list(swat100cm = sum(SWATI)),
+                                by  = dates]
 ```
 Another result that is returned by default are daily soil water state variables ('SWATI', 'THETA', 'WETNES', 'PSIMI', 'PSITI'), of the individual soil layers. The file in the `project.dir`-folder is named 'SWATDAY.ASC' and contains the values of the individual layers organized in rows. We want to plot absolut soil water storage ('SWATI') down to a soil depth of 100 cm, so we need to create a 'Date'-object from the date variables and then integrate `b90res$swatday.asc$swati` over the 'swati'-values of the 14 uppermost soil layers. Again we use data.table syntax for convenient aggregation:
 
