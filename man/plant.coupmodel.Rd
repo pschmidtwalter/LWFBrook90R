@@ -25,7 +25,7 @@ plant.coupmodel(minval, maxval, doy.incr, doy.max, doy.min, shape.incr,
 \item{maxdoy}{length of the year, 366 for leap years, 365 for normal years}
 }
 \value{
-
+numeric vector of length \code{maxdoy}
 }
 \description{
 Creates a daily sequence for one year from parameters

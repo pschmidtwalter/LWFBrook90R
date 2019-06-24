@@ -6,7 +6,7 @@
 #' @param values values
 #' @param maxdoy length of the year, 366 for leap years, 365 for normal years
 #'
-#' @return numeric vector of length maxdoy
+#' @return numeric vector of length \code{maxdoy}
 #'
 #' @examples
 #' doys <- c(110,200,250,280)

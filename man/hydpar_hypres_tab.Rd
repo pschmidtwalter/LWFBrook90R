@@ -7,7 +7,7 @@
 hydpar_hypres_tab(tex.hypres, topsoil)
 }
 \arguments{
-\item{tex.hypres}{A character vector with soil texture values according to classes applied in W?sten et al. 2009}
+\item{tex.hypres}{A character vector with soil texture values according to classes applied in Woesten et al. 2009}
 
 \item{topsoil}{logical Is the sample from the topsoil?}
 }
@@ -29,9 +29,10 @@ Derives the MVG Parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
     from soil texture classes and bulk density values
 }
 \examples{
+hydpar_hypres_tab(tex.hypres = c("C","MF"), topsoil = c(TRUE,FALSE))
 
 }
 \references{
-W?sten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of
+Woesten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of
                 a database of hydraulic properties of European soils. Geoderma 90, pp. 169-185
 }

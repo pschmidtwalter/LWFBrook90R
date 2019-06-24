@@ -10,7 +10,7 @@
 #' @param decr.dur duration (number of days) since doy.decr until minval is rached
 #' @param maxdoy length of the year, 366 for leap years, 365 for normal years
 #'
-#' @return numeric vector of length maxdoy
+#' @return numeric vector of length \code{maxdoy}
 #'
 #' @examples
 #' plot(plant.b90(minval = 0,maxval=1,

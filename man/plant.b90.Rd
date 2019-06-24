@@ -22,7 +22,7 @@ plant.b90(minval, maxval, doy.incr, incr.dur, doy.decr, decr.dur, maxdoy)
 \item{maxdoy}{length of the year, 366 for leap years, 365 for normal years}
 }
 \value{
-numeric vector of length maxdoy
+numeric vector of length \code{maxdoy}
 }
 \description{
 Creates a daily sequence for one year from parameters

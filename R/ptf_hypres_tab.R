@@ -3,7 +3,7 @@
 #' Derives the MVG Parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
 #'     from soil texture classes and bulk density values
 #'
-#' @param tex.hypres A character vector with soil texture values according to classes applied in W?sten et al. 2009
+#' @param tex.hypres A character vector with soil texture values according to classes applied in Woesten et al. 2009
 #' @param topsoil logical Is the sample from the topsoil?
 #'
 #' @return A data.frame with the number of rows equal to length(tex.hypres)
@@ -17,12 +17,13 @@
 #'   \item{ksat}{Saturated hyraulic conductivity parameter of Mualem hydraulic conductivity function, mm d-1}
 #'   \item{tort}{Tortuosity parameter of Mualem hydraulic conductivity function}
 #' }
-#' @references W?sten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of
+#' @references Woesten JHM, Lilly A, Nemes A, Le Bas C  (1999) Development and use of
 #'                 a database of hydraulic properties of European soils. Geoderma 90, pp. 169-185
 #'
 #' @export
 #'
 #' @examples
+#' hydpar_hypres_tab(tex.hypres = c("C","MF"), topsoil = c(TRUE,FALSE))
 #'
 hydpar_hypres_tab <- function(tex.hypres, topsoil){
   if (is.null(tex.hypres) || is.null(topsoil)){

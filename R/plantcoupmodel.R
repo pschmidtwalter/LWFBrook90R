@@ -11,7 +11,8 @@
 #' @param shape.decr shape parameter of the decreasing phase
 #' @param maxdoy length of the year, 366 for leap years, 365 for normal years
 #'
-#' @return
+#' @return numeric vector of length \code{maxdoy}
+#'
 #'
 #' @examples
 #' plot(plant.coupmodel(0,5, 121, 200, 280, 0.3, 3, 365))
