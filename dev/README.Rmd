@@ -1,5 +1,5 @@
 ---
-output: github_document
+output: pdf_document
 urlcolor: blue
 ---
 
@@ -48,11 +48,11 @@ You can also install the latest stable release directly from GitHub, using the d
 if (!requireNamespace("devtools")) {
     install.packages("devtools")
 }
-devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/releases/
-                      download/v0.2.0/LWFBrook90R_0.2.0.tar.gz",
+devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.2.0.tar.gz",
                       dependencies = T, build_vignettes = T)
+
 ```
- 
+
 ### Development version
 
 Instead of installing the latest stable release, you can also install the latest development version using the devtools package:
@@ -114,7 +114,7 @@ The package works as intended and is fully documented. However, there are some p
 
 - [x] enable use of Clapp-Hornberger hydraulic parameterization in addition to the default Mualem-van Genuchten
 - [x] Use of sub-day resolution precipitation interval data.
-- [ ] implement unit tests (currently functionality is tested mostly through vignette building)
+- [ ] implement unit tests (functionality is currently tested through vignette and examples)
 - [ ] Run the `check` with Travis.
 
 ### Fortran-Code 
@@ -123,13 +123,13 @@ The package works as intended and is fully documented. However, there are some p
 - [x] Cleaning up `declared but not used` variables
 - [x] Use of sub-day resolution precipitation interval data.
 - [x] Optional writing of model log-file that contains the former commandline-feed.
-- [x] Implementation of an error-routine. No stop calls in Fortran code.
-- [ ] Return model ouput directly back to R. Currrently, the executable code writes its own output text-files, which raises a warning on CRAN-check (no Stdin/Stdout writing)
+- [x] Implementation of an error-routine. All STOP/EXIT commands removed from Fortran code.
+- [ ] Return model output directly back to R. Currrently, the executable code writes its own output text-files, which raises a warning on CRAN-check (no Stdin/Stdout writing)
 
 ## Authors 
 Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Tony Federer.
 
-Tony Federer's original [Brook90 Fortran 77 code](http://www.ecoshift.net/brook/b90doc.html) (Brook90_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin Kennel at Bavarian State Institute of Forestry (LWF) around the year 2000. Since then, LWF-BROOK90 is distributed by [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) upon request as a pre-compiled Fortran command line program together with in MS Access User Interface. In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented the connection to R. Paul Schmidt-Walter's *brook90r* package for LWF-Brook90 input data generation, model execution and result processing was adapted and extended to control this interface function.
+Tony Federer's original [Brook90 Fortran 77 code](http://www.ecoshift.net/brook/b90doc.html) (Brook90_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin Kennel at Bavarian State Institute of Forestry (LWF) around the year 2000. Since then, LWF-BROOK90 is distributed by [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) upon request as a pre-compiled Fortran command line program together with an MS Access User Interface. In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented the connection to R. Paul Schmidt-Walter's *brook90r* package for LWF-Brook90 input data generation, model execution and result processing was adapted and extended to control this interface function.
 
 ## License
 GPL-3 for all Fortran and R code. brook90r has GPL-3, while LWF-Brook90 was without license until recently. Lothar Zimmermann and Stephan raspe (LWF), as well as all Fortran contributors agreed to assign GPL-3 to the Fortran code.

@@ -47,8 +47,7 @@ using the devtools package:
 if (!requireNamespace("devtools")) {
     install.packages("devtools")
 }
-devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/releases/
-                      download/v0.2.0/LWFBrook90R_0.2.0.tar.gz",
+devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.2.0.tar.gz",
                       dependencies = T, build_vignettes = T)
 ```
 
@@ -129,8 +128,8 @@ are some points to be accomplish in the near future:
   - [x] enable use of Clapp-Hornberger hydraulic parameterization in
     addition to the default Mualem-van Genuchten
   - [x] Use of sub-day resolution precipitation interval data.
-  - [ ] implement unit tests (currently functionality is tested mostly
-    through vignette building)
+  - [ ] implement unit tests (functionality is currently tested through
+    vignette and examples)
   - [ ] Run the `check` with Travis.
 
 ### Fortran-Code
@@ -141,9 +140,9 @@ are some points to be accomplish in the near future:
   - [x] Use of sub-day resolution precipitation interval data.
   - [x] Optional writing of model log-file that contains the former
     commandline-feed.
-  - [x] Implementation of an error-routine. No stop calls in Fortran
-    code.
-  - [ ] Return model ouput directly back to R. Currrently, the
+  - [x] Implementation of an error-routine. All STOP/EXIT commands
+    removed from Fortran code.
+  - [ ] Return model output directly back to R. Currrently, the
     executable code writes its own output text-files, which raises a
     warning on CRAN-check (no Stdin/Stdout writing)
 
@@ -159,7 +158,7 @@ State Institute of Forestry (LWF) around the year 2000. Since then,
 LWF-BROOK90 is distributed by
 [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
 upon request as a pre-compiled Fortran command line program together
-with in MS Access User Interface. In 2019, Volodymyr Trotsiuk converted
+with an MS Access User Interface. In 2019, Volodymyr Trotsiuk converted
 the Fortran 77 code to Fortran 95 and implemented the connection to R.
 Paul Schmidt-Walter’s *brook90r* package for LWF-Brook90 input data
 generation, model execution and result processing was adapted and
