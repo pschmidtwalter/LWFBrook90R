@@ -64,8 +64,8 @@ vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          shape.budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
-                         soil_materials.ths3 = runif(n, 0.3,0.5),
-                         maxlai2 = runif(n,4,8))
+                         soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
+                         maxlai2 = runif(n,4,8)) # 2nd year lai
 
 # soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
@@ -85,9 +85,15 @@ evapday <- data.table::rbindlist(lapply(b90.multi,
                                  idcol = "srun")
 evapday$dates <- with(evapday, as.Date(paste(YR,MO,DA), "%Y %m %d"))
 
-with(evapday[evapday$srun == "RunNo.1", ],
-     plot(dates, cumsum(EVAP))
+srun_nms <- unique(evapday$srun)
+
+with(evapday[evapday$srun == srun_nms[1], ],
+     plot(dates, cumsum(EVAP), type = "l")
 )
+for (i in 2:length(b90.multi)){
+  with(evapday[evapday$srun == srun_nms[i], ],
+  lines(dates, cumsum(EVAP)))
+}
 
 # ---- MakeStand  ----
 
