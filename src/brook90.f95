@@ -3122,6 +3122,9 @@ function FWETK (K, Par, iModel, output_log)
     end if
 
     if(iModel .eq. 1) then
+
+        It=0 ! VT 2019.11.29 To limit number of iteration for convergence
+
 5       WetStart=0.50d0
         WetOld=WetStart
 10      continue
@@ -3142,9 +3145,23 @@ function FWETK (K, Par, iModel, output_log)
             if (output_log .EQ. INT(1)) then
                 write(10,*)'FWETK: no convergence, stopping programm!'
             end if
+
+            if(It .eq. ItMax) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in original program
+                if (output_log .EQ. INT(1)) then
+                    write(10,*)'FWETK: maximum number of iterations exceeded,'
+                    write(10,*)'FWETK: no convergence, stopping programm!'
+                end if
+
+                FWETK = -99999.d0
+                Goto 999
+            end if
+
+            It=It+1
+
             K=K/2.0d0
             Goto 5
 !               stop
+
         end if
 
         It=0
