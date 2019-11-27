@@ -3105,13 +3105,13 @@ function FWETK (K, Par, iModel, output_log)
     real(kind=8) :: WetNew
     real(kind=8) :: KOld
     real(kind=8) :: KNew
-    integer :: It, ItMax ! number of iterations, maximum of that
+    integer :: It, Itk, ItMax, ItKonv ! number of iterations, maximum of that
     real(kind=8) :: Eps      ! precision of solution
     real(kind=8) :: DeltaS   ! relative difference for numerical differentiation
     real(kind=8) :: dKdS1, dKdS2, Konver
     real(kind=8) :: b0,b1,b2,b3
 
-    parameter (ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
+    parameter (ItKonv = 1000, ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
 
     FWETK = 0.0d0
 
@@ -3123,11 +3123,13 @@ function FWETK (K, Par, iModel, output_log)
 
     if(iModel .eq. 1) then
 
-        It=0 ! VT 2019.11.29 To limit number of iteration for convergence
+        Itk=0 ! VT 2019.11.29 To limit number of iteration for convergence
 
 5       WetStart=0.50d0
         WetOld=WetStart
+
 10      continue
+
         KOld=FK(WetOld,Par,iModel)-K
         b0=FK(WetOld+DeltaS,Par,iModel)-K
         b1=FK(WetOld+2*DeltaS,Par,iModel)-K
@@ -3137,16 +3139,18 @@ function FWETK (K, Par, iModel, output_log)
         dKdS2=(b1-2*KOld+b3)/(4*DeltaS**2)
         Konver=abs(KOld*dKdS2/dKdS1**2)
 !        Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
+
         if( (Konver .gt. 1.0d0) .and. (WetOld .lt. 0.950d0) ) then
             WetOld=WetOld+0.050d0
             goto 10
         end if
+
         if(Konver .gt. 1.0d0) then
             if (output_log .EQ. INT(1)) then
-                write(10,*)'FWETK: no convergence, stopping programm!'
+                write(10,*)'FWETK: no convergence with found. Trying next itteration!'
             end if
 
-            if(It .eq. ItMax) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in original program
+            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in original program
                 if (output_log .EQ. INT(1)) then
                     write(10,*)'FWETK: maximum number of iterations exceeded,'
                     write(10,*)'FWETK: no convergence, stopping programm!'
@@ -3156,7 +3160,7 @@ function FWETK (K, Par, iModel, output_log)
                 Goto 999
             end if
 
-            It=It+1
+            Itk=Itk+1
 
             K=K/2.0d0
             Goto 5
@@ -3165,10 +3169,13 @@ function FWETK (K, Par, iModel, output_log)
         end if
 
         It=0
+
 20      continue
+
         b0=FK(WetOld+DeltaS,Par,iModel)-K
         b1=FK(WetOld-DeltaS,Par,iModel)-K
         dKdS1=(b0-b1)/(2*DeltaS)
+
         if(dKdS1 .ne. 0.0d0) then
             WetNew=WetOld-KOld/dKdS1
         else
@@ -3178,23 +3185,32 @@ function FWETK (K, Par, iModel, output_log)
             FWETK = -99999.d0
             go to 999
         end if
+
         KNew=FK(WetNew,Par,iModel)-K
         WetOld=WetNew
         KOld=KNew
+
         It=It+1
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
+        
         if(It .eq. ItMax) then
+
             if (output_log .EQ. INT(1)) then
-                write(10,*)'FWETK: maximum number of iterations exceeded,'
-                write(10,*)' stopping programm!'
+                write(10,*)'FWETK: maximum number of iterations exceeded, adjusting K!'
             end if
+
             K=K/2.0d0
+            
             Goto 5
 !              stop
         end if
+        
         if(abs(KNew) .ge. Eps) goto 20
+
         FWETK=WetOld
+
     end if
+    
 999 end function FWETK
 
 function FWETNES (PSIM,Par,iModel)
