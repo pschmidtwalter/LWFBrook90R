@@ -122,7 +122,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   }
 
   # ---- Simulation period ----------------------------------------------------------
-  climyears <- unique(climate$yr)
+  climyears <-  unique(as.integer(format(climate$dates,"%Y")))
   simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
                   to = as.integer(format(options.b90$enddate,"%Y")),
                   by = 1)
