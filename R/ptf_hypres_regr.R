@@ -47,10 +47,10 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
   out <- within(out,{
 
     thr <- 0
-    ths <-  0.7919 + 0.1691 * clay - 0.00029619 * bd - 0.01491 * silt * silt
+    ths <-  (0.7919 + 0.1691 * clay - 0.00029619 * bd - 0.01491 * silt * silt
     +0.821 * h * h + 0.0002427 / clay + 0.0001113 / silt
     +0.01472 * log(silt * 100) - 0.733 * h * clay - 0.0000619 * bd * clay
-    -0.0001183 * bd * h - 0.01664 * topsoil * silt
+    -0.0001183 * bd * h - 0.01664 * topsoil * silt)
 
     alpha <- exp(-14.96 + 3.135 * clay + 3.51 * silt + 64.6 * h +
                    0.01529 * bd - 0.192 * topsoil - 0.000004671 * bd * bd - 7.81 * clay * clay -
