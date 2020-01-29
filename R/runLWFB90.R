@@ -302,9 +302,19 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
           output_fun <- list(output_fun)
         }
 
+        outfunargs <- list(x = simout,...)
+
+        outfunargsnms <- lapply(output_fun, FUN = function(x,argsnms) {
+          match.arg(formalArgs(x),
+                    argsnms,
+                    several.ok = T)},
+          argsnms = names(outfunargs))
+
+        # TODO: simout is copied for use in each output_fun.
+        # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun, instead of adressing the whole list x.
         simres$output_fun <- tryCatch( {
 
-          lapply(output_fun, do.call, args = list(simout, ...))
+          Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))
 
         },
         warning = function(wrn){return(wrn)},
