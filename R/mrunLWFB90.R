@@ -107,7 +107,7 @@ mrunLWFB90 <- function(paramvar,
                        cores = 2,
                        showProgress = TRUE,
                        ...){
-  i <- NULL #pass CRAN check Notes
+  i <- NULL #to pass CRAN check Notes
 
   nRuns <- nrow(paramvar)
 

@@ -311,7 +311,8 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
           argsnms = names(outfunargs))
 
         # TODO: simout is copied for use in each output_fun.
-        # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun, instead of adressing the whole list x.
+        # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
+        # instead of adressing the whole list x.
         simres$output_fun <- tryCatch( {
 
           Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))

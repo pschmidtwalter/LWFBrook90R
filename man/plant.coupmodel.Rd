@@ -33,3 +33,8 @@ Creates a daily sequence for one year from parameters
 \examples{
 plot(plant.coupmodel(0,5, 121, 200, 280, 0.3, 3, 365))
 }
+\references{
+Jansson, P.-E. & Karlberg, L. (2004): "Coupled heat and mass transfer model for
+soil-plant-atmosphere systems."
+\emph{Royal Institute of Technolgy, Dept of Civil and Environmental Engineering Stockholm}
+}

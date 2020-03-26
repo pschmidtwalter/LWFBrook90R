@@ -15,12 +15,8 @@ for which the relative root distribution will be calculated.}
 \item{maxrootdepth}{the maximum rooting depth (m, negative downwards) below which
 relative root length density will be set to zero}
 
-\item{method}{method name for the root depth distribution. 'betamodel' uses the model after Gale & Grigal,
-'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
-'linear' returns linearly decreasing root densities with the maximum value
-(taken from the first vector element of 'relrootden') at the uppermost layer to 0
-at 'maxrootdepth'. 'constant' returns a uniform root distribution with depth
-corresponding to the first vector element of 'relrootden' and 0 below 'maxrootdepth'.}
+\item{method}{method name for the root depth distribution. Possible value are 'betamodel',
+'table', 'linear', 'constant'. See details.}
 
 \item{beta}{parameter(s) of the root distribution function}
 
@@ -33,6 +29,14 @@ vector of relative rootlength, corresponding to soilnodes
 }
 \description{
 Generates a root density depth function the soil layers' lower depth limits
+}
+\details{
+Method  'betamodel' uses the model after Gale & Grigal (1987),
+'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
+Method 'linear' returns linearly decreasing root densities with the maximum value
+(taken from the first vector element of 'relrootden') at the uppermost layer to 0
+at 'maxrootdepth'. 'constant' returns a uniform root distribution with depth
+corresponding to the first vector element of 'relrootden' and 0 below 'maxrootdepth'.
 }
 \examples{
 
@@ -72,4 +76,9 @@ lines(roots_beta, slb1_soil$lower, type = 's', col = "brown", lwd = 1.5)
 
 legend("bottomright", c("'betamodel'","'table'","'linear'", "'constant'"),seg.len = 1.5,
        pch = NULL, lwd =1.5, col = c("brown", "green", "blue", "red"), bty = "n")
+}
+\references{
+Gale, M.R. & Grigal D.F. (1987): "Vertical root distributions of northern tree
+species in relation to successional status."
+\emph{Canadian Journal of Forest Research}, \emph{17:829-834}
 }

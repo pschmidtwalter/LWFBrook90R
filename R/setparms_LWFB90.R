@@ -36,8 +36,8 @@
 #'  cintsl       \tab Maximum interception storage of snow per unit LAI. Default: 0.6 \tab mm                \tab Interception           \cr
 #'  cintss       \tab Maximum interception storage of snow per unit SAI. Default: 0.6 \tab mm                \tab Interception           \cr
 #'  frintlai     \tab Intercepted fraction of rain per unit LAI. Default: 0.06 \tab -                  \tab Interception           \cr
-#'  frintsai     \tab Intercepted fraction of snow per unit LAI. Default: 0.04\tab -                  \tab Interception           \cr
-#'  fsintlai     \tab Intercepted fraction of rain per unit SAI. Default: 0.06 \tab -                  \tab Interception           \cr
+#'  frintsai     \tab Intercepted fraction of rain per unit SAI. Default: 0.04\tab -                  \tab Interception           \cr
+#'  fsintlai     \tab Intercepted fraction of snow per unit LAI. Default: 0.06 \tab -                  \tab Interception           \cr
 #'  fsintsai     \tab Intercepted fraction of snow per unit SAI. Default: 0.04 \tab -                  \tab Interception           \cr
 #'  pdur         \tab Average duration of precipitation events for each month of the year. Default: rep(4,12) \tab hours                  \tab Interception           \cr
 #'  alb          \tab Albedo of soil/vegetation surface without snow. Default: 0.2 \tab -                  \tab Meteo                  \cr
@@ -54,7 +54,7 @@
 #'  coords_y     \tab Latitude value (decimal degrees) of the simulation location. Default: 51.54 \tab m                 \tab Meteo                  \cr
 #'  zw           \tab Height at which wind speed was measured. Default: 2 \tab m                 \tab Meteo                  \cr
 #'  eslope       \tab slope for evapotranspiration and snowmelt calculation. Default:  0\tab deg               \tab Meteo                  \cr
-#'  aspect       \tab Mean exposition of soil surface at soil profile (north: 0, west: 90, south: 180, east: 270). Default: 0\tab deg               \tab Meteo                  \cr
+#'  aspect       \tab Mean exposition of soil surface at soil profile (north: 0, east: 90, south: 180, west: 270). Default: 0\tab deg               \tab Meteo                  \cr
 #'  obsheight    \tab Mean height of obstacles on soil surface (grass, furrows etc.), used to calculate soil surface roughness. Default: 0.025 \tab m                 \tab Meteo                  \cr
 #'  prec.corr.statexp \tab station exposure situation of prec measurements (passed to \code{\link{prec_corr}} Default: 'mg' \tab                  \tab Meteo                  \cr
 #'  dpsimax      \tab maximum potential difference considered equal. Default: 5e-04 \tab kPa               \tab Numerical              \cr

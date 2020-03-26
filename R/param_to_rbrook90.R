@@ -1,6 +1,6 @@
-#' Creates the parameter vector for r_brook90
+#' Create a parameter vector for the r_lwfbrook90-function
 #'
-#' The parameter-vector for r_brook90 is created from the lists of model controls options, parameters, and soil.
+#' The parameter vector for r_lwfbrook90 is created from the lists of model controls options, parameters, and soil.
 #'
 #'
 #' @param param.b90 a named list of model parameters.

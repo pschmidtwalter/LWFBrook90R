@@ -1,4 +1,4 @@
-#' Create the daily standproperties from parameters and options
+#' Create daily plant characteristics from parameters and options
 #'
 #' Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from parameter and options
 #' using \code{\link{approx_standprop}} and \code{\link{MakeSeasLAI}}.

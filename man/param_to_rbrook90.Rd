@@ -2,7 +2,7 @@
 % Please edit documentation in R/param_to_rbrook90.R
 \name{param_to_rbrook90}
 \alias{param_to_rbrook90}
-\title{Creates the parameter vector for r_brook90}
+\title{Create a parameter vector for the r_lwfbrook90-function}
 \usage{
 param_to_rbrook90(param.b90, imodel)
 }
@@ -15,5 +15,5 @@ param_to_rbrook90(param.b90, imodel)
 a numerical vector with the parameters in the right order for r_brook90
 }
 \description{
-The parameter-vector for r_brook90 is created from the lists of model controls options, parameters, and soil.
+The parameter vector for r_lwfbrook90 is created from the lists of model controls options, parameters, and soil.
 }

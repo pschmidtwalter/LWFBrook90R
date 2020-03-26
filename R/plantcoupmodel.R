@@ -13,6 +13,10 @@
 #'
 #' @return numeric vector of length \code{maxdoy}
 #'
+#' @references
+#' Jansson, P.-E. & Karlberg, L. (2004): "Coupled heat and mass transfer model for
+#' soil-plant-atmosphere systems."
+#' \emph{Royal Institute of Technolgy, Dept of Civil and Environmental Engineering Stockholm}
 #'
 #' @examples
 #' plot(plant.coupmodel(0,5, 121, 200, 280, 0.3, 3, 365))

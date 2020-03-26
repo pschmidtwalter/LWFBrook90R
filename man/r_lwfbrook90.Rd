@@ -2,7 +2,7 @@
 % Please edit documentation in R/r_lwfbrook90.R
 \name{r_lwfbrook90}
 \alias{r_lwfbrook90}
-\title{Define the function to run LWFBrook90 in R}
+\title{Interface function to the LWF-Brook90 model}
 \usage{
 r_lwfbrook90(siteparam, climveg, param, pdur, soil_materials, soil_nodes,
   precdat = NULL, output, output_log = TRUE)
@@ -35,7 +35,7 @@ year, month, day, interval-number (1:precint), prec, meslflp}
 commandline-feed of the original fortan program is written.}
 }
 \description{
-Define the function to run LWFBrook90 in R
+Passes input data matrices to the Fortran model code
 }
 \details{
 model output is written to comma-separated files (.ASC) in the working directory.

@@ -4,17 +4,26 @@
 #' for which the relative root distribution will be calculated.
 #' @param maxrootdepth the maximum rooting depth (m, negative downwards) below which
 #' relative root length density will be set to zero
-#' @param method method name for the root depth distribution. 'betamodel' uses the model after Gale & Grigal,
-#' 'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
-#' 'linear' returns linearly decreasing root densities with the maximum value
-#' (taken from the first vector element of 'relrootden') at the uppermost layer to 0
-#' at 'maxrootdepth'. 'constant' returns a uniform root distribution with depth
-#' corresponding to the first vector element of 'relrootden' and 0 below 'maxrootdepth'.
+#' @param method method name for the root depth distribution. Possible value are 'betamodel',
+#' 'table', 'linear', 'constant'. See details.
 #' @param beta parameter(s) of the root distribution function
 #' @param relrootden vector of relative root densities
 #' @param rootdepths vector of lower depths limit, corresponding to 'relrootden'
 #'
 #' @return vector of relative rootlength, corresponding to soilnodes
+#'
+#' @details Method  'betamodel' uses the model after Gale & Grigal (1987),
+#' 'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
+#' Method 'linear' returns linearly decreasing root densities with the maximum value
+#' (taken from the first vector element of 'relrootden') at the uppermost layer to 0
+#' at 'maxrootdepth'. 'constant' returns a uniform root distribution with depth
+#' corresponding to the first vector element of 'relrootden' and 0 below 'maxrootdepth'.
+#'
+#' @references
+#' Gale, M.R. & Grigal D.F. (1987): "Vertical root distributions of northern tree
+#' species in relation to successional status."
+#' \emph{Canadian Journal of Forest Research}, \emph{17:829-834}
+#'
 #' @examples
 #'
 #' depths <- slb1_soil$lower

@@ -1,4 +1,6 @@
-#' Calculate vegetation period start and end days of year)
+#' Calculate the dates of budburst and beginning of leaf fall
+#'
+#' Wrapper for \code{\link[vegperiod]{vegperiod}}
 #'
 #' @param budburst.method name of model for estimating budburst day of year. Either 'fixed'
 #' or one of the values accepted by the 'start.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.

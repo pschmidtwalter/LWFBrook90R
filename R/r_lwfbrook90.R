@@ -1,4 +1,7 @@
-#' Define the function to run LWFBrook90 in R
+#' Interface function to the LWF-Brook90 model
+#'
+#' Passes input data matrices to the Fortran model code
+#'
 #'
 #' @param siteparam a [1,6] matrix with site level information: start year, start doy,
 #' latitude, initial snow, initial groundwater, precipitation interval
