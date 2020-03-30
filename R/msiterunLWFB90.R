@@ -1,10 +1,11 @@
-#' Make a multi-site simulation using list of inputs.
+#' Make a multi-site simulation using lists of climate, soil, options and parameter input objects.
 #'
-#' Repeatedly calls \code{\link[runLWFB90]{runLWFB90}} for combinations of climate and soil data,
-#' and parameters and model control options, and returns the singlerun-results as a named list.
+#' Wrapper function for \code{\link{runLWFB90}}to make multiple parallel simulations for combinations
+#' of climate, soil, parameters and model control options, e.g., for simulating one  or sevral parameter sets
+#' for a series of sites with individual climate and soil.
 #'
 #' @param param.b90 Named list of parameters to be used in all simulations, or a list of multiple parameter sets.
-#' @param options.b90 Named list of model control options to be used in all simulations, or a list of multiple lists with different options sets.
+#' @param options.b90 Named list of model control options to be used in all simulations, or a list of multiple lists with different options.
 #' @param soil data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles
 #' @param climate data.frame with climate data, or a list of climate data.frames
 #' @param all_combinations Set up and run all possible combinations of
@@ -19,11 +20,19 @@
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on. The names of the returned list entries
 #' are concatenated from the names of the input list entries
-#' in the following form: <climate> <soil> <param.b90> <option.b90>.
-
+#' in the following form: <climate> <soil> <param.b90> <options.b90>.
+#'
+#' @section File management:
+#' The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+#' If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
+#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
+#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
+#' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+#' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
 #'
 #' @export
-
+#'
 #' @examples
 #' options.b90 <- setoptions_LWFB90(budburst.method = "Menzel")
 #'
@@ -229,8 +238,8 @@ setup_combinations <- function(param_len, options_len, soil_len, clim_len,
     if ( !identical(param_len, options_len) ) {
 
       if ( all(c(param_len, options_len) > 1) ) {
-        stop("The list of lists containing the options and parameters have unequal length, both greater 1.
-           Please either use one set of options per parameter set, or many parameter sets with the same options.
+        stop("The lists of options.b90 and param.b90 objects have unequal length, both greater 1.
+           Please either use one set of options per parameter set, or many parameter sets with one single options.b90 object, or vice versa.
            In order to simulate all possible combinations of climate, soil, parameters and options,
            please set all_combinations = TRUE")
       }
@@ -245,7 +254,7 @@ setup_combinations <- function(param_len, options_len, soil_len, clim_len,
     if ( !identical(soil_len, clim_len) ) {
       if ( all(c(soil_len, clim_len) > 1) ) {
         stop("The lists of data.frames containing soil and climate have unequal length, both greater 1.
-             Please either use one climate per soil, or many climates with the same soil.
+             Please either use one climate per soil, or many climates with the same soil, or vice versa.
              In order to set up all possible combinations of climate, soil, parameters and options, please set all_combinations = TRUE")
       }
       soilclim_combi <- as.matrix(expand.grid(soil = 1:soil_len, climate = 1:clim_len))
