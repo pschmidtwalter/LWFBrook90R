@@ -2,7 +2,7 @@
 % Please edit documentation in R/MakeStand.R
 \name{make_standprop}
 \alias{make_standprop}
-\title{Create the daily standproperties from parameters and options}
+\title{Create daily plant characteristics from parameters and options}
 \usage{
 make_standprop(options.b90, param.b90, out.years)
 }

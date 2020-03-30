@@ -7,11 +7,11 @@
 #' @param options.b90 Named list of model control options to be used in all simulations, or a list of multiple lists with different options sets.
 #' @param soil data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles
 #' @param climate data.frame with climate data, or a list of climate data.frames
-#' @param all_combinations logical Set up and run all possible combinations of
+#' @param all_combinations Set up and run all possible combinations of
 #' individual param.b90, options.b90, climate and soil objects? Default is FALSE,
 #' running one or multiple param.b90/options.b90 combinations for a series of climate/soil combinations.
 #' @param multirun.dir directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
-#' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE
+#' @param keep.subdirs keep sub-directories of the single runs after successful simulation? Default is FALSE.
 #' @param cores number of cores to use for parallel processing
 #' @param showProgress Show progressbar?
 #' @param ... Further arguments passed to \code{\link[runLWFB90]{runLWFB90}}.

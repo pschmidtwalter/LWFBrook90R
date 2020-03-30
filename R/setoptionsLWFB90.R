@@ -21,7 +21,7 @@
 #'   the method name is passed to the 'end.method'-argument of  \code{\link[vegperiod]{vegperiod}}.}
 #'   \item{standprop.input}{name of input for longterm (interannual) plant development.
 #'   'parameters': yearly values of stand properties height, sai, densef, lai come from
-#'   individual parameters, 'table':  values come from 'standprop.table' provided in parameters.}}
+#'   individual parameters, 'table':  values come from 'standprop.table' provided in parameters.}
 #'   \item{standprop.interp}{interpolation method for aboveground stand properties.
 #'   'linear' or 'constant', see 'approx.method'-argument of \code{\link{approx_standprop}}.}
 #'   \item{standprop.use_growthperiod}{Should yearly changes of stand properties (growth)
@@ -31,7 +31,8 @@
 #'   \item{lai.method}{name of method for constructing seasonal course leaf area index development from parameters.
 #'   Passed to 'method'-argument of \code{\link{MakeSeasLAI}}. }
 #'   \item{imodel}{name of retention & conductivity model: "CH" for Clapp/Hornberger, "MvG" for Mualem/van Genuchten}
-#'   \item{root.method}{method name of the root length density depth distribution function. Any of the names accepted by \code{\link{MakeRelRootDens}} are allowed.
+#'   \item{root.method}{method name of the root length density depth distribution function.
+#'   Any of the names accepted by \code{\link{MakeRelRootDens}} are allowed.
 #'   Additionally, "soilvar" can be used if the root length density depth distribution is specified in column 'rootden' in the soil-data.frame}
 #' }
 #' @examples
