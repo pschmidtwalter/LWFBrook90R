@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_vegperiod.R
 \name{calc_vegperiod}
 \alias{calc_vegperiod}
-\title{Calculate vegetation period start and end days of year)}
+\title{Calculate the dates of budburst and beginning of leaf fall}
 \usage{
 calc_vegperiod(budburst.method, leaffall.method, dates = NULL,
   tavg = NULL, out.years = NULL, budburstdoy.fixed = 121,
@@ -35,7 +35,7 @@ a data.frame with columns 'year', 'start', 'end'. if budburst.method = 'fixed' o
 'start' and 'end' contain the values specified in budburstdoy.fixed and leaffalldoy.fixed respectively.
 }
 \description{
-Calculate vegetation period start and end days of year)
+Wrapper for \code{\link[vegperiod]{vegperiod}}
 }
 \examples{
 
