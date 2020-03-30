@@ -4,14 +4,14 @@
 #' with varying input parameters.
 #'
 #' @param paramvar data.frame of variable input parameters. For each row,
-#' a simulation is performed, with the elements in param.b90 being replaced by the
-#' respective column of paramvar. All parameter names (column names) in paramvar must be found in param.b90.
-#' @param param.b90 Named list of parameters, in which the parameters defined in paramvar will be replaced.
+#' a simulation is performed, with the elements in \code{param.b90} being replaced by the
+#' respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in param.b90.
+#' @param param.b90 Named list of parameters, in which the parameters defined in \code{paramvar} will be replaced.
 #' @param options.b90 Named list of model control option to be used in all simulations.
 #' @param soil data.frame with soil properties passed to \code{\link{runLWFB90}}, or a list of lists with different soil profiles
 #' @param climate data.frame with climate data passed to \code{\link{runLWFB90}}, or a list of climate data.frames
-#' @param paramvar_nms names of the parameters in paramvar to be replaced in param.b90
-#' @param multirun.dir the directory where to create the subdirectories for the the single runs. Default is 'MultiRuns/'.
+#' @param paramvar_nms names of the parameters in paramvar to be replaced in param.b90.
+#' @param multirun.dir directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
 #' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE.
 #' @param cores number of CPUs to use for parallel processing. Default is 2.
 #' @param showProgress Show progressbar? Default is TRUE.
@@ -21,23 +21,23 @@
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on.
 #'
-#'  @section File management:
+#' @section File management:
 #' The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-#' If \code{keep.subdirs=FALSE}, they are deleted after successful singlerun simulation. In case of an error,
-#' the respective subdirectory is not deleted. Care must be taken, as the returned list of single run results can become very large,
-#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer data.
-#' Please carefully select the output, and make use of the option to pass a list of functions
-#' to \code{\link{runLWFB90}} (argument \code{output_fun}) to be performed on the output of a simulation.
+#' If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
+#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
+#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
+#' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+#' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
 #'
-#' @section Parameter updating in param.b90:
+#' @section Parameter updating:
 #' The transfer of values from a row in paramvar to param.b90 before each single run
 #' simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
 #' or vector elements in \code{param.b90} by a column name in \code{paramvar}, the respective column name
-#' has to be setup from its name and index in param.b90. To replace e.g., the 2nd value of \code{ths}
+#' has to be setup from its name and index in param.b90. To replace, e.g., the 2nd value of \code{ths}
 #' in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
-#' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of vector element \code{maxlai} in \code{param.b90},
-#' the column name has to be named 'maxlai3'. The function used for replacing values in vector elements
-#' and data.frames is \code{\link{replace_vecelements}}.
+#' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
+#' the column has to be named 'maxlai3'.
 #'
 #' @export
 #'
