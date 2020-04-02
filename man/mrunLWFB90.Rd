@@ -4,9 +4,9 @@
 \alias{mrunLWFB90}
 \title{Make a multirun simulation using a set of variable input parameters.}
 \usage{
-mrunLWFB90(paramvar, param.b90, options.b90, climate, soil = NULL,
-  paramvar_nms = names(paramvar), multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE, cores = 2, showProgress = TRUE, ...)
+mrunLWFB90(paramvar, param.b90, paramvar_nms = names(paramvar),
+  multirun.dir = "MultiRuns/", keep.subdirs = FALSE, cores = 2,
+  showProgress = TRUE, ...)
 }
 \arguments{
 \item{paramvar}{data.frame of variable input parameters. For each row,
@@ -14,12 +14,6 @@ a simulation is performed, with the elements in \code{param.b90} being replaced 
 respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in param.b90.}
 
 \item{param.b90}{Named list of parameters, in which the parameters defined in \code{paramvar} will be replaced.}
-
-\item{options.b90}{Named list of model control option to be used in all simulations.}
-
-\item{climate}{data.frame with climate data passed to \code{\link{runLWFB90}}, or a list of climate data.frames}
-
-\item{soil}{data.frame with soil properties passed to \code{\link{runLWFB90}}, or a list of lists with different soil profiles}
 
 \item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90.}
 
@@ -31,8 +25,14 @@ respective column of \code{paramvar}. All parameter names (column names) in \cod
 
 \item{showProgress}{Show progressbar? Default is TRUE.}
 
-\item{...}{Additional arguments passed to \code{\link{runLWFB90}} for selecting model output
-and returned objects for the single run simulations.}
+\item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
+at least the arguments that have no defaults (\code{options.b90} and \code{climate})}
+
+\item{options.b90}{Named list of model control option to be used in all simulations.}
+
+\item{soil}{data.frame with soil properties passed to \code{\link{runLWFB90}}}
+
+\item{climate}{data.frame with climate data passed to \code{\link{runLWFB90}}}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -58,7 +58,7 @@ perform directly on the output of a single run simulation, and can be used for a
 The transfer of values from a row in paramvar to param.b90 before each single run
 simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
 or vector elements in \code{param.b90} by a column name in \code{paramvar}, the respective column name
-has to be setup from its name and index in param.b90. To replace, e.g., the 2nd value of \code{ths}
+has to be setup from its name and index in \code{param.b90}. To replace, e.g., the 2nd value of \code{ths}
 in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
 has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 the column has to be named 'maxlai3'.
