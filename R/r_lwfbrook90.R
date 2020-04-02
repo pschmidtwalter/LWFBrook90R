@@ -6,20 +6,20 @@
 #' @param siteparam a [1,6] matrix with site level information: start year, start doy,
 #' latitude, initial snow, initial groundwater, precipitation interval
 #' @param climveg a matrix with 15 columns of climatic and vegetation data: year, month, day
-#' globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPar), wind (m s-1), prec (mm), mesfl (mm),
-#' densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), age (years)
+#' globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPa), wind (m s-1), prec (mm), mesfl (mm),
+#' densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), stand age (years)
 #' @param param a vector of model input parameters
-#' @param pdur a [1,12]-matrix of precipitation durations (hours) for each monath
+#' @param pdur a [1,12]-matrix of precipitation durations (hours) for each month
 #' @param soil_materials a matrix of the 8 soil materials parameters. When imodel = 1 (Mualem-van Genuchten), these refer to:
-#' mat, ths, thr , alpha (m-1), npar, ksat (mm d-1), tort (-), stonef (-). When imodel = 2 (Clapp-Hornberger):
+#' mat, ths, thr, alpha (m-1), npar, ksat (mm d-1), tort (-), stonef (-). When imodel = 2 (Clapp-Hornberger):
 #' mat, thsat, thetaf, psif (kPa), bexp, kf (mm d-1), wetinf (-), stonef (-)
-#' @param soil_nodes a matrix of the 6 soil model layers with columns nl (layer number),
+#' @param soil_nodes a matrix of the soil model layers with columns nl (layer number),
 #' layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).
-#' @param precdat a matrix precipitation interval data with 6 columns:
-#' year, month, day, interval-number (1:precint), prec, meslflp
+#' @param precdat a matrix of precipitation interval data with 6 columns:
+#' year, month, day, interval-number (1:precint), prec, mesflp
 #' @param output a [12,5] matrix of output selection settings
 #' @param output_log logical wether to write the output-logfile 'Log.txt'. This is where the
-#' commandline-feed of the original fortan program is written.
+#' commandline-feed of the original Fortan program is written.
 #'
 #' @details model output is written to comma-separated files (.ASC) in the working directory.
 #'

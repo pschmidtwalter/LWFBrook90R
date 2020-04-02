@@ -14,17 +14,19 @@
 #' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 #' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
 #' per day defined in \code{options.b90$prec.interval}.
-#' @param soil data.frame containing the hydraulic properties of the soil layers. See details.
+#' @param soil data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'
 #' @param output a [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
 #' @param output_fun a function or a list of functions to be performed on the output objects selected by \code{output}.
-#' Can be used to aggregate output or calculate goodness of fit measures.
+#' Can be used to aggregate output or calculate goodness of fit measures on-the-fly,
+#' which is useful if the function is evaluated within a large multi-run application
+#' (see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
 #' Disabled when read.output = FALSE.
 #' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('standprop_daily', as derived from parameters) to the result?
 #' @param rtrn.output return the simulation results? Disabled when read.output = FALSE.
 #' @param read.output read the simulation result files from project.dir? Default is TRUE.
-#' @param chk.input logical wether to check param.b90, options.b90, climate, precip, soil, and obs
+#' @param chk.input logical wether to check param.b90, options.b90, climate, precip, and soil
 #' for completeness and consistency.
 #' @param output.log write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.
 #' @param run run LWF-Brook90 or only return model input objects?
@@ -32,8 +34,8 @@
 #' @param verbose print messages to the console? Default is TRUE.
 #' @param ... additional arguments passed to \code{output_fun}.
 #'
-#' @return A list containing the model input (except for climate), the contents of
-#' the LWF-Brook90 output files found in 'project.dir', and the return values of \code{output_fun}.
+#' @return A list containing the selected model output, the model input (except for \code{climate}) if desired,
+#' and the return values of \code{output_fun} if specified.
 #'
 #'@section Climate data:
 #' The \code{climate} data.frame must contain the following variable in columns named
@@ -277,6 +279,13 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
     simres <- list(simulation_duration = simtime,
                    finishing_time = finishing_time)
 
+    # ---- append model input -------------------------------------------------------
+    if (rtrn.input) {
+      simres$model_input <- list(options.b90 = options.b90,
+                                 param.b90 = param.b90,
+                                 standprop_daily = standprop_daily)
+    }
+
     # ---- Read output files --------------------------------------------------------
     if ( read.output ) {
       if (verbose == T) {
@@ -293,7 +302,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       }
 
 
-      # ---- apply functions on simuation output -------------------------------
+      # ---- apply functions on simulation output -------------------------------
       if (!is.null(output_fun)) {
         if (verbose == T) {
           message("Applying function on simulation output files..")
@@ -321,13 +330,6 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
         warning = function(wrn){return(wrn)},
         error = function(err){return(err)})
       }
-    }
-
-    # ---- append model input -------------------------------------------------------
-    if (rtrn.input) {
-      simres$model_input <- list(options.b90 = options.b90,
-                                 param.b90 = param.b90,
-                                 standprop_daily = standprop_daily)
     }
 
   } else {
