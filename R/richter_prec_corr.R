@@ -1,13 +1,13 @@
 #' Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)
 #'
-#' @param month vector of months of the same length as tavg and prec
-#' @param tavg vector of air temperature values (deg C)
-#' @param prec vector of measured rainfall vales (mm)
-#' @param station.exposure situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
-#' (corresponding to full exposure, low protected, moderate protected, strong protected situation)
-#' @param full.output logical wether to return the full data set additionally including input data, correction coefficients.
+#' @param month Vector of months.
+#' @param tavg Vector of air temperature values (deg C). Same length as \code{month}.
+#' @param prec Vector of measured rainfall vales (mm). Same length as \code{month}.
+#' @param station.exposure Situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
+#' (corresponding to full exposure, low protected, moderate protected, strong protected situation).
+#' @param full.output Logical wether to return the full data set additionally including input data, correction coefficients.
 #'
-#' @return a vector of corrected rainfall data, or (if full.output == TRUE) a data.table containing the input objects, the month,
+#' @return A vector of corrected rainfall data, or (if \code{full.output == TRUE}) a data.table containing the input objects, the month,
 #' the precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain, winter; 'N8' = sleet, 'N7' = snow),
 #' correction coefficients epsilon and b, and the corrected rainfall.
 #'
@@ -41,7 +41,6 @@
 #' legend('bottomright', c('frei', "lg", "mg", "sg"),
 #'        col = c("violet", "blue", "green", "red", "black"),
 #'        lty = 1, pch = NULL )
-#' @importFrom utils stack
 prec_corr <-  function(month,tavg,prec,
                        station.exposure = "mg",
                        full.output = FALSE
@@ -77,7 +76,7 @@ prec_corr <-  function(month,tavg,prec,
 
   # Niederschlag korrigieren
   dat$b <- bcoeff[dat$prectype, station.exposure]
-  dat$eps <- stack(eps[dat$prectype])$values
+  dat$eps <- utils::stack(eps[dat$prectype])$values
   dat$preccorr <- prec + dat$b * prec**dat$eps
 
   #output

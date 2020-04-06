@@ -1,7 +1,7 @@
 #' Create a list of model control options
 #'
-#' @param ... named values to be included in return value
-#' @return Returns a list of default model control options for use as 'options.b90'-argument in \code{\link{runLWFB90}}.
+#' @param ... Named values to be included in return value.
+#' @return A list of model control options for use as \code{options.b90}-argument in \code{\link{runLWFB90}}.
 #' @details
 #' \describe{
 #'   \item{startdate}{start date of the simulation.}

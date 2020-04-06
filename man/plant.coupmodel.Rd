@@ -8,24 +8,24 @@ plant.coupmodel(minval, maxval, doy.incr, doy.max, doy.min, shape.incr,
   shape.decr, maxdoy)
 }
 \arguments{
-\item{minval}{minimum value}
+\item{minval}{Minimum value.}
 
-\item{maxval}{maximum value}
+\item{maxval}{Maximum value.}
 
-\item{doy.incr}{date (day of year) when increasing to maxval begins}
+\item{doy.incr}{Date (day of year) when increasing to maxval begins.}
 
-\item{doy.max}{date (day of year) when maxval is reached}
+\item{doy.max}{Date (day of year) when maxval is reached.}
 
-\item{doy.min}{date (day of year) when minval is reached}
+\item{doy.min}{Date (day of year) when minval is reached.}
 
-\item{shape.incr}{shape parameter of the increasing phase}
+\item{shape.incr}{Shape parameter of the increasing phase.}
 
-\item{shape.decr}{shape parameter of the decreasing phase}
+\item{shape.decr}{Shape parameter of the decreasing phase.}
 
-\item{maxdoy}{length of the year, 366 for leap years, 365 for normal years}
+\item{maxdoy}{Length of the year, 366 for leap years, 365 for normal years.}
 }
 \value{
-numeric vector of length \code{maxdoy}
+A numeric vector of length \code{maxdoy}.
 }
 \description{
 Creates a daily sequence for one year from parameters

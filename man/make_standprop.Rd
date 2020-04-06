@@ -7,17 +7,17 @@
 make_standprop(options.b90, param.b90, out.years)
 }
 \arguments{
-\item{options.b90}{a list of model control options}
+\item{options.b90}{A list of model control options.}
 
-\item{param.b90}{a parameter list-object}
+\item{param.b90}{A parameter list-object.}
 
-\item{out.years}{years for which values are returned.}
+\item{out.years}{Years for which values are returned.}
 }
 \value{
-a data.frame containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
+A data.frame containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
 }
 \description{
-Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from parameter and options
+Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from parameters and options
 using \code{\link{approx_standprop}} and \code{\link{MakeSeasLAI}}.
 }
 \examples{

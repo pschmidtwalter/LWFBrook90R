@@ -1,16 +1,16 @@
 #' Generates a root density depth function the soil layers' lower depth limits
 #'
-#' @param soilnodes vector of lower soil layer depth limits,
+#' @param soilnodes Vector of lower soil layer depth limits,
 #' for which the relative root distribution will be calculated.
-#' @param maxrootdepth the maximum rooting depth (m, negative downwards) below which
-#' relative root length density will be set to zero
-#' @param method method name for the root depth distribution. Possible value are 'betamodel',
+#' @param maxrootdepth The maximum rooting depth (m, negative downwards) below which
+#' relative root length density will be set to zero.
+#' @param method Method name for the root depth distribution. Possible value are 'betamodel',
 #' 'table', 'linear', 'constant'. See details.
-#' @param beta parameter(s) of the root distribution function
-#' @param relrootden vector of relative root densities
-#' @param rootdepths vector of lower depths limit, corresponding to 'relrootden'
+#' @param beta Parameter(s) of the root distribution function.
+#' @param relrootden Vector of relative root densities.
+#' @param rootdepths Vector of lower depths limit, corresponding to 'relrootden'.
 #'
-#' @return vector of relative rootlength, corresponding to soilnodes
+#' @return Vector of relative rootlength, corresponding to soilnodes.
 #'
 #' @details Method  'betamodel' uses the model after Gale & Grigal (1987),
 #' 'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
@@ -63,7 +63,6 @@
 #' legend("bottomright", c("'betamodel'","'table'","'linear'", "'constant'"),seg.len = 1.5,
 #'        pch = NULL, lwd =1.5, col = c("brown", "green", "blue", "red"), bty = "n")
 #' @export
-#' @importFrom stats approx approxfun
 MakeRelRootDens <- function(soilnodes,
                             maxrootdepth = min(soilnodes),
                             method = "betamodel",
@@ -87,7 +86,7 @@ MakeRelRootDens <- function(soilnodes,
     RLenD <- c(RLenDcum[1], diff(RLenDcum))
 
     # linear approx function is derived using the "unshifted" values
-    RelDenFun <- approxfun(x = seq(min(soilnodes),maxrootdepth),
+    RelDenFun <- stats::approxfun(x = seq(min(soilnodes),maxrootdepth),
                            y = RLenD,
                            method = "linear",
                            rule = 2:1, yright = 0) # rule 2:1: left > max(x) -> repeat, right = 0
@@ -99,7 +98,7 @@ MakeRelRootDens <- function(soilnodes,
   }
 
   if (method == "table") {
-    RelDenFun <- approxfun(x = rootdepths, y = relrootden,
+    RelDenFun <- stats::approxfun(x = rootdepths, y = relrootden,
                                               method = "linear", rule = 1:2,  yleft = 0)
     midpoints <- c(min(soilnodes) + 0.01, soilnodes[1:length(soilnodes)-1]) + (diff(c(min(soilnodes) +0.01, soilnodes))/2)
     rootden <- RelDenFun(midpoints)
@@ -107,14 +106,14 @@ MakeRelRootDens <- function(soilnodes,
 
   if (method == "constant") {
     if (is.null(relrootden)) {relrootden <- 1}
-    RelDenFun <- approxfun(x = c(max(soilnodes),maxrootdepth), y = c(relrootden[1],relrootden[1]),
+    RelDenFun <- stats::approxfun(x = c(max(soilnodes),maxrootdepth), y = c(relrootden[1],relrootden[1]),
                            method = "constant",rule = 1:2, yleft = 0)
     rootden <- RelDenFun(soilnodes)
   }
 
   if (method == "linear") {
     if (is.null(relrootden)) {relrootden <- 1}
-    RelDenFun <- approxfun(x = c(max(soilnodes),maxrootdepth), y = c(relrootden[1],0), method = "linear",rule = 1:2, yleft = 0)
+    RelDenFun <- stats::approxfun(x = c(max(soilnodes),maxrootdepth), y = c(relrootden[1],0), method = "linear",rule = 1:2, yleft = 0)
     midpoints <- c(max(soilnodes) + 0.01, soilnodes[1:length(soilnodes)-1]) + (diff(c(max(soilnodes) +0.01, soilnodes))/2)
     rootden <- RelDenFun(midpoints)
   }

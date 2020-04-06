@@ -7,22 +7,22 @@
 plant.b90(minval, maxval, doy.incr, incr.dur, doy.decr, decr.dur, maxdoy)
 }
 \arguments{
-\item{minval}{minimum value}
+\item{minval}{Minimum value.}
 
-\item{maxval}{maximum value}
+\item{maxval}{Maximum value.}
 
-\item{doy.incr}{date (day of year) when increasing to maxval begins}
+\item{doy.incr}{Date (day of year) when increasing to maxval begins.}
 
-\item{incr.dur}{duration (number of days) since doy.incr until maxval is rached}
+\item{incr.dur}{Duration (number of days) since doy.incr until maxval is reached.}
 
-\item{doy.decr}{date (day of year) when decreasing to minval begins}
+\item{doy.decr}{Date (day of year) when decreasing to minval begins.}
 
-\item{decr.dur}{duration (number of days) since doy.decr until minval is rached}
+\item{decr.dur}{Duration (number of days) since doy.decr until minval is reached.}
 
-\item{maxdoy}{length of the year, 366 for leap years, 365 for normal years}
+\item{maxdoy}{Length of the year, 366 for leap years, 365 for normal years.}
 }
 \value{
-numeric vector of length \code{maxdoy}
+A numeric vector of length \code{maxdoy}.
 }
 \description{
 Creates a daily sequence for one year from parameters

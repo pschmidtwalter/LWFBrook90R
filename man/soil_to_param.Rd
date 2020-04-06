@@ -7,12 +7,12 @@
 soil_to_param(soil, imodel = "MvG")
 }
 \arguments{
-\item{soil}{data.frame with soil depths ('upper', 'lower') and
+\item{soil}{Data.frame with soil layer boundaries ('upper', 'lower') and
 hydraulic parameters. When imodel = 'MvG', columns of soil have to be named 'ths', 'thr',
 'alpha', 'npar', 'ksat', 'tort', 'gravel'. When imodel = 'CH', columns have to be named
 thsat , 'thetaf','psif', 'bexp','kf', 'wetinf', 'gravel'.}
 
-\item{imodel}{name of the hydraulic model}
+\item{imodel}{Name of the hydraulic model ('MvG' or 'CH')}
 }
 \value{
 a list with data.frames 'soil_nodes' and 'soil_materials'

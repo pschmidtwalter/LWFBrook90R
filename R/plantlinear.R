@@ -2,11 +2,11 @@
 #'
 #' Creates a daily sequence for one year from doy/value pairs.
 #'
-#' @param doys dates (days of year)
-#' @param values values
-#' @param maxdoy length of the year, 366 for leap years, 365 for normal years
+#' @param doys Vector of Dates (days of year).
+#' @param values Numeric vector Values.
+#' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
 #'
-#' @return numeric vector of length \code{maxdoy}
+#' @return A numeric vector of length \code{maxdoy}.
 #'
 #' @examples
 #' doys <- c(110,200,250,280)
@@ -14,10 +14,9 @@
 #' maxdoy <- 365
 #' plot(plant.linear(doys = doys, values = values, maxdoy = 365))
 #' @export
-#'@importFrom stats approx
 plant.linear <- function(doys, values, maxdoy) {
   stopifnot(all(doys %in% 1:maxdoy))
-  approx(x = doys, y = values,
+  stats::approx(x = doys, y = values,
          method = "linear", rule = 2,
          xout = 1:maxdoy)$y
 }

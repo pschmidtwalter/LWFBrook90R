@@ -7,18 +7,18 @@
 hydpar_puh2(clay, silt, sand, bd, oc.pct = 0.5)
 }
 \arguments{
-\item{clay}{clay mass percent}
+\item{clay}{Numeric vector of clay mass percent}
 
-\item{silt}{silt mass percent}
+\item{silt}{Numeric vector of silt mass percent.}
 
-\item{sand}{sand mass percent}
+\item{sand}{Numeric vector of sand mass percent.}
 
-\item{bd}{bulk density in g cm-3}
+\item{bd}{Numeric vector of bulk density in g cm-3.}
 
-\item{oc.pct}{organic carbon content in mass percent}
+\item{oc.pct}{Numeric vector of organic carbon content in mass percent.}
 }
 \value{
-A data.frame with the number of rows equal to length(tex.KA5)
+A data.frame with the number of rows equal to length(tex.KA5).
 The data.frame contains the following variables:
 \describe{
   \item{ths}{Saturation water content fraction}

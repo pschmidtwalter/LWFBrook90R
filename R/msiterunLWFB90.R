@@ -1,21 +1,21 @@
 #' Make a multi-site simulation using lists of climate, soil, options and parameter input objects.
 #'
-#' Wrapper function for \code{\link{runLWFB90}}to make multiple parallel simulations for combinations
+#' Wrapper function for \code{\link{runLWFB90}} to make multiple parallel simulations for combinations
 #' of climate, soil, parameters and model control options, e.g., for simulating one  or sevral parameter sets
 #' for a series of sites with individual climate and soil.
 #'
 #' @param param.b90 Named list of parameters to be used in all simulations, or a list of multiple parameter sets.
 #' @param options.b90 Named list of model control options to be used in all simulations, or a list of multiple lists with different options.
-#' @param soil data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles
-#' @param climate data.frame with climate data, or a list of climate data.frames
-#' @param all_combinations Set up and run all possible combinations of
+#' @param soil Data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles.
+#' @param climate Data.frame with climate data, or a list of climate data.frames.
+#' @param all_combinations Logical: Set up and run all possible combinations of
 #' individual param.b90, options.b90, climate and soil objects? Default is FALSE,
 #' running one or multiple param.b90/options.b90 combinations for a series of climate/soil combinations.
-#' @param multirun.dir directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
-#' @param keep.subdirs keep sub-directories of the single runs after successful simulation? Default is FALSE.
-#' @param cores number of cores to use for parallel processing
-#' @param showProgress Show progressbar?
-#' @param ... Further arguments passed to \code{\link[runLWFB90]{runLWFB90}}.
+#' @param multirun.dir Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
+#' @param keep.subdirs Keep sub-directories of the single runs after successful simulation? Default is FALSE.
+#' @param cores Number of cores to use for parallel processing.
+#' @param showProgress Logical: Show progressbar?
+#' @param ... Further arguments passed to \code{\link{runLWFB90}}.
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on. The names of the returned list entries
@@ -37,8 +37,12 @@
 #' options.b90 <- setoptions_LWFB90(budburst.method = "Menzel")
 #'
 #' # define parameter sets
-#' param_l <- list(spruce = setparam_LWFB90(maxlai = 5, budburst.species = "Picea abies (frueh)", winlaifrac = 0.8),
-#'                 beech = setparam_LWFB90(maxlai = 6, budburst.species = "Fagus sylvatica", winlaifrac = 0))
+#' param_l <- list(spruce = setparam_LWFB90(maxlai = 5,
+#'                                          budburst.species = "Picea abies (frueh)",
+#'                                          winlaifrac = 0.8),
+#'                 beech = setparam_LWFB90(maxlai = 6,
+#'                                         budburst.species = "Fagus sylvatica",
+#'                                         winlaifrac = 0))
 #'
 #' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 #'
@@ -49,21 +53,23 @@
 #' climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
 #'
 #' # run two parameter sets on a series of climate and soil-objects
-#' res <- msiterunLWFB90(param.b90 = param_l,
-#'                       options.b90 = options.b90,
-#'                       soil = soils,
-#'                       climate = climates)
-#' names(res)
-#'
-#' # all combinations
+#' # (run = FALSE: 'dry' run without actual simulation)
 #' res <- msiterunLWFB90(param.b90 = param_l,
 #'                       options.b90 = options.b90,
 #'                       soil = soils,
 #'                       climate = climates,
-#'                       all_combinations = T)
+#'                       run = FALSE)
 #' names(res)
-#' @importFrom stats setNames
-#' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' # all possible combinations of soil, climate, parameters
+#' res <- msiterunLWFB90(param.b90 = param_l,
+#'                       options.b90 = options.b90,
+#'                       soil = soils,
+#'                       climate = climates,
+#'                       all_combinations = TRUE,
+#'                       run = FALSE)
+#' names(res)
+#'
 msiterunLWFB90 <- function(param.b90,
                            options.b90,
                            climate,
@@ -75,6 +81,8 @@ msiterunLWFB90 <- function(param.b90,
                            showProgress = TRUE,
                            ...){
 
+  clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; options_nms <- NULL
+  clim_no <- NULL; i <- NULL; thisname <- NULL; thisclim <- NULL
 
   #determine list lengths and setup the names
   param_len <- nstlist_length(param.b90)
@@ -107,7 +115,7 @@ msiterunLWFB90 <- function(param.b90,
   `%dopar%` <- foreach::`%dopar%`
   `%:%` <- foreach::`%:%`
 
-  progress <- function(nRuns) setTxtProgressBar(pb, nRuns)
+  progress <- function(nRuns) utils::setTxtProgressBar(pb, nRuns)
 
   if (showProgress) {
     opts <- list(progress = progress)
@@ -120,7 +128,7 @@ msiterunLWFB90 <- function(param.b90,
   snow::clusterEvalQ(cl, library("LWFBrook90R"))
   on.exit(snow::stopCluster(cl), add = T)
 
-  pb <- txtProgressBar(min = 1, max = nRuns, style = 3)
+  pb <- utils::txtProgressBar(min = 1, max = nRuns, style = 3)
 
   # foreach-Loop --------------------------------------------------------------------
   if (is.null(clim_nms)) {
@@ -131,7 +139,7 @@ msiterunLWFB90 <- function(param.b90,
   results <- foreach::foreach(thisclim = iterators::iter(climate),
                               clim_no = iterators::icount(),
                               thisname = iterators::iter(outer_nms), #use thisname for proj.dir
-                              .final = function(x) setNames(x, clim_nms),
+                              .final = function(x) stats::setNames(x, clim_nms),
                               .errorhandling = "pass",
                               .options.snow = opts) %:%
 
@@ -228,7 +236,7 @@ make_nms_climsoilparmopts <- function() {
 }
 
 setup_combinations <- function(param_len, options_len, soil_len, clim_len,
-                               all_combinations =F){
+                               all_combinations =FALSE){
 
   if (all_combinations) {
     combinations <- data.frame(expand.grid(param = 1:param_len, options = 1:options_len,

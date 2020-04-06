@@ -18,8 +18,8 @@ or one of the values accepted by the 'end.method'-argument of the function \code
 \item{dates}{date vector passed to \code{\link[vegperiod]{vegperiod}},
 ignored if both leaffall.method and budburst.method = 'fixed'}
 
-\item{tavg}{vector or daily mean air temperature passed to \code{\link[vegperiod]{vegperiod}},
-ignored both if leaffall.method and budburst.method = 'fixed'}
+\item{tavg}{vector of daily mean air temperature passed to \code{\link[vegperiod]{vegperiod}},
+ignored if leaffall.method = 'fixed' and budburst.method = 'fixed'.}
 
 \item{out.years}{integer vector of the years to be returned. If not specified,
 values for the years in dates will be returned.}

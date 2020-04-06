@@ -7,14 +7,14 @@
 standprop_yearly_to_param(standprop_yearly, param.b90, out.years)
 }
 \arguments{
-\item{standprop_yearly}{a data.frame or data.table with columns 'year', 'height', 'maxlai', 'sai', 'densef', 'age'}
+\item{standprop_yearly}{A data.frame or data.table with columns 'year', 'height', 'maxlai', 'sai', 'densef', 'age'.}
 
-\item{param.b90}{a list object to update}
+\item{param.b90}{A list object to update.}
 
-\item{out.years}{the years for which parameters should be updated}
+\item{out.years}{Vector of years for which parameters should be updated.}
 }
 \value{
-the param.b90 list-object with updated items maxlai, height, height.ini,
+The param.b90 list-object with updated items maxlai, height, height.ini,
 sai, sai.ini, densef, densef.ini, age, age.ini.
 }
 \description{

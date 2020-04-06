@@ -3,20 +3,17 @@
 #' Wrapper function for \code{\link{runLWFB90}} to make multiple simulations parallel,
 #' with varying input parameters.
 #'
-#' @param paramvar data.frame of variable input parameters. For each row,
+#' @param paramvar Data.frame of variable input parameters. For each row,
 #' a simulation is performed, with the elements in \code{param.b90} being replaced by the
-#' respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in param.b90.
+#' respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in \code{param.b90}.
 #' @param param.b90 Named list of parameters, in which the parameters defined in \code{paramvar} will be replaced.
-#' @param options.b90 Named list of model control option to be used in all simulations.
-#' @param soil data.frame with soil properties passed to \code{\link{runLWFB90}}, or a list of lists with different soil profiles
-#' @param climate data.frame with climate data passed to \code{\link{runLWFB90}}, or a list of climate data.frames
-#' @param paramvar_nms names of the parameters in paramvar to be replaced in param.b90.
-#' @param multirun.dir directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
-#' @param keep.subdirs keep sub-directories of the single runs? Default is FALSE.
-#' @param cores number of CPUs to use for parallel processing. Default is 2.
+#' @param paramvar_nms Names of the parameters in \code{paramvar} to be replaced in \code{param.b90}.
+#' @param multirun.dir Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
+#' @param keep.subdirs Keep sub-directories of the single runs? Default is FALSE.
+#' @param cores Number of CPUs to use for parallel processing. Default is 2.
 #' @param showProgress Show progressbar? Default is TRUE.
-#' @param ... Additional arguments passed to \code{\link{runLWFB90}} for selecting model output
-#' and returned objects for the single run simulations.
+#' @param ... Additional arguments passed to \code{\link{runLWFB90}}:
+#' provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on.
@@ -34,7 +31,7 @@
 #' The transfer of values from a row in paramvar to param.b90 before each single run
 #' simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
 #' or vector elements in \code{param.b90} by a column name in \code{paramvar}, the respective column name
-#' has to be setup from its name and index in param.b90. To replace, e.g., the 2nd value of \code{ths}
+#' has to be setup from its name and index in \code{param.b90}. To replace, e.g., the 2nd value of \code{ths}
 #' in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
 #' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 #' the column has to be named 'maxlai3'.
@@ -42,21 +39,18 @@
 #' @export
 #'
 #' @examples
-#' #Set up lists containing model control options and model parameters:
+#' # Set up lists containing model control options and model parameters:
 #' param.b90 <- setparam_LWFB90()
-#' options.b90 <- setoptions_LWFB90()
+#' # choose the 'Coupmodel' shape option for the annual lai dynamic,
+#' # with fixed budburst and leaf fall dates:
+#' options.b90 <- setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+#'                                  enddate = as.Date("2003-12-31"),
+#'                                  lai.method = 'Coupmodel',
+#'                                  budburst.method = 'fixed',
+#'                                  leaffall.method = 'fixed')
 #'
 #' # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
 #' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
-#'
-#' # Set start and end Dates for the simulation
-#' options.b90$startdate <- as.Date("2002-01-01")
-#' options.b90$enddate <- as.Date("2003-12-31")
-#'
-#' # choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
-#' options.b90$lai.method <- 'Coupmodel'
-#' options.b90$budburst.method <- 'fixed'
-#' options.b90$leaffall.method <- 'fixed'
 #'
 #' #set up data.frame with variable parameters
 #' n <- 5
@@ -65,10 +59,11 @@
 #'                          winlaifrac = runif(n, 0,0.5),
 #'                          budburstdoy = runif(n,100,150),
 #'                          soil_materials.ths3 = runif(n, 0.3,0.5), #' ths of material 3
-#'                          maxlai2 = runif(n,4,8)) #' 2nd year lai
+#'                          maxlai2 = runif(n,4,8)) #' lai in the 2nd year of the simulation
 #'
-#' # soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
+#' # add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 #' param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+#'
 #' # set up maxlai with length 2, so maxlai2 of paramvar can be looked up
 #' param.b90$maxlai <- c(5, 5)
 #'
@@ -79,28 +74,24 @@
 #'                         climate = slb1_meteo)
 #' names(b90.multi)
 #'
-#' #extract results: EVAPDAY.ASC
-#' evapday <- data.table::rbindlist(lapply(b90.multi,
-#'                                         FUN = function(x) {x[["EVAPDAY.ASC"]]}),
-#'                                  idcol = "srun")
-#' evapday$dates <- with(evapday, as.Date(paste(YR,MO,DA), "%Y %m %d"))
+#' # extract results: EVAPDAY.ASC
+#' evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
+#'                                                    FUN = function(x) {x[["EVAPDAY.ASC"]]}),
+#'                                             idcol = "srun"))
+#' evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"%Y %j")
 #'
-#' # plot
 #' srun_nms <- unique(evapday$srun)
+#'
 #' with(evapday[evapday$srun == srun_nms[1], ],
-#'      plot(dates, cumsum(EVAP), type = "l")
+#'      plot(dates, cumsum(EVAP), type = "n",
+#'           ylim = c(0,1000))
 #' )
-#' for (i in 2:length(b90.multi)){
+#' for (i in 1:length(b90.multi)){
 #'   with(evapday[evapday$srun == srun_nms[i], ],
 #'        lines(dates, cumsum(EVAP)))
 #' }
-#' @importFrom stats setNames
-#' @importFrom utils txtProgressBar setTxtProgressBar
 mrunLWFB90 <- function(paramvar,
                        param.b90,
-                       options.b90,
-                       climate,
-                       soil = NULL,
                        paramvar_nms = names(paramvar),
                        multirun.dir = "MultiRuns/",
                        keep.subdirs = FALSE,
@@ -150,7 +141,7 @@ mrunLWFB90 <- function(paramvar,
 
   # set up Cluster and progressbar --------------------------------------------------
 
-  progress <- function(nRuns) setTxtProgressBar(pb, nRuns)
+  progress <- function(nRuns) utils::setTxtProgressBar(pb, nRuns)
 
   if (showProgress) {
     opts <- list(progress = progress)
@@ -163,11 +154,11 @@ mrunLWFB90 <- function(paramvar,
   snow::clusterEvalQ(cl, library("LWFBrook90R"))
   on.exit(snow::stopCluster(cl), add = T)
 
-  pb <- txtProgressBar(min = 1, max = nRuns, style = 3)
+  pb <- utils::txtProgressBar(min = 1, max = nRuns, style = 3)
 
   # foreach-Loop --------------------------------------------------------------------
   results <- foreach::foreach(i = 1:nRuns,
-                              .final = function(x) setNames(x, paste0("RunNo.", 1:nRuns)),
+                              .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
                               .errorhandling = "pass",
                               .options.snow = opts) %dopar% {
 
@@ -189,9 +180,6 @@ mrunLWFB90 <- function(paramvar,
                                 # Run LWFBrook90
                                 res <- runLWFB90(project.dir = proj.dir,
                                                  param.b90 = param.b90,
-                                                 options.b90 = options.b90,
-                                                 soil = soil,
-                                                 climate = climate,
                                                  ...)
 
                                 if (!keep.subdirs) {

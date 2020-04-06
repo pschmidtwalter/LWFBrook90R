@@ -9,30 +9,24 @@ mrunLWFB90(paramvar, param.b90, paramvar_nms = names(paramvar),
   showProgress = TRUE, ...)
 }
 \arguments{
-\item{paramvar}{data.frame of variable input parameters. For each row,
+\item{paramvar}{Data.frame of variable input parameters. For each row,
 a simulation is performed, with the elements in \code{param.b90} being replaced by the
-respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in param.b90.}
+respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in \code{param.b90}.}
 
 \item{param.b90}{Named list of parameters, in which the parameters defined in \code{paramvar} will be replaced.}
 
-\item{paramvar_nms}{names of the parameters in paramvar to be replaced in param.b90.}
+\item{paramvar_nms}{Names of the parameters in \code{paramvar} to be replaced in \code{param.b90}.}
 
-\item{multirun.dir}{directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
+\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
 
-\item{keep.subdirs}{keep sub-directories of the single runs? Default is FALSE.}
+\item{keep.subdirs}{Keep sub-directories of the single runs? Default is FALSE.}
 
-\item{cores}{number of CPUs to use for parallel processing. Default is 2.}
+\item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
 
 \item{showProgress}{Show progressbar? Default is TRUE.}
 
 \item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
-at least the arguments that have no defaults (\code{options.b90} and \code{climate})}
-
-\item{options.b90}{Named list of model control option to be used in all simulations.}
-
-\item{soil}{data.frame with soil properties passed to \code{\link{runLWFB90}}}
-
-\item{climate}{data.frame with climate data passed to \code{\link{runLWFB90}}}
+provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -65,21 +59,18 @@ the column has to be named 'maxlai3'.
 }
 
 \examples{
-#Set up lists containing model control options and model parameters:
+# Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()
-options.b90 <- setoptions_LWFB90()
+# choose the 'Coupmodel' shape option for the annual lai dynamic,
+# with fixed budburst and leaf fall dates:
+options.b90 <- setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+                                 enddate = as.Date("2003-12-31"),
+                                 lai.method = 'Coupmodel',
+                                 budburst.method = 'fixed',
+                                 leaffall.method = 'fixed')
 
 # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
-
-# Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2002-01-01")
-options.b90$enddate <- as.Date("2003-12-31")
-
-# choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
-options.b90$lai.method <- 'Coupmodel'
-options.b90$budburst.method <- 'fixed'
-options.b90$leaffall.method <- 'fixed'
 
 #set up data.frame with variable parameters
 n <- 5
@@ -88,10 +79,11 @@ vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
                          soil_materials.ths3 = runif(n, 0.3,0.5), #' ths of material 3
-                         maxlai2 = runif(n,4,8)) #' 2nd year lai
+                         maxlai2 = runif(n,4,8)) #' lai in the 2nd year of the simulation
 
-# soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
+# add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+
 # set up maxlai with length 2, so maxlai2 of paramvar can be looked up
 param.b90$maxlai <- c(5, 5)
 
@@ -102,18 +94,19 @@ b90.multi <- mrunLWFB90(paramvar = vary_parms,
                         climate = slb1_meteo)
 names(b90.multi)
 
-#extract results: EVAPDAY.ASC
-evapday <- data.table::rbindlist(lapply(b90.multi,
-                                        FUN = function(x) {x[["EVAPDAY.ASC"]]}),
-                                 idcol = "srun")
-evapday$dates <- with(evapday, as.Date(paste(YR,MO,DA), "\%Y \%m \%d"))
+# extract results: EVAPDAY.ASC
+evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
+                                                   FUN = function(x) {x[["EVAPDAY.ASC"]]}),
+                                            idcol = "srun"))
+evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"\%Y \%j")
 
-# plot
 srun_nms <- unique(evapday$srun)
+
 with(evapday[evapday$srun == srun_nms[1], ],
-     plot(dates, cumsum(EVAP), type = "l")
+     plot(dates, cumsum(EVAP), type = "n",
+          ylim = c(0,1000))
 )
-for (i in 2:length(b90.multi)){
+for (i in 1:length(b90.multi)){
   with(evapday[evapday$srun == srun_nms[i], ],
        lines(dates, cumsum(EVAP)))
 }

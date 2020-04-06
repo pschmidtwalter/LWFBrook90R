@@ -4,35 +4,35 @@
 #' and returns the selected results.
 #'
 #' @param project.dir directory-name of the project to which output files
-#' are written. Will be created, if not existing. Defaults to 'runLWFB90/'
-#' @param options.b90 named list of model control options. Use
+#' are written. Will be created, if not existing. Defaults to 'runLWFB90/'.
+#' @param options.b90 Named list of model control options. Use
 #' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
 #' @param param.b90 Named list of model input parameters. Use
 #' \code{\link{setparam_LWFB90}} to generate a list with default model parameters.
-#' @param climate data.frame with daily climate data. See details for the required variables.
-#' @param precip data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+#' @param climate Data.frame with daily climate data. See details for the required variables.
+#' @param precip Data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 #' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 #' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
 #' per day defined in \code{options.b90$prec.interval}.
-#' @param soil data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'
-#' @param output a [10,5]-matrix flagging the desired model-output. Use
+#' @param soil Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'
+#' @param output A [10,5]-matrix flagging the desired model-output. Use
 #' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
-#' @param output_fun a function or a list of functions to be performed on the output objects selected by \code{output}.
+#' @param output_fun A function or a list of functions to be performed on the output objects selected by \code{output}.
 #' Can be used to aggregate output or calculate goodness of fit measures on-the-fly,
 #' which is useful if the function is evaluated within a large multi-run application
 #' (see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
-#' Disabled when read.output = FALSE.
-#' @param rtrn.input append 'param.b90', 'options.b90', 'soil' and daily plant
+#' Disabled when \code{read.output = FALSE}.
+#' @param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('standprop_daily', as derived from parameters) to the result?
-#' @param rtrn.output return the simulation results? Disabled when read.output = FALSE.
-#' @param read.output read the simulation result files from project.dir? Default is TRUE.
-#' @param chk.input logical wether to check param.b90, options.b90, climate, precip, and soil
+#' @param rtrn.output Logical: return the simulation results? Disabled when read.output = FALSE.
+#' @param read.output Logical: read the simulation result files from project.dir? Default is TRUE.
+#' @param chk.input Logical wether to check param.b90, options.b90, climate, precip, and soil
 #' for completeness and consistency.
-#' @param output.log write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.
-#' @param run run LWF-Brook90 or only return model input objects?
+#' @param output.log Logical: write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.
+#' @param run Logical: run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
-#' @param verbose print messages to the console? Default is TRUE.
-#' @param ... additional arguments passed to \code{output_fun}.
+#' @param verbose Logical: print messages to the console? Default is TRUE.
+#' @param ... Additional arguments passed to \code{output_fun}.
 #'
 #' @return A list containing the selected model output, the model input (except for \code{climate}) if desired,
 #' and the return values of \code{output_fun} if specified.
@@ -301,7 +301,6 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
         simres[names(simout)] <- simout
       }
 
-
       # ---- apply functions on simulation output -------------------------------
       if (!is.null(output_fun)) {
         if (verbose == T) {
@@ -314,7 +313,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
         outfunargs <- list(x = simout,...)
 
         outfunargsnms <- lapply(output_fun, FUN = function(x,argsnms) {
-          match.arg(formalArgs(x),
+          match.arg(methods::formalArgs(x),
                     argsnms,
                     several.ok = T)},
           argsnms = names(outfunargs))

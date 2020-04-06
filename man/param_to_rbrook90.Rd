@@ -7,13 +7,13 @@
 param_to_rbrook90(param.b90, imodel)
 }
 \arguments{
-\item{param.b90}{a named list of model parameters.}
+\item{param.b90}{A named list of model parameters.}
 
-\item{imodel}{name of hydraulic model ('MvG' or 'CH')}
+\item{imodel}{Name of hydraulic model ('MvG' or 'CH')}
 }
 \value{
-a numerical vector with the parameters in the right order for r_brook90
+A numerical vector with the parameters in the right order for \code{\link{r_lwfbrook90}}.
 }
 \description{
-The parameter vector for r_lwfbrook90 is created from the lists of model controls options, parameters, and soil.
+The parameter vector for \code{\link{r_lwfbrook90}} is created from the lists of model control options, parameters, and soil.
 }

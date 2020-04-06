@@ -8,19 +8,19 @@ prec_corr(month, tavg, prec, station.exposure = "mg",
   full.output = FALSE)
 }
 \arguments{
-\item{month}{vector of months of the same length as tavg and prec}
+\item{month}{Vector of months.}
 
-\item{tavg}{vector of air temperature values (deg C)}
+\item{tavg}{Vector of air temperature values (deg C). Same length as \code{month}.}
 
-\item{prec}{vector of measured rainfall vales (mm)}
+\item{prec}{Vector of measured rainfall vales (mm). Same length as \code{month}.}
 
-\item{station.exposure}{situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
-(corresponding to full exposure, low protected, moderate protected, strong protected situation)}
+\item{station.exposure}{Situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
+(corresponding to full exposure, low protected, moderate protected, strong protected situation).}
 
-\item{full.output}{logical wether to return the full data set additionally including input data, correction coefficients.}
+\item{full.output}{Logical wether to return the full data set additionally including input data, correction coefficients.}
 }
 \value{
-a vector of corrected rainfall data, or (if full.output == TRUE) a data.table containing the input objects, the month,
+A vector of corrected rainfall data, or (if \code{full.output == TRUE}) a data.table containing the input objects, the month,
 the precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain, winter; 'N8' = sleet, 'N7' = snow),
 correction coefficients epsilon and b, and the corrected rainfall.
 }

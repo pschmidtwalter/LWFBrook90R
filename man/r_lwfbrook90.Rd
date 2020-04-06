@@ -8,35 +8,35 @@ r_lwfbrook90(siteparam, climveg, param, pdur, soil_materials, soil_nodes,
   precdat = NULL, output, output_log = TRUE)
 }
 \arguments{
-\item{siteparam}{a [1,6] matrix with site level information: start year, start doy,
-latitude, initial snow, initial groundwater, precipitation interval}
+\item{siteparam}{A [1,6] matrix with site level information: start year, start doy,
+latitude, initial snow, initial groundwater, precipitation interval.}
 
-\item{climveg}{a matrix with 15 columns of climatic and vegetation data: year, month, day
-globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPar), wind (m s-1), prec (mm), mesfl (mm),
-densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), age (years)}
+\item{climveg}{A matrix with 15 columns of climatic and vegetation data: year, month, day
+globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPa), wind (m s-1), prec (mm), mesfl (mm),
+densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), stand age (years).}
 
-\item{param}{a vector of model input parameters}
+\item{param}{A numeric vector of model input parameters (for the right order see \code{\link{param_to_rbrook90}}).}
 
-\item{pdur}{a [1,12]-matrix of precipitation durations (hours) for each monath}
+\item{pdur}{a [1,12]-matrix of precipitation durations (hours) for each month.}
 
-\item{soil_materials}{a matrix of the 8 soil materials parameters. When imodel = 1 (Mualem-van Genuchten), these refer to:
-mat, ths, thr , alpha (m-1), npar, ksat (mm d-1), tort (-), stonef (-). When imodel = 2 (Clapp-Hornberger):
-mat, thsat, thetaf, psif (kPa), bexp, kf (mm d-1), wetinf (-), stonef (-)}
+\item{soil_materials}{A matrix of the 8 soil materials parameters. When imodel = 1 (Mualem-van Genuchten), these refer to:
+mat, ths, thr, alpha (m-1), npar, ksat (mm d-1), tort (-), stonef (-). When imodel = 2 (Clapp-Hornberger):
+mat, thsat, thetaf, psif (kPa), bexp, kf (mm d-1), wetinf (-), stonef (-).}
 
-\item{soil_nodes}{a matrix of the 6 soil model layers with columns nl (layer number),
+\item{soil_nodes}{A matrix of the soil model layers with columns nl (layer number),
 layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).}
 
-\item{precdat}{a matrix precipitation interval data with 6 columns:
-year, month, day, interval-number (1:precint), prec, meslflp}
+\item{precdat}{A matrix of precipitation interval data with 6 columns:
+year, month, day, interval-number (1:precint), prec, mesflp.}
 
-\item{output}{a [12,5] matrix of output selection settings}
+\item{output}{A [12,5] matrix of output selection settings.}
 
-\item{output_log}{logical wether to write the output-logfile 'Log.txt'. This is where the
-commandline-feed of the original fortan program is written.}
+\item{output_log}{Logical wether to write the output-logfile 'Log.txt'. This is where the
+commandline-feed of the original Fortan program is written.}
 }
 \description{
 Passes input data matrices to the Fortran model code
 }
 \details{
-model output is written to comma-separated files (.ASC) in the working directory.
+The model output is written to comma-separated files (.ASC) in the working directory.
 }

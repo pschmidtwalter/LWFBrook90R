@@ -2,7 +2,7 @@
 % Please edit documentation in R/msiterunLWFB90.R
 \name{msiterunLWFB90}
 \alias{msiterunLWFB90}
-\title{Make a multi-site simulation using list of inputs.}
+\title{Make a multi-site simulation using lists of climate, soil, options and parameter input objects.}
 \usage{
 msiterunLWFB90(param.b90, options.b90, climate, soil = NULL,
   all_combinations = F, multirun.dir = "MultiRuns/",
@@ -11,42 +11,58 @@ msiterunLWFB90(param.b90, options.b90, climate, soil = NULL,
 \arguments{
 \item{param.b90}{Named list of parameters to be used in all simulations, or a list of multiple parameter sets.}
 
-\item{options.b90}{Named list of model control options to be used in all simulations, or a list of multiple lists with different options sets.}
+\item{options.b90}{Named list of model control options to be used in all simulations, or a list of multiple lists with different options.}
 
-\item{climate}{data.frame with climate data, or a list of climate data.frames}
+\item{climate}{Data.frame with climate data, or a list of climate data.frames.}
 
-\item{soil}{data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles}
+\item{soil}{Data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles.}
 
-\item{all_combinations}{logical Set up and run all possible combinations of
+\item{all_combinations}{Logical: Set up and run all possible combinations of
 individual param.b90, options.b90, climate and soil objects? Default is FALSE,
 running one or multiple param.b90/options.b90 combinations for a series of climate/soil combinations.}
 
-\item{multirun.dir}{directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
+\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
 
-\item{keep.subdirs}{keep sub-directories of the single runs? Default is FALSE}
+\item{keep.subdirs}{Keep sub-directories of the single runs after successful simulation? Default is FALSE.}
 
-\item{cores}{number of cores to use for parallel processing}
+\item{cores}{Number of cores to use for parallel processing.}
 
-\item{showProgress}{Show progressbar?}
+\item{showProgress}{Logical: Show progressbar?}
 
-\item{...}{Further arguments passed to \code{\link[runLWFB90]{runLWFB90}}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 Simulation or processing errors are passed on. The names of the returned list entries
 are concatenated from the names of the input list entries
-in the following form: <climate> <soil> <param.b90> <option.b90>.
+in the following form: <climate> <soil> <param.b90> <options.b90>.
 }
 \description{
-Repeatedly calls \code{\link[runLWFB90]{runLWFB90}} for combinations of climate and soil data,
-and parameters and model control options, and returns the singlerun-results as a named list.
+Wrapper function for \code{\link{runLWFB90}} to make multiple parallel simulations for combinations
+of climate, soil, parameters and model control options, e.g., for simulating one  or sevral parameter sets
+for a series of sites with individual climate and soil.
 }
+\section{File management}{
+
+The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
+the respective subdirectory is not deleted. The returned list of single run results can become very large,
+if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
+and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
+}
+
 \examples{
 options.b90 <- setoptions_LWFB90(budburst.method = "Menzel")
 
 # define parameter sets
-param_l <- list(spruce = setparam_LWFB90(maxlai = 5, budburst.species = "Picea abies (frueh)", winlaifrac = 0.8),
-                beech = setparam_LWFB90(maxlai = 6, budburst.species = "Fagus sylvatica", winlaifrac = 0))
+param_l <- list(spruce = setparam_LWFB90(maxlai = 5,
+                                         budburst.species = "Picea abies (frueh)",
+                                         winlaifrac = 0.8),
+                beech = setparam_LWFB90(maxlai = 6,
+                                        budburst.species = "Fagus sylvatica",
+                                        winlaifrac = 0))
 
 soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 
@@ -57,17 +73,21 @@ soils <- list(soil1 = soil, soil2 = soil)
 climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
 
 # run two parameter sets on a series of climate and soil-objects
-res <- msiterunLWFB90(param.b90 = param_l,
-                      options.b90 = options.b90,
-                      soil = soils,
-                      climate = climates)
-names(res)
-
-# all combinations
+# (run = FALSE: 'dry' run without actual simulation)
 res <- msiterunLWFB90(param.b90 = param_l,
                       options.b90 = options.b90,
                       soil = soils,
                       climate = climates,
-                      all_combinations = T)
+                      run = FALSE)
 names(res)
+
+# all possible combinations of soil, climate, parameters
+res <- msiterunLWFB90(param.b90 = param_l,
+                      options.b90 = options.b90,
+                      soil = soils,
+                      climate = climates,
+                      all_combinations = TRUE,
+                      run = FALSE)
+names(res)
+
 }

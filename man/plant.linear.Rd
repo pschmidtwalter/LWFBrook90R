@@ -7,14 +7,14 @@
 plant.linear(doys, values, maxdoy)
 }
 \arguments{
-\item{doys}{dates (days of year)}
+\item{doys}{Vector of Dates (days of year).}
 
-\item{values}{values}
+\item{values}{Numeric vector Values.}
 
-\item{maxdoy}{length of the year, 366 for leap years, 365 for normal years}
+\item{maxdoy}{Length of the year, 366 for leap years, 365 for normal years.}
 }
 \value{
-numeric vector of length \code{maxdoy}
+A numeric vector of length \code{maxdoy}.
 }
 \description{
 Creates a daily sequence for one year from doy/value pairs.

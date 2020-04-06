@@ -7,12 +7,12 @@
 hydpar_hypres_tab(tex.hypres, topsoil)
 }
 \arguments{
-\item{tex.hypres}{A character vector with soil texture values according to classes applied in Woesten et al. 2009}
+\item{tex.hypres}{A character vector with soil texture values according to classes applied in Woesten et al. 2009.}
 
-\item{topsoil}{logical Is the sample from the topsoil?}
+\item{topsoil}{Logical: Is the sample from the topsoil?}
 }
 \value{
-A data.frame with the number of rows equal to length(tex.hypres)
+A data.frame with the number of rows equal to length(tex.hypres).
 The data.frame contains the following variables:
 \describe{
   \item{ths}{Saturation water content fraction}
@@ -26,7 +26,7 @@ The data.frame contains the following variables:
 }
 \description{
 Derives the MVG Parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
-    from soil texture classes and bulk density values
+from soil texture classes and bulk density values
 }
 \examples{
 hydpar_hypres_tab(tex.hypres = c("C","MF"), topsoil = c(TRUE,FALSE))

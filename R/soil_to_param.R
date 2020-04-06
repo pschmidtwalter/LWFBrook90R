@@ -1,10 +1,10 @@
 #' Split up soil into materials and soil nodes.
 #'
-#' @param soil data.frame with soil depths ('upper', 'lower') and
+#' @param soil Data.frame with soil layer boundaries ('upper', 'lower') and
 #' hydraulic parameters. When imodel = 'MvG', columns of soil have to be named 'ths', 'thr',
 #' 'alpha', 'npar', 'ksat', 'tort', 'gravel'. When imodel = 'CH', columns have to be named
 #' thsat , 'thetaf','psif', 'bexp','kf', 'wetinf', 'gravel'.
-#' @param imodel name of the hydraulic model
+#' @param imodel Name of the hydraulic model ('MvG' or 'CH')
 #'
 #' @return a list with data.frames 'soil_nodes' and 'soil_materials'
 #' @export

@@ -1,12 +1,12 @@
 #' Mualem - van Genuchten Parameters from W?sten et al. 1999, Tab. 4
 #'
 #' Derives the MVG Parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
-#'     from soil texture classes and bulk density values
+#' from soil texture classes and bulk density values
 #'
-#' @param tex.hypres A character vector with soil texture values according to classes applied in Woesten et al. 2009
-#' @param topsoil logical Is the sample from the topsoil?
+#' @param tex.hypres A character vector with soil texture values according to classes applied in Woesten et al. 2009.
+#' @param topsoil Logical: Is the sample from the topsoil?
 #'
-#' @return A data.frame with the number of rows equal to length(tex.hypres)
+#' @return A data.frame with the number of rows equal to length(tex.hypres).
 #' The data.frame contains the following variables:
 #' \describe{
 #'   \item{ths}{Saturation water content fraction}

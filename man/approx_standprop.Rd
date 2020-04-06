@@ -9,28 +9,28 @@ approx_standprop(x.years, y, y.ini = NULL, xout.years = x.years,
   approx.method = "constant", return_xout = FALSE)
 }
 \arguments{
-\item{x.years}{A sequence of years or a single year}
+\item{x.years}{A sequence of years or a single year.}
 
-\item{y}{vector of the same length as x.years. If approx.method = 'linear',
+\item{y}{Vector of the same length as x.years. If approx.method = 'linear',
 the values are interpreted to be valid at the end of the respective year in x.years.}
 
-\item{y.ini}{initial value used as a starting point for linear interpolation.
+\item{y.ini}{Initial value used as a starting point for linear interpolation.
 Interpreted to be valid at the 1st of January of the first year in x.years.
 Ignored if approx.method = 'constant'.}
 
-\item{xout.years}{years for which output is generated, maybe longer or shorter than
+\item{xout.years}{Vector of years for which output is generated. May be longer or shorter than
 x.years. For years outside x.years, the value of the closest data extrem is returned.}
 
-\item{use_growthperiod}{logical: Use startdoy and enddoy for linear interpolation?
+\item{use_growthperiod}{Logical: Use startdoy and enddoy for linear interpolation?
 If TRUE, yearly changes take place between startdoy and enddoy, other wise from end of year to end of year.}
 
-\item{startdoy}{a single value or vector of the same length as x.years, with the day of year when growth begins.}
+\item{startdoy}{A single value or vector of the same length as x.years, with the day of year when growth begins.}
 
-\item{enddoy}{a single value or vector of the same length as x.years, with the day of year when growth cessates.}
+\item{enddoy}{A single value or vector of the same length as x.years, with the day of year when growth cessates.}
 
-\item{approx.method}{name of interpolation method ('constant' or 'linear').}
+\item{approx.method}{Name of interpolation method ('constant' or 'linear').}
 
-\item{return_xout}{logical. If true, daily values of y and a date vector are returned in data.frame.}
+\item{return_xout}{Logical: If true, daily values of y and a date vector are returned in data.frame.}
 }
 \value{
 A vector of interpolated daily values

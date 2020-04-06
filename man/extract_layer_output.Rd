@@ -7,23 +7,23 @@
 extract_layer_output(dat, layers = NULL, value.vars = NULL, sep = "")
 }
 \arguments{
-\item{dat}{data.frame with layer data organized in rows and identified by a layer number column nl.}
+\item{dat}{Data.frame with layer data organized in rows and identified by a layer number column nl.}
 
-\item{layers}{integer vector addressing the layer numbers (nl) to be extracted
-from dat. If not supplied, values from all layers will be returned}
+\item{layers}{Integer vector addressing the layer numbers (nl) to be extracted
+from dat. If not supplied, values from all layers will be returned.}
 
-\item{value.vars}{character vector containing names of value-variables to be extracted from dat.
+\item{value.vars}{Character vector containing names of value-variables to be extracted from dat.
 If not supplied, value.var will be guessed.}
 
-\item{sep}{separation character for constructig names from variable name and layer index.}
+\item{sep}{Separation character for constructig names from variable name and layer index.}
 }
 \value{
-a data.table with the layers' values of the variables organized in columns
+A data.table with the layers' values of the variables organized in columns
 (wide format) with the names being made up of the variable name and layer number.
 }
 \description{
 Reorganizes layer data such as BELO and SWAT to the wide format
- by casting variables with the layer number, using data.table's dcast function.
+ by casting variables with the layer number, using data.table's dcast-function.
 }
 \examples{
 # create a data.frame with monthly values

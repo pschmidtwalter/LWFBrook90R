@@ -2,16 +2,16 @@
 #'
 #' Creates a daily sequence for one year from parameters
 #'
-#' @param minval minimum value
-#' @param maxval maximum value
-#' @param doy.incr date (day of year) when increasing to maxval begins
-#' @param doy.max  date (day of year) when maxval is reached
-#' @param doy.min date (day of year) when minval is reached
-#' @param shape.incr shape parameter of the increasing phase
-#' @param shape.decr shape parameter of the decreasing phase
-#' @param maxdoy length of the year, 366 for leap years, 365 for normal years
+#' @param minval Minimum value.
+#' @param maxval Maximum value.
+#' @param doy.incr Date (day of year) when increasing to maxval begins.
+#' @param doy.max  Date (day of year) when maxval is reached.
+#' @param doy.min Date (day of year) when minval is reached.
+#' @param shape.incr Shape parameter of the increasing phase.
+#' @param shape.decr Shape parameter of the decreasing phase.
+#' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
 #'
-#' @return numeric vector of length \code{maxdoy}
+#' @return A numeric vector of length \code{maxdoy}.
 #'
 #' @references
 #' Jansson, P.-E. & Karlberg, L. (2004): "Coupled heat and mass transfer model for

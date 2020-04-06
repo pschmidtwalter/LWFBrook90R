@@ -3,13 +3,13 @@
 #' Derives the Mualem - van Genuchten parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
 #'     from clay, silt, sand contents, bulk density, and organic carbon content values
 #'
-#' @param clay clay mass percent
-#' @param silt silt mass percent
-#' @param sand sand mass percent
-#' @param bd bulk density in g cm-3
-#' @param oc.pct organic carbon content in mass percent
+#' @param clay Numeric vector of clay mass percent
+#' @param silt Numeric vector of silt mass percent.
+#' @param sand Numeric vector of sand mass percent.
+#' @param bd Numeric vector of bulk density in g cm-3.
+#' @param oc.pct Numeric vector of organic carbon content in mass percent.
 #'
-#' @return A data.frame with the number of rows equal to length(tex.KA5)
+#' @return A data.frame with the number of rows equal to length(tex.KA5).
 #' The data.frame contains the following variables:
 #' \describe{
 #'   \item{ths}{Saturation water content fraction}

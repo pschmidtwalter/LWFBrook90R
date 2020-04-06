@@ -44,19 +44,16 @@ str(b90.aggswat$output_fun$swat)
 rm(list=ls())
 #Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()
-options.b90 <- setoptions_LWFB90()
+# choose the 'Coupmodel' shape option for the annual lai dynamic,
+# with fixed budburst and leaf fall dates:
+options.b90 <- setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+                                 enddate = as.Date("2003-12-31"),
+                                 lai.method = 'Coupmodel',
+                                 budburst.method = 'fixed',
+                                 leaffall.method = 'fixed')
 
 # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
-
-# Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2002-01-01")
-options.b90$enddate <- as.Date("2003-12-31")
-
-# choose the 'Coupmodel' shape option for the annual lai dynamic, with fixed budburst and leaf fall dates:
-options.b90$lai.method <- 'Coupmodel'
-options.b90$budburst.method <- 'fixed'
-options.b90$leaffall.method <- 'fixed'
 
 #set up data.frame with variable parameters
 n <- 5
@@ -65,10 +62,11 @@ vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
                          soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
-                         maxlai2 = runif(n,4,8)) # 2nd year lai
+                         maxlai2 = runif(n,4,8)) # lai in the 2nd year of the simulation
 
-# soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
+# add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+
 # set up maxlai with length 2, so maxlai2 of paramvar can be looked up
 param.b90$maxlai <- c(5, 5)
 
@@ -80,17 +78,18 @@ b90.multi <- mrunLWFB90(paramvar = vary_parms,
 names(b90.multi)
 
 #extract results: EVAPDAY.ASC
-evapday <- data.table::rbindlist(lapply(b90.multi,
+evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
                                         FUN = function(x) {x[["EVAPDAY.ASC"]]}),
-                                 idcol = "srun")
-evapday$dates <- with(evapday, as.Date(paste(YR,MO,DA), "%Y %m %d"))
+                                 idcol = "srun"))
+evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"%Y %j")
 
 srun_nms <- unique(evapday$srun)
 
 with(evapday[evapday$srun == srun_nms[1], ],
-     plot(dates, cumsum(EVAP), type = "l")
+     plot(dates, cumsum(EVAP), type = "n",
+          ylim = c(0,1000))
 )
-for (i in 2:length(b90.multi)){
+for (i in 1:length(b90.multi)){
   with(evapday[evapday$srun == srun_nms[i], ],
   lines(dates, cumsum(EVAP)))
 }
@@ -113,10 +112,12 @@ soils <- list(soil1 = soil, soil2 = soil)
 climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
 
 # run two parameter sets on a series of climate and soil-objects
+# (run = FALSE: 'dry' run without actual simulations)
 res <- msiterunLWFB90(param.b90 = param_l,
                       options.b90 = options.b90,
                       soil = soils,
-                      climate = climates)
+                      climate = climates,
+                      run = FALSE)
 names(res)
 
 #  all combinations
@@ -124,7 +125,8 @@ res <- msiterunLWFB90(param.b90 = param_l,
                       options.b90 = options.b90,
                       soil = soils,
                       climate = climates,
-                      all_combinations = T)
+                      all_combinations = TRUE,
+                      run = FALSE)
 names(res)
 
 

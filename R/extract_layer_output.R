@@ -1,16 +1,16 @@
 #'  Extract values from layer data and organize layer-wise variables in columns
 #'
 #'  Reorganizes layer data such as BELO and SWAT to the wide format
-#'  by casting variables with the layer number, using data.table's dcast function.
+#'  by casting variables with the layer number, using data.table's dcast-function.
 #'
-#' @param dat data.frame with layer data organized in rows and identified by a layer number column nl.
-#' @param layers integer vector addressing the layer numbers (nl) to be extracted
-#' from dat. If not supplied, values from all layers will be returned
-#' @param value.vars character vector containing names of value-variables to be extracted from dat.
+#' @param dat Data.frame with layer data organized in rows and identified by a layer number column nl.
+#' @param layers Integer vector addressing the layer numbers (nl) to be extracted
+#' from dat. If not supplied, values from all layers will be returned.
+#' @param value.vars Character vector containing names of value-variables to be extracted from dat.
 #' If not supplied, value.var will be guessed.
-#' @param sep separation character for constructig names from variable name and layer index.
+#' @param sep Separation character for constructig names from variable name and layer index.
 #'
-#' @return a data.table with the layers' values of the variables organized in columns
+#' @return A data.table with the layers' values of the variables organized in columns
 #' (wide format) with the names being made up of the variable name and layer number.
 #' @export
 #' @examples
@@ -32,14 +32,13 @@
 #' #extract specific variables
 #' extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
 #' @import data.table
-#' @importFrom stats as.formula
 extract_layer_output <- function(dat,
                                  layers = NULL,
                                  value.vars=NULL,
                                  sep = ""){
   nl <- NULL #pass CRAN check NOTES
 
-  if (!is.data.table(dat)) {setDT(dat) }
+  if (!is.data.table(dat)) {data.table::setDT(dat) }
 
   setnames(dat, names(dat), tolower(names(dat)))
 
@@ -60,9 +59,9 @@ extract_layer_output <- function(dat,
 
   setkey(dat, nl)
 
-  datm <- melt(dat[list(layers), ], # extract layers of interest
+  datm <- data.table::melt(dat[list(layers), ], # extract layers of interest
                id.vars = c(id.vars,"nl"),
                measure.vars = value.vars)
   castf <- paste(paste(id.vars, collapse = "+"), "~ variable+nl")
-  dcast(datm, as.formula(castf), sep = sep)
+  data.table::dcast(datm, stats::as.formula(castf), sep = sep)
 }

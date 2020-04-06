@@ -3,20 +3,20 @@
 #' Uses yearly values of inter-annual vegetation development values (e.g. sai, height, densef, age)
 #' and interpolates them to a daily sequence.
 #'
-#' @param x.years A sequence of years or a single year
-#' @param y vector of the same length as x.years. If approx.method = 'linear',
+#' @param x.years A sequence of years or a single year.
+#' @param y Vector of the same length as x.years. If approx.method = 'linear',
 #' the values are interpreted to be valid at the end of the respective year in x.years.
-#' @param y.ini initial value used as a starting point for linear interpolation.
+#' @param y.ini Initial value used as a starting point for linear interpolation.
 #' Interpreted to be valid at the 1st of January of the first year in x.years.
 #' Ignored if approx.method = 'constant'.
-#' @param xout.years years for which output is generated, maybe longer or shorter than
+#' @param xout.years Vector of years for which output is generated. May be longer or shorter than
 #' x.years. For years outside x.years, the value of the closest data extrem is returned.
-#' @param use_growthperiod logical: Use startdoy and enddoy for linear interpolation?
+#' @param use_growthperiod Logical: Use startdoy and enddoy for linear interpolation?
 #' If TRUE, yearly changes take place between startdoy and enddoy, other wise from end of year to end of year.
-#' @param startdoy a single value or vector of the same length as x.years, with the day of year when growth begins.
-#' @param enddoy a single value or vector of the same length as x.years, with the day of year when growth cessates.
-#' @param approx.method name of interpolation method ('constant' or 'linear').
-#' @param return_xout logical. If true, daily values of y and a date vector are returned in data.frame.
+#' @param startdoy A single value or vector of the same length as x.years, with the day of year when growth begins.
+#' @param enddoy A single value or vector of the same length as x.years, with the day of year when growth cessates.
+#' @param approx.method Name of interpolation method ('constant' or 'linear').
+#' @param return_xout Logical: If true, daily values of y and a date vector are returned in data.frame.
 #'
 #' @return A vector of interpolated daily values
 #'
@@ -72,7 +72,6 @@
 #'        col  = c("black", "blue", "green"),  lwd = 2, pch = NULL,
 #'        bty = "n")
 #'@export
-#' @importFrom stats approx
 approx_standprop <- function(x.years,
                              y,
                              y.ini = NULL,
@@ -144,7 +143,7 @@ approx_standprop <- function(x.years,
     yout <- rep(y, times = length(xout.dates))
 
   } else { # interpolation
-    yout <- approx(x.dates, y, xout = xout.dates, rule = 2, f = 1, method = approx.method)$y
+    yout <- stats::approx(x.dates, y, xout = xout.dates, rule = 2, f = 1, method = approx.method)$y
   }
 
   if (!return_xout) {

@@ -1,14 +1,14 @@
 #' Mualem - van Genuchten Parameters from regression functions developed by Woesten et al 1999
 #'
 #' Derives the Mualem - van Genuchten parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
-#'      from sand, silt, clay, bulk density, organic carbon content values
+#' from sand, silt, clay, bulk density, organic carbon content values.
 #'
-#' @param clay clay mass percent
-#' @param silt silt mass percent
-#' @param bd bulk density in g cm-3
-#' @param oc.pct organic carbon content in mass percent
-#' @param topsoil Is the sample from the topsoil?
-#' @param humconv conversion factor oc.pct to organic matter percent
+#' @param clay Numeric vector of clay mass percent.
+#' @param silt Numeric vector of silt mass percent.
+#' @param bd Numeric vector of bulk density in g cm-3.
+#' @param oc.pct Numeric vector of organic carbon content in mass percent.
+#' @param topsoil Logical: Is the sample from the topsoil?
+#' @param humconv Conversion factor oc.pct to organic matter percent.
 #'
 #' @return A data.frame with the number of rows equal to length(clay)
 #' The data.frame contains the following variables:

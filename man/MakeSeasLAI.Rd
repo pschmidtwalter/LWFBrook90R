@@ -11,35 +11,35 @@ MakeSeasLAI(method = "b90", year, maxlai, winlaifrac = 0,
   lai.frac = c(0, 0, 0.5, 1, 0.5, 0))
 }
 \arguments{
-\item{method}{name of method for generating the sequence. Must be one of "b90", "linear", "Coupmodel"}
+\item{method}{Name of method for generating the sequence. Must be one of "b90", "linear", "Coupmodel".}
 
-\item{year}{years to be returned}
+\item{year}{Vector of years to be returned.}
 
-\item{maxlai}{maximum value during summer}
+\item{maxlai}{Maximum leaf are index.}
 
-\item{winlaifrac}{fraction of maxlai during winter (ignored when method = 'linear')}
+\item{winlaifrac}{Fraction of \code{maxlai} during winter (ignored when method = 'linear').}
 
-\item{budburst.doy}{budburst day of year (ignored when method = 'linear')}
+\item{budburst.doy}{Budburst day of year (ignored when method = 'linear').}
 
-\item{leaffall.doy}{day of year when leaf fall begins (ignored when method = 'linear')}
+\item{leaffall.doy}{Day of year when leaf fall begins (ignored when method = 'linear').}
 
-\item{emerge.dur}{number of days from budburst until maximum leaf area index is reached}
+\item{emerge.dur}{Number of days from budburst until maximum leaf area index is reached.}
 
-\item{leaffall.dur}{number of days until minimum leaf are index is reached}
+\item{leaffall.dur}{Number of days until minimum leaf are index is reached.}
 
-\item{shape.optdoy}{day of year when optimum value is reached (required when method = "Coupmodel")}
+\item{shape.optdoy}{Day of year when optimum value is reached (required when method = "Coupmodel").}
 
-\item{shape.budburst}{shape parameter for the growth phase (required when method = "Coupmodel")}
+\item{shape.budburst}{Shape parameter for the growth phase (required when method = "Coupmodel").}
 
-\item{shape.leaffall}{shape parameter growth cessation (required when method = "Coupmodel")}
+\item{shape.leaffall}{Shape parameter growth cessation (required when method = "Coupmodel").}
 
-\item{lai.doy}{integer vector of days of years}
+\item{lai.doy}{Integer vector of days of years.}
 
-\item{lai.frac}{vector of values of fractional leaf area index corresponding
-to lai.doy (required when method = "linear")}
+\item{lai.frac}{Vector of values of fractional leaf area index corresponding
+to lai.doy (required when method = "linear").}
 }
 \value{
-a vector of daily lai values covering the years specified
+A vector of daily lai values covering the years specified.
 }
 \description{
 A daily sequence of leaf area index is derived from maximum and minimum values,

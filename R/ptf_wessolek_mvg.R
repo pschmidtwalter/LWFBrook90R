@@ -1,11 +1,11 @@
 #' Mualem - van Genuchten Parameters from Wessolek et al. 2009, Table 10.
 #'
 #' Derives the MVG Parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
-#'     from KA5 soil texture classes
+#' from KA5 soil texture classes
 #'
-#' @param tex.KA5 A character vector with soil texture values according to KA5
+#' @param tex.KA5 A character vector with soil texture values according to KA5.
 #'
-#' @return A data.frame with the number of rows equal to length(tex.KA5)
+#' @return A data.frame with the number of rows equal to length(tex.KA5).
 #' The data.frame contains the following variables:
 #' \describe{
 #'   \item{tex.KA5}{soil texture according to KA5 }

@@ -7,10 +7,10 @@
 hydpar_wessolek_mvg(tex.KA5)
 }
 \arguments{
-\item{tex.KA5}{A character vector with soil texture values according to KA5}
+\item{tex.KA5}{A character vector with soil texture values according to KA5.}
 }
 \value{
-A data.frame with the number of rows equal to length(tex.KA5)
+A data.frame with the number of rows equal to length(tex.KA5).
 The data.frame contains the following variables:
 \describe{
   \item{tex.KA5}{soil texture according to KA5 }
@@ -25,7 +25,7 @@ The data.frame contains the following variables:
 }
 \description{
 Derives the MVG Parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
-    from KA5 soil texture classes
+from KA5 soil texture classes
 }
 \references{
 Wessolek, Kaupenjohann and Renger (2009) Bodenphysikalische Kennwerte

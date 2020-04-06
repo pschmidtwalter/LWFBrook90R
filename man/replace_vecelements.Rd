@@ -7,11 +7,11 @@
 replace_vecelements(x, varnms, vals)
 }
 \arguments{
-\item{x}{vector or dataframe}
+\item{x}{A vector or data.frame.}
 
-\item{varnms}{variable names to match: Specify}
+\item{varnms}{Variable names to match: Specify position by name and index.}
 
-\item{vals}{values to insert}
+\item{vals}{Vector of values to insert at the specified positions.}
 }
 \value{
 The vector or data.frame in x with the elements 'varnms' replaced by vals.

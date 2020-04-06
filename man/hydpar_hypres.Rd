@@ -8,17 +8,17 @@ hydpar_hypres(clay, silt, bd, oc.pct = 0.1, topsoil = TRUE,
   humconv = 1.72)
 }
 \arguments{
-\item{clay}{clay mass percent}
+\item{clay}{Numeric vector of clay mass percent.}
 
-\item{silt}{silt mass percent}
+\item{silt}{Numeric vector of silt mass percent.}
 
-\item{bd}{bulk density in g cm-3}
+\item{bd}{Numeric vector of bulk density in g cm-3.}
 
-\item{oc.pct}{organic carbon content in mass percent}
+\item{oc.pct}{Numeric vector of organic carbon content in mass percent.}
 
-\item{topsoil}{Is the sample from the topsoil?}
+\item{topsoil}{Logical: Is the sample from the topsoil?}
 
-\item{humconv}{conversion factor oc.pct to organic matter percent}
+\item{humconv}{Conversion factor oc.pct to organic matter percent.}
 }
 \value{
 A data.frame with the number of rows equal to length(clay)
@@ -35,7 +35,7 @@ The data.frame contains the following variables:
 }
 \description{
 Derives the Mualem - van Genuchten parameters ThetaR, ThetaS, Alpha, n, Tort and Ksat
-     from sand, silt, clay, bulk density, organic carbon content values
+from sand, silt, clay, bulk density, organic carbon content values.
 }
 \examples{
 hydpar_hypres(20,20,1.5,2)

@@ -12,52 +12,54 @@ runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90, climate,
 }
 \arguments{
 \item{project.dir}{directory-name of the project to which output files
-are written. Will be created, if not existing. Defaults to 'runLWFB90/'}
+are written. Will be created, if not existing. Defaults to 'runLWFB90/'.}
 
-\item{options.b90}{named list of model control options. Use
+\item{options.b90}{Named list of model control options. Use
 \code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
 
 \item{param.b90}{Named list of model input parameters. Use
 \code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
 
-\item{climate}{data.frame with daily climate data. See details for the required variables.}
+\item{climate}{Data.frame with daily climate data. See details for the required variables.}
 
-\item{precip}{data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+\item{precip}{Data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
 Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
 per day defined in \code{options.b90$prec.interval}.}
 
-\item{soil}{data.frame containing the hydraulic properties of the soil layers. See details.}
+\item{soil}{Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'}
 
-\item{output}{a [10,5]-matrix flagging the desired model-output. Use
+\item{output}{A [10,5]-matrix flagging the desired model-output. Use
 \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
 
-\item{output_fun}{a function or a list of functions to be performed on the output objects selected by \code{output}.
-Can be used to aggregate output or calculate goodness of fit measures.
-Disabled when read.output = FALSE.}
+\item{output_fun}{A function or a list of functions to be performed on the output objects selected by \code{output}.
+Can be used to aggregate output or calculate goodness of fit measures on-the-fly,
+which is useful if the function is evaluated within a large multi-run application
+(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
+Disabled when \code{read.output = FALSE}.}
 
-\item{rtrn.input}{append 'param.b90', 'options.b90', 'soil' and daily plant
+\item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('standprop_daily', as derived from parameters) to the result?}
 
-\item{rtrn.output}{return the simulation results? Disabled when read.output = FALSE.}
+\item{rtrn.output}{Logical: return the simulation results? Disabled when read.output = FALSE.}
 
-\item{read.output}{read the simulation result files from project.dir? Default is TRUE.}
+\item{read.output}{Logical: read the simulation result files from project.dir? Default is TRUE.}
 
-\item{chk.input}{logical wether to check param.b90, options.b90, climate, precip, soil, and obs
+\item{chk.input}{Logical wether to check param.b90, options.b90, climate, precip, and soil
 for completeness and consistency.}
 
-\item{output.log}{write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
+\item{output.log}{Logical: write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
 
-\item{run}{run LWF-Brook90 or only return model input objects?
+\item{run}{Logical: run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
-\item{verbose}{print messages to the console? Default is TRUE.}
+\item{verbose}{Logical: print messages to the console? Default is TRUE.}
 
-\item{...}{additional arguments passed to \code{output_fun}.}
+\item{...}{Additional arguments passed to \code{output_fun}.}
 }
 \value{
-A list containing the model input (except for climate), the contents of
-the LWF-Brook90 output files found in 'project.dir', and the return values of \code{output_fun}.
+A list containing the selected model output, the model input (except for \code{climate}) if desired,
+and the return values of \code{output_fun} if specified.
 }
 \description{
 Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
