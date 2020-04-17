@@ -7,7 +7,7 @@
 #' @param climveg A matrix with 15 columns of climatic and vegetation data: year, month, day
 #' globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPa), wind (m s-1), prec (mm), mesfl (mm),
 #' densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), stand age (years).
-#' @param param A numeric vector of model input parameters (for the right order see \code{\link{param_to_rbrook90}}).
+#' @param param A numeric vector of model input parameters (for the right order see \code{\link{param_to_rlwfbrook90}}).
 #' @param pdur a [1,12]-matrix of precipitation durations (hours) for each month.
 #' @param soil_materials A matrix of the 8 soil materials parameters. When imodel = 1 (Mualem-van Genuchten), these refer to:
 #' mat, ths, thr, alpha (m-1), npar, ksat (mm d-1), tort (-), stonef (-). When imodel = 2 (Clapp-Hornberger):

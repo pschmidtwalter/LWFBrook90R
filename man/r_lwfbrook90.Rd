@@ -15,7 +15,7 @@ latitude, initial snow, initial groundwater, precipitation interval.}
 globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPa), wind (m s-1), prec (mm), mesfl (mm),
 densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), stand age (years).}
 
-\item{param}{A numeric vector of model input parameters (for the right order see \code{\link{param_to_rbrook90}}).}
+\item{param}{A numeric vector of model input parameters (for the right order see \code{\link{param_to_rlwfbrook90}}).}
 
 \item{pdur}{a [1,12]-matrix of precipitation durations (hours) for each month.}
 
