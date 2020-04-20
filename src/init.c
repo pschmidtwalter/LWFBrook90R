@@ -7,10 +7,10 @@
 */
 
 /* .Fortran calls */
-extern void F77_NAME(fbrook90)(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern void F77_NAME(fbrook90)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 
 static const R_FortranMethodDef FortranEntries[] = {
-    {"fbrook90", (DL_FUNC) &F77_NAME(fbrook90), 9},
+    {"fbrook90", (DL_FUNC) &F77_NAME(fbrook90), 11},
     {NULL, NULL, 0}
 };
 

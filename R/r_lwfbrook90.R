@@ -43,6 +43,9 @@ r_lwfbrook90 <- function(
     precdat <- matrix(-999, nrow = param[1] * siteparam[[6]], ncol = 6)
   }
 
+  output_day = matrix(-999, nrow = param[1], ncol = 34)
+  output_layer = array(-999, dim =  c(param[1], 15, param[65] ) )
+
   # Run the model
   out <- .Fortran(
     'fbrook90',
@@ -54,8 +57,10 @@ r_lwfbrook90 <- function(
     soil_nodes = as.matrix( soil_nodes, ncol = 6 ),
     precdat = as.matrix( precdat, ncol = 6),
     output = as.integer( as.matrix( output, ncol = 5, nrow = 10)),
-    output_log = as.integer( output_log )
+    output_log = as.integer( output_log ),
+    output_day = output_day,
+    output_layer = output_layer
     )
 
-  # return(NULL)
+  return( list( day = out$output_day, layer = out$output_layer) )
 }

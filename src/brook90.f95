@@ -13,7 +13,8 @@ module fbrook_mod
 IMPLICIT NONE
 contains
 
-subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, output, output_log) &
+subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, output, output_log, &
+                    output_day, output_layer) &
                     bind(C, name="fbrook90_")
 
     use iso_c_binding, only: c_double, c_int
@@ -40,6 +41,10 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
     ! Those are the files of output, and we close them in the end
     integer :: nfiles
     integer, dimension (45) :: outfile = (/(nfiles, nfiles=16, 60)/)
+
+    ! Output matrix
+    real(kind=c_double), dimension( INT(param(1)),34), intent(inout) :: output_day
+    real(kind=c_double), dimension( INT(param(1)), 15, INT(param(65))), intent(inout) :: output_layer
 
     ! Variables
     include 'VARDCL.h'
@@ -712,6 +717,8 @@ subroutine fbrook90( siteparam, climveg, param, pdur, soil_materials, soil_nodes
 
         !     daily output
         INCLUDE 'DOUTPUT.h'
+        INCLUDE 'output_day.h'
+        INCLUDE 'output_layer.h'
         !     flows accumulated over month
         INCLUDE 'MACCUM.h'
 
