@@ -1,11 +1,12 @@
-LWFBrook90R v0.3.0 (Release date: )
+LWFBrook90R v0.3.0 (Release date: 2020-04-21)
 ==============
 
 Changes
 * new function msiterunLWFB90()
-* runLWFB90(): model input (param.b90, option.b90, standprop_daily) is appended 
-	to the return value BEFORE evaluating the output_fun-argument. In this way, 
-	on-the-fly post-processing of model results including model-input is possible now. 
+* runLWFB90(): model input (param.b90, option.b90, standprop_daily) is appended
+	to the return value BEFORE evaluating the output_fun-argument. In this way,
+	on-the-fly post-processing of model results including model-input is possible now.
+* minor bugs fixed
 
 
 LWFBrook90R v0.2.0 (Release date: 2019-06-18)
