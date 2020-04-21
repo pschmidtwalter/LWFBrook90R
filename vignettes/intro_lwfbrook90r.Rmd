@@ -65,9 +65,9 @@ output <- setoutput_LWFB90()
 output
 ```
 
-## Single run simulations
+## Single-run simulations
 
-Now we are ready to perform the single run simulation using the central function `runLWFB90`:
+Now we are ready to perform the single-run simulation using the central function `runLWFB90`:
 ```{r, eval = F}
 b90res <- runLWFB90(project.dir = "example_run_b90/",
                             options.b90 = options.b90,
@@ -130,9 +130,9 @@ With LWFBrook90R, parallelized multi-run simulations can be conveniently perform
 
 For the first case, the function `mrunLWFB90` is available. The second problem can be tackled using the function `msiterunLWFB90`. Both functions are wrapper functions for `runLWFB90` and allow for parallel processing of tasks using a specified number of CPUs to speed up the execution of a multi-run simulation. 
 
-The functions return lists of the individual single run simulation results, as they are returned by `runLWFB90`. These lists can become very large when many simulations are performed, and if the selected output comprises daily data sets (e.g. `EVAPDAY.ASC`) and especially soil moisture state variables of individual soil layers (`SWATDAY.ASC`). To minimize memory allocation, it is therefore recommended to reduce the selected output to a minimum and make use of the `output_fun`-argument in `runLWFB90`. With this argument, it is possible to pass custom functions to `runLWFB90`, which directly perform on the simulation output list object. With `rtrn.output` set to `FALSE`, the original simulation output list containing .ASC file contents can be discarded, and only the results from the `output_fun`-argument are returned. This can be very useful for model calibration or sensitivity analyses tasks comprising ten thousands of simulations in a Monte-Carlo setting. With this magnitude, only a relatively small output can be returned for each individual simulation, e.g., a measure of agreement between simulated and observed values. Similarly, it is possible to define functions to aggregate model output on-the-fly, or to redirect the output to a database, when Multi-Site forward simulations shall be performed for a large number of sites. 
+The functions return lists of the individual single-run simulation results, as they are returned by `runLWFB90`. These lists can become very large when many simulations are performed, and if the selected output comprises daily data sets (e.g. `EVAPDAY.ASC`) and especially soil moisture state variables of individual soil layers (`SWATDAY.ASC`). To minimize memory allocation, it is therefore recommended to reduce the selected output to a minimum and make use of the `output_fun`-argument in `runLWFB90`. With this argument, it is possible to pass custom functions to `runLWFB90`, which directly perform on the simulation output list object. With `rtrn.output` set to `FALSE`, the original simulation output list containing .ASC file contents can be discarded, and only the results from the `output_fun`-argument are returned. This can be very useful for model calibration or sensitivity analyses tasks comprising ten thousands of simulations in a Monte-Carlo setting. With this magnitude, only a relatively small output can be returned for each individual simulation, e.g., a measure of agreement between simulated and observed values. Similarly, it is possible to define functions to aggregate model output on-the-fly, or to redirect the output to a database, when Multi-Site forward simulations shall be performed for a large number of sites. 
 
-To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo simulation using the function `mrunLWFB90`. The function is a simple wrapper function for `runLWFB90` and takes a data.frame `paramvar`, that contains variable parameter values in columns and their realisations in rows. For each row in `paramvar`, the respective parameter values in `param.b90` are replaced by name, and `runLWFB90` is executed. The return of `mrunLWFB90` is a list containing the individual single run simulation results, as returned by `runLWFB90`. In order to reduce the returned output, we define a function that integrates depth-specific soil moisture to soil water storage in 0-100 cm soil depths (as we did in the first example) and return the calculated values in a data.frame along with daily transpiration:
+To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo simulation using the function `mrunLWFB90`. The function is a simple wrapper function for `runLWFB90` and takes a data.frame `paramvar`, that contains variable parameter values in columns and their realisations in rows. For each row in `paramvar`, the respective parameter values in `param.b90` are replaced by name, and `runLWFB90` is executed. The return of `mrunLWFB90` is a list containing the individual single-run simulation results, as returned by `runLWFB90`. In order to reduce the returned output, we define a function that integrates depth-specific soil moisture to soil water storage in 0-100 cm soil depths (as we did in the first example) and return the calculated values in a data.frame along with daily transpiration:
 
 ```{r}
 output_function <- function(x) {
@@ -146,7 +146,7 @@ output_function <- function(x) {
 }
 ```
 
-We can test our custom output function on the previous single run simulation `b90res` result and see that it works:
+We can test our custom output function on the previous single-run simulation `b90res` result and see that it works:
 
 ```{r}
 head(output_function(b90res))
@@ -173,7 +173,7 @@ mrun_res <- mrunLWFB90(paramvar = paramvar,
                        output_fun = output_function)
 ```
 
-The result is a list of the individual single run results, from which we can easily extract the results of our output function and `rbind` them to a data.table:
+The result is a list of the individual single-run results, from which we can easily extract the results of our output function and `rbind` them to a data.table:
 
 ```{r, eval = F}
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]), 
