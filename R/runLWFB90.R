@@ -297,9 +297,8 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       names(simout) <- list.files(".", pattern = ".ASC")
 
       # append results
-      if (rtrn.output) {
-        simres[names(simout)] <- simout
-      }
+      simres[names(simout)] <- simout
+
 
       # ---- apply functions on simulation output -------------------------------
       if (!is.null(output_fun)) {
@@ -310,7 +309,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
           output_fun <- list(output_fun)
         }
 
-        outfunargs <- list(x = simout,...)
+        outfunargs <- list(x = simres,...)
 
         outfunargsnms <- lapply(output_fun, FUN = function(x,argsnms) {
           match.arg(methods::formalArgs(x),
@@ -329,6 +328,12 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
         warning = function(wrn){return(wrn)},
         error = function(err){return(err)})
       }
+
+      # remove the basic results again if they are not required
+      if (!rtrn.output) {
+        simres <- simres[-which(names(simres) %in% names(simout))]
+      }
+
     }
 
   } else {

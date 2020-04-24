@@ -1,6 +1,6 @@
 Package: LWFBrook90R
 Title: Run the LWF-Brook90 Hydrological Model in R
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(person("Paul", "Schmidt-Walter", , "paul.schmidt-walter@nw-fva.de", role = c("aut", "cre")),
              person("Volodymyr", "Trotsiuk", , "vtrotsiuk@gmail.com", role = c("aut")),
              person("Klaus", "Hammel", , ,role = c("aut")),

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ------
 
-Run the [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) hydrological model from within R
+Run the [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) hydrological model in R
 
 ## Installation
 
