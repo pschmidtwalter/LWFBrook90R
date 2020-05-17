@@ -4,9 +4,17 @@
 \alias{approx_standprop}
 \title{Create a daily sequence of stand properties from parameters using interpolation}
 \usage{
-approx_standprop(x.years, y, y.ini = NULL, xout.years = x.years,
-  use_growthperiod = FALSE, startdoy = 121, enddoy = 279,
-  approx.method = "constant", return_xout = FALSE)
+approx_standprop(
+  x.years,
+  y,
+  y.ini = NULL,
+  xout.years = x.years,
+  use_growthperiod = FALSE,
+  startdoy = 121,
+  enddoy = 279,
+  approx.method = "constant",
+  return_xout = FALSE
+)
 }
 \arguments{
 \item{x.years}{A sequence of years or a single year.}

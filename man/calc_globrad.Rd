@@ -4,8 +4,7 @@
 \alias{calc_globrad}
 \title{Calculate global solar radiation from sunshine duration hours}
 \usage{
-calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5,
-  full.output = FALSE)
+calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5, full.output = FALSE)
 }
 \arguments{
 \item{dates}{Date vector}

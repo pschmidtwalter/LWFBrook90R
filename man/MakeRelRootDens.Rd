@@ -4,9 +4,14 @@
 \alias{MakeRelRootDens}
 \title{Generates a root density depth function the soil layers' lower depth limits}
 \usage{
-MakeRelRootDens(soilnodes, maxrootdepth = min(soilnodes),
-  method = "betamodel", beta = 0.97, relrootden = NULL,
-  rootdepths = NULL)
+MakeRelRootDens(
+  soilnodes,
+  maxrootdepth = min(soilnodes),
+  method = "betamodel",
+  beta = 0.97,
+  relrootden = NULL,
+  rootdepths = NULL
+)
 }
 \arguments{
 \item{soilnodes}{Vector of lower soil layer depth limits,

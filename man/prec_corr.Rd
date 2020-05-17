@@ -4,8 +4,7 @@
 \alias{prec_corr}
 \title{Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)}
 \usage{
-prec_corr(month, tavg, prec, station.exposure = "mg",
-  full.output = FALSE)
+prec_corr(month, tavg, prec, station.exposure = "mg", full.output = FALSE)
 }
 \arguments{
 \item{month}{Vector of months.}
