@@ -15,8 +15,8 @@
 !     xxxxYflow for year, mm
 
 integer, parameter :: ML = 1000, MPar= 10, MMat=20, Reset=1
-real(kind=8) :: B0,B1           !,B2,B3,B4,B5     ! buffer
-real(kind=8) :: A0,A1           !,A2,A3,A4,A5     ! buffer
+real(kind=8) :: B0           !,B1,B2,B3,B4,B5     ! buffer
+!real(kind=8) :: A0,A1           !,A2,A3,A4,A5     ! buffer
 real(kind=8) :: AA              ! average available energy over daytime or nighttime, W/m2
 real(kind=8) :: ADEF            ! available water deficit in root zone, mm, output only
 real(kind=8) :: ALB             ! * albedo with no snow
@@ -33,7 +33,7 @@ real(kind=8) :: AWAT            ! available soil water in root zone, mm, output 
 real(kind=8) :: AWATFK          ! available soil water in root zone at field cap., mm, output only
 real(kind=8) :: AWATM           ! average monthly AWAT
 real(kind=8) :: AWAT40          ! available soil water til 40 cm, mm, output only
-real(kind=8) :: BALERD,BALERM,BALERY ! error in water balance. mm
+real(kind=8) :: BALERD ! BALERM,,BALERY error in water balance. mm
 real(kind=8) :: BYFLI(ML)       ! bypass flow rate from layer, mm/d
 real(kind=8) :: BYFLPI(ML), BYFLDI(ML), BYFLMI(ML), BYFLYI(ML)
 real(kind=8) :: BYFLP, BYFLD, BYFLM, BYFLY ! bypass flow
@@ -81,14 +81,14 @@ real(kind=8) :: DUMM(ML)        ! dummy array for subroutine calls
 real(kind=8) :: DUMMY           ! dummy variable for subroutine calls
 real(kind=8), dimension(12) :: DURATN ! * average duration of daily precip by month, hr
 real(kind=8) :: EA              ! ** vapor pressure for the day, kPa
-integer :: error                ! if there is error in the subroutine
+logical(kind=1) :: error                ! if there is error in the subroutine
 real(kind=8) :: ES              ! saturated vapor pressure, kPa
 real(kind=8) :: ESLOPE          ! * slope for evapotranspiration and snowmelt, degrees
 real(kind=8) :: Eta             ! volumetric air content
-real(kind=8) :: ETDiff          ! Evapotranspirationdifferenz
+!real(kind=8) :: ETDiff          ! Evapotranspirationdifferenz
 real(kind=8) :: EVAPP, EVAPD, EVAPM, EVAPY, EVAPVP ! evapotranspiration
 real(kind=8) :: FETCH           ! * weather station fetch, m"
-real(kind=8) :: FLOWP, FLOWD, FLOWM, FLOWY, FLOWVP ! total flow
+real(kind=8) :: FLOWP, FLOWD, FLOWM, FLOWY ! , FLOWVPtotal flow
 real(kind=8) :: FRINTL          ! * intercepted fraction of rain per unit LAI
 real(kind=8) :: FRINTS          ! * intercepted fraction of rain per unit SAI
 real(kind=8) :: frelden(ML)! * relative values of final root density per unit volume
@@ -170,7 +170,7 @@ integer :: NOOUTF               ! * 1 if no outflow allowed from roots, otherwis
 integer :: NPINT                ! **** number of precipitation intervals per day
 real(kind=8) :: NTFLI(ML)       ! net flow rate into layer, mm/d
 real(kind=8) :: NTFLPI(ML), NTFLDI(ML), NTFLMI(ML), NTFLYI(ML)
-integer :: OP(10,5)             ! * output file selections
+! integer :: OP(10,5)             ! * output file selections
 real(kind=8) :: ParMat(MPar,MMat) ! hydraulic parameters for material
 real(kind=8) :: Par(MPar,ML)    ! hydraulic parameters for layer
 real(kind=8) :: PINT            ! average potential interception for day, mm/d
@@ -258,7 +258,7 @@ real(kind=8) :: STHRD, STHRM, STHRY ! snow throughfall, mm
 real(kind=8) :: STONEF(ML)      ! * stone volume fraction, unitless, for layers
 real(kind=8) :: StonefMat(MMat) ! * stone volume fraction, unitless ,  for materials
 real(kind=8) :: STORD, STORM, STORY ! total water storage in system, mm
-real(kind=8) :: STRES, STRESVP  ! TRAN / PTRAN for time period
+real(kind=8) :: STRES  ! , STRESVP TRAN / PTRAN for time period
 real(kind=8) :: SWAT            ! total soil water in all layers, mm
 real(kind=8) :: SWATI(ML)       ! water volume in layer, mm
 real(kind=8) :: SWATMX(ML)      ! maximum water storage for layer, mm

@@ -16,8 +16,7 @@
 #' layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).
 #' @param precdat A matrix of precipitation interval data with 6 columns:
 #' year, month, day, interval-number (1:precint), prec, mesflp.
-#' @param output A [12,5] matrix of output selection settings.
-#' @param output_log Logical wether to write the output-logfile 'Log.txt'. This is where the
+#' @param output_log Logical wether to print the output-logfile. This is where the
 #' commandline-feed of the original Fortan program is written.
 #'
 #' @details The model output is written to comma-separated files (.ASC) in the working directory.
@@ -33,22 +32,17 @@ r_lwfbrook90 <- function(
   soil_materials,
   soil_nodes,
   precdat = NULL,
-  output,
   output_log = TRUE
   ){
-
 
   # make a matrix of precipitation fille
   if ( is.null(precdat) ){
     precdat <- matrix(-999, nrow = param[1] * siteparam[[6]], ncol = 6)
   }
 
-  output_day = matrix(-999, nrow = param[1], ncol = 34)
-  output_layer = array(-999, dim =  c(param[1], 15, param[65] ) )
-
   # Run the model
-  out <- .Fortran(
-    'fbrook90',
+  out <- .Call(
+    's_brook90_c',
     siteparam = as.matrix( siteparam, ncol = 6, nrow = 1),
     climveg = as.matrix( climveg, ncol = 15),
     param = as.vector(param),
@@ -56,11 +50,14 @@ r_lwfbrook90 <- function(
     soil_materials = as.matrix( soil_materials, ncol = 8 ),
     soil_nodes = as.matrix( soil_nodes, ncol = 6 ),
     precdat = as.matrix( precdat, ncol = 6),
-    output = as.integer( as.matrix( output, ncol = 5, nrow = 10)),
-    output_log = as.integer( output_log ),
-    output_day = output_day,
-    output_layer = output_layer
+    pr = output_log,
+    n_m = as.integer(param[1]),
+    n_l = as.integer(param[65])
     )
 
-  return( list( day = out$output_day, layer = out$output_layer) )
+  return( list( day = out[[1]], layer = out[[2]]) )
+}
+
+.onUnload <- function(libpath) {
+  library.dynam.unload("LWFBrook90R", libpath)
 }
