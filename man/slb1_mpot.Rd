@@ -5,8 +5,7 @@
 \alias{slb1_mpot}
 \title{Daily values of soil water potential (1999-2009) in different soil depths
 measured at the Solling Beech experimental site 'SLB1'.}
-\format{
-A data.frame with 4018 rows and 6 variables
+\format{A data.frame with 4018 rows and 6 variables
 \describe{
   \item{dates}{Date of measurement}
   \item{mpot_10cm}{soil water potential in 10cm soil depth, hPa}
@@ -14,8 +13,7 @@ A data.frame with 4018 rows and 6 variables
   \item{mpot_40cm}{soil water potential in 10cm soil depth, hPa}
   \item{mpot_100cm}{soil water potential in 10cm soil depth, hPa}
   \item{mpot_180cm}{soil water potential in 10cm soil depth, hPa}
-}
-}
+}}
 \usage{
 slb1_mpot
 }

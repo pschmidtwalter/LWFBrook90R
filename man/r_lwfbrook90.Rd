@@ -12,7 +12,6 @@ r_lwfbrook90(
   soil_materials,
   soil_nodes,
   precdat = NULL,
-  output,
   output_log = TRUE
 )
 }
@@ -38,9 +37,7 @@ layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).}
 \item{precdat}{A matrix of precipitation interval data with 6 columns:
 year, month, day, interval-number (1:precint), prec, mesflp.}
 
-\item{output}{A [12,5] matrix of output selection settings.}
-
-\item{output_log}{Logical wether to write the output-logfile 'Log.txt'. This is where the
+\item{output_log}{Logical wether to print the output-logfile. This is where the
 commandline-feed of the original Fortan program is written.}
 }
 \description{
