@@ -1,16 +1,16 @@
-#' Generates a root density depth function the soil layers' lower depth limits
+#' Generates a root density depth function for the soil layers' lower depth limits
 #'
 #' @param soilnodes Vector of lower soil layer depth limits,
-#' for which the relative root distribution will be calculated.
+#' for which the relative root distribution will be calculated (m, negative downwards).
 #' @param maxrootdepth The maximum rooting depth (m, negative downwards) below which
 #' relative root length density will be set to zero.
-#' @param method Method name for the root depth distribution. Possible value are 'betamodel',
+#' @param method Method name for the root depth distribution. Possible values are 'betamodel',
 #' 'table', 'linear', 'constant'. See details.
-#' @param beta Parameter(s) of the root distribution function.
+#' @param beta Parameter of the root distribution function.
 #' @param relrootden Vector of relative root densities.
 #' @param rootdepths Vector of lower depths limit, corresponding to 'relrootden'.
 #'
-#' @return Vector of relative rootlength, corresponding to soilnodes.
+#' @return Vector of relative rootlength densities at the soilnodes.
 #'
 #' @details Method  'betamodel' uses the model after Gale & Grigal (1987),
 #' 'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
@@ -75,26 +75,21 @@ MakeRelRootDens <- function(soilnodes,
 
   if (method == "betamodel") {
     # only positive d-values allowed in beta-model:
-    #maxrootdepth <- soilnodes[which(abs(soilnodes - maxrootdepth) == min(abs(soilnodes-maxrootdepth)))]
+    # maxrootdepth <- soilnodes[which(abs(soilnodes - maxrootdepth) == min(abs(soilnodes-maxrootdepth)))]
     maxrootdepth <- maxrootdepth * (-100)
     soilnodes <- soilnodes * (-100)
 
+    # replace first element greater maxrootdepth with maxrootdepth
+    soilnodes[which.max(soilnodes >= maxrootdepth)] <- maxrootdepth
+
     # cumulative density
-    # shift min(soilnodes) to 1 and extend maxrootdepth
-    RLenDcum <- 1 - (beta ^ seq(1,maxrootdepth-(min(soilnodes)-1)))
+    RLenDcum <- 1 - (beta ^ soilnodes)
+
     # density
     RLenD <- c(RLenDcum[1], diff(RLenDcum))
+    RLenD[which(soilnodes>maxrootdepth)] <- 0
 
-    # linear approx function is derived using the "unshifted" values
-    RelDenFun <- stats::approxfun(x = seq(min(soilnodes),maxrootdepth),
-                           y = RLenD,
-                           method = "linear",
-                           rule = 2:1, yright = 0) # rule 2:1: left > max(x) -> repeat, right = 0
-
-    # get midpoints of the soilnodes:
-    midpoints <- c(min(soilnodes) - 1, soilnodes[1:length(soilnodes)-1]) + (diff(c(min(soilnodes) - 1,soilnodes))/2)
-    # calc the rootden for the midpoints to be exact, and normalize to unity
-    rootden <- RelDenFun(midpoints) * (1/sum(RelDenFun(midpoints)))
+    rootden <- RLenD
   }
 
   if (method == "table") {
