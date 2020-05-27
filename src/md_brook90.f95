@@ -170,7 +170,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         DENSEF=MAX(0.050d0,DENSEF)
 
         IF (YEAR .NE. YY .OR. MONTH .NE. MM .OR. DOM .NE. DD) THEN
-            print*, 'STOP - DFILE error, expected', YEAR, MONTH, DOM, ' but got', YY, MM, DD
+            call intpr("STOP - DFILE error, expected", -1, 1, 0)
+            !print*, 'STOP - DFILE error, expected', YEAR, MONTH, DOM, ' but got', YY, MM, DD
 !           STOP
         END IF
 
@@ -757,6 +758,10 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     end if
     
+    call intpr(" ", -1, 1, 0)
+    !call intpr("total              inter     snow     rain      et   drain     lat", -1, 1, 0)
+    call intpr("   total inter snow rain et drain lat", -1, NINT((/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/)), 6)
+    call realpr("   total inter snow rain et drain lat", -1, (/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/), 6)
     
     if( pr ) then
         print*,
@@ -765,9 +770,11 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     end if
 
 !     ***************   E N D    D A Y   L O O P    **************************
-    999 if( error )  print*, 'PARAMETERS COMBINATION ERROR'
+    !999 if( error )  print*, 'PARAMETERS COMBINATION ERROR'
+    999 if( error )  call intpr("PARAMETERS COMBINATION ERROR", -1, 1, 0)
     
-    if( pr ) print*, 'THAT IS THE END'
+    !if( pr ) print*, 'THAT IS THE END'
+    call intpr("THAT IS THE END", -1, 1, 0)
         
 end subroutine s_brook90_f
 
@@ -1935,7 +1942,8 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             CHN = 2.0d0 * WETINF - 1.0d0 - (-PSIINF(I) * BEXP / (CHM * WETINF))
             Par(8,i) = CHN
             IF (PSIM(I) .GT. 0.0d0) THEN
-                print*, 'matrix psi must be negative or zero'
+                !print*, 'matrix psi must be negative or zero'
+                call intpr("matrix psi must be negative or zero", -1, 1, 0)
                 error = .TRUE.
                 go to 999
             ELSEIF (PSIM(I) .EQ. 0.0d0) THEN
@@ -1967,7 +1975,8 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             SWATMX(I) = THICK(I) * THS * (1.0d0 - STONEF(I))
 
             IF (PSIM(I) .GT. 0.) THEN
-                print*, 'matrix psi must be negative or zero'
+                call intpr("matrix psi must be negative or zero", -1, 1, 0)
+                !print*, 'matrix psi must be negative or zero'
                 error = .TRUE.
                 go to 999
             ELSE
@@ -2578,7 +2587,7 @@ subroutine Temper(N,NMat,THICK,ZL,MUE,STEP,MatNum,TempO,TempN, &
     CALL TRIDIG(N,A,B,C,D,TempN,IFEHL)
 !
 !
-    if(ifehl .eq. 1)  print*, 'tridig failed'
+    if(ifehl .eq. 1)  call intpr("tridig failed", -1, 1, 0) !print*, 'tridig failed'
 
 !   DO 160 I=1,N
 !       write(10,*) i, TempN(i)
@@ -3073,7 +3082,8 @@ function FWETK (K, Par, iModel, pr)
     FWETK = 0.0d0
 
     if(iModel .eq. 0) then
-        print*, 'Function FWETK can not be called for iModel=0, stopping program'
+        call intpr("Function FWETK can not be called for iModel=0, stopping program", -1, 1, 0)
+        !print*, 'Function FWETK can not be called for iModel=0, stopping program'
         FWETK = -99999.d0
         go to 999
     end if
