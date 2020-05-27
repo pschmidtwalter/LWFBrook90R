@@ -758,10 +758,11 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     end if
     
-    call intpr(" ", -1, 1, 0)
-    !call intpr("total              inter     snow     rain      et   drain     lat", -1, 1, 0)
-    call intpr("   total inter snow rain et drain lat", -1, NINT((/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/)), 6)
-    call realpr("   total inter snow rain et drain lat", -1, (/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/), 6)
+
+    call intpr("TOTAL:   inter     snow    rain    et      drain     lat", -1, 0, 0)
+    call intpr(makeString(6, (/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/), 21,'(5X,2F9.2,F9.1,3F8.1)'), -1, 0, 0)
+
+    !call intpr("   total inter snow rain et drain lat", -1, NINT((/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/)), 6)
     
     if( pr ) then
         print*,
@@ -770,13 +771,22 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     end if
 
 !     ***************   E N D    D A Y   L O O P    **************************
-    !999 if( error )  print*, 'PARAMETERS COMBINATION ERROR'
-    999 if( error )  call intpr("PARAMETERS COMBINATION ERROR", -1, 1, 0)
+    999 if( error )  call intpr("PARAMETERS COMBINATION ERROR", -1, 0, 0)
     
-    !if( pr ) print*, 'THAT IS THE END'
-    call intpr("THAT IS THE END", -1, 1, 0)
+    if( pr ) call intpr("THAT IS THE END", -1, 0, 0)
         
 end subroutine s_brook90_f
+
+
+function makeString( nn, num, nf, fmt) result(res)
+    integer, intent(in) :: nn
+    real(kind=8), dimension(nn), intent(in) :: num
+    integer, intent(in) :: nf
+    character(len=nf), intent(in) :: fmt
+    character(len=255) :: res
+
+    write(res, fmt ) num
+end function makeString
 
 
 !*************************************************************************************
