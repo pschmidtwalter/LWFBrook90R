@@ -1,3 +1,7 @@
+# outputs: rearrange outputs so it looks as before.
+# adjust the multirun functions to work with the new function,
+# and get rid of the snow-package. it is outdated
+
 
 runLWFB90 <- function(options.b90,
                       param.b90,
@@ -145,7 +149,6 @@ runLWFB90 <- function(options.b90,
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
       soil_nodes = param.b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
-      output = output,
       output_log = output.log
     )
 
@@ -160,19 +163,20 @@ runLWFB90 <- function(options.b90,
     # ---- process and manage outputs ---------------------------------------------------------------
     simout$day <- data.table::data.table(simout$day)
     data.table::setnames(simout$day, names(simout$day),
-                         c('yr','mo','da','rfal','rint','sfal','sint','rsno','rnet','smlt','slfl',
-                           'srfl','snow','swat','gwat','evap','tran','irvp','isvp','slvp','snvp',
-                           'pint','ptran','pslvp','flow','seep','srfl','slfl','byfl','dsfl','gwfl',
-                           'vrfln','nits','balerr'))
+                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rsno',
+                           'rnet','smlt','snow','swat','gwat','evap','tran','irvp',
+                           'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
+                           'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
+                           'stres','adef','awat','relawat','awat40','nits','balerr'))
 
     simout$layer <- data.table::rbindlist(lapply(seq(dim(simout$layer)[3]),
                                                  function(x) data.frame(simout$layer[ , , x])),
                                   idcol = "nl")
-    data.table::setnames(simout$layer, paste0("X", 1:15),
-                         c('yr','mo','da','swati','theta','wetnes','psimi','psiti','infl',
+    data.table::setnames(simout$layer, paste0("X", 1:16),
+                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','psiti','infl',
                            'byfl','tran','slvp','vrfl','dsfl','ntfl'))
 
-    simout$layer <- simout$layer[order(yr, mo, da, nl),]
+    simout$layer <- simout$layer[order(yr, doy, nl),]
 
 
 

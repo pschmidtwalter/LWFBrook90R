@@ -7,23 +7,20 @@ param.b90 <- setparam_LWFB90()
 options.b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2002-01-01")
+options.b90$startdate <- as.Date("2003-01-01")
 options.b90$enddate <- as.Date("2003-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 
-output <- setoutput_LWFB90()
-output[,] <- 0L
-output[,"Day"] <- 1L
 # Run LWF-Brook90
-b90.result <- runLWFB90(project.dir = "example_run_b90",
-                        options.b90 = options.b90,
+b90.result <- runLWFB90(options.b90 = options.b90,
                         param.b90 = param.b90,
                         climate = slb1_meteo,
-                        soil = soil,
-                        output = output)
+                        soil = soil, output.log = F)
+
+
 b90.result$day[, dates := as.Date(paste(yr, mo,da, sep ="-"))]
 b90.result$day[, doy := as.integer(format(dates, "%j"))]
 b90.result$day[,mesfl:=0]
