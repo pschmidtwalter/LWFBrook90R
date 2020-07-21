@@ -23,7 +23,7 @@ b90.result <- runLWFB90(project.dir = "example_run_b90",
                         param.b90 = param.b90,
                         climate = slb1_meteo,
                         soil = soil,
-                        output = output)
+                        output.log = F)
 b90.result$day[, dates := as.Date(paste(yr, mo,da, sep ="-"))]
 b90.result$day[, doy := as.integer(format(dates, "%j"))]
 b90.result$day[,mesfl:=0]
