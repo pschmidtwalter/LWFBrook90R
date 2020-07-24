@@ -20,7 +20,7 @@ b90.result <- runLWFB90(options.b90 = options.b90,
                         param.b90 = param.b90,
                         climate = slb1_meteo,
                         soil = soil,
-                        output = -1,
+                        output = output,
                         output.log = F)
 
 n <- 5

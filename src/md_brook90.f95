@@ -52,7 +52,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     logical(kind=c_bool), intent(in) :: pr
 
     ! Output matrix
-    real(kind=c_double), dimension( INT(param(1)),41), intent(inout) :: output_day
+    real(kind=c_double), dimension( INT(param(1)),40), intent(inout) :: output_day
     real(kind=c_double), dimension( INT(param(1)), 16, INT(param(65))), intent(inout) :: output_layer
 
     ! Variables

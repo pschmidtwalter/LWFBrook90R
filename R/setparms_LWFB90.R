@@ -2,7 +2,7 @@
 #'
 #' @param ... Named arguments to be included in return value.
 #' @return A list with model parameters for use as \code{param.b90}-argument in \code{\link{runLWFB90}}.
-#' @details
+#' @section List of input parameters:
 #' \tabular{llcl}{
 #'  \strong{Name} \tab \strong{Description} \tab \strong{Unit} \tab \strong{Group} \cr
 #'  czr          \tab Ratio of roughness length to mean height for smooth closed canopies for heights greater than HR when LAI>LPC. Default: 0.05 \tab -                 \tab Canopy                 \cr

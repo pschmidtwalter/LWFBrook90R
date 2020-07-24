@@ -311,7 +311,7 @@ real(kind=8) :: VRFLPI(ML), VRFLDI(ML) !, VRFLMI(ML), VRFLYI(ML)
 real(kind=8) :: VV(ML)          ! temporary VRFLI
 real(kind=8) :: WETC(ML)        ! @ wetness at PSICR, dimensionless
 real(kind=8) :: WETFR           ! fraction of precipitation interval that canopy is wet
-real(kind=8) :: WETNES(ML)      ! wetness, fraction of saturation     
+real(kind=8) :: WETNES(ML)      ! wetness, fraction of saturation
 real(kind=8) :: WNDRAT          ! * ratio of nighttime to daytime wind speed
 integer :: YEAR                 ! **** two-digit first year of DFILE
 integer :: YY                   ! ** two-digit year

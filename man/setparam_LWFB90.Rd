@@ -15,7 +15,8 @@ A list with model parameters for use as \code{param.b90}-argument in \code{\link
 \description{
 Create the list of model parameters
 }
-\details{
+\section{List of input parameters}{
+
 \tabular{llcl}{
  \strong{Name} \tab \strong{Description} \tab \strong{Unit} \tab \strong{Group} \cr
  czr          \tab Ratio of roughness length to mean height for smooth closed canopies for heights greater than HR when LAI>LPC. Default: 0.05 \tab -                 \tab Canopy                 \cr
@@ -131,6 +132,7 @@ Create the list of model parameters
  rrad         \tab Average radius of the fine or water-absorbing roots. Default: 0.35 \tab mm                \tab Water supply
 }
 }
+
 \examples{
 # Default parameter
 parms <- setparam_LWFB90()
