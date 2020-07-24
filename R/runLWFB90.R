@@ -268,7 +268,9 @@ runLWFB90 <- function(options.b90,
                          c('yr','mo','da','doy','swati','theta','wetnes','psimi','psiti','infl',
                            'byfl','tran','slvp','vrfl','dsfl','ntfl'))
 
-    simout$layer_output <- simout$layer_output[order(yr, doy, nl),]
+    simout$layer_output <- simout$layer_output[order(simout$layer_output$yr,
+                                                     simout$layer_output$doy,
+                                                     simout$layer_output$nl),]
 
 
     # ---- initialize return value ---------------------------------------------------------------
@@ -547,6 +549,10 @@ process_outputs <- function(simout, output) {
     Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","awat40","nits","balerr")]}
 
   moutputs <- list() # results collection
+
+  # yr<-NULL;mo<-NULL;da<-NULL;doy<-NULL;nl<-NULL;rfal<-NULL;sfal<-NULL;flow<-NULL;evap <- NULL;seep<- NULL;
+  # snow <- NULL;swat<- NULL;gwat<-NULL;intr<-NULL;ints<-NULL;vrfln<-NULL;safrac<-NULL;stres<-NULL;adef<-NULL;
+  # awat<-NULL;relawat<-NULL;awat40<-NULL;nits<-NULL;balerr<-NULL;
 
   for (sel in selection) {
     X <- get(sel)
