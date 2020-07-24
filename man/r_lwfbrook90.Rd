@@ -19,8 +19,8 @@ r_lwfbrook90(
 \item{siteparam}{A [1,6] matrix with site level information: start year, start doy,
 latitude, initial snow, initial groundwater, precipitation interval.}
 
-\item{climveg}{A matrix with 15 columns of climatic and vegetation data: year, month, day
-globrad (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPa), wind (m s-1), prec (mm), mesfl (mm),
+\item{climveg}{A matrix with 15 columns of climatic and vegetation data: year, month, day,
+global radiation (MJ m-2 d-1), tmax (degC), tmin (degC), vappres (kPa), wind (m s-1), prec (mm), mesfl (mm),
 densef (-), stand height (m), lai (m2 m-2), sai (m2 m-2), stand age (years).}
 
 \item{param}{A numeric vector of model input parameters (for the right order see \code{\link{param_to_rlwfbrook90}}).}
@@ -40,9 +40,9 @@ year, month, day, interval-number (1:precint), prec, mesflp.}
 \item{output_log}{Logical wether to print the output-logfile. This is where the
 commandline-feed of the original Fortan program is written.}
 }
-\description{
-Passes input data matrices to the Fortran model code
+\value{
+A list containing the daily and soil layer model outputs.
 }
-\details{
-The model output is written to comma-separated files (.ASC) in the working directory.
+\description{
+Passes input data matrices to the Fortran model code and returns the results
 }

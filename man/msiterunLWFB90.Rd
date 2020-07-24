@@ -10,8 +10,6 @@ msiterunLWFB90(
   climate,
   soil = NULL,
   all_combinations = F,
-  multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE,
   cores = 2,
   showProgress = TRUE,
   ...
@@ -30,15 +28,15 @@ msiterunLWFB90(
 individual param.b90, options.b90, climate and soil objects? Default is FALSE,
 running one or multiple param.b90/options.b90 combinations for a series of climate/soil combinations.}
 
-\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
-
-\item{keep.subdirs}{Keep sub-directories of the single runs after successful simulation? Default is FALSE.}
-
 \item{cores}{Number of cores to use for parallel processing.}
 
 \item{showProgress}{Logical: Show progressbar?}
 
 \item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
+
+\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
+
+\item{keep.subdirs}{Keep sub-directories of the single runs after successful simulation? Default is FALSE.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -51,15 +49,15 @@ Wrapper function for \code{\link{runLWFB90}} to make multiple parallel simulatio
 of climate, soil, parameters and model control options, e.g., for simulating one  or sevral parameter sets
 for a series of sites with individual climate and soil.
 }
-\section{File management}{
+\section{Data management}{
 
-The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
-the respective subdirectory is not deleted. The returned list of single run results can become very large,
-if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
-and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
-perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
+The returned list of single run results can become very large,if many simulations are done and
+the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
+carefully selecting the output, and make use of the option to pass a list of functions to
+\code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
+output of a single run simulation, and can be used for aggrating model output on-the-fly,
+or writing results to a file or database.
 }
 
 \examples{

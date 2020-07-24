@@ -13,10 +13,10 @@ If no matrix is passed, a default selection of output values is returned opened 
 \item{edit}{open R's data-editor ?}
 }
 \value{
-a [5,10]-matrix containing 0 and 1 for use as 'output'-argument in \code{\link{runLWFB90}}
+a [7,5]-matrix containing 0 and 1 for use as 'output'-argument in \code{\link{runLWFB90}}
 }
 \description{
-Returns a [5,10] matrix with a default selection of LWF-Brook90 output data sets for the use
+Returns a [7,5] matrix with a default selection of LWF-Brook90 output data sets for the use
 as 'output'-argument \code{\link{runLWFB90}}.
 }
 \examples{

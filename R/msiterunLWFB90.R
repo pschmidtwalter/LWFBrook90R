@@ -22,15 +22,14 @@
 #' are concatenated from the names of the input list entries
 #' in the following form: <climate> <soil> <param.b90> <options.b90>.
 #'
-#' @section File management:
-#' The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-#' If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
-#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
-#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
-#' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
-#' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
-#'
+#' @section Data management:
+#' The returned list of single run results can become very large,if many simulations are done and
+#' the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
+#' carefully selecting the output, and make use of the option to pass a list of functions to
+#' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
+#' output of a single run simulation, and can be used for aggrating model output on-the-fly,
+#' or writing results to a file or database.
 #' @export
 #'
 #' @examples
@@ -75,8 +74,6 @@ msiterunLWFB90 <- function(param.b90,
                            climate,
                            soil = NULL,
                            all_combinations = F,
-                           multirun.dir = "MultiRuns/",
-                           keep.subdirs = FALSE,
                            cores = 2,
                            showProgress = TRUE,
                            ...){
@@ -102,12 +99,6 @@ msiterunLWFB90 <- function(param.b90,
                                      all_combinations = all_combinations)
 
   nRuns <- nrow(combinations)
-
-  # set up multirun-directory
-  multirun.dir <- normalizePath(multirun.dir, mustWork = F)
-  if (!dir.exists(multirun.dir)) {
-    dir.create(multirun.dir)
-  }
 
   #set up Cluster and progressbar --------------------------------------------------
 
@@ -149,23 +140,13 @@ msiterunLWFB90 <- function(param.b90,
 
                        #subset for readibility
                        combi_thisclim <- combinations[which(combinations$clim == clim_no),]
-                       #set project-directory
-                       proj.dir <- file.path(multirun.dir, trimws(paste(thisname,
-                                                                        soil_nms[combi_thisclim$soil[i]],
-                                                                        param_nms[combi_thisclim$param[i]],
-                                                                        options_nms[combi_thisclim$options[i]])))
 
-                       res <- runLWFB90(project.dir = proj.dir,
-                                        param.b90 = param.b90[[combi_thisclim$param[i]]],
-                                        options.b90 = options.b90[[combi_thisclim$options[i]]],
-                                        soil = soil[[combi_thisclim$soil[i]]],
-                                        climate = thisclim,
-                                        ...)
-
-                       if (!keep.subdirs) {
-                         unlink(file.path(proj.dir), recursive = TRUE)
-                       }
-                       return(res)
+                       runLWFB90(project.dir = proj.dir,
+                                 param.b90 = param.b90[[combi_thisclim$param[i]]],
+                                 options.b90 = options.b90[[combi_thisclim$options[i]]],
+                                 soil = soil[[combi_thisclim$soil[i]]],
+                                 climate = thisclim,
+                                 ...)
                      }
 
   # unnest

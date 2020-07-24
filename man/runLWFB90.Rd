@@ -5,7 +5,6 @@
 \title{Run the LWF-Brook90 hydrological model}
 \usage{
 runLWFB90(
-  project.dir = "runLWFB90/",
   options.b90,
   param.b90,
   climate,
@@ -15,7 +14,6 @@ runLWFB90(
   output_fun = NULL,
   rtrn.input = TRUE,
   rtrn.output = TRUE,
-  read.output = TRUE,
   chk.input = TRUE,
   output.log = TRUE,
   run = TRUE,
@@ -24,9 +22,6 @@ runLWFB90(
 )
 }
 \arguments{
-\item{project.dir}{directory-name of the project to which output files
-are written. Will be created, if not existing. Defaults to 'runLWFB90/'.}
-
 \item{options.b90}{Named list of model control options. Use
 \code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
 
@@ -42,26 +37,24 @@ per day defined in \code{options.b90$prec.interval}.}
 
 \item{soil}{Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'}
 
-\item{output}{A [10,5]-matrix flagging the desired model-output. Use
-\code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
+\item{output}{A [7,5]-matrix flagging the desired model-output. Use
+\code{\link{setoutput_LWFB90}} to generate and edit a default output matrix. Alternatively,
+use -1 to return the raw daily and layer-wise outputs.}
 
 \item{output_fun}{A function or a list of functions to be performed on the output objects selected by \code{output}.
-Can be used to aggregate output or calculate goodness of fit measures on-the-fly,
-which is useful if the function is evaluated within a large multi-run application
-(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
-Disabled when \code{read.output = FALSE}.}
+Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
+Useful if the function is evaluated within a large multi-run application, which might overload the memory.
+(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
 
 \item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('standprop_daily', as derived from parameters) to the result?}
 
-\item{rtrn.output}{Logical: return the simulation results? Disabled when read.output = FALSE.}
-
-\item{read.output}{Logical: read the simulation result files from project.dir? Default is TRUE.}
+\item{rtrn.output}{Logical: return the simulation results?}
 
 \item{chk.input}{Logical wether to check param.b90, options.b90, climate, precip, and soil
 for completeness and consistency.}
 
-\item{output.log}{Logical: write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
+\item{output.log}{Logical or file name wether to print runtime output, or redirect runtime output to a file.}
 
 \item{run}{Logical: run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}

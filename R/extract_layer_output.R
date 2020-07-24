@@ -36,7 +36,7 @@ extract_layer_output <- function(dat,
                                  layers = NULL,
                                  value.vars=NULL,
                                  sep = ""){
-  nl <- NULL #pass CRAN check NOTES
+  nl <- NULL # to pass CRAN check NOTES
 
   if (!is.data.table(dat)) {data.table::setDT(dat) }
 
@@ -55,6 +55,7 @@ extract_layer_output <- function(dat,
   } else {
     value.vars <- match.arg(tolower(value.vars), choices = names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))], several.ok = T)
   }
+
   id.vars <- names(dat)[which(names(dat) %in% c("yr","mo","da","doy"))]
 
   setkey(dat, nl)
