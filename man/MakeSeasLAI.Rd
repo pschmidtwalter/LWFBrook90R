@@ -4,11 +4,21 @@
 \alias{MakeSeasLAI}
 \title{Construct the seasonal course of leaf area index from parameters}
 \usage{
-MakeSeasLAI(method = "b90", year, maxlai, winlaifrac = 0,
-  budburst.doy = 121, leaffall.doy = 279, emerge.dur = 28,
-  leaffall.dur = 58, shape.optdoy = 220, shape.budburst = 0.5,
-  shape.leaffall = 10, lai.doy = c(1, 121, 150, 280, 320, 365),
-  lai.frac = c(0, 0, 0.5, 1, 0.5, 0))
+MakeSeasLAI(
+  method = "b90",
+  year,
+  maxlai,
+  winlaifrac = 0,
+  budburst.doy = 121,
+  leaffall.doy = 279,
+  emerge.dur = 28,
+  leaffall.dur = 58,
+  shape.optdoy = 220,
+  shape.budburst = 0.5,
+  shape.leaffall = 10,
+  lai.doy = c(1, 121, 150, 280, 320, 365),
+  lai.frac = c(0, 0, 0.5, 1, 0.5, 0)
+)
 }
 \arguments{
 \item{method}{Name of method for generating the sequence. Must be one of "b90", "linear", "Coupmodel".}
@@ -75,7 +85,7 @@ lai_coupmodel <- MakeSeasLAI(method = "Coupmodel",
                              shape.budburst = 0.5,
                              shape.leaffall = 5)
 
-plot(lai_b90, type = "n", xlab = "doy", ylab = "lai [m²/m²]", ylim = c(0,6))
+plot(lai_b90, type = "n", xlab = "doy", ylab = "lai [mÂ²/mÂ²]", ylim = c(0,6))
 lines(lai_b90, col ="green",lwd = 2,)
 lines(lai_linear, col ="red",lwd = 2)
 lines(lai_coupmodel, col ="blue",lwd = 2)
@@ -92,7 +102,7 @@ lai <- MakeSeasLAI(method = "Coupmodel",
                    shape.optdoy =c(210,180,240) )
 
 dates <- seq.Date(as.Date("2001-01-01"), as.Date("2003-12-31"), by = "day")
-plot(dates,lai, col = "green", ylab = "lai [m²/m²]",
+plot(dates,lai, col = "green", ylab = "lai [mÂ²/mÂ²]",
      type ="l", xlab = "", lwd = 2)
 
 }

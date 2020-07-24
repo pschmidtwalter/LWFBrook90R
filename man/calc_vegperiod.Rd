@@ -4,9 +4,16 @@
 \alias{calc_vegperiod}
 \title{Calculate the dates of budburst and beginning of leaf fall}
 \usage{
-calc_vegperiod(budburst.method, leaffall.method, dates = NULL,
-  tavg = NULL, out.years = NULL, budburstdoy.fixed = 121,
-  leaffalldoy.fixed = 279, ...)
+calc_vegperiod(
+  budburst.method,
+  leaffall.method,
+  dates = NULL,
+  tavg = NULL,
+  out.years = NULL,
+  budburstdoy.fixed = 121,
+  leaffalldoy.fixed = 279,
+  ...
+)
 }
 \arguments{
 \item{budburst.method}{name of model for estimating budburst day of year. Either 'fixed'

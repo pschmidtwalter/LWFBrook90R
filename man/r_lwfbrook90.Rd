@@ -4,8 +4,17 @@
 \alias{r_lwfbrook90}
 \title{Interface function to the LWF-Brook90 model}
 \usage{
-r_lwfbrook90(siteparam, climveg, param, pdur, soil_materials, soil_nodes,
-  precdat = NULL, output, output_log = TRUE)
+r_lwfbrook90(
+  siteparam,
+  climveg,
+  param,
+  pdur,
+  soil_materials,
+  soil_nodes,
+  precdat = NULL,
+  output,
+  output_log = TRUE
+)
 }
 \arguments{
 \item{siteparam}{A [1,6] matrix with site level information: start year, start doy,

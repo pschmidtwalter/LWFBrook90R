@@ -4,9 +4,16 @@
 \alias{mrunLWFB90}
 \title{Make a multirun simulation using a set of variable input parameters.}
 \usage{
-mrunLWFB90(paramvar, param.b90, paramvar_nms = names(paramvar),
-  multirun.dir = "MultiRuns/", keep.subdirs = FALSE, cores = 2,
-  showProgress = TRUE, ...)
+mrunLWFB90(
+  paramvar,
+  param.b90,
+  paramvar_nms = names(paramvar),
+  multirun.dir = "MultiRuns/",
+  keep.subdirs = FALSE,
+  cores = 2,
+  showProgress = TRUE,
+  ...
+)
 }
 \arguments{
 \item{paramvar}{Data.frame of variable input parameters. For each row,

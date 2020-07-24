@@ -4,11 +4,24 @@
 \alias{runLWFB90}
 \title{Run the LWF-Brook90 hydrological model}
 \usage{
-runLWFB90(project.dir = "runLWFB90/", options.b90, param.b90, climate,
-  precip = NULL, soil = NULL, output = setoutput_LWFB90(),
-  output_fun = NULL, rtrn.input = TRUE, rtrn.output = TRUE,
-  read.output = TRUE, chk.input = TRUE, output.log = TRUE,
-  run = TRUE, verbose = TRUE, ...)
+runLWFB90(
+  project.dir = "runLWFB90/",
+  options.b90,
+  param.b90,
+  climate,
+  precip = NULL,
+  soil = NULL,
+  output = setoutput_LWFB90(),
+  output_fun = NULL,
+  rtrn.input = TRUE,
+  rtrn.output = TRUE,
+  read.output = TRUE,
+  chk.input = TRUE,
+  output.log = TRUE,
+  run = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{project.dir}{directory-name of the project to which output files

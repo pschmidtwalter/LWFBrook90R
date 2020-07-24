@@ -4,7 +4,8 @@
 \name{slb1_standprop}
 \alias{slb1_standprop}
 \title{Annual stand properties of the Solling Beech experimental site 'SLB1'}
-\format{A data.frame with 49 rows and 7 variables
+\format{
+A data.frame with 49 rows and 7 variables
 \describe{
   \item{year}{Year of observation}
   \item{species}{Tree species}
@@ -13,7 +14,8 @@
   \item{maxlai}{maximum leaf area index, m2 m-2}
   \item{sai}{stem area index, m2 m-2 }
   \item{densef}{stand density}
-}}
+}
+}
 \usage{
 slb1_standprop
 }

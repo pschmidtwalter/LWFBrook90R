@@ -4,8 +4,7 @@
 \alias{hydpar_hypres}
 \title{Mualem - van Genuchten Parameters from regression functions developed by Woesten et al 1999}
 \usage{
-hydpar_hypres(clay, silt, bd, oc.pct = 0.1, topsoil = TRUE,
-  humconv = 1.72)
+hydpar_hypres(clay, silt, bd, oc.pct = 0.1, topsoil = TRUE, humconv = 1.72)
 }
 \arguments{
 \item{clay}{Numeric vector of clay mass percent.}

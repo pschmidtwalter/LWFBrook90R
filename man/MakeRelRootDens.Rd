@@ -2,33 +2,38 @@
 % Please edit documentation in R/MakeRoots.R
 \name{MakeRelRootDens}
 \alias{MakeRelRootDens}
-\title{Generates a root density depth function the soil layers' lower depth limits}
+\title{Generates a root density depth function for the soil layers' lower depth limits}
 \usage{
-MakeRelRootDens(soilnodes, maxrootdepth = min(soilnodes),
-  method = "betamodel", beta = 0.97, relrootden = NULL,
-  rootdepths = NULL)
+MakeRelRootDens(
+  soilnodes,
+  maxrootdepth = min(soilnodes),
+  method = "betamodel",
+  beta = 0.97,
+  relrootden = NULL,
+  rootdepths = NULL
+)
 }
 \arguments{
 \item{soilnodes}{Vector of lower soil layer depth limits,
-for which the relative root distribution will be calculated.}
+for which the relative root distribution will be calculated (m, negative downwards).}
 
 \item{maxrootdepth}{The maximum rooting depth (m, negative downwards) below which
 relative root length density will be set to zero.}
 
-\item{method}{Method name for the root depth distribution. Possible value are 'betamodel',
+\item{method}{Method name for the root depth distribution. Possible values are 'betamodel',
 'table', 'linear', 'constant'. See details.}
 
-\item{beta}{Parameter(s) of the root distribution function.}
+\item{beta}{Parameter of the root distribution function.}
 
 \item{relrootden}{Vector of relative root densities.}
 
 \item{rootdepths}{Vector of lower depths limit, corresponding to 'relrootden'.}
 }
 \value{
-Vector of relative rootlength, corresponding to soilnodes.
+Vector of relative rootlength densities at the soilnodes.
 }
 \description{
-Generates a root density depth function the soil layers' lower depth limits
+Generates a root density depth function for the soil layers' lower depth limits
 }
 \details{
 Method  'betamodel' uses the model after Gale & Grigal (1987),

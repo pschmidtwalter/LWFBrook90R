@@ -4,8 +4,16 @@
 \alias{plant.coupmodel}
 \title{Interpolate plant properties using the 'Coupmodel' method.}
 \usage{
-plant.coupmodel(minval, maxval, doy.incr, doy.max, doy.min, shape.incr,
-  shape.decr, maxdoy)
+plant.coupmodel(
+  minval,
+  maxval,
+  doy.incr,
+  doy.max,
+  doy.min,
+  shape.incr,
+  shape.decr,
+  maxdoy
+)
 }
 \arguments{
 \item{minval}{Minimum value.}

@@ -4,9 +4,18 @@
 \alias{msiterunLWFB90}
 \title{Make a multi-site simulation using lists of climate, soil, options and parameter input objects.}
 \usage{
-msiterunLWFB90(param.b90, options.b90, climate, soil = NULL,
-  all_combinations = F, multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE, cores = 2, showProgress = TRUE, ...)
+msiterunLWFB90(
+  param.b90,
+  options.b90,
+  climate,
+  soil = NULL,
+  all_combinations = F,
+  multirun.dir = "MultiRuns/",
+  keep.subdirs = FALSE,
+  cores = 2,
+  showProgress = TRUE,
+  ...
+)
 }
 \arguments{
 \item{param.b90}{Named list of parameters to be used in all simulations, or a list of multiple parameter sets.}

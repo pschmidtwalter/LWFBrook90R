@@ -3,7 +3,6 @@
 \docType{package}
 \name{LWFBrook90R}
 \alias{LWFBrook90R}
-\alias{LWFBrook90R-package}
 \title{LWFBrook90R: A package for running the LWF-BROOK90 hydrological model from within R}
 \description{
 The central function runLWFB90() creates model input  from model control options, parameters,
