@@ -1,29 +1,48 @@
 library(LWFBrook90R)
 library(data.table)
-source("dev/output/runLWFB90.R")
 
 #Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()
 options.b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2003-01-01")
+options.b90$startdate <- as.Date("2002-01-01")
 options.b90$enddate <- as.Date("2003-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
-
+output <- setoutput_LWFB90()
+output[,] <-0L
+output[,"Day"] <- 1L
 # Run LWF-Brook90
 b90.result <- runLWFB90(options.b90 = options.b90,
                         param.b90 = param.b90,
                         climate = slb1_meteo,
                         soil = soil,
+                        output = -1,
                         output.log = F)
-b90.result$day[, dates := as.Date(paste(yr, mo,da, sep ="-"))]
-b90.result$day[, doy := as.integer(format(dates, "%j"))]
-b90.result$day[,mesfl:=0]
-b90.result$day[,prec := rfal+sfal]
+
+n <- 5
+vary_parms <- data.frame(winlaifrac = runif(n, 0,0.5),
+                         budburstdoy = runif(n,100,150),
+                         soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
+                         maxlai2 = runif(n,4,8)) # lai in the 2nd year of the simulation
+
+# add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
+param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+
+# set up maxlai with length 2, so maxlai2 of paramvar can be looked up
+param.b90$maxlai <- c(5, 5)
+options.b90$startdate
+options.b90$enddate
+# Make a Multirun-Simulation
+system.time(b90.multi <- mrunLWFB90(paramvar = vary_parms,
+                        param.b90 = param.b90,
+                        options.b90 = options.b90,
+                        climate = slb1_meteo,
+                        cores = 3))
+
 
 
 getwd()

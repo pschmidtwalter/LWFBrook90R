@@ -1,11 +1,11 @@
-! Tony Federer's original [Brook90 Fortran 77 code](http://www.ecoshift.net/brook/b90doc.html) 
+! Tony Federer's original [Brook90 Fortran 77 code](http://www.ecoshift.net/brook/b90doc.html)
 ! (Brook90_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin Kennel at Bavarian State
-! Institute of Forestry (LWF) around the year 2000. Since then, LWF-BROOK90 is distributed by 
+! Institute of Forestry (LWF) around the year 2000. Since then, LWF-BROOK90 is distributed by
 ! [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) upon request as a !
-! pre-compiled Fortran command line program together with in MS Access User Interface. 
-! In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented 
-! the connection to R. Paul Schmidt-Walter's *brook90r* package for LWF-Brook90 input data 
-! generation, model execution and result processing was adapted and extended to control this 
+! pre-compiled Fortran command line program together with in MS Access User Interface.
+! In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented
+! the connection to R. Paul Schmidt-Walter's *brook90r* package for LWF-Brook90 input data
+! generation, model execution and result processing was adapted and extended to control this
 ! interface function.
 
 ! 2020-05 adjustments made by V. Trotsik [volodymyr.trostiuk@wsl.ch]
@@ -52,7 +52,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     logical(kind=c_bool), intent(in) :: pr
 
     ! Output matrix
-    real(kind=c_double), dimension( INT(param(1)),39), intent(inout) :: output_day
+    real(kind=c_double), dimension( INT(param(1)),41), intent(inout) :: output_day
     real(kind=c_double), dimension( INT(param(1)), 16, INT(param(65))), intent(inout) :: output_layer
 
     ! Variables
@@ -759,7 +759,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         go to 500
 
     end if
-    
+
     if( pr ) then
         call intpr(" ", -1, 0, 0)
         call intpr("TOTAL:   inter     snow    rain    et      drain     lat", -1, 0, 0)
@@ -768,9 +768,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 !     ***************   E N D    D A Y   L O O P    **************************
     999 if( error )  call intpr("PARAMETERS COMBINATION ERROR", -1, 0, 0)
-    
+
     if( pr ) call intpr("THAT IS THE END", -1, 0, 0)
-        
+
 end subroutine s_brook90_f
 
 
@@ -1370,7 +1370,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     Thr=Par(10,j)
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
-                    
+
                     if (pr) then
                         call realpr('xxx i=, th=, thr=, netflow=, thick=, K=, Psi=', -1, &
                             (/real(j,8),th,thr,NTFLI(j),Thick(j),K,PSI/), 7)
@@ -1391,7 +1391,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
 
-                    if (pr) then 
+                    if (pr) then
                         call realpr('xxx i=, th=, netflow=, thick=, K=, Psi=', -1, &
                             (/real(j,8),th,NTFLI(j),Thick(j),K,PSI/), 6)
                     end if
@@ -1925,9 +1925,9 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
 !       intrinsic
     real(kind=8) :: PSIINF(NLAYER)
 !          potential at dry end of near saturation range, kPa
-    
+
     error = .FALSE.
-    
+
     DO 100 I = 1, NLAYER
 !           gravity potential is negative down from surface
         IF (I .EQ. 1) THEN
@@ -3061,7 +3061,7 @@ function FWETK (K, Par, iModel, pr)
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
-    logical(kind=1) :: pr !write output_log file?, if 
+    logical(kind=1) :: pr !write output_log file?, if
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation

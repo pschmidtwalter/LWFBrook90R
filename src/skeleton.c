@@ -16,7 +16,7 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
     const int n_m_c = INTEGER(n_m)[0];
     const int n_l_c = INTEGER(n_l)[0];
 
-    SEXP output_day = PROTECT( allocMatrix(REALSXP, n_m_c, 39) );
+    SEXP output_day = PROTECT( allocMatrix(REALSXP, n_m_c, 41) );
 
     n = n_m_c * 16 * n_l_c;
     SEXP output_layer = PROTECT( allocVector(REALSXP, n) );

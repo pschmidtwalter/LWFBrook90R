@@ -18,15 +18,6 @@
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on.
 #'
-#' @section File management:
-#' The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-#' If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
-#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
-#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
-#' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
-#' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
-#'
 #' @section Parameter updating:
 #' The transfer of values from a row in paramvar to param.b90 before each single run
 #' simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
@@ -35,6 +26,15 @@
 #' in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
 #' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 #' the column has to be named 'maxlai3'.
+#'
+#' @section Data management:
+#' The returned list of single run results can become very large,if many simulations are done and
+#' the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
+#' carefully selecting the output, and make use of the option to pass a list of functions to
+#' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
+#' output of a single run simulation, and can be used for aggrating model output on-the-fly,
+#' or writing results to a file or database.
 #'
 #' @export
 #'
@@ -93,8 +93,6 @@
 mrunLWFB90 <- function(paramvar,
                        param.b90,
                        paramvar_nms = names(paramvar),
-                       multirun.dir = "MultiRuns/",
-                       keep.subdirs = FALSE,
                        cores = 2,
                        showProgress = TRUE,
                        ...){
@@ -130,12 +128,6 @@ mrunLWFB90 <- function(paramvar,
                  paste(nms[which(!nms %in% names(param.b90))], collapse =", ") ))
   }
 
-  # set up multirun-directory -------------------------------------------------------
-  multirun.dir <- normalizePath(multirun.dir, mustWork = FALSE)
-  if (!dir.exists(multirun.dir)) {
-    dir.create(multirun.dir)
-  }
-
   # set up local %dopar%
   `%dopar%` <- foreach::`%dopar%`
 
@@ -148,7 +140,7 @@ mrunLWFB90 <- function(paramvar,
   } else {
     opts <- list(progress = NULL)
   }
-  #
+
   cl <- snow::makeSOCKcluster(cores)
   doSNOW::registerDoSNOW(cl)
   snow::clusterEvalQ(cl, library("LWFBrook90R"))
@@ -172,20 +164,11 @@ mrunLWFB90 <- function(paramvar,
                                     param.b90[[ list_ind ]] <- replace_vecelements(param.b90[[ list_ind ]],
                                                                                    varnms = paramvar_nms[ param_ll[[l]] ],
                                                                                    vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
-                                    }
+                                  }
                                 }
-                                # Set up directory name
-                                proj.dir <- file.path(multirun.dir,paste0("RunNo.",i))
 
                                 # Run LWFBrook90
-                                res <- runLWFB90(project.dir = proj.dir,
-                                                 param.b90 = param.b90,
-                                                 ...)
-
-                                if (!keep.subdirs) {
-                                  unlink(file.path(proj.dir), recursive = TRUE)
-                                }
-                                return(res)
+                                runLWFB90(param.b90 = param.b90, ...)
                               }
 
   return(results)

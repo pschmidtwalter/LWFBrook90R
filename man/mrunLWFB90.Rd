@@ -8,8 +8,6 @@ mrunLWFB90(
   paramvar,
   param.b90,
   paramvar_nms = names(paramvar),
-  multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE,
   cores = 2,
   showProgress = TRUE,
   ...
@@ -24,16 +22,16 @@ respective column of \code{paramvar}. All parameter names (column names) in \cod
 
 \item{paramvar_nms}{Names of the parameters in \code{paramvar} to be replaced in \code{param.b90}.}
 
-\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
-
-\item{keep.subdirs}{Keep sub-directories of the single runs? Default is FALSE.}
-
 \item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
 
 \item{showProgress}{Show progressbar? Default is TRUE.}
 
 \item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
 provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!}
+
+\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
+
+\item{keep.subdirs}{Keep sub-directories of the single runs? Default is FALSE.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -43,17 +41,6 @@ Simulation or processing errors are passed on.
 Wrapper function for \code{\link{runLWFB90}} to make multiple simulations parallel,
 with varying input parameters.
 }
-\section{File management}{
-
-The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
-the respective subdirectory is not deleted. The returned list of single run results can become very large,
-if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
-and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
-perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
-}
-
 \section{Parameter updating}{
 
 The transfer of values from a row in paramvar to param.b90 before each single run
@@ -63,6 +50,17 @@ has to be setup from its name and index in \code{param.b90}. To replace, e.g., t
 in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
 has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 the column has to be named 'maxlai3'.
+}
+
+\section{Data management}{
+
+The returned list of single run results can become very large,if many simulations are done and
+the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
+carefully selecting the output, and make use of the option to pass a list of functions to
+\code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
+output of a single run simulation, and can be used for aggrating model output on-the-fly,
+or writing results to a file or database.
 }
 
 \examples{
