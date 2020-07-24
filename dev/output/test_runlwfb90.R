@@ -1,5 +1,5 @@
 library(LWFBrook90R)
-library(data.table)
+
 
 #Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()

@@ -79,8 +79,9 @@ else
     Eta=0.d0
 end if
 
-AWATFK = 0.0d0
+
 IF (IDAY .EQ. 1) THEN
+    AWATFK = 0.0d0
     DO 916 I = 1, NLAYER
         dummy = FWETNES(-6.18d0,Par(1,i),iModel)
         IF (RELDEN(I) .GE. 1E-06 .AND. RTLEN .GE. .1d0) THEN
