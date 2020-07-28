@@ -356,6 +356,7 @@ runLWFB90 <- function(options.b90,
       if (verbose == T) {
         message("Applying custom functions on simulation output...")
       }
+
       if (!is.list(output_fun)){
         output_fun <- list(output_fun)
       }
@@ -367,6 +368,8 @@ runLWFB90 <- function(options.b90,
                   argsnms,
                   several.ok = T)},
         argsnms = names(outfunargs))
+
+        outfunargs <- list(x = simres,...)
 
       # TODO: simout is copied for use in each output_fun.
       # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
@@ -387,6 +390,12 @@ runLWFB90 <- function(options.b90,
       } else {
         simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
       }
+
+      # remove the basic results again if they are not required
+      if (!rtrn.output) {
+        simres <- simres[-which(names(simres) %in% names(simout))]
+      }
+
     }
 
 

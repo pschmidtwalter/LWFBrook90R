@@ -1,22 +1,24 @@
+
 LWFBrook90R v0.4.0 (Release date: )
 ==============
 
-Changes: 
+Changes:
 * result datasets are now returned directly, without the need to write .ASC text files.
 * runLWFB90() by default now returns two tables with simulation results: general daily outputs and layer outputs.
  However, for convenience it is still possible to provide an output selection matrix, to return different output datasets at different timescales.
 
-Bug fixes: 
+Bug fixes:
 * zero division error causing infinite relawat values in the output.
 
-LWFBrook90R v0.3.0 (Release date: 2020-04-19)
+LWFBrook90R v0.3.0 (Release date: 2020-04-21)
 ==============
 
 Changes
 * new function msiterunLWFB90()
-* runLWFB90(): model input (param.b90, option.b90, standprop_daily) is appended 
-	to the return value BEFORE evaluating the output_fun-argument. In this way, 
-	on-the-fly post-processing of model results including model-input is possible now. 
+* runLWFB90(): model input (param.b90, option.b90, standprop_daily) is appended
+	to the return value BEFORE evaluating the output_fun-argument. In this way,
+	on-the-fly post-processing of model results including model-input is possible now.
+* minor bugs fixed
 
 
 LWFBrook90R v0.2.0 (Release date: 2019-06-18)

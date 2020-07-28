@@ -71,7 +71,7 @@ param_l <- list(spruce = setparam_LWFB90(maxlai = 5,
                                         budburst.species = "Fagus sylvatica",
                                         winlaifrac = 0))
 
-soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 # define list of soil objects
 soils <- list(soil1 = soil, soil2 = soil)
@@ -86,6 +86,7 @@ res <- msiterunLWFB90(param.b90 = param_l,
                       soil = soils,
                       climate = climates,
                       run = FALSE)
+
 names(res)
 
 # all possible combinations of soil, climate, parameters
