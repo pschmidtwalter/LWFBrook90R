@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_layer_output.R
 \name{extract_layer_output}
 \alias{extract_layer_output}
-\title{Extract values from layer data and organize layer-wise variables in columns}
+\title{Extracts values from layer data and organizes layer-wise variables in columns}
 \usage{
 extract_layer_output(dat, layers = NULL, value.vars = NULL, sep = "")
 }
@@ -22,7 +22,7 @@ A data.table with the layers' values of the variables organized in columns
 (wide format) with the names being made up of the variable name and layer number.
 }
 \description{
-Reorganizes layer data such as BELO and SWAT to the wide format
+COnvenience function to reorganize soil layer data such as BELO and SWAT to the wide format,
  by casting variables with the layer number, using data.table's dcast-function.
 }
 \examples{
@@ -31,16 +31,18 @@ Reorganizes layer data such as BELO and SWAT to the wide format
 df <- expand.grid(nl = 1:5,
                   yr = 2002:2003,
                   mo = 1:12)
-#value.var
+#add a value variable
 df$var <- runif(nrow(df), -1,0)
 
 extract_layer_output(df)
 
-#more variables
+# add more variables
 df$var1 <- runif(nrow(df), 1,2)
 df$var2 <- runif(nrow(df), 2,3)
+
 # extract specific layers
 extract_layer_output(df,layers = 2:4, sep = "_")
+
 #extract specific variables
 extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
 }

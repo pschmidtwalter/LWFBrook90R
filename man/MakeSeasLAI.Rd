@@ -56,8 +56,7 @@ A daily sequence of leaf area index is derived from maximum and minimum values,
 dates and shape parameters using different methods.
 }
 \examples{
-
-# lai courses
+# Intraannual courses of leaf area index
 lai_b90 <- MakeSeasLAI(method = "b90",
                        year = 2001,
                        maxlai = 5,
@@ -104,5 +103,4 @@ lai <- MakeSeasLAI(method = "Coupmodel",
 dates <- seq.Date(as.Date("2001-01-01"), as.Date("2003-12-31"), by = "day")
 plot(dates,lai, col = "green", ylab = "lai [mÂ²/mÂ²]",
      type ="l", xlab = "", lwd = 2)
-
 }

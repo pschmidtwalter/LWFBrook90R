@@ -30,7 +30,8 @@ Ignored if approx.method = 'constant'.}
 x.years. For years outside x.years, the value of the closest data extrem is returned.}
 
 \item{use_growthperiod}{Logical: Use startdoy and enddoy for linear interpolation?
-If TRUE, yearly changes take place between startdoy and enddoy, other wise from end of year to end of year.}
+If TRUE, yearly changes take place between startdoy and enddoy, othe wise from end of year to end
+of the year after.}
 
 \item{startdoy}{A single value or vector of the same length as x.years, with the day of year when growth begins.}
 
@@ -56,33 +57,28 @@ from which the sequence is interpolated to the first value of y. The linear chan
 between 31st to 31st of December of the years in x.years, or during the growing season only (use_growingperiod = TRUE).
 }
 \examples{
-options.b90 <- setoptions_LWFB90()
-param.b90 <- setparam_LWFB90()
-
 years <- 2002:2004
-options.b90$standprop.interp <- 'constant'
-param.b90$height <- c(20.2,20.8,21.3)
+height_yearly <- c(20.2,20.8,21.3)
+
+# constant 'interpolation'
 height_c <- approx_standprop(x.years=years,
-                             y = param.b90$height,
-                             approx.method = options.b90$standprop.interp)
+                             y = height_yearly)
 
 # linear interpolation
-options.b90$standprop.interp <- 'linear'
-param.b90$height.ini <- 19.1
+height.ini <- 19.1
 height_l <- approx_standprop(x.years=years,
-                             y = param.b90$height,
-                             y.ini = param.b90$height.ini,
-                             approx.method = options.b90$standprop.interp)
+                             y = height_yearly,
+                             y.ini = height.ini,
+                             approx.method = 'linear')
 
 # use growthperiod
-options.b90$standprop.use_growthperiod <- TRUE
 height_l_gp <- approx_standprop(x.years = years,
-                                y = param.b90$height,
-                                y.ini = param.b90$height.ini,
-                                use_growthperiod = options.b90$standprop.use_growthperiod,
-                                startdoy = param.b90$budburstdoy,
-                                enddoy = param.b90$leaffalldoy,
-                                approx.method = options.b90$standprop.interp)
+                                y = height_yearly,
+                                y.ini = height.ini,
+                                use_growthperiod = TRUE,
+                                startdoy = 121,
+                                enddoy = 279,
+                                approx.method = 'linear')
 
 dates <- seq.Date(from = as.Date(paste0(min(years),"-01-01")),
                   to = as.Date(paste0(max(years),"-12-31")),
@@ -94,8 +90,8 @@ lines(dates, height_l,
       col = "blue", lwd = 2)
 lines(dates, height_l_gp,
       col = "green", lwd = 2)
-legend("topleft", legend = c("'constant'",
-                             "'linear'", "'linear', 'use_growthperiod'"),
+legend("topleft", legend = c("'constant'", "'linear'",
+                             "'linear', 'use_growthperiod'"),
        col  = c("black", "blue", "green"),  lwd = 2, pch = NULL,
        bty = "n")
 }

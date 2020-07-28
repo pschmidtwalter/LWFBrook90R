@@ -44,7 +44,6 @@ at 'maxrootdepth'. 'constant' returns a uniform root distribution with depth
 corresponding to the first vector element of 'relrootden' and 0 below 'maxrootdepth'.
 }
 \examples{
-
 depths <- slb1_soil$lower
 roots_beta <- MakeRelRootDens(soilnodes = depths,
                               maxrootdepth = -1,4,

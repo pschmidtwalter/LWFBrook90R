@@ -96,5 +96,4 @@ res <- msiterunLWFB90(param.b90 = param_l,
                       all_combinations = TRUE,
                       run = FALSE)
 names(res)
-
 }

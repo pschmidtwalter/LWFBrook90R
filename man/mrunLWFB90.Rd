@@ -68,7 +68,7 @@ or writing results to a file or database.
 param.b90 <- setparam_LWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
 # with fixed budburst and leaf fall dates:
-options.b90 <- setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+options.b90 <- setoptions_LWFB90(startdate = as.Date("2003-01-01"),
                                  enddate = as.Date("2003-12-31"),
                                  lai.method = 'Coupmodel',
                                  budburst.method = 'fixed',
@@ -83,14 +83,12 @@ vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          shape.budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
-                         soil_materials.ths3 = runif(n, 0.3,0.5), #' ths of material 3
-                         maxlai2 = runif(n,4,8)) #' lai in the 2nd year of the simulation
+                         soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
+                         maxlai = runif(n,4,7))
+
 
 # add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
-
-# set up maxlai with length 2, so maxlai2 of paramvar can be looked up
-param.b90$maxlai <- c(5, 5)
 
 # Make a Multirun-Simulation
 b90.multi <- mrunLWFB90(paramvar = vary_parms,
@@ -103,16 +101,16 @@ names(b90.multi)
 evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
                                                    FUN = function(x) {x[["EVAPDAY.ASC"]]}),
                                             idcol = "srun"))
-evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"\%Y \%j")
+evapday$dates <- as.Date(paste(evapday$yr, evapday$doy),"\%Y \%j")
 
 srun_nms <- unique(evapday$srun)
 
 with(evapday[evapday$srun == srun_nms[1], ],
-     plot(dates, cumsum(EVAP), type = "n",
+     plot(dates, cumsum(evap), type = "n",
           ylim = c(0,1000))
 )
 for (i in 1:length(b90.multi)){
   with(evapday[evapday$srun == srun_nms[i], ],
-       lines(dates, cumsum(EVAP)))
+       lines(dates, cumsum(evap)))
 }
 }
