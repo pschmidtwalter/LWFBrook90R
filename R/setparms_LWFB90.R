@@ -36,8 +36,8 @@
 #'  cintsl       \tab Maximum interception storage of snow per unit LAI. Default: 0.6 \tab mm                \tab Interception           \cr
 #'  cintss       \tab Maximum interception storage of snow per unit SAI. Default: 0.6 \tab mm                \tab Interception           \cr
 #'  frintlai     \tab Intercepted fraction of rain per unit LAI. Default: 0.06 \tab -                  \tab Interception           \cr
-#'  frintsai     \tab Intercepted fraction of rain per unit SAI. Default: 0.04\tab -                  \tab Interception           \cr
-#'  fsintlai     \tab Intercepted fraction of snow per unit LAI. Default: 0.06 \tab -                  \tab Interception           \cr
+#'  frintsai     \tab Intercepted fraction of rain per unit SAI. Default: 0.06\tab -                  \tab Interception           \cr
+#'  fsintlai     \tab Intercepted fraction of snow per unit LAI. Default: 0.04 \tab -                  \tab Interception           \cr
 #'  fsintsai     \tab Intercepted fraction of snow per unit SAI. Default: 0.04 \tab -                  \tab Interception           \cr
 #'  pdur         \tab Average duration of precipitation events for each month of the year. Default: rep(4,12) \tab hours                  \tab Interception           \cr
 #'  alb          \tab Albedo of soil/vegetation surface without snow. Default: 0.2 \tab -                  \tab Meteo                  \cr
