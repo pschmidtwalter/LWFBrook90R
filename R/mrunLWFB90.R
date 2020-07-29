@@ -18,6 +18,15 @@
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on.
 #'
+#' @section File management:
+#' The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+#' If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
+#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
+#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
+#' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+#' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
+#'
 #' @section Parameter updating:
 #' The transfer of values from a row in paramvar to param.b90 before each single run
 #' simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
@@ -27,21 +36,65 @@
 #' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 #' the column has to be named 'maxlai3'.
 #'
-#' @section Data management:
-#' The returned list of single run results can become very large,if many simulations are done and
-#' the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
-#' carefully selecting the output, and make use of the option to pass a list of functions to
-#' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
-#' output of a single run simulation, and can be used for aggrating model output on-the-fly,
-#' or writing results to a file or database.
-#'
 #' @export
 #'
-#' @example inst/examples/mrunLWFB90-help.R
+#' @examples
+#' # Set up lists containing model control options and model parameters:
+#' param.b90 <- setparam_LWFB90()
+#' # choose the 'Coupmodel' shape option for the annual lai dynamic,
+#' # with fixed budburst and leaf fall dates:
+#' options.b90 <- setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+#'                                  enddate = as.Date("2003-12-31"),
+#'                                  lai.method = 'Coupmodel',
+#'                                  budburst.method = 'fixed',
+#'                                  leaffall.method = 'fixed')
+#'
+#' # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
+#' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
+#'
+#' #set up data.frame with variable parameters
+#' n <- 5
+#' vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
+#'                          shape.budburst = runif(n, 0.1,1),
+#'                          winlaifrac = runif(n, 0,0.5),
+#'                          budburstdoy = runif(n,100,150),
+#'                          soil_materials.ths3 = runif(n, 0.3,0.5), #' ths of material 3
+#'                          maxlai2 = runif(n,4,8)) #' lai in the 2nd year of the simulation
+#'
+#' # add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
+#' param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+#'
+#' # set up maxlai with length 2, so maxlai2 of paramvar can be looked up
+#' param.b90$maxlai <- c(5, 5)
+#'
+#' # Make a Multirun-Simulation
+#' b90.multi <- mrunLWFB90(paramvar = vary_parms,
+#'                         param.b90 = param.b90,
+#'                         options.b90 = options.b90,
+#'                         climate = slb1_meteo)
+#' names(b90.multi)
+#'
+#' # extract results: EVAPDAY.ASC
+#' evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
+#'                                                    FUN = function(x) {x[["EVAPDAY.ASC"]]}),
+#'                                             idcol = "srun"))
+#' evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"%Y %j")
+#'
+#' srun_nms <- unique(evapday$srun)
+#'
+#' with(evapday[evapday$srun == srun_nms[1], ],
+#'      plot(dates, cumsum(EVAP), type = "n",
+#'           ylim = c(0,1000))
+#' )
+#' for (i in 1:length(b90.multi)){
+#'   with(evapday[evapday$srun == srun_nms[i], ],
+#'        lines(dates, cumsum(EVAP)))
+#' }
 mrunLWFB90 <- function(paramvar,
                        param.b90,
                        paramvar_nms = names(paramvar),
+                       multirun.dir = "MultiRuns/",
+                       keep.subdirs = FALSE,
                        cores = 2,
                        showProgress = TRUE,
                        ...){
@@ -77,6 +130,12 @@ mrunLWFB90 <- function(paramvar,
                  paste(nms[which(!nms %in% names(param.b90))], collapse =", ") ))
   }
 
+  # set up multirun-directory -------------------------------------------------------
+  multirun.dir <- normalizePath(multirun.dir, mustWork = FALSE)
+  if (!dir.exists(multirun.dir)) {
+    dir.create(multirun.dir)
+  }
+
   # set up local %dopar%
   `%dopar%` <- foreach::`%dopar%`
 
@@ -89,7 +148,7 @@ mrunLWFB90 <- function(paramvar,
   } else {
     opts <- list(progress = NULL)
   }
-
+  #
   cl <- snow::makeSOCKcluster(cores)
   doSNOW::registerDoSNOW(cl)
   snow::clusterEvalQ(cl, library("LWFBrook90R"))
@@ -113,11 +172,20 @@ mrunLWFB90 <- function(paramvar,
                                     param.b90[[ list_ind ]] <- replace_vecelements(param.b90[[ list_ind ]],
                                                                                    varnms = paramvar_nms[ param_ll[[l]] ],
                                                                                    vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
-                                  }
+                                    }
                                 }
+                                # Set up directory name
+                                proj.dir <- file.path(multirun.dir,paste0("RunNo.",i))
 
                                 # Run LWFBrook90
-                                runLWFB90(param.b90 = param.b90, ...)
+                                res <- runLWFB90(project.dir = proj.dir,
+                                                 param.b90 = param.b90,
+                                                 ...)
+
+                                if (!keep.subdirs) {
+                                  unlink(file.path(proj.dir), recursive = TRUE)
+                                }
+                                return(res)
                               }
 
   return(results)
