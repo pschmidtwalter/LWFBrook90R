@@ -45,6 +45,7 @@ a data.frame with columns 'year', 'start', 'end'. if budburst.method = 'fixed' o
 Wrapper for \code{\link[vegperiod]{vegperiod}}
 }
 \examples{
+
 # fixed budburst and leaffall doy
 calc_vegperiod(out.years = 2001:2010,
                budburst.method = "fixed",
