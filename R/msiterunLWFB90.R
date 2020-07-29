@@ -22,22 +22,61 @@
 #' are concatenated from the names of the input list entries
 #' in the following form: <climate> <soil> <param.b90> <options.b90>.
 #'
-#' @section Data management:
-#' The returned list of single run results can become very large,if many simulations are done and
-#' the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
-#' carefully selecting the output, and make use of the option to pass a list of functions to
-#' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
-#' output of a single run simulation, and can be used for aggrating model output on-the-fly,
-#' or writing results to a file or database.
+#' @section File management:
+#' The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
+#' If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
+#' the respective subdirectory is not deleted. The returned list of single run results can become very large,
+#' if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
+#' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+#' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
+#'
 #' @export
 #'
-#' @example inst/examples/msiterunLWFB90-help.R
+#' @examples
+#' options.b90 <- setoptions_LWFB90(budburst.method = "Menzel")
+#'
+#' # define parameter sets
+#' param_l <- list(spruce = setparam_LWFB90(maxlai = 5,
+#'                                          budburst.species = "Picea abies (frueh)",
+#'                                          winlaifrac = 0.8),
+#'                 beech = setparam_LWFB90(maxlai = 6,
+#'                                         budburst.species = "Fagus sylvatica",
+#'                                         winlaifrac = 0))
+#'
+#' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
+#'
+#' # define list of soil objects
+#' soils <- list(soil1 = soil, soil2 = soil)
+#'
+#' # define list of climate objects
+#' climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
+#'
+#' # run two parameter sets on a series of climate and soil-objects
+#' # (run = FALSE: 'dry' run without actual simulation)
+#' res <- msiterunLWFB90(param.b90 = param_l,
+#'                       options.b90 = options.b90,
+#'                       soil = soils,
+#'                       climate = climates,
+#'                       run = FALSE)
+#' names(res)
+#'
+#' # all possible combinations of soil, climate, parameters
+#' res <- msiterunLWFB90(param.b90 = param_l,
+#'                       options.b90 = options.b90,
+#'                       soil = soils,
+#'                       climate = climates,
+#'                       all_combinations = TRUE,
+#'                       run = FALSE)
+#' names(res)
+#'
 msiterunLWFB90 <- function(param.b90,
                            options.b90,
                            climate,
                            soil = NULL,
                            all_combinations = F,
+                           multirun.dir = "MultiRuns/",
+                           keep.subdirs = FALSE,
                            cores = 2,
                            showProgress = TRUE,
                            ...){
@@ -63,6 +102,12 @@ msiterunLWFB90 <- function(param.b90,
                                      all_combinations = all_combinations)
 
   nRuns <- nrow(combinations)
+
+  # set up multirun-directory
+  multirun.dir <- normalizePath(multirun.dir, mustWork = F)
+  if (!dir.exists(multirun.dir)) {
+    dir.create(multirun.dir)
+  }
 
   #set up Cluster and progressbar --------------------------------------------------
 
@@ -104,13 +149,23 @@ msiterunLWFB90 <- function(param.b90,
 
                        #subset for readibility
                        combi_thisclim <- combinations[which(combinations$clim == clim_no),]
+                       #set project-directory
+                       proj.dir <- file.path(multirun.dir, trimws(paste(thisname,
+                                                                        soil_nms[combi_thisclim$soil[i]],
+                                                                        param_nms[combi_thisclim$param[i]],
+                                                                        options_nms[combi_thisclim$options[i]])))
 
-                       runLWFB90(project.dir = proj.dir,
-                                 param.b90 = param.b90[[combi_thisclim$param[i]]],
-                                 options.b90 = options.b90[[combi_thisclim$options[i]]],
-                                 soil = soil[[combi_thisclim$soil[i]]],
-                                 climate = thisclim,
-                                 ...)
+                       res <- runLWFB90(project.dir = proj.dir,
+                                        param.b90 = param.b90[[combi_thisclim$param[i]]],
+                                        options.b90 = options.b90[[combi_thisclim$options[i]]],
+                                        soil = soil[[combi_thisclim$soil[i]]],
+                                        climate = thisclim,
+                                        ...)
+
+                       if (!keep.subdirs) {
+                         unlink(file.path(proj.dir), recursive = TRUE)
+                       }
+                       return(res)
                      }
 
   # unnest

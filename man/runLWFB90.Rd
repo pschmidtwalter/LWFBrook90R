@@ -5,6 +5,7 @@
 \title{Run the LWF-Brook90 hydrological model}
 \usage{
 runLWFB90(
+  project.dir = "runLWFB90/",
   options.b90,
   param.b90,
   climate,
@@ -14,6 +15,7 @@ runLWFB90(
   output_fun = NULL,
   rtrn.input = TRUE,
   rtrn.output = TRUE,
+  read.output = TRUE,
   chk.input = TRUE,
   output.log = TRUE,
   run = TRUE,
@@ -22,6 +24,9 @@ runLWFB90(
 )
 }
 \arguments{
+\item{project.dir}{directory-name of the project to which output files
+are written. Will be created, if not existing. Defaults to 'runLWFB90/'.}
+
 \item{options.b90}{Named list of model control options. Use
 \code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
 
@@ -37,24 +42,26 @@ per day defined in \code{options.b90$prec.interval}.}
 
 \item{soil}{Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'}
 
-\item{output}{A [7,5]-matrix flagging the desired model output datasets at different time intervals. Use
-\code{\link{setoutput_LWFB90}} to generate and edit a default output selection matrix. Alternatively,
-use -1 (the default) to return the raw daily and soil layer outputs.}
+\item{output}{A [10,5]-matrix flagging the desired model-output. Use
+\code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.}
 
 \item{output_fun}{A function or a list of functions to be performed on the output objects selected by \code{output}.
-Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
-Useful if the function is evaluated within a large multi-run application, which might overload the memory.
-(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
+Can be used to aggregate output or calculate goodness of fit measures on-the-fly,
+which is useful if the function is evaluated within a large multi-run application
+(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
+Disabled when \code{read.output = FALSE}.}
 
 \item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
 properties ('standprop_daily', as derived from parameters) to the result?}
 
-\item{rtrn.output}{Logical: return the simulation results?}
+\item{rtrn.output}{Logical: return the simulation results? Disabled when read.output = FALSE.}
+
+\item{read.output}{Logical: read the simulation result files from project.dir? Default is TRUE.}
 
 \item{chk.input}{Logical wether to check param.b90, options.b90, climate, precip, and soil
 for completeness and consistency.}
 
-\item{output.log}{Logical or file name wether to print runtime output, or redirect runtime output to a file.}
+\item{output.log}{Logical: write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.}
 
 \item{run}{Logical: run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
@@ -71,87 +78,24 @@ and the return values of \code{output_fun} if specified.
 Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
 and returns the selected results.
 }
-\section{Climate input data}{
+\section{Climate data}{
 
-The \code{climate} data.frame must contain the following variables in columns named
+The \code{climate} data.frame must contain the following variable in columns named
 \code{dates} (Date), \code{tmax} (deg C), \code{tmin} (deg C), \code{tmean} (deg C),
 \code{wind} (m s-1), \code{prec} (mm) , \code{vappres} (kPa), and either \code{globrad} (MJ d-1 m-2)
 or \code{sunhours} (hours). When using \code{sunhours}, please set \code{options.b90$fornetrad = 'sunhours'}.
 }
 
-\section{Soil input parameters}{
+\section{Soil parameters}{
 
 Each row of \code{soil} represents one layer, containing the layers' boundaries and soil hydraulic parameters.
 The column names for the upper and lower layer boundaries are \code{upper} and \code{lower} (m, negative downwards).
 When using options.b90$imodel = 'MvG', the hydraulic parameters are  \code{ths}, \code{thr},
  \code{alpha} (m-1), \code{npar}, \code{ksat} (mm d-1) and \code{tort}.  With options.b90$imodel = 'CH',
- the parameters are \code{thsat}, \code{thetaf}, \code{psif} (kPa), \code{bexp},
+ the parameters are \code{thsat}, \code{thetaf}, \code{psif}(kPa), \code{bexp},
  \code{kf} (mm d-1), and \code{wetinf}. For both parameterizations, the volume fraction of stones has to be named \code{gravel}.
  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
  of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
-}
-
-\section{Daily outputs}{
-
-\tabular{llcl}{
-\strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
-adef \tab air deficit in the root zone \tab - \cr
-awat \tab total available soil water in layers with roots between -6.18 kPa and PSICR \tab mm \cr
-balerr \tab error in water balance \tab mm \cr
-byfl \tab total bypass flow \tab mm \cr
-dsfl \tab downslope flow \tab mm \cr
-evap \tab evapotranspiration \tab mm \cr
-flow \tab total streamflow \tab mm \cr
-gwat \tab groundwater storage below soil layers at the end of the time interval \tab mm \cr
-gwfl \tab groundwater flow \tab mm \cr
-intr \tab intercepted rain at the end of the time interval \tab mm \cr
-ints \tab intercepted snow at the end of the time interval \tab mm \cr
-irvp \tab evaporation of intercepted rain \tab mm \cr
-isvp \tab evaporation of intercepted snow \tab mm \cr
-nits \tab total number of iterations in time interval \tab - \cr
-pint \tab potential interception for a canopy always wet \tab mm \cr
-pslvp \tab potential soil evaporation \tab mm \cr
-ptran \tab potential transpiration \tab mm \cr
-relawat \tab relative available soil water in layers with roots \tab - \cr
-rfal \tab rainfall \tab mm \cr
-rint \tab rain interception \tab mm \cr
-rnet \tab rainfall to soil surface \tab mm \cr
-rsno \tab rain on snow \tab mm \cr
-safrac \tab source area fraction \tab - \cr
-seep \tab seepage loss \tab mm \cr
-sfal \tab snowfall \tab mm \cr
-sint \tab snow interception \tab mm \cr
-slfl \tab input to soil surface \tab mm \cr
-slvp \tab evaporation rate from soil \tab mm \cr
-smlt \tab snowmelt \tab mm \cr
-snow \tab snowpack water equivalent \tab mm \cr
-snvp \tab evaporation from snowpack \tab mm \cr
-srfl \tab source area flow \tab mm \cr
-stres \tab TRAN / PTRAN for time period \tab - \cr
-swat \tab total soil water in all layers at the end of the time interval \tab mm \cr
-tran \tab transpiration \tab mm \cr
-vrfln \tab vertical matrix drainage from lowest layer \tab mm \cr
-}
-}
-
-\section{Layer outputs}{
-
-\tabular{llcl}{
-\strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
-nl \tab index of soil layer \tab \cr
-swati \tab soil water volume in layer \tab mm \cr
-theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
-wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
-psimi \tab matric soil water potential for soil layer \tab kPa \cr
-psiti \tab total soil water potential for a soil layer \tab kPa \cr
-infl \tab infiltration to soil water in soil layer \tab mm \cr
-byfl \tab bypass flow from soil layer \tab mm \cr
-tran \tab transpiration from soil layer \tab mm \cr
-slvp \tab soil evaporation from a soil layer \tab mm \cr
-vrfl \tab vertical matrix drainage from soil layer \tab mm \cr
-dsfl \tab downslope drainage from layer \tab mm \cr
-ntfl \tab net flow into soil layer \tab mm \cr
-}
 }
 
 \examples{
@@ -165,10 +109,11 @@ options.b90$enddate <- as.Date("2003-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions
-soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
 
 # Run LWF-Brook90
-b90.result <- runLWFB90(options.b90 = options.b90,
+b90.result <- runLWFB90(project.dir = "example_run_b90",
+                        options.b90 = options.b90,
                         param.b90 = param.b90,
                         climate = slb1_meteo,
                         soil = soil)
@@ -176,21 +121,21 @@ b90.result <- runLWFB90(options.b90 = options.b90,
 # use a function to be performed on the output:
 # aggregate soil water storage down to a specific layer
 agg_swat <- function(x, layer) {
-  out <- aggregate(swati~yr+doy,
+  out <- aggregate(SWATI~YR+DOY,
                    x$SWATDAY.ASC,
                    FUN = sum,
-                   subset = nl <= layer)
-  out[order(out$yr, out$doy),]}
+                   subset = NL <= layer)
+  out[order(out$YR, out$DOY),]}
 
 # run model, without returning the original output.
-b90.aggswat <- runLWFB90(options.b90 = options.b90,
+b90.aggswat <- runLWFB90(project.dir = "example_run_b90",
+                         options.b90 = options.b90,
                          param.b90 = param.b90,
                          climate = slb1_meteo,
                          soil = soil,
                          output_fun = list(swat = agg_swat),
                          rtrn.output = FALSE,
-                         layer = 10)  # passed to output_fun
+                         layer = 10) #' passed to output_fun
 str(b90.aggswat$output_fun$swat)
 
-b90.aggswat
 }

@@ -5,6 +5,7 @@
     ! output specifications -------
     NDAYS = INT( param( 1 ) )
     HEAT = INT( param( 2 ) )
+    OP(:,:) = output(:,:)
 
     ! Meteorologic parameters -------
     ESLOPE = param( 3 )

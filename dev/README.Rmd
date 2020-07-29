@@ -1,5 +1,5 @@
 ---
-output: github_document
+output: pdf_document
 urlcolor: blue
 ---
 
@@ -35,12 +35,12 @@ install.packages("doSNOW")
 It is recommended to download and install the latest stable release from https://github.com/pschmidtwalter/LWFBrook90R/releases
 
 ```{r}
-install.packages("path/to/package/LWFBrook90R_0.4.0.tar.gz", repos = NULL, type = "source")
+install.packages("path/to/package/LWFBrook90R_0.2.0.tar.gz", repos = NULL, type = "source")
 ```
 
 For installing the source package in R under Windows, [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is required. If Rtools is not available, install the (.zip) binary package:
 ```{r}
-install.packages("path/to/package/LWFBrook90R_0.4.0.zip", repos = NULL, type = "binary")
+install.packages("path/to/package/LWFBrook90R_0.2.0.zip", repos = NULL, type = "binary")
 ```
 
 You can also install the latest stable release directly from GitHub, using the devtools package:
@@ -48,7 +48,7 @@ You can also install the latest stable release directly from GitHub, using the d
 if (!requireNamespace("devtools")) {
     install.packages("devtools")
 }
-devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.4.0.tar.gz",
+devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.2.0.tar.gz",
                       dependencies = T, build_vignettes = T)
 
 ```
@@ -124,7 +124,7 @@ The package works as intended and is fully documented. However, there are some p
 - [x] Use of sub-day resolution precipitation interval data.
 - [x] Optional writing of model log-file that contains the former commandline-feed.
 - [x] Implementation of an error-routine. All STOP/EXIT commands removed from Fortran code.
-- [x] Return model output directly back to R, without writing text files.
+- [ ] Return model output directly back to R. Currrently, the executable code writes its own output text-files, which raises a warning on CRAN-check (no Stdin/Stdout writing)
 
 ## Authors 
 Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Tony Federer.

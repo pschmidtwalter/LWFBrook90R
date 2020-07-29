@@ -1,17 +1,3 @@
-
-LWFBrook90R v0.4.0 (Release date: )
-==============
-
-Changes:
-* result datasets are now returned directly, without the need to write .ASC text files.
-* runLWFB90(): providing output = -1 instead of an output selection matrix returns two tables with
-  simulation results: general daily outputs and layer outputs.
-* all column names of the .ASC output objects are now in lower case.
-* added proper desciptions of model output variable in the help pages of runLWFB90().
-
-Bug fixes:
-* zero division error causing infinite relawat values in the output.
-
 LWFBrook90R v0.3.0 (Release date: 2020-04-21)
 ==============
 
@@ -33,5 +19,5 @@ Changes:
 
 LWFBrook90R v0.1.0 (Release date: 2019-05-13)
 ==============
- first beta release: most functionality was taken from brook90r. However, functions
+ first beta release: most functionnality was taken from brook90r. However, functions
  and arguments were renamed, and a lot of functionality was added.

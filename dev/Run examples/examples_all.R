@@ -21,7 +21,7 @@ b90.result <- runLWFB90(project.dir = "example_run_b90",
                         soil = soil)
 
 # use a function to be performed on the output:
-# e.g. aggregation of soil water storage down to a specific layer
+# aggregate soil water storage down to a specific layer
 agg_swat <- function(x, layer) {
   out <- aggregate(SWATI~YR+DOY,
                    x$SWATDAY.ASC,
@@ -79,8 +79,8 @@ names(b90.multi)
 
 #extract results: EVAPDAY.ASC
 evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
-                                                   FUN = function(x) {x[["EVAPDAY.ASC"]]}),
-                                            idcol = "srun"))
+                                        FUN = function(x) {x[["EVAPDAY.ASC"]]}),
+                                 idcol = "srun"))
 evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"%Y %j")
 
 srun_nms <- unique(evapday$srun)
@@ -91,7 +91,7 @@ with(evapday[evapday$srun == srun_nms[1], ],
 )
 for (i in 1:length(b90.multi)){
   with(evapday[evapday$srun == srun_nms[i], ],
-       lines(dates, cumsum(EVAP)))
+  lines(dates, cumsum(EVAP)))
 }
 
 # ---- msiterunLWFB90 -----
