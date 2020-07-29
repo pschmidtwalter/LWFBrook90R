@@ -10,14 +10,8 @@
 #' @return A data.frame containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
 #' @export
 #'
-#' @examples
-#' options.b90 <- setoptions_LWFB90()
-#' param.b90 <- setparam_LWFB90()
-#'
-#' standprop <- make_standprop(options.b90,
-#'                             param.b90,
-#'                             out.years = 2002:2004)
-#' plot(standprop$dates, standprop$lai, type = "l")
+#' @example inst/examples/make_standprop-help.R
+
 make_standprop <- function(options.b90,
                            param.b90,
                            out.years) {
