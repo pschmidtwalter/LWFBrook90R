@@ -110,46 +110,7 @@
 #'}
 #'
 #' @export
-#' @examples
-#' # Set up lists containing model control options and model parameters:
-#' param.b90 <- setparam_LWFB90()
-#' options.b90 <- setoptions_LWFB90()
-#'
-#' # Set start and end Dates for the simulation
-#' options.b90$startdate <- as.Date("2003-01-01")
-#' options.b90$enddate <- as.Date("2003-12-31")
-#'
-#' # Derive soil hydraulic properties from soil physical properties
-#' # using pedotransfer functions
-#' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
-#'
-#' # Run LWF-Brook90
-#' b90.result <- runLWFB90(project.dir = "example_run_b90",
-#'                         options.b90 = options.b90,
-#'                         param.b90 = param.b90,
-#'                         climate = slb1_meteo,
-#'                         soil = soil)
-#'
-#' # use a function to be performed on the output:
-#' # aggregate soil water storage down to a specific layer
-#' agg_swat <- function(x, layer) {
-#'   out <- aggregate(SWATI~YR+DOY,
-#'                    x$SWATDAY.ASC,
-#'                    FUN = sum,
-#'                    subset = NL <= layer)
-#'   out[order(out$YR, out$DOY),]}
-#'
-#' # run model, without returning the original output.
-#' b90.aggswat <- runLWFB90(project.dir = "example_run_b90",
-#'                          options.b90 = options.b90,
-#'                          param.b90 = param.b90,
-#'                          climate = slb1_meteo,
-#'                          soil = soil,
-#'                          output_fun = list(swat = agg_swat),
-#'                          rtrn.output = FALSE,
-#'                          layer = 10) #' passed to output_fun
-#' str(b90.aggswat$output_fun$swat)
-#'
+#' @example inst/examples/runLWFB90-help.R
 runLWFB90 <- function(options.b90,
                       param.b90,
                       climate,
@@ -369,9 +330,7 @@ runLWFB90 <- function(options.b90,
                   several.ok = T)},
         argsnms = names(outfunargs))
 
-        outfunargs <- list(x = simres,...)
-
-      # TODO: simout is copied for use in each output_fun.
+      # TODO: simres is copied for use in each output_fun.
       # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
       # instead of adressing the whole list x.
       simres$output_fun <- tryCatch( {
@@ -391,9 +350,9 @@ runLWFB90 <- function(options.b90,
         simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
       }
 
-      # remove the basic results again if they are not required
-      if (!rtrn.output) {
-        simres <- simres[-which(names(simres) %in% names(simout))]
+      # remove the model_input if not required
+      if (!rtrn.input) {
+        simres <- simres[-which(names(simres) == "model_input")]
       }
 
     }
