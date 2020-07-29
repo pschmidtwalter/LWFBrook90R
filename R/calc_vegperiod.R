@@ -20,32 +20,7 @@
 #' 'start' and 'end' contain the values specified in budburstdoy.fixed and leaffalldoy.fixed respectively.
 #' @export
 #'
-#' @examples
-#'
-#' # fixed budburst and leaffall doy
-#' calc_vegperiod(out.years = 2001:2010,
-#'                budburst.method = "fixed",
-#'                leaffall.method = "fixed",
-#'                budburstdoy.fixed = floor(runif(10, 120,130)),
-#'                leaffalldoy.fixed = floor(runif(2, 260,280)))
-#'
-#' # dynamic budburst and leaffall using air temperature
-#' climate <- LWFBrook90R::slb1_meteo
-#'
-#' calc_vegperiod(budburst.method = "Menzel",
-#'                leaffall.method = "fixed",
-#'                leaffalldoy.fixed = 280,
-#'                dates = climate$dates,
-#'                tavg = climate$tmean,
-#'                species = "Fagus sylvatica",
-#'                est.prev = 3)
-#'
-#' calc_vegperiod(budburst.method = "Menzel",
-#'                leaffall.method = "ETCCDI",
-#'                dates = climate$dates,
-#'                tavg = climate$tmean,
-#'                species = "Quercus robur",
-#'                est.prev = 3)
+#' @example inst/examples/calc_vegperiod-help.R
 calc_vegperiod <- function(budburst.method,
                            leaffall.method,
                            dates = NULL,

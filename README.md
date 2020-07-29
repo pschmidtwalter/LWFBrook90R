@@ -33,8 +33,7 @@ install.packages("path/to/package/LWFBrook90R_0.2.0.tar.gz", repos = NULL, type 
 
 For installing the source package in R under Windows,
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is required. If
-Rtools is not available, install the (.zip) binary
-package:
+Rtools is not available, install the (.zip) binary package:
 
 ``` r
 install.packages("path/to/package/LWFBrook90R_0.2.0.zip", repos = NULL, type = "binary")
@@ -142,9 +141,8 @@ are some points to be accomplish in the near future:
     commandline-feed.
   - [x] Implementation of an error-routine. All STOP/EXIT commands
     removed from Fortran code.
-  - [ ] Return model output directly back to R. Currrently, the
-    executable code writes its own output text-files, which raises a
-    warning on CRAN-check (no Stdin/Stdout writing)
+  - [x] Return model output directly back to R, without writing text
+    files.
 
 ## Authors
 

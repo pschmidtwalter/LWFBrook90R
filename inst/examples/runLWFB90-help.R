@@ -34,5 +34,3 @@ b90.aggswat <- runLWFB90(options.b90 = options.b90,
                          rtrn.output = FALSE,
                          layer = 10)  # passed to output_fun
 str(b90.aggswat$output_fun$swat)
-
-b90.aggswat
