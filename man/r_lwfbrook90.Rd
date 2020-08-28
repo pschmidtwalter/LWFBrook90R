@@ -37,11 +37,10 @@ layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).}
 \item{precdat}{A matrix of precipitation interval data with 6 columns:
 year, month, day, interval-number (1:precint), prec, mesflp.}
 
-\item{output_log}{Logical wether to print the output-logfile. This is where the
-commandline-feed of the original Fortan program is written.}
+\item{output_log}{Logical wether to print runtime output to console.}
 }
 \value{
-A list containing the daily and soil layer model outputs.
+A list containing the daily and soil layer model outputs (see \code{\link{runLWFB90}}.
 }
 \description{
 Passes input data matrices to the Fortran model code and returns the results
