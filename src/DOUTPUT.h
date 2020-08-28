@@ -88,10 +88,10 @@ IF (OP(9, 3) .EQ. 1) THEN
     else
         Eta=0.0d0
     end if
-!        output
-    AWATFK = 0.0d0
+
+
     IF (IDAY .EQ. 1) THEN
-!         AWATFK = 0.0d0
+         AWATFK = 0.0d0
         OPEN (UNIT = 35, FILE = 'MISCDAY.ASC', STATUS='REPLACE')
         WRITE (35,'(''YR,MO,DA,DOY,VRFLN,SAFRAC,STRES,ADEF,AWAT,RELAWAT,AWAT40,NITS,BALERR'')')
         DO 16 I = 1, NLAYER

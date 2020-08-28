@@ -208,12 +208,12 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
 
   # Make Roots ----------------------------------------------------------------------
   if (options.b90$root.method != "soilvar") {
-    param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = param.b90$soil_nodes$lower,
+    param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = c(max(param.b90$soil_nodes$upper),
+                                                                  param.b90$soil_nodes$lower),
                                                     maxrootdepth = param.b90$maxrootdepth,
                                                     method = options.b90$root.method,
                                                     beta = param.b90$betaroot,
-                                                    relrootden = param.b90$rootden.tab$rootden,
-                                                    rootdepths = param.b90$rootden.tab$depth)
+                                                    rootdat = param.b90$rootden.tab)
   } else {
     if (!is.null(soil)) {
       param.b90$soil_nodes$rootden <- soil$rootden
