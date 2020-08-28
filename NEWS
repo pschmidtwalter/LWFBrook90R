@@ -13,8 +13,17 @@ Changes:
   options.b90 input objects was disabled.
 * added proper desciptions of model output variables in the help pages of runLWFB90().
 
+LWFBrook90R v0.3.4 (Release date: 2020-08-28)
+==============
+
+Changes
+* Adjusted 'table'-method in MakeRelRootDens: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of total root masses.
+* Input changed for soilnodes-argument of MakeRelRootDens. See ?MakeRelRootDens.
+
 Bug fixes:
-* zero division error causing infinite relawat-values in the output.
+* zero division error causing infinite relawat values in MISCDAY.ASC-output.
+* 'betamodel'-method of MakeRelRootDens returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
+
 
 LWFBrook90R v0.3.0 (Release date: 2020-04-21)
 ==============
