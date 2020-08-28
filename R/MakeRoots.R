@@ -79,8 +79,10 @@ MakeRelRootDens <- function(soilnodes,
   if (method == "table") {
 
     # distributes 'measured' relative root densities to the soil layers, preserving total root mass
+
     stopifnot(all(c("upper", "lower", "rootden") %in% tolower(names(rootdat))))
     names(rootdat) <- tolower(names(rootdat))
+
     # create data.tables for overlap join
     rootdat <- data.table::data.table(rootdat, key = c("lower", "upper"))
     rootdat[, rthick := (upper - lower)]
