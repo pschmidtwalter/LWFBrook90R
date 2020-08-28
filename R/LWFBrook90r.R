@@ -4,9 +4,9 @@
 #' climate and soil data, executes the model code and returns the model results.
 #' The model control options thereby let the user select different methods for defining
 #' phenology and leaf area index seasonality, root density depth distributions,
-#' and inter-annual variation of stand height and stem area index variation.
-#' Additionally, a set of pedotransfer functions is provided to derive hydraulic
-#' parameters from soil physical properties. For an introduction to the basic usage see \code{vignette('intro_lwfbrook90r')}.
+#' and inter-annual variation of stand properties. Additionally, a set of pedotransfer functions
+#' is provided to derive hydraulic parameters from soil physical properties.
+#' For an introduction to the basic usage see \code{vignette('intro_lwfbrook90r')}.
 #'
 #' @docType package
 #' @name LWFBrook90R
