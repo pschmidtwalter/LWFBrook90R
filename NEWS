@@ -20,7 +20,7 @@ Changes
 * Input changed for soilnodes-argument of MakeRelRootDens. See ?MakeRelRootDens.
 
 Bug fixes:
-* zero division error causing infinite relawat values in the output.
+* zero division error causing infinite relawat values in MISCDAY.ASC-output.
 * 'betamodel'-method of MakeRelRootDens returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
 
 
