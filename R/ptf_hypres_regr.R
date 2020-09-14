@@ -31,7 +31,7 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
   h <- NULL #pass CRAN check Notes
 
   out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,
-                    h=ifelse(oc.pct < 0.1,0.1,oc.pct/100), topsoil,
+                    h=ifelse(oc.pct < 0.1,0.001,oc.pct/100), topsoil,
                     stringsAsFactors=F)
 
 
@@ -69,8 +69,8 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
                   0.643 * log(silt * 100) - 0.001398 * bd * clay - 0.01673 * bd * h +
                   2.986 * topsoil * clay - 3.305 * topsoil * silt) * 10 # conversion to mm/d
 
-    tort <- 0.0202 + 6.193 * clay * clay - 11.36 * h * h - 0.2316 * log(h * 100) - 0.003544 * bd * clay +
-      0.000283 * bd * silt + 0.00488 * bd * h
+    tort <- 0.0202 + 6.193 * clay * clay - 11.36 * h * h - 0.2316 * log(h * 100) -
+      0.003544 * bd * clay + 0.000283 * bd * silt + 0.00488 * bd * h
   })
   out$tort <-  10 * (exp(out$tort) - 1) / (exp(out$tort) + 1)
   out$mpar <- 1-1/out$n
