@@ -1,9 +1,9 @@
 writeParam.in <- function(parameters, outmat, filename){
-  
+
   # average duration of precipitation events by month, hours
   PDurs <- paste(parameters$pdur, collapse =  "\t")
-  
-  
+
+
   # construct character vectors to be written line by line
   lines.sec1 <-   c(
     "''",
@@ -19,7 +19,7 @@ writeParam.in <- function(parameters, outmat, filename){
     paste("'","out\\","'", " ''", sep  =  ""),
     "''",
     "''")
-  
+
   lines.sec2 <- c(
     "''",
     "''",
@@ -52,7 +52,7 @@ writeParam.in <- function(parameters, outmat, filename){
     "''",
     paste(formatC(parameters$rstemp,   format = "fg"), "''"),
     "''",
-    PDurs,
+    parameters$pdur,
     paste(formatC(parameters$intrainini,   format = "fg"), "''"),
     paste(formatC(parameters$intsnowini,   format = "fg"), "''"),
     paste(formatC(parameters$frintlai,   format = "fg"), "''"),
@@ -131,30 +131,30 @@ writeParam.in <- function(parameters, outmat, filename){
     paste(formatC(parameters$dpsimax,   format = "fg"), "''"),
     "''",
     "'End of in\\Param.in'")
-  
+
   # Param.in schreiebn--------------------------------------------------------------------------------
   #open file for writing
   p.in <- file(filename, open  =  "wt")
-  
+
   #lines.sec1
   writeLines(lines.sec1, p.in)
-  
+
   #output-matrix
   writeLines(apply(cbind(paste0("'",row.names(outmat),"'"), format(outmat)), 1, paste,
                    collapse = "\t"), p.in)
-  
+
   #lines.sec2
   writeLines(lines.sec2, p.in)
-  
+
   #materials-table
   writeLines(apply(format(parameters$soil_materials), 1, paste, collapse = "\t"), p.in)
   writeLines(c("''","''"), p.in)
-  
+
   #write Templayers
   writeLines(apply(format(parameters$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")]),
                    1, paste, collapse = "\t"), p.in)
-  
+
   writeLines(lines.sec3, p.in)
-  
+
   on.exit(close(p.in))
 }
