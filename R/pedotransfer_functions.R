@@ -9,8 +9,7 @@
 #' @param tex.KA5 Character vector of soil texture classes according to KA5. Only for \code{hydpar_wessolek_tab}.
 #' @param tex.hypres Character vector of soil texture classes according Wösten et al (1999).
 #' @param topsoil Logical: Is the sample from the topsoil? Only for \code{hydpar_hypres_tab}.
-#'  Only for \code{hydpar_hypres_tab}.
-#' @param humconv Conversion factor oc.pct to organic matter percent. Default: 1.72. Only for \code{hydpar_hypres_tab}.
+#' @param humconv Conversion factor from oc.pct to organic matter percent. Default: 1.72. Only for \code{hydpar_hypres_tab}.
 #' @param n An integer value specifying the number of rows of the returned data.frame
 #' (i.e. the number of repetitions of the MvG-Parameter set, only for \code{hydpar_ff_hamken}).
 #'
@@ -80,7 +79,7 @@ hydpar_puh2 <- function(clay, silt, sand, bd, oc.pct=0.5){
   out <- within(out,{
     #MvG
     ths <- 0.015362*(oc.pct^0.5) - 0.2513*bd - 0.026836*log(clay+1) - 0.0055404*(sand^0.5) + 0.8648
-    thr <- 0.069 #konstant
+    thr <- 0.069
     alpha  <- exp( -1.187*(bd^2) - 0.031899*sand - 0.58805*log(oc.pct+0.1) - 0.00032963*(silt^2) - 0.016267*silt*bd + 2.021 )
     npar <- exp( 0.0003758*(sand^2) + 0.004751*silt + 0.017826*(silt/bd)  -2.9804) +1
     mpar <- 1-1/npar

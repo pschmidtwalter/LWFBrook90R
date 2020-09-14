@@ -26,10 +26,9 @@ hydpar_ff_b90(n = 1)
 
 \item{oc.pct}{Numeric vector of organic carbon content in mass \%.}
 
-\item{topsoil}{Logical: Is the sample from the topsoil? Only for \code{hydpar_hypres_tab}.
-Only for \code{hydpar_hypres_tab}.}
+\item{topsoil}{Logical: Is the sample from the topsoil? Only for \code{hydpar_hypres_tab}.}
 
-\item{humconv}{Conversion factor oc.pct to organic matter percent. Default: 1.72. Only for \code{hydpar_hypres_tab}.}
+\item{humconv}{Conversion factor from oc.pct to organic matter percent. Default: 1.72. Only for \code{hydpar_hypres_tab}.}
 
 \item{tex.hypres}{Character vector of soil texture classes according Wösten et al (1999).}
 
