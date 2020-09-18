@@ -36,9 +36,10 @@ running one or multiple param.b90/options.b90 combinations for a series of clima
 
 \item{cores}{Number of cores to use for parallel processing.}
 
-\item{showProgress}{Logical: Show progressbar?}
+\item{showProgress}{Logical: Show progressbar? Default is TRUE. See also section \code{Progress bar}.}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}}.
+It might be a good idea to pass \code{verbose=FALSE} to supress excessive chatter of \code{runLWFB90}.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -60,6 +61,17 @@ if many simulations are done and the selected output contains daily resolution d
 To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
 and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
 perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
+}
+
+\section{Progress bar}{
+
+This function supports progress bars via the package \CRANpkg{progressr}.
+The parameter \code{showProgress=TRUE} wraps the parallized part in
+[progressr::with_progress()] to display a progress bar. The look of the
+progress bar can be changed via \code{progressr::handlers()}. We recommend
+to use package \CRANpkg{progress} with \code{progressr::handlers("progress")}
+but many other fancy styles are possible, including acoustic updates
+(cf. \code{vignette('progressr-intro')}).
 }
 
 \examples{

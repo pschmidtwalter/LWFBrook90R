@@ -14,8 +14,9 @@
 #' @param multirun.dir Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
 #' @param keep.subdirs Keep sub-directories of the single runs after successful simulation? Default is FALSE.
 #' @param cores Number of cores to use for parallel processing.
-#' @param showProgress Logical: Show progressbar?
+#' @param showProgress Logical: Show progressbar? Default is TRUE. See also section \code{Progress bar}.
 #' @param ... Further arguments passed to \code{\link{runLWFB90}}.
+#' It might be a good idea to pass \code{verbose=FALSE} to supress excessive chatter of \code{runLWFB90}.
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on. The names of the returned list entries
@@ -30,6 +31,15 @@
 #' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
 #' and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
 #' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
+#'
+#' @section Progress bar:
+#' This function supports progress bars via the package \CRANpkg{progressr}.
+#' The parameter \code{showProgress=TRUE} wraps the parallized part in
+#' [progressr::with_progress()] to display a progress bar. The look of the
+#' progress bar can be changed via \code{progressr::handlers()}. We recommend
+#' to use package \CRANpkg{progress} with \code{progressr::handlers("progress")}
+#' but many other fancy styles are possible, including acoustic updates
+#' (cf. \code{vignette('progressr-intro')}).
 #'
 #' @export
 #'
@@ -81,8 +91,15 @@ msiterunLWFB90 <- function(param.b90,
                            showProgress = TRUE,
                            ...){
 
+  if(cores > future::availableCores())
+    stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
+               "available."))
+
+  # to pass CRAN check Notes
   clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; options_nms <- NULL
   clim_no <- NULL; i <- NULL; thisname <- NULL; thisclim <- NULL
+  `%dopar%` <- foreach::`%dopar%`
+  `%:%` <- foreach::`%:%`
 
   #determine list lengths and setup the names
   param_len <- nstlist_length(param.b90)
@@ -109,66 +126,69 @@ msiterunLWFB90 <- function(param.b90,
     dir.create(multirun.dir)
   }
 
-  #set up Cluster and progressbar --------------------------------------------------
+  # set up Cluster and define foreach-Loop ------------------------------------------
+  # plan multisession does makeClusterPSOCK() in the background
+  # cluster is stoped automagically on exit
+  # a future plan that might have existied before will be restored on exit
+  oplan <- future::plan(future::multisession, workers=cores)
+  on.exit(future::plan(oplan), add=TRUE)
+  doFuture::registerDoFuture()
 
-  # define local foreach symbols
-  `%dopar%` <- foreach::`%dopar%`
-  `%:%` <- foreach::`%:%`
-
-  progress <- function(nRuns) utils::setTxtProgressBar(pb, nRuns)
-
-  if (showProgress) {
-    opts <- list(progress = progress)
-  } else {
-    opts <- list(progress = NULL)
-  }
-
-  cl <- snow::makeSOCKcluster(cores)
-  doSNOW::registerDoSNOW(cl)
-  snow::clusterEvalQ(cl, library("LWFBrook90R"))
-  on.exit(snow::stopCluster(cl), add = T)
-
-  pb <- utils::txtProgressBar(min = 1, max = nRuns, style = 3)
-
-  # foreach-Loop --------------------------------------------------------------------
   if (is.null(clim_nms)) {
     outer_nms <- "clim_1"
-  } else { outer_nms <- clim_nms}
+  } else {
+    outer_nms <- clim_nms
+  }
 
-  # outer loop iterates over climate to save memory -> result is nested
-  results <- foreach::foreach(thisclim = iterators::iter(climate),
-                              clim_no = iterators::icount(),
-                              thisname = iterators::iter(outer_nms), #use thisname for proj.dir
-                              .final = function(x) stats::setNames(x, clim_nms),
-                              .errorhandling = "pass",
-                              .options.snow = opts) %:%
+  foreach_loop <- function(){
+    # outer loop iterates over climate to save memory -> result is nested
+    foreach::foreach(
+      thisclim = iterators::iter(climate),
+      clim_no = iterators::icount(),
+      thisname = iterators::iter(outer_nms), #use thisname for proj.dir
+      .final = function(x) stats::setNames(x, clim_nms),
+      .errorhandling = "pass") %:%
 
-    # inner loop iterates over the combinations using thisclim
-    foreach::foreach(i = 1:nrow(combinations[which(combinations$clim == clim_no),]),
-                     .errorhandling = "pass") %dopar% {
+      # inner loop iterates over the combinations using thisclim
+      foreach::foreach(i = 1:nrow(combinations[which(combinations$clim == clim_no),]),
+                       .errorhandling = "pass") %dopar% {
 
-                       #subset for readibility
-                       combi_thisclim <- combinations[which(combinations$clim == clim_no),]
-                       #set project-directory
-                       proj.dir <- file.path(multirun.dir, trimws(paste(thisname,
-                                                                        soil_nms[combi_thisclim$soil[i]],
-                                                                        param_nms[combi_thisclim$param[i]],
-                                                                        options_nms[combi_thisclim$options[i]])))
+                         #subset for readibility
+                         combi_thisclim <- combinations[which(combinations$clim == clim_no),]
+                         #set project-directory
+                         proj.dir <- file.path(multirun.dir, trimws(paste(thisname,
+                                                                          soil_nms[combi_thisclim$soil[i]],
+                                                                          param_nms[combi_thisclim$param[i]],
+                                                                          options_nms[combi_thisclim$options[i]])))
 
-                       res <- runLWFB90(project.dir = proj.dir,
-                                        param.b90 = param.b90[[combi_thisclim$param[i]]],
-                                        options.b90 = options.b90[[combi_thisclim$options[i]]],
-                                        soil = soil[[combi_thisclim$soil[i]]],
-                                        climate = thisclim,
-                                        ...)
+                         res <- runLWFB90(project.dir = proj.dir,
+                                          param.b90 = param.b90[[combi_thisclim$param[i]]],
+                                          options.b90 = options.b90[[combi_thisclim$options[i]]],
+                                          soil = soil[[combi_thisclim$soil[i]]],
+                                          climate = thisclim,
+                                          ...)
 
-                       if (!keep.subdirs) {
-                         unlink(file.path(proj.dir), recursive = TRUE)
+                         increment_progressbar()
+
+                         if (!keep.subdirs) {
+                           unlink(file.path(proj.dir), recursive = TRUE)
+                         }
+                         return(res)
                        }
-                       return(res)
-                     }
+  }
 
-  # unnest
+  # with progressbar if wanted
+  if(isTRUE(showProgress)){
+    progressr::with_progress({
+      increment_progressbar <- progressr::progressor(steps=nRuns)
+      results <- foreach_loop()
+    })
+  } else {
+    increment_progressbar <- function(){}
+    results <- foreach_loop()
+  }
+
+  # unnest results
   results <- unlist(results, recursive = F)
 
   names(results) <- trimws(paste(clim_nms[combinations$clim],
@@ -179,6 +199,10 @@ msiterunLWFB90 <- function(param.b90,
   return(results)
 }
 
+
+#------------------------------------------------------------------------------
+# Helper Functions
+#------------------------------------------------------------------------------
 nstlist_length <- function(ll) {
   if (any(sapply(ll, is.list))) {
     len <- length(ll)
