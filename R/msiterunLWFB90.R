@@ -33,13 +33,12 @@
 #' perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
 #'
 #' @section Progress bar:
-#' This function supports progress bars via the package \CRANpkg{progressr}.
-#' The parameter \code{showProgress=TRUE} wraps the parallized part in
-#' [progressr::with_progress()] to display a progress bar. The look of the
-#' progress bar can be changed via \code{progressr::handlers()}. We recommend
-#' to use package \CRANpkg{progress} with \code{progressr::handlers("progress")}
-#' but many other fancy styles are possible, including acoustic updates
-#' (cf. \code{vignette('progressr-intro')}).
+#' This function provides a progress bar via the package \CRANpkg{progressr}
+#' if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+#' \code{progressr::with_progress()} to enable progress reporting from
+#' distributed calculations. The appearance of the progress bar (including
+#' audible notification) can be customized by the user for the entire session
+#' using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 #'
 #' @export
 #'
