@@ -105,7 +105,7 @@ Create the list of model parameters
  tl           \tab Lower temperature threshold for stomata closure. Default: 0\tab deg C             \tab Potential Transpiration\cr
  betaroot     \tab Shape parameter for rootlength density depth distribution. Default: 0.97 \tab -                 \tab Roots                  \cr
  maxrootdepth \tab Maximum root depth (positive downward) - passed to MakeRelRootDens. Default: -1.5 \tab cm                \tab Roots                  \cr
- rootden.table \tab Data.frame of relative root density depth distribution with columns 'depth' and 'rootden' \tab                   \tab Roots\cr
+ rootden.table \tab Data.frame relative root density depth distribution for the use with \code{options.b90$root.method = 'table'}. See \code{\link{MakeRelRootDens}}. \tab                   \tab Roots\cr
  rstemp       \tab base temperature for snow-rain transition. Default: -0.5 \tab deg C              \tab Snow                   \cr
  ccfac        \tab cold content factor. Default: 0.3 \tab MJ m-2 d-1 K-1    \tab Snow                   \cr
  grdmlt       \tab rate of groundmelt of snowpack. Default: 0.35 \tab mm d-1            \tab Snow                   \cr

@@ -2,85 +2,88 @@
 % Please edit documentation in R/MakeRoots.R
 \name{MakeRelRootDens}
 \alias{MakeRelRootDens}
-\title{Generates a root density depth function for the soil layers' lower depth limits}
+\title{Generates a root density depth function for soil layers}
 \usage{
 MakeRelRootDens(
   soilnodes,
   maxrootdepth = min(soilnodes),
   method = "betamodel",
   beta = 0.97,
-  relrootden = NULL,
-  rootdepths = NULL
+  rootdat = NULL
 )
 }
 \arguments{
-\item{soilnodes}{Vector of lower soil layer depth limits,
+\item{soilnodes}{Vector of soil layer depth limits (including the top and the bottom of the profile)
 for which the relative root distribution will be calculated (m, negative downwards).}
 
 \item{maxrootdepth}{The maximum rooting depth (m, negative downwards) below which
-relative root length density will be set to zero.}
+relative root length density will be set to zero (not applying when \code{method = 'table'}).}
 
 \item{method}{Method name for the root depth distribution. Possible values are 'betamodel',
 'table', 'linear', 'constant'. See details.}
 
 \item{beta}{Parameter of the root distribution function.}
 
-\item{relrootden}{Vector of relative root densities.}
-
-\item{rootdepths}{Vector of lower depths limit, corresponding to 'relrootden'.}
+\item{rootdat}{data.frame with a given root depth density distribution. Columns are depth limits
+('upper' and 'lower' in m, negative downwards) and relative root densities of fine or absorbing roots
+('rootden') per unit stonefree volume. Only used when \code{method = 'table'}.}
 }
 \value{
-Vector of relative rootlength densities at the soilnodes.
+Vector of relative root length densities for the soil layers framed by \code{soilnodes}.
+Length is one less than \code{length(soilnodes)}.
 }
 \description{
-Generates a root density depth function for the soil layers' lower depth limits
+Generates a root density depth function for soil layers
 }
 \details{
-Method  'betamodel' uses the model after Gale & Grigal (1987),
-'table' interpolates the value pairs of 'rootdepths' and 'relrootden' to 'soilnodes'.
-Method 'linear' returns linearly decreasing root densities with the maximum value
-(taken from the first vector element of 'relrootden') at the uppermost layer to 0
-at 'maxrootdepth'. 'constant' returns a uniform root distribution with depth
-corresponding to the first vector element of 'relrootden' and 0 below 'maxrootdepth'.
+\code{method = 'betamodel'} calculates the relative root length densities of the soil layers
+from the cumulative proportion of roots derived by the model after Gale & Grigal (1987).
+\code{method = 'table'} distributes the relative root densities provided by \code{rootdat} to the soil layers,
+under preservation of total root mass. \code{method = 'linear'} returns linearly decreasing root densities
+with a value of 1 at the top of the soil profile to 0 at \code{maxrootdepth}.
+\code{method = 'constant'} returns a uniform root distribution with a relative root length density of 1
+for all soil layers above \code{'maxrootdepth'}.
 }
 \examples{
-
-depths <- slb1_soil$lower
+depths <- c(max(slb1_soil$upper), slb1_soil$lower)
 roots_beta <- MakeRelRootDens(soilnodes = depths,
                               maxrootdepth = -1,4,
                               beta = 0.97,
                               method = "betamodel")
 
 rootden.table <- data.frame(
-  depth = c(-0.02, -0.15, -0.35, -0.5, -0.65,-0.9,-1.1,-1.3,-1.6),
-  rootden = c(15, 35, 15, 7.5, 4, 12, 2, 2, 0))
+  upper = c(0.03,0,-0.02, -0.15, -0.35, -0.5, -0.65,-0.9,-1.1,-1.3),
+  lower = c(0,-0.02, -0.15, -0.35, -0.5, -0.65,-0.9,-1.1,-1.3,-1.6),
+  rootden = c(10,15, 35, 15, 7.5, 4, 12, 2, 2, 0))
 
 roots_table <- MakeRelRootDens(soilnodes = depths,
                                method = "table",
-                               relrootden = rootden.table$rootden,
-                               rootdepths = rootden.table$depth)
+                               rootdat = rootden.table)
 
 roots_linear <- MakeRelRootDens(soilnodes = depths,
                                 maxrootdepth = -1.4,
-                                method = 'linear',
-                                relrootden = 0.2)
+                                method = 'linear')
 
 roots_constant <- MakeRelRootDens(soilnodes = depths,
                                   maxrootdepth = -1.4,
-                                  method = 'const',
-                                  relrootden = 0.2)
+                                  method = 'const')
 
 plot(roots_constant, slb1_soil$lower +runif(n=length(slb1_soil$lower), -0.02,0.02),
      type = 's', lwd = 1.5,ylab = "soil depth [m]",xlab = "relative root density",
-     xlim = c(0,0.35), col = "red")
+     xlim = c(0,1), col = "red")
+
 lines(roots_linear, slb1_soil$lower,
       type = 's', col = "blue", lwd = 1.5)
-lines(roots_table/100, slb1_soil$lower+runif(n=length(slb1_soil$lower), -0.02,0.02),
+
+lines(roots_beta*10, slb1_soil$lower, type = 's', col = "brown", lwd = 1.5)
+
+lines(roots_table/100, slb1_soil$lower,
       type = 's', col = "green", lwd = 1.5)
-lines(roots_beta, slb1_soil$lower, type = 's', col = "brown", lwd = 1.5)
+
 
 legend("bottomright", c("'betamodel'","'table'","'linear'", "'constant'"),seg.len = 1.5,
        pch = NULL, lwd =1.5, col = c("brown", "green", "blue", "red"), bty = "n")
+
 }
 \references{
 Gale, M.R. & Grigal D.F. (1987): "Vertical root distributions of northern tree

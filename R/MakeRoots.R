@@ -103,7 +103,6 @@ MakeRelRootDens <- function(soilnodes,
 
   if (method == "constant") {
     rootden <- rep(1,length(soilnodes)-1)
-    #rootden[which(soilnodes[2:length(soilnodes)] < maxrootdepth)] <- 0
     rootden[which(soilnodes[1:length(soilnodes)-1] <= maxrootdepth)] <- 0
   }
 
@@ -111,7 +110,6 @@ MakeRelRootDens <- function(soilnodes,
     RelDenFun <- stats::approxfun(x = c(max(soilnodes),maxrootdepth), y = c(1,0), method = "linear",rule = 1:2, yleft = 0)
     soilnodes[which.max(soilnodes <= maxrootdepth)] <- maxrootdepth
     midpoints <- soilnodes[1:length(soilnodes)-1] + diff(soilnodes)/2
-    #rootden <- RelDenFun(soilnodes[2:length(soilnodes)])
     rootden <- RelDenFun(midpoints)
   }
 
