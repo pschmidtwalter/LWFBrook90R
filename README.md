@@ -11,17 +11,6 @@ hydrological model from within R
 
 ## Installation
 
-Before installing the package, the following imported packages need to
-be installed from CRAN:
-
-``` r
-install.packages("data.table")
-install.packages("vegperiod")
-install.packages("sirad")
-install.packages("foreach")
-install.packages("doSNOW")
-```
-
 ### Recommended installation
 
 It is recommended to download and install the latest stable release from

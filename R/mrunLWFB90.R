@@ -11,9 +11,10 @@
 #' @param multirun.dir Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
 #' @param keep.subdirs Keep sub-directories of the single runs? Default is FALSE.
 #' @param cores Number of CPUs to use for parallel processing. Default is 2.
-#' @param showProgress Show progressbar? Default is TRUE.
+#' @param showProgress Show progressbar? Default is TRUE. See also section \code{Progress bar}.
 #' @param ... Additional arguments passed to \code{\link{runLWFB90}}:
 #' provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!
+#' It might be a good idea to also pass \code{verbose=FALSE} to supress excessive chatter of \code{runLWFB90}.
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on.
@@ -36,6 +37,14 @@
 #' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 #' the column has to be named 'maxlai3'.
 #'
+#' @section Progress bar:
+#' This function provides a progress bar via the package \CRANpkg{progressr}
+#' if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+#' \code{progressr::with_progress()} to enable progress reporting from
+#' distributed calculations. The appearance of the progress bar (including
+#' audible notification) can be customized by the user for the entire session
+#' using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+#'
 #' @export
 #'
 #' @examples
@@ -54,6 +63,7 @@
 #'
 #' #set up data.frame with variable parameters
 #' n <- 5
+#' set.seed(2020)
 #' vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
 #'                          shape.budburst = runif(n, 0.1,1),
 #'                          winlaifrac = runif(n, 0,0.5),
@@ -98,7 +108,14 @@ mrunLWFB90 <- function(paramvar,
                        cores = 2,
                        showProgress = TRUE,
                        ...){
-  i <- NULL #to pass CRAN check Notes
+
+  if(cores > future::availableCores())
+    stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
+               "available."))
+
+  # to pass CRAN check Notes
+  i <- NULL
+  `%dopar%` <- foreach::`%dopar%`
 
   nRuns <- nrow(paramvar)
 
@@ -136,62 +153,60 @@ mrunLWFB90 <- function(paramvar,
     dir.create(multirun.dir)
   }
 
-  # set up local %dopar%
-  `%dopar%` <- foreach::`%dopar%`
+  # set up Cluster and define foreach-Loop ------------------------------------------
+  # plan multisession does makeClusterPSOCK() in the background
+  # cluster is stoped automagically on exit
+  # a future plan that might have existied before will be restored on exit
+  oplan <- future::plan(future::multisession, workers=cores)
+  on.exit(future::plan(oplan), add=TRUE)
+  doFuture::registerDoFuture()
 
-  # set up Cluster and progressbar --------------------------------------------------
+  foreach_loop <- function(){
+    foreach::foreach(
+      i = 1:nRuns,
+      .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
+      .errorhandling = "pass",
+      .export = "param.b90") %dopar% {
 
-  progress <- function(nRuns) utils::setTxtProgressBar(pb, nRuns)
+        # replace single value parameters
+        param.b90[match(singlepar_nms,names(param.b90))] <- paramvar[i,match(singlepar_nms, paramvar_nms, nomatch = 0)]
 
-  if (showProgress) {
-    opts <- list(progress = progress)
-  } else {
-    opts <- list(progress = NULL)
+        # replace parameters in data.frames and vector elements
+        if (param_ll_len > 0) {
+          for (l in 1:length(param_ll)){
+            list_ind <- which(names(param.b90) == names(param_ll)[l])
+            param.b90[[ list_ind ]] <- replace_vecelements(param.b90[[ list_ind ]],
+                                                           varnms = paramvar_nms[ param_ll[[l]] ],
+                                                           vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
+          }
+        }
+        # Set up directory name
+        proj.dir <- file.path(multirun.dir,paste0("RunNo.",i))
+
+        # Run LWFBrook90
+        res <- runLWFB90(project.dir = proj.dir,
+                         param.b90 = param.b90,
+                         ...)
+
+        increment_progressbar()
+
+        if (!keep.subdirs) {
+          unlink(file.path(proj.dir), recursive = TRUE)
+        }
+        return(res)
+      }
   }
-  #
-  cl <- snow::makeSOCKcluster(cores)
-  doSNOW::registerDoSNOW(cl)
-  snow::clusterEvalQ(cl, library("LWFBrook90R"))
-  on.exit(snow::stopCluster(cl), add = T)
 
-  pb <- utils::txtProgressBar(min = 1, max = nRuns, style = 3)
-
-  # foreach-Loop --------------------------------------------------------------------
-  results <- foreach::foreach(i = 1:nRuns,
-                              .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
-                              .errorhandling = "pass",
-                              .options.snow = opts) %dopar% {
-
-                                # replace single value parameters
-                                param.b90[match(singlepar_nms,names(param.b90))] <- paramvar[i,match(singlepar_nms, paramvar_nms, nomatch = 0)]
-
-                                # replace parameters in data.frames and vector elements
-                                if (param_ll_len > 0) {
-                                  for (l in 1:length(param_ll)){
-                                    list_ind <- which(names(param.b90) == names(param_ll)[l])
-                                    param.b90[[ list_ind ]] <- replace_vecelements(param.b90[[ list_ind ]],
-                                                                                   varnms = paramvar_nms[ param_ll[[l]] ],
-                                                                                   vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
-                                    }
-                                }
-                                # Set up directory name
-                                proj.dir <- file.path(multirun.dir,paste0("RunNo.",i))
-
-                                # Run LWFBrook90
-                                res <- runLWFB90(project.dir = proj.dir,
-                                                 param.b90 = param.b90,
-                                                 ...)
-
-                                if (!keep.subdirs) {
-                                  unlink(file.path(proj.dir), recursive = TRUE)
-                                }
-                                return(res)
-                              }
+  # with progressbar if wanted
+  if(isTRUE(showProgress)){
+    progressr::with_progress({
+      increment_progressbar <- progressr::progressor(steps=nRuns)
+      results <- foreach_loop()
+    })
+  } else {
+    increment_progressbar <- function(){}
+    results <- foreach_loop()
+  }
 
   return(results)
 }
-
-
-
-
-
