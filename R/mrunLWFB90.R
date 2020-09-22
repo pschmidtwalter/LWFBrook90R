@@ -46,6 +46,10 @@ mrunLWFB90 <- function(paramvar,
                        cores = 2,
                        showProgress = TRUE,
                        ...){
+  if(cores > future::availableCores())
+    stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
+               "available."))
+
   # to pass CRAN check Notes
   i <- NULL
   `%dopar%` <- foreach::`%dopar%`

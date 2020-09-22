@@ -35,10 +35,14 @@ msiterunLWFB90 <- function(param.b90,
                            options.b90,
                            climate,
                            soil = NULL,
-                           all_combinations = F,
+                           all_combinations = FALSE,
                            cores = 2,
                            showProgress = TRUE,
                            ...){
+  if(cores > future::availableCores())
+    stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
+               "available."))
+
   # to pass CRAN check
   clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL
   `%dopar%` <- foreach::`%dopar%`
