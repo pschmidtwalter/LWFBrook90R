@@ -6,19 +6,19 @@ calc_vegperiod(out.years = 2001:2010,
                leaffalldoy.fixed = floor(runif(2, 260,280)))
 
 # dynamic budburst and leaffall using air temperature
-climate <- LWFBrook90R::slb1_meteo
+data(slb1_meteo)
 
 calc_vegperiod(budburst.method = "Menzel",
                leaffall.method = "fixed",
                leaffalldoy.fixed = 280,
-               dates = climate$dates,
-               tavg = climate$tmean,
+               dates = slb1_meteo$dates,
+               tavg = slb1_meteo$tmean,
                species = "Fagus sylvatica",
                est.prev = 3)
 
 calc_vegperiod(budburst.method = "Menzel",
                leaffall.method = "ETCCDI",
-               dates = climate$dates,
-               tavg = climate$tmean,
+               dates = slb1_meteo$dates,
+               tavg = slb1_meteo$tmean,
                species = "Quercus robur",
                est.prev = 3)

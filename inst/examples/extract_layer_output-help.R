@@ -3,6 +3,7 @@
 df <- expand.grid(nl = 1:5,
                   yr = 2002:2003,
                   mo = 1:12)
+df
 #add a value variable
 df$var <- runif(nrow(df), -1,0)
 

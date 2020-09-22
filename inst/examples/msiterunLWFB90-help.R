@@ -17,7 +17,7 @@ soils <- list(soil1 = soil, soil2 = soil)
 climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
 
 # run two parameter sets on a series of climate and soil-objects
-# (run = FALSE: 'dry' run without actual simulation)
+# (run = FALSE: 'dry' run without actual simulation, only input returned)
 res <- msiterunLWFB90(param.b90 = param_l,
                       options.b90 = options.b90,
                       soil = soils,
@@ -34,14 +34,14 @@ res <- msiterunLWFB90(param.b90 = param_l,
                       run = FALSE)
 names(res)
 
-# set up and run individual parameter sets at individual locations
+# set up and run individual parameter sets for individual locations
 # location parameters
 loc_parm <- data.frame(loc_id = names(climates),
                        coords_y = c(48.0, 54.0),
                        eslope = c(30,0),
                        aspect = c(180,0))
 
-# make list
+# make list of param.b90 lists
 param_l <- lapply(names(climates), function(x, loc_parms) {
   parms <- setparam_LWFB90()
   parms[match(names(loc_parm),names(parms), nomatch = 0)] <-
