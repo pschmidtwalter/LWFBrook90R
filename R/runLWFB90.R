@@ -3,8 +3,6 @@
 #' Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
 #' and returns the selected results.
 #'
-#' @param project.dir directory-name of the project to which output files
-#' are written. Will be created, if not existing. Defaults to 'runLWFB90/'.
 #' @param options.b90 Named list of model control options. Use
 #' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
 #' @param param.b90 Named list of model input parameters. Use
@@ -15,20 +13,19 @@
 #' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
 #' per day defined in \code{options.b90$prec.interval}.
 #' @param soil Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'
-#' @param output A [10,5]-matrix flagging the desired model-output. Use
-#' \code{\link{setoutput_LWFB90}} to generate and edit a default output matrix.
+#' @param output A [7,5]-matrix flagging the desired model output datasets at different time intervals. Use
+#' \code{\link{setoutput_LWFB90}} to generate and edit a default output selection matrix. Alternatively,
+#' use -1 (the default) to return the raw daily and soil layer outputs.
 #' @param output_fun A function or a list of functions to be performed on the output objects selected by \code{output}.
-#' Can be used to aggregate output or calculate goodness of fit measures on-the-fly,
-#' which is useful if the function is evaluated within a large multi-run application
+#' Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
+#' Useful if the function is evaluated within a large multi-run application, which might overload the memory.
 #' (see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
-#' Disabled when \code{read.output = FALSE}.
 #' @param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
 #' properties ('standprop_daily', as derived from parameters) to the result?
-#' @param rtrn.output Logical: return the simulation results? Disabled when read.output = FALSE.
-#' @param read.output Logical: read the simulation result files from project.dir? Default is TRUE.
+#' @param rtrn.output Logical: return the simulation results?
 #' @param chk.input Logical wether to check param.b90, options.b90, climate, precip, and soil
 #' for completeness and consistency.
-#' @param output.log Logical: write the logfile 'Log.txt' to the 'project.dir'? Default is TRUE.
+#' @param output.log Logical or file name wether to print runtime output, or redirect runtime output to a file.
 #' @param run Logical: run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
 #' @param verbose Logical: print messages to the console? Default is TRUE.
@@ -37,65 +34,84 @@
 #' @return A list containing the selected model output, the model input (except for \code{climate}) if desired,
 #' and the return values of \code{output_fun} if specified.
 #'
-#'@section Climate data:
-#' The \code{climate} data.frame must contain the following variable in columns named
+#'@section Climate input data:
+#' The \code{climate} data.frame must contain the following variables in columns named
 #' \code{dates} (Date), \code{tmax} (deg C), \code{tmin} (deg C), \code{tmean} (deg C),
 #' \code{wind} (m s-1), \code{prec} (mm) , \code{vappres} (kPa), and either \code{globrad} (MJ d-1 m-2)
 #' or \code{sunhours} (hours). When using \code{sunhours}, please set \code{options.b90$fornetrad = 'sunhours'}.
 #'
-#' @section Soil parameters:
+#' @section Soil input parameters:
 #' Each row of \code{soil} represents one layer, containing the layers' boundaries and soil hydraulic parameters.
 #' The column names for the upper and lower layer boundaries are \code{upper} and \code{lower} (m, negative downwards).
 #' When using options.b90$imodel = 'MvG', the hydraulic parameters are  \code{ths}, \code{thr},
 #'  \code{alpha} (m-1), \code{npar}, \code{ksat} (mm d-1) and \code{tort}.  With options.b90$imodel = 'CH',
-#'  the parameters are \code{thsat}, \code{thetaf}, \code{psif}(kPa), \code{bexp},
+#'  the parameters are \code{thsat}, \code{thetaf}, \code{psif} (kPa), \code{bexp},
 #'  \code{kf} (mm d-1), and \code{wetinf}. For both parameterizations, the volume fraction of stones has to be named \code{gravel}.
 #'  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
 #'  of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
 #'
+#' @section Daily outputs:
+#' \tabular{llcl}{
+#' \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
+#' adef \tab air deficit in the root zone \tab - \cr
+#' awat \tab total available soil water in layers with roots between -6.18 kPa and PSICR \tab mm \cr
+#' balerr \tab error in water balance \tab mm \cr
+#' byfl \tab total bypass flow \tab mm \cr
+#' dsfl \tab downslope flow \tab mm \cr
+#' evap \tab evapotranspiration \tab mm \cr
+#' flow \tab total streamflow \tab mm \cr
+#' gwat \tab groundwater storage below soil layers at the end of the time interval \tab mm \cr
+#' gwfl \tab groundwater flow \tab mm \cr
+#' intr \tab intercepted rain at the end of the time interval \tab mm \cr
+#' ints \tab intercepted snow at the end of the time interval \tab mm \cr
+#' irvp \tab evaporation of intercepted rain \tab mm \cr
+#' isvp \tab evaporation of intercepted snow \tab mm \cr
+#' nits \tab total number of iterations in time interval \tab - \cr
+#' pint \tab potential interception for a canopy always wet \tab mm \cr
+#' pslvp \tab potential soil evaporation \tab mm \cr
+#' ptran \tab potential transpiration \tab mm \cr
+#' relawat \tab relative available soil water in layers with roots \tab - \cr
+#' rfal \tab rainfall \tab mm \cr
+#' rint \tab rain interception \tab mm \cr
+#' rnet \tab rainfall to soil surface \tab mm \cr
+#' rsno \tab rain on snow \tab mm \cr
+#' safrac \tab source area fraction \tab - \cr
+#' seep \tab seepage loss \tab mm \cr
+#' sfal \tab snowfall \tab mm \cr
+#' sint \tab snow interception \tab mm \cr
+#' slfl \tab input to soil surface \tab mm \cr
+#' slvp \tab evaporation rate from soil \tab mm \cr
+#' smlt \tab snowmelt \tab mm \cr
+#' snow \tab snowpack water equivalent \tab mm \cr
+#' snvp \tab evaporation from snowpack \tab mm \cr
+#' srfl \tab source area flow \tab mm \cr
+#' stres \tab TRAN / PTRAN for time period \tab - \cr
+#' swat \tab total soil water in all layers at the end of the time interval \tab mm \cr
+#' tran \tab transpiration \tab mm \cr
+#' vrfln \tab vertical matrix drainage from lowest layer \tab mm \cr
+#'}
+#'
+#' @section Layer outputs:
+#' \tabular{llcl}{
+#' \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
+#' nl \tab index of soil layer \tab \cr
+#' swati \tab soil water volume in layer \tab mm \cr
+#' theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
+#' wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
+#' psimi \tab matric soil water potential for soil layer \tab kPa \cr
+#' psiti \tab total soil water potential for a soil layer \tab kPa \cr
+#' infl \tab infiltration to soil water in soil layer \tab mm \cr
+#' byfl \tab bypass flow from soil layer \tab mm \cr
+#' tran \tab transpiration from soil layer \tab mm \cr
+#' slvp \tab soil evaporation from a soil layer \tab mm \cr
+#' vrfl \tab vertical matrix drainage from soil layer \tab mm \cr
+#' dsfl \tab downslope drainage from layer \tab mm \cr
+#' ntfl \tab net flow into soil layer \tab mm \cr
+#'}
+#'
 #' @export
-#' @examples
-#' # Set up lists containing model control options and model parameters:
-#' param.b90 <- setparam_LWFB90()
-#' options.b90 <- setoptions_LWFB90()
-#'
-#' # Set start and end Dates for the simulation
-#' options.b90$startdate <- as.Date("2003-01-01")
-#' options.b90$enddate <- as.Date("2003-12-31")
-#'
-#' # Derive soil hydraulic properties from soil physical properties
-#' # using pedotransfer functions
-#' soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
-#'
-#' # Run LWF-Brook90
-#' b90.result <- runLWFB90(project.dir = "example_run_b90",
-#'                         options.b90 = options.b90,
-#'                         param.b90 = param.b90,
-#'                         climate = slb1_meteo,
-#'                         soil = soil)
-#'
-#' # use a function to be performed on the output:
-#' # aggregate soil water storage down to a specific layer
-#' agg_swat <- function(x, layer) {
-#'   out <- aggregate(SWATI~YR+DOY,
-#'                    x$SWATDAY.ASC,
-#'                    FUN = sum,
-#'                    subset = NL <= layer)
-#'   out[order(out$YR, out$DOY),]}
-#'
-#' # run model, without returning the original output.
-#' b90.aggswat <- runLWFB90(project.dir = "example_run_b90",
-#'                          options.b90 = options.b90,
-#'                          param.b90 = param.b90,
-#'                          climate = slb1_meteo,
-#'                          soil = soil,
-#'                          output_fun = list(swat = agg_swat),
-#'                          rtrn.output = FALSE,
-#'                          layer = 10) #' passed to output_fun
-#' str(b90.aggswat$output_fun$swat)
-#'
-runLWFB90 <- function(project.dir = "runLWFB90/",
-                      options.b90,
+#' @example inst/examples/runLWFB90-help.R
+runLWFB90 <- function(options.b90,
                       param.b90,
                       climate,
                       precip = NULL,
@@ -104,15 +120,12 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
                       output_fun = NULL,
                       rtrn.input = TRUE,
                       rtrn.output = TRUE,
-                      read.output = TRUE,
                       chk.input = TRUE,
                       output.log = TRUE,
                       run = TRUE,
                       verbose = TRUE,
                       ...) {
 
-  oldWD <- getwd()
-  on.exit(setwd(oldWD))
 
   # input checks ------------------------------------------------------------
   if (chk.input) {
@@ -188,7 +201,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   if (options.b90$fornetrad == "sunhours") {
     climate$globrad <- with(climate,
                             calc_globrad( as.integer(format(dates, "%j")),
-                                         sunhours, param.b90$coords_y ))
+                                          sunhours, param.b90$coords_y ))
   }
 
   # ---- Make soilnodes & soil materials --------------------------------------------
@@ -209,7 +222,7 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
   # Make Roots ----------------------------------------------------------------------
   if (options.b90$root.method != "soilvar") {
     param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = c(max(param.b90$soil_nodes$upper),
-                                                                  param.b90$soil_nodes$lower),
+                                                                      param.b90$soil_nodes$lower),
                                                     maxrootdepth = param.b90$maxrootdepth,
                                                     method = options.b90$root.method,
                                                     beta = param.b90$betaroot,
@@ -224,33 +237,14 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
 
   # ---- Execute LWF-Brook90  -------------------------------------------------------
   if (run) {
-    # create project-directory
-    project.dir <- normalizePath(project.dir, mustWork = FALSE)
-
-    if (!dir.exists(project.dir)) {
-      if (verbose == TRUE) {message("Creating project-directory...")}
-      tryCatch( {
-        dir.create(project.dir)
-      }, warning = function(wrn){
-        stop(paste0("The specified  project directory (",
-                    project.dir,
-                    ") could not be created.)"))
-      },
-      error = function(err){
-        return(err)
-      })
-    }
-
-    setwd(project.dir) # set the working directory to the project folder
-    try(file.remove(list.files(".", pattern = ".ASC", full.names = T)))
-    try(file.remove(list.files("Log.txt")))
 
     if (verbose == T) {
       message("Running model..." )
     }
 
     start <- Sys.time()
-    r_lwfbrook90(
+
+    simout <- r_lwfbrook90(
       siteparam = data.frame(simyears[1],
                              as.integer(format(options.b90$startdate, "%j")),
                              param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
@@ -263,7 +257,6 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
       soil_nodes = param.b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
-      output = output,
       output_log = output.log
     )
 
@@ -275,66 +268,95 @@ runLWFB90 <- function(project.dir = "runLWFB90/",
       message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
     }
 
-    # initialize return ---------------------------------------------------------------
+    # ---- process and manage outputs ---------------------------------------------------------------
+    # precipitation interval outputs (to come)
+
+    # daily outputs
+    simout$daily_output <- data.table::data.table(simout$daily_output)
+    data.table::setnames(simout$daily_output, names(simout$daily_output),
+                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rsno',
+                           'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
+                           'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
+                           'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
+                           'stres','adef','awat','relawat','nits','balerr'))
+
+    # layer outputs
+    simout$layer_output <- data.table::rbindlist(lapply(seq(dim(simout$layer_output)[3]),
+                                                        function(x) data.frame(simout$layer_output[ , , x])),
+                                                 idcol = "nl")
+    data.table::setnames(simout$layer_output, paste0("X", 1:16),
+                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','psiti','infl',
+                           'byfl','tran','slvp','vrfl','dsfl','ntfl'))
+
+    simout$layer_output <- simout$layer_output[order(simout$layer_output$yr,
+                                                     simout$layer_output$doy,
+                                                     simout$layer_output$nl),]
+
+
+    # ---- initialize return value ---------------------------------------------------------------
     simres <- list(simulation_duration = simtime,
                    finishing_time = finishing_time)
 
     # ---- append model input -------------------------------------------------------
-    if (rtrn.input) {
-      simres$model_input <- list(options.b90 = options.b90,
-                                 param.b90 = param.b90,
-                                 standprop_daily = standprop_daily)
-    }
+    # might be needed for access from output_fun. if not required, will be removed again later
+    simres$model_input <- list(options.b90 = options.b90,
+                               param.b90 = param.b90,
+                               standprop_daily = standprop_daily)
 
-    # ---- Read output files --------------------------------------------------------
-    if ( read.output ) {
-      if (verbose == T) {
-        message("Reading output...")
-      }
-      simout <- lapply(list.files(".", pattern = ".ASC", full.names = T),
-                       data.table::fread,
-                       fill = T, stringsAsFactors = FALSE)
-      names(simout) <- list.files(".", pattern = ".ASC")
 
-      # append results
+    # ---- append simulation results  -------------------------------------------------------
+    # either raw output or only dataset selections
+    if (is.matrix(output) & all(dim(output) == c(7,5))) {
+      simres <- c(simres, process_outputs(simout, output))
+    } else {
       simres[names(simout)] <- simout
+    }
 
-
-      # ---- apply functions on simulation output -------------------------------
-      if (!is.null(output_fun)) {
-        if (verbose == T) {
-          message("Applying function on simulation output files..")
-        }
-        if (!is.list(output_fun)){
-          output_fun <- list(output_fun)
-        }
-
-        outfunargs <- list(x = simres,...)
-
-        outfunargsnms <- lapply(output_fun, FUN = function(x,argsnms) {
-          match.arg(methods::formalArgs(x),
-                    argsnms,
-                    several.ok = T)},
-          argsnms = names(outfunargs))
-
-        # TODO: simout is copied for use in each output_fun.
-        # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
-        # instead of adressing the whole list x.
-        simres$output_fun <- tryCatch( {
-
-          Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))
-
-        },
-        warning = function(wrn){return(wrn)},
-        error = function(err){return(err)})
+    # ---- apply functions on simulation output -------------------------------
+    if (!is.null(output_fun)) {
+      if (verbose == T) {
+        message("Applying custom functions on simulation output...")
       }
 
-      # remove the basic results again if they are not required
-      if (!rtrn.output) {
-        simres <- simres[-which(names(simres) %in% names(simout))]
+      if (!is.list(output_fun)){
+        output_fun <- list(output_fun)
+      }
+
+      outfunargs <- list(x = simres,...)
+
+      outfunargsnms <- lapply(output_fun, FUN = function(x,argsnms) {
+        match.arg(methods::formalArgs(x),
+                  argsnms,
+                  several.ok = T)},
+        argsnms = names(outfunargs))
+
+      # TODO: simres is copied for use in each output_fun.
+      # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
+      # instead of adressing the whole list x.
+      simres$output_fun <- tryCatch( {
+
+        Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))
+
+      },
+      warning = function(wrn){return(wrn)},
+      error = function(err){return(err)})
+    }
+
+    # remove the basic results again if they are not required
+    if (!rtrn.output) {
+      if (is.matrix(output) & all(dim(output) == c(7,5))) {
+        simres <- simres[-which(grepl(".ASC", names(simres), fixed = T))]
+      } else {
+        simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
+      }
+
+      # remove the model_input if not required
+      if (!rtrn.input) {
+        simres <- simres[-which(names(simres) == "model_input")]
       }
 
     }
+
 
   } else {
     # 'dry' run = FALSE -> always return model input
@@ -476,23 +498,23 @@ chk_clim <- function() {
   }))
 }
 
-chk_obs <- function(){
-  eval.parent(quote({
-    if (!is.null(obs)) {
-      names(obs) <- tolower(names(obs))
-      stopifnot("dates" %in% names(obs),
-                inherits(obs$dates, "Date"),
-                length(obs) > 1)
-      if (min(obs$dates) > options.b90$startdate & max(obs$dates) < options.b90$enddate) {
-        stop("Your observations are not within the simulation period.")
-      }
-      if (is.null(gof_fun)) {
-        stop("Please provide a function(sim, obs) or list of functions to calculate
-           goodness-of-fit measures for observed variables.")
-      }
-    }
-  }))
-}
+# chk_obs <- function(){
+#   eval.parent(quote({
+#     if (!is.null(obs)) {
+#       names(obs) <- tolower(names(obs))
+#       stopifnot("dates" %in% names(obs),
+#                 inherits(obs$dates, "Date"),
+#                 length(obs) > 1)
+#       if (min(obs$dates) > options.b90$startdate & max(obs$dates) < options.b90$enddate) {
+#         stop("Your observations are not within the simulation period.")
+#       }
+#       if (is.null(gof_fun)) {
+#         stop("Please provide a function(sim, obs) or list of functions to calculate
+#            goodness-of-fit measures for observed variables.")
+#       }
+#     }
+#   }))
+# }
 
 chk_soil <- function(){
 
@@ -530,6 +552,146 @@ chk_soil <- function(){
     }
   }))
 
+}
+
+
+process_outputs <- function(simout, output) {
+
+
+  selection <- rownames(output)[which(rowSums(output) > 0)]
+
+  if (any(selection == "Budg")) {
+    Budg <- simout$daily_output[,c("yr","mo","da","doy","rfal","sfal","flow", "evap", "seep","snow","swat","gwat","intr","ints")]}
+  if (any(selection == "Flow")){
+    Flow <- simout$daily_output[,c("yr","mo","da","doy","flow","seep","srfl","slfl","byfl","dsfl","gwfl","vrfln")]}
+  if (any(selection == "Evap")){
+    Evap <- simout$daily_output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
+  if (any(selection == "Abov")){
+    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rsno","rnet","smlt","slfl","srfl")]}
+  if (any(selection == "Belo")){
+    Belo <- simout$layer_output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
+  if (any(selection == "Swat")){
+    Swat <- simout$layer_output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
+  if (any(selection == "Misc")){
+    Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
+
+  moutputs <- list() # results collection
+
+  # yr<-NULL;mo<-NULL;da<-NULL;doy<-NULL;nl<-NULL;rfal<-NULL;sfal<-NULL;flow<-NULL;evap <- NULL;seep<- NULL;
+  # snow <- NULL;swat<- NULL;gwat<-NULL;intr<-NULL;ints<-NULL;vrfln<-NULL;safrac<-NULL;stres<-NULL;adef<-NULL;
+  # awat<-NULL;relawat<-NULL;nits<-NULL;balerr<-NULL;
+
+  for (sel in selection) {
+    X <- get(sel)
+    if (sel  %in% c("Flow", "Evap", "Abov")) {
+      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
+        if (per == "Day") {
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round, 1), by = list(yr, mo, da, doy)]
+        }
+        if (per == "Mon") {
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
+                                                          .SDcols = -c("da","doy"), by = list(yr, mo)]
+        }
+        if (per == "Ann") {
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
+                                                          .SDcols = -c("mo","da","doy"),by = yr]
+        }
+      }
+    }
+
+    if (sel  == "Swat") {
+      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
+        if (per == "Day") {
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round ,3), by = list(yr, mo, da, doy, nl)]
+
+        }
+        if (per == "Mon") {
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(mean(x),3)}),
+                                                          .SDcols = -c("da","doy"), by = list(yr, mo, nl)]
+        }
+        if (per == "Ann") {
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(mean(x),3)}),
+                                                          .SDcols = -c("mo","da","doy"),by = list(yr, nl)]
+        }
+      }
+    }
+    if (sel  == "Belo") {
+      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
+        if (per == "Day") {
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round, 1), by = list(yr, mo, da, doy, nl)]
+
+        }
+        if (per == "Mon") {
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
+                                                          .SDcols = -c("da","doy"),by = list(yr, mo, nl)]
+        }
+        if (per == "Ann") {
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
+                                                          .SDcols = -c("mo","da","doy"), by = list(yr, nl)]
+        }
+      }
+    }
+    if (sel  == "Budg") {
+      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
+        if (per == "Day") {
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(yr, mo, da, doy, prec = round(rfal+sfal,1),
+                                                                flow = round(sum(flow),1),evap = round(sum(evap),1),
+                                                                seep = round(seep,1), snow = round(snow[which.max(doy)],1),
+                                                                swat = round(swat,1), gwat = round(gwat,1),
+                                                                intr = round(intr,1), ints = round(ints,1))]
+        }
+        if (per == "Mon") {
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(prec = round(sum(rfal+sfal),1), flow = round(sum(flow),1),
+                                                                 evap = round(sum(evap),1), seep = round(sum(seep),1),
+                                                                 snow = round(snow[which.max(doy)],1),
+                                                                 swat = round(swat[which.max(doy)],1),
+                                                                 gwat = round(gwat[which.max(doy)],1),
+                                                                 intr = round(intr[which.max(doy)],1),
+                                                                 ints = round(ints[which.max(doy)],1)),
+                                                          by = list(yr, mo)]
+        }
+        if (per == "Ann") {
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(prec = round(sum(rfal+sfal),1), flow = round(sum(flow),1),
+                                                                 evap = round(sum(evap),1),seep = round(sum(seep),1),
+                                                                 snow = round(snow[which.max(doy)],1),
+                                                                 swat = round(swat[which.max(doy)],1),
+                                                                 gwat = round(gwat[which.max(doy)],1),
+                                                                 intr = round(intr[which.max(doy)],1),
+                                                                 ints = round(ints[which.max(doy)],1)),
+                                                          by = list(yr)]
+        }
+      }
+    }
+    if (sel  == "Misc") {
+      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
+        if (per == "Day") {
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(yr, mo, da, doy, vrfln = round(vrfln,1),
+                                                                 safrac = round(safrac,1), stres = round(stres,3),
+                                                                 adef = round(adef,3), awat = round(awat,1),
+                                                                 relawat = round(relawat,3),
+                                                                 nits, balerr = round(balerr, 3))]
+
+        }
+        if (per == "Mon") {
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln = round(sum(vrfln),1), safrac = round(sum(safrac),1),
+                                                                 stres = round(mean(stres),3),adef = round(mean(adef),3),
+                                                                 awat = round(mean(awat),1), relawat = round(mean(relawat),3),
+                                                                 nits=sum(nits),balerr = round(sum(balerr), 3)),
+                                                          by = list(yr, mo)]
+        }
+        if (per == "Ann") {
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln = round(sum(vrfln),1), safrac = round(sum(safrac),1),
+                                                                 stres = round(mean(stres),3),adef = round(mean(adef),3),
+                                                                 awat = round(mean(awat),1),relawat = round(mean(relawat),3),
+                                                                 nits=sum(nits), balerr = round(sum(balerr), 3)),
+                                                          by = list(yr)]
+        }
+      }
+    }
+  }
+
+
+  return(moutputs)
 }
 
 
