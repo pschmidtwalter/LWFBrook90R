@@ -6,7 +6,7 @@ Release date: ???
 
 Changes:
 
-- switched `msiterunLWFB90()` and `mrunLWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof.
+- switched `msiterunLWFB90()` and `mrunLWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 
 ----
 
