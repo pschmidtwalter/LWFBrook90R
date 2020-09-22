@@ -9,7 +9,7 @@ msiterunLWFB90(
   options.b90,
   climate,
   soil = NULL,
-  all_combinations = F,
+  all_combinations = FALSE,
   cores = 2,
   showProgress = TRUE,
   ...
@@ -30,9 +30,10 @@ running one or the list of param.b90 for a series of climate/soil combinations.}
 
 \item{cores}{Number of cores to use for parallel processing.}
 
-\item{showProgress}{Logical: Show progressbar?}
+\item{showProgress}{Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}}.
+It might be a good idea to pass \code{verbose=FALSE} to suppress excessive chatter of \code{runLWFB90}.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -54,6 +55,16 @@ carefully selecting the output, and make use of the option to pass a list of fun
 \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
 output of a single run simulation, and can be used for aggrating model output on-the-fly,
 or writing results to a file or database.
+}
+
+\section{Progress bar}{
+
+This function provides a progress bar via the package \CRANpkg{progressr}
+if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+\code{progressr::with_progress()} to enable progress reporting from
+distributed calculations. The appearance of the progress bar (including
+audible notification) can be customized by the user for the entire session
+using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 }
 
 \examples{
