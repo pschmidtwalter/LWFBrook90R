@@ -4,9 +4,9 @@
 #'
 #' @param minval Minimum value.
 #' @param maxval Maximum value.
-#' @param doy.incr Date (day of year) when increasing to maxval begins.
-#' @param doy.max  Date (day of year) when maxval is reached.
-#' @param doy.min Date (day of year) when minval is reached.
+#' @param doy.incr Day of year when increasing from \code{minval} to \code{maxval} begins.
+#' @param doy.max  Day of year when \code{maxval} is reached.
+#' @param doy.min Day of year when \code{minval} is reached again.
 #' @param shape.incr Shape parameter of the increasing phase.
 #' @param shape.decr Shape parameter of the decreasing phase.
 #' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
@@ -34,8 +34,10 @@ plant.coupmodel <- function(minval,
 
   forms <- c(1,shape.incr,shape.decr,1)
 
-  ind <- c(rep(1, doy.incr - 1), rep(2, doy.max - doy.incr),
-           rep(3, doy.min - doy.max), rep(4, maxdoy - doy.min + 1))
+  ind <- c(rep(1L, as.integer(doy.incr) - 1),
+           rep(2L, as.integer(doy.max) - as.integer(doy.incr)),
+           rep(3L, as.integer(doy.min) - as.integer(doy.max)),
+           rep(4L, maxdoy - as.integer(doy.min) + 1))
 
   doy <- 1:maxdoy
 

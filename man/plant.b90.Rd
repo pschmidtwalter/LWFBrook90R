@@ -11,13 +11,13 @@ plant.b90(minval, maxval, doy.incr, incr.dur, doy.decr, decr.dur, maxdoy)
 
 \item{maxval}{Maximum value.}
 
-\item{doy.incr}{Date (day of year) when increasing to maxval begins.}
+\item{doy.incr}{Day of year when increasing from \code{minval} to \code{maxval} begins.}
 
-\item{incr.dur}{Duration (number of days) since doy.incr until maxval is reached.}
+\item{incr.dur}{Duration (number of days) since  \code{doy.incr} until \code{maxval} is reached.}
 
-\item{doy.decr}{Date (day of year) when decreasing to minval begins.}
+\item{doy.decr}{Day of year when decreasing to \code{minval} begins.}
 
-\item{decr.dur}{Duration (number of days) since doy.decr until minval is reached.}
+\item{decr.dur}{Duration (number of days) since \code{doy.incr} until \code{minval} is reached.}
 
 \item{maxdoy}{Length of the year, 366 for leap years, 365 for normal years.}
 }

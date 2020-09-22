@@ -4,10 +4,10 @@
 #'
 #' @param minval Minimum value.
 #' @param maxval Maximum value.
-#' @param doy.incr Date (day of year) when increasing to maxval begins.
-#' @param incr.dur Duration (number of days) since doy.incr until maxval is reached.
-#' @param doy.decr Date (day of year) when decreasing to minval begins.
-#' @param decr.dur Duration (number of days) since doy.decr until minval is reached.
+#' @param doy.incr Day of year when increasing from \code{minval} to \code{maxval} begins.
+#' @param incr.dur Duration (number of days) since  \code{doy.incr} until \code{maxval} is reached.
+#' @param doy.decr Day of year when decreasing to \code{minval} begins.
+#' @param decr.dur Duration (number of days) since \code{doy.incr} until \code{minval} is reached.
 #' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
 #'
 #' @return A numeric vector of length \code{maxdoy}.

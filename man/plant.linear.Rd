@@ -7,11 +7,11 @@
 plant.linear(doys, values, maxdoy)
 }
 \arguments{
-\item{doys}{Vector of Dates (days of year).}
+\item{doys}{Integer vector of dates (days of year).}
 
-\item{values}{Numeric vector Values.}
+\item{values}{Numeric vector of values.}
 
-\item{maxdoy}{Length of the year, 366 for leap years, 365 for normal years.}
+\item{maxdoy}{Integer length of the year, 366 for leap years, 365 for normal years.}
 }
 \value{
 A numeric vector of length \code{maxdoy}.

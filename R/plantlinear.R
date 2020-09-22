@@ -2,9 +2,9 @@
 #'
 #' Creates a daily sequence for one year from doy/value pairs.
 #'
-#' @param doys Vector of Dates (days of year).
-#' @param values Numeric vector Values.
-#' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
+#' @param doys Integer vector of dates (days of year).
+#' @param values Numeric vector of values.
+#' @param maxdoy Integer length of the year, 366 for leap years, 365 for normal years.
 #'
 #' @return A numeric vector of length \code{maxdoy}.
 #'

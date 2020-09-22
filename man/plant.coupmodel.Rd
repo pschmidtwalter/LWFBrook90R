@@ -20,11 +20,11 @@ plant.coupmodel(
 
 \item{maxval}{Maximum value.}
 
-\item{doy.incr}{Date (day of year) when increasing to maxval begins.}
+\item{doy.incr}{Day of year when increasing from \code{minval} to \code{maxval} begins.}
 
-\item{doy.max}{Date (day of year) when maxval is reached.}
+\item{doy.max}{Day of year when \code{maxval} is reached.}
 
-\item{doy.min}{Date (day of year) when minval is reached.}
+\item{doy.min}{Day of year when \code{minval} is reached again.}
 
 \item{shape.incr}{Shape parameter of the increasing phase.}
 
