@@ -12,11 +12,7 @@
 #'
 #' @return A numeric vector of length \code{maxdoy}.
 #'
-#' @examples
-#' plot(plant.b90(minval = 0,maxval=1,
-#'                doy.incr = 121,incr.dur = 28,
-#'                doy.decr = 280, decr.dur = 50,
-#'                maxdoy = 365))
+#' @example inst/examples/plantb90-help.R
 #' @export
 plant.b90 <- function(minval, maxval,
                       doy.incr,incr.dur,
