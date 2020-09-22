@@ -5,7 +5,8 @@ Authors@R: c(person("Paul", "Schmidt-Walter", , "paul.schmidt-walter@nw-fva.de",
              person("Volodymyr", "Trotsiuk", , "vtrotsiuk@gmail.com", role = c("aut")),
              person("Klaus", "Hammel", , ,role = c("aut")),
              person("Martin", "Kennel", , ,role = c("aut")),
-             person("Anthony", "Federer", , , role = c("aut")))
+             person("Anthony", "Federer", , , role = c("aut")),
+             person("Robert", "Nuske", role=c("ctb"), comment=c(ORCID="0000-0001-9773-2061")))
 Description: The LWFBrook90R package simulates water fluxes, soil moisture and drought stress using the 
     LWF-Brook90 hydrological model. Different functions provide for convenient simulation set-up and model execution.
     Additional functions allow for parallelization of multiple simulations.
@@ -15,8 +16,9 @@ Imports:
     vegperiod (>= 0.2.1),
     foreach,
     iterators,
-    doSNOW,
-    snow,
+    doFuture,
+    future,
+    progressr,
 	sirad,
 	methods
 License: GPL-3

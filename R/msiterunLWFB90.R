@@ -12,8 +12,9 @@
 #' individual param.b90, climate and soil objects? Default is FALSE,
 #' running one or the list of param.b90 for a series of climate/soil combinations.
 #' @param cores Number of cores to use for parallel processing.
-#' @param showProgress Logical: Show progressbar?
+#' @param showProgress Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.
 #' @param ... Further arguments passed to \code{\link{runLWFB90}}.
+#' It might be a good idea to pass \code{verbose=FALSE} to suppress excessive chatter of \code{runLWFB90}.
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on. The names of the returned list entries
@@ -28,19 +29,35 @@
 #' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
 #' output of a single run simulation, and can be used for aggrating model output on-the-fly,
 #' or writing results to a file or database.
+#'
+#' @section Progress bar:
+#' This function provides a progress bar via the package \CRANpkg{progressr}
+#' if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+#' \code{progressr::with_progress()} to enable progress reporting from
+#' distributed calculations. The appearance of the progress bar (including
+#' audible notification) can be customized by the user for the entire session
+#' using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+#'
 #' @export
 #'
 #' @example inst/examples/msiterunLWFB90-help.R
+#'
 msiterunLWFB90 <- function(param.b90,
                            options.b90,
                            climate,
                            soil = NULL,
-                           all_combinations = F,
+                           all_combinations = FALSE,
                            cores = 2,
                            showProgress = TRUE,
                            ...){
+  if(cores > future::availableCores())
+    stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
+               "available."))
 
-  clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL;
+  # to pass CRAN check
+  clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL
+  `%dopar%` <- foreach::`%dopar%`
+  `%:%` <- foreach::`%:%`
 
   #determine list lengths and setup the names
   param_len <- nstlist_length(param.b90)
@@ -60,54 +77,62 @@ msiterunLWFB90 <- function(param.b90,
 
   nRuns <- nrow(combinations)
 
-  #set up Cluster and progressbar --------------------------------------------------
 
-  # define local foreach symbols
-  `%dopar%` <- foreach::`%dopar%`
-  `%:%` <- foreach::`%:%`
+  # set up Cluster and foreach-Loop ------------------------------------------
+  # plan multisession does makeClusterPSOCK() in the background
+  # cluster is stopped automagically on exit
+  # a future plan that might have existed before will be restored on exit
+  oplan <- future::plan(future::multisession, workers=cores)
+  on.exit(future::plan(oplan), add=TRUE)
+  doFuture::registerDoFuture()
 
-  progress <- function(nRuns) utils::setTxtProgressBar(pb, nRuns)
-
-  if (showProgress) {
-    opts <- list(progress = progress)
-  } else {
-    opts <- list(progress = NULL)
-  }
-
-  cl <- snow::makeSOCKcluster(cores)
-  doSNOW::registerDoSNOW(cl)
-  snow::clusterEvalQ(cl, library("LWFBrook90R"))
-  on.exit(snow::stopCluster(cl), add = T)
-
-  pb <- utils::txtProgressBar(min = 1, max = nRuns, style = 3)
-
-  # foreach-Loop --------------------------------------------------------------------
   if (is.null(clim_nms)) {
     outer_nms <- "clim_1"
-  } else {outer_nms <- clim_nms}
+  } else {
+    outer_nms <- clim_nms
+  }
 
-  # outer loop iterates over climate to save memory -> result is nested
-  results <- foreach::foreach(thisclim = iterators::iter(climate),
-                              clim_no = iterators::icount(),
-                              .final = function(x) stats::setNames(x, clim_nms),
-                              .errorhandling = "pass",
-                              .options.snow = opts) %:%
+  foreach_loop <- function(){
+    # outer loop iterates over climate to save memory -> result is nested
+    foreach::foreach(
+      thisclim = iterators::iter(climate),
+      clim_no = iterators::icount(),
+      .final = function(x) stats::setNames(x, clim_nms),
+      .errorhandling = "pass") %:%
 
-    # inner loop iterates over the combinations using thisclim
-    foreach::foreach(i = 1:nrow(combinations[which(combinations$clim == clim_no),]),
-                     .errorhandling = "pass") %dopar% {
+      # inner loop iterates over the combinations using thisclim
+      foreach::foreach(
+        i = 1:nrow(combinations[which(combinations$clim == clim_no), ]),
+        .errorhandling = "pass") %dopar% {
 
-                       #subset for readibility
-                       combi_thisclim <- combinations[which(combinations$clim == clim_no),]
+          #subset for readibility
+          combi_thisclim <- combinations[which(combinations$clim == clim_no), ]
 
-                       runLWFB90(options.b90 = options.b90,
-                                 param.b90 = param.b90[[combi_thisclim$param[i]]],
-                                 soil = soil[[combi_thisclim$soil[i]]],
-                                 climate = thisclim,
-                                 ...)
-                     }
+          res <- runLWFB90(options.b90 = options.b90,
+                           param.b90 = param.b90[[combi_thisclim$param[i]]],
+                           soil = soil[[combi_thisclim$soil[i]]],
+                           climate = thisclim,
+                           ...)
 
-  # unnest
+          increment_progressbar()
+
+          return(res)
+        }
+  }
+
+  # with progressbar if wanted
+  if(isTRUE(showProgress)){
+    progressr::with_progress({
+      increment_progressbar <- progressr::progressor(steps=nRuns)
+      results <- foreach_loop()
+    })
+  } else {
+    increment_progressbar <- function(){}
+    results <- foreach_loop()
+  }
+
+
+  # unnest results
   results <- unlist(results, recursive = F)
 
   # set names
@@ -117,6 +142,12 @@ msiterunLWFB90 <- function(param.b90,
 
   return(results)
 }
+
+
+
+#------------------------------------------------------------------------------
+# Internal Helper Functions
+#------------------------------------------------------------------------------
 
 nstlist_length <- function(ll) {
   if (any(sapply(ll, is.list))) {
@@ -202,9 +233,3 @@ setup_combinations <- function(param_len, soil_len, clim_len,
   }
   return(combinations)
 }
-
-
-
-
-
-

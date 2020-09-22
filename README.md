@@ -7,7 +7,7 @@
 
 Run the
 [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
-hydrological model from within R
+hydrological model in R
 
 ## Installation
 
@@ -17,7 +17,7 @@ It is recommended to download and install the latest stable release from
 <https://github.com/pschmidtwalter/LWFBrook90R/releases>
 
 ``` r
-install.packages("path/to/package/LWFBrook90R_0.2.0.tar.gz", repos = NULL, type = "source")
+install.packages("path/to/package/LWFBrook90R_0.4.0.tar.gz", repos = NULL, type = "source")
 ```
 
 For installing the source package in R under Windows,
@@ -25,7 +25,7 @@ For installing the source package in R under Windows,
 Rtools is not available, install the (.zip) binary package:
 
 ``` r
-install.packages("path/to/package/LWFBrook90R_0.2.0.zip", repos = NULL, type = "binary")
+install.packages("path/to/package/LWFBrook90R_0.4.0.zip", repos = NULL, type = "binary")
 ```
 
 You can also install the latest stable release directly from GitHub,
@@ -35,7 +35,7 @@ using the devtools package:
 if (!requireNamespace("devtools")) {
     install.packages("devtools")
 }
-devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.2.0.tar.gz",
+devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.4.0.tar.gz",
                       dependencies = T, build_vignettes = T)
 ```
 

@@ -24,10 +24,11 @@ respective column of \code{paramvar}. All parameter names (column names) in \cod
 
 \item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
 
-\item{showProgress}{Show progressbar? Default is TRUE.}
+\item{showProgress}{Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.}
 
 \item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
-provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!}
+provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!
+It might be a good idea to also pass \code{verbose=FALSE} to suppress excessive chatter of \code{runLWFB90}.}
 
 \item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
 
@@ -63,6 +64,16 @@ output of a single run simulation, and can be used for aggrating model output on
 or writing results to a file or database.
 }
 
+\section{Progress bar}{
+
+This function provides a progress bar via the package \CRANpkg{progressr}
+if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+\code{progressr::with_progress()} to enable progress reporting from
+distributed calculations. The appearance of the progress bar (including
+audible notification) can be customized by the user for the entire session
+using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+}
+
 \examples{
 # Set up lists containing model control options and model parameters:
 param.b90 <- setparam_LWFB90()
@@ -79,6 +90,7 @@ soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 #set up data.frame with variable parameters
 n <- 5
+set.seed(2020)
 vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          shape.budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
