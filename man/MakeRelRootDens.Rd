@@ -83,7 +83,6 @@ lines(roots_table/100, slb1_soil$lower,
 
 legend("bottomright", c("'betamodel'","'table'","'linear'", "'constant'"),seg.len = 1.5,
        pch = NULL, lwd =1.5, col = c("brown", "green", "blue", "red"), bty = "n")
-
 }
 \references{
 Gale, M.R. & Grigal D.F. (1987): "Vertical root distributions of northern tree

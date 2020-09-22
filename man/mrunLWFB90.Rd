@@ -8,8 +8,6 @@ mrunLWFB90(
   paramvar,
   param.b90,
   paramvar_nms = names(paramvar),
-  multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE,
   cores = 2,
   showProgress = TRUE,
   ...
@@ -24,17 +22,16 @@ respective column of \code{paramvar}. All parameter names (column names) in \cod
 
 \item{paramvar_nms}{Names of the parameters in \code{paramvar} to be replaced in \code{param.b90}.}
 
+\item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
+
+\item{showProgress}{Show progressbar? Default is TRUE.}
+
+\item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
+provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!}
+
 \item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
 
 \item{keep.subdirs}{Keep sub-directories of the single runs? Default is FALSE.}
-
-\item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
-
-\item{showProgress}{Show progressbar? Default is TRUE. See also section \code{Progress bar}.}
-
-\item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
-provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!
-It might be a good idea to also pass \code{verbose=FALSE} to supress excessive chatter of \code{runLWFB90}.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
@@ -44,17 +41,6 @@ Simulation or processing errors are passed on.
 Wrapper function for \code{\link{runLWFB90}} to make multiple simulations parallel,
 with varying input parameters.
 }
-\section{File management}{
-
-The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
-the respective subdirectory is not deleted. The returned list of single run results can become very large,
-if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
-and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
-perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
-}
-
 \section{Parameter updating}{
 
 The transfer of values from a row in paramvar to param.b90 before each single run
@@ -66,14 +52,15 @@ has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \co
 the column has to be named 'maxlai3'.
 }
 
-\section{Progress bar}{
+\section{Data management}{
 
-This function provides a progress bar via the package \CRANpkg{progressr}
-if \code{showProgress=TRUE}. The parallel computation is then wrapped with
-\code{progressr::with_progress()} to enable progress reporting from
-distributed calculations. The appearance of the progress bar (including
-audible notification) can be customized by the user for the entire session
-using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+The returned list of single run results can become very large,if many simulations are done and
+the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
+To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
+carefully selecting the output, and make use of the option to pass a list of functions to
+\code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
+output of a single run simulation, and can be used for aggrating model output on-the-fly,
+or writing results to a file or database.
 }
 
 \examples{
@@ -81,30 +68,27 @@ using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 param.b90 <- setparam_LWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
 # with fixed budburst and leaf fall dates:
-options.b90 <- setoptions_LWFB90(startdate = as.Date("2002-01-01"),
-                                 enddate = as.Date("2003-12-31"),
+options.b90 <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
+                                 enddate = as.Date("2003-06-30"),
                                  lai.method = 'Coupmodel',
                                  budburst.method = 'fixed',
                                  leaffall.method = 'fixed')
 
 # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
-soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 #set up data.frame with variable parameters
 n <- 5
-set.seed(2020)
 vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          shape.budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
-                         soil_materials.ths3 = runif(n, 0.3,0.5), #' ths of material 3
-                         maxlai2 = runif(n,4,8)) #' lai in the 2nd year of the simulation
+                         soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
+                         maxlai = runif(n,2,7))
+
 
 # add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
 param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
-
-# set up maxlai with length 2, so maxlai2 of paramvar can be looked up
-param.b90$maxlai <- c(5, 5)
 
 # Make a Multirun-Simulation
 b90.multi <- mrunLWFB90(paramvar = vary_parms,
@@ -117,16 +101,16 @@ names(b90.multi)
 evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
                                                    FUN = function(x) {x[["EVAPDAY.ASC"]]}),
                                             idcol = "srun"))
-evapday$dates <- as.Date(paste(evapday$YR, evapday$DOY),"\%Y \%j")
+evapday$dates <- as.Date(paste(evapday$yr, evapday$doy),"\%Y \%j")
 
 srun_nms <- unique(evapday$srun)
 
 with(evapday[evapday$srun == srun_nms[1], ],
-     plot(dates, cumsum(EVAP), type = "n",
-          ylim = c(0,1000))
+     plot(dates, cumsum(evap), type = "n",
+          ylim = c(0,100))
 )
 for (i in 1:length(b90.multi)){
   with(evapday[evapday$srun == srun_nms[i], ],
-       lines(dates, cumsum(EVAP)))
+       lines(dates, cumsum(evap)))
 }
 }

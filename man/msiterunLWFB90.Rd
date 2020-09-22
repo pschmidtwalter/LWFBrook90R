@@ -10,8 +10,6 @@ msiterunLWFB90(
   climate,
   soil = NULL,
   all_combinations = F,
-  multirun.dir = "MultiRuns/",
-  keep.subdirs = FALSE,
   cores = 2,
   showProgress = TRUE,
   ...
@@ -20,57 +18,42 @@ msiterunLWFB90(
 \arguments{
 \item{param.b90}{Named list of parameters to be used in all simulations, or a list of multiple parameter sets.}
 
-\item{options.b90}{Named list of model control options to be used in all simulations, or a list of multiple lists with different options.}
+\item{options.b90}{Named list of model control options to be used in all simulations}
 
 \item{climate}{Data.frame with climate data, or a list of climate data.frames.}
 
 \item{soil}{Data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles.}
 
 \item{all_combinations}{Logical: Set up and run all possible combinations of
-individual param.b90, options.b90, climate and soil objects? Default is FALSE,
-running one or multiple param.b90/options.b90 combinations for a series of climate/soil combinations.}
-
-\item{multirun.dir}{Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.}
-
-\item{keep.subdirs}{Keep sub-directories of the single runs after successful simulation? Default is FALSE.}
+individual param.b90, climate and soil objects? Default is FALSE,
+running one or the list of param.b90 for a series of climate/soil combinations.}
 
 \item{cores}{Number of cores to use for parallel processing.}
 
-\item{showProgress}{Logical: Show progressbar? Default is TRUE. See also section \code{Progress bar}.}
+\item{showProgress}{Logical: Show progressbar?}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}}.
-It might be a good idea to pass \code{verbose=FALSE} to supress excessive chatter of \code{runLWFB90}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
 }
 \value{
 A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 Simulation or processing errors are passed on. The names of the returned list entries
 are concatenated from the names of the input list entries
-in the following form: <climate> <soil> <param.b90> <options.b90>.
+in the following form: <climate> <soil> <param.b90>.
 }
 \description{
 Wrapper function for \code{\link{runLWFB90}} to make multiple parallel simulations for combinations
-of climate, soil, parameters and model control options, e.g., for simulating one  or sevral parameter sets
-for a series of sites with individual climate and soil.
+of climate, soil, and parameters, e.g., for simulating one or several parameter sets
+for a series of sites with individual climate and soil, or individual parameter set for each combination.
 }
-\section{File management}{
+\section{Data management}{
 
-The LWF-Brook90 output files of the single runs are stored in subdirectories within 'multirun.dir'.
-If \code{keep.subdirs=FALSE}, subdirectories are deleted after successful singlerun simulation. In case of an error,
-the respective subdirectory is not deleted. The returned list of single run results can become very large,
-if many simulations are done and the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-To not overload memory, it is advised to reduce the returned simulation results to a minimum, by carefully selecting the output,
-and make use of the option to pass a list of functions to \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
-perform directly on the output of a single run simulation, and can be used for aggrating model output on-the-fly.
-}
-
-\section{Progress bar}{
-
-This function provides a progress bar via the package \CRANpkg{progressr}
-if \code{showProgress=TRUE}. The parallel computation is then wrapped with
-\code{progressr::with_progress()} to enable progress reporting from
-distributed calculations. The appearance of the progress bar (including
-audible notification) can be customized by the user for the entire session
-using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+The returned list of single run results can become very large, if many simulations are performed and
+the selected output contains daily resolution datasets, especially daily layer-wise soil moisture data.
+To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
+carefully selecting the output, and make use of the option to pass a list of functions to
+\code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
+output of a single run simulation, and can be used for aggrating model output on-the-fly,
+or writing results to a file or database.
 }
 
 \examples{
@@ -84,7 +67,7 @@ param_l <- list(spruce = setparam_LWFB90(maxlai = 5,
                                         budburst.species = "Fagus sylvatica",
                                         winlaifrac = 0))
 
-soil <- cbind(slb1_soil, hydpar_wessolek_mvg(slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 # define list of soil objects
 soils <- list(soil1 = soil, soil2 = soil)
@@ -110,4 +93,26 @@ res <- msiterunLWFB90(param.b90 = param_l,
                       run = FALSE)
 names(res)
 
+# set up and run individual parameter sets at individual locations
+# location parameters
+loc_parm <- data.frame(loc_id = names(climates),
+                       coords_y = c(48.0, 54.0),
+                       eslope = c(30,0),
+                       aspect = c(180,0))
+
+# make list
+param_l <- lapply(names(climates), function(x, loc_parms) {
+  parms <- setparam_LWFB90()
+  parms[match(names(loc_parm),names(parms), nomatch = 0)] <-
+    loc_parm[loc_parm$loc_id == x, which(names(loc_parm) \%in\% names(parms))]
+  parms
+}, loc_parm = loc_parm)
+names(param_l) <- c("locpar1", "locpar2")
+
+res <- msiterunLWFB90(param.b90 = param_l,
+                      options.b90 = options.b90,
+                      soil = soils,
+                      climate = climates,
+                      run = FALSE)
+names(res)
 }
