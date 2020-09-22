@@ -11,9 +11,10 @@
 #' @param multirun.dir Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
 #' @param keep.subdirs Keep sub-directories of the single runs? Default is FALSE.
 #' @param cores Number of CPUs to use for parallel processing. Default is 2.
-#' @param showProgress Show progressbar? Default is TRUE.
+#' @param showProgress Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.
 #' @param ... Additional arguments passed to \code{\link{runLWFB90}}:
 #' provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!
+#' It might be a good idea to also pass \code{verbose=FALSE} to suppress excessive chatter of \code{runLWFB90}.
 #'
 #' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
 #' Simulation or processing errors are passed on.
@@ -35,6 +36,14 @@
 #' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
 #' output of a single run simulation, and can be used for aggrating model output on-the-fly,
 #' or writing results to a file or database.
+#'
+#' @section Progress bar:
+#' This function provides a progress bar via the package \CRANpkg{progressr}
+#' if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+#' \code{progressr::with_progress()} to enable progress reporting from
+#' distributed calculations. The appearance of the progress bar (including
+#' audible notification) can be customized by the user for the entire session
+#' using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 #'
 #' @export
 #'
