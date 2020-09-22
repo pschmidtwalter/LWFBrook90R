@@ -1,11 +1,22 @@
 News for the LWFBrook90R-package
 ================
 
-# LWFBrook90R v0.?.?
+# LWFBrook90R v0.4.0
 Release date: ???
 
 Changes:
 
+- result datasets are now returned directly by the Fortran model code, without the detour of writing
+  .ASC output text files and reading them back into workspace. This speeds up the simulations and is
+  necessary for the planned release on CRAN.
+- `runLWFB90()`: providing output = -1 instead of an output selection matrix returns two tables with
+  simulation results: general daily outputs and layer outputs. A proper description 
+  of model output variables was added to the in the help pages.
+- all column names of the .ASC output objects are now in lower case.
+- `msiterunLWFB90()`: It is now possible to provide individual `param.b90` input parameter objects for
+  individual climate/soil combinations (i.e. individual locations). The option to provide a list of
+  `options.b90` input objects was disabled
+- renamed some of the pedotransfer-functions and reorganized the documentation for it. See `?ptfs`.
 - switched `msiterunLWFB90()` and `mrunLWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 
 ----
