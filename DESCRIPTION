@@ -17,6 +17,9 @@ Imports:
     iterators,
     doSNOW,
     snow,
+    doFuture,
+    future,
+    progressr,
 	sirad,
 	methods
 License: GPL-3

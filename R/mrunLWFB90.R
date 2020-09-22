@@ -39,13 +39,16 @@
 #' @export
 #'
 #' @example inst/examples/mrunLWFB90-help.R
+#'
 mrunLWFB90 <- function(paramvar,
                        param.b90,
                        paramvar_nms = names(paramvar),
                        cores = 2,
                        showProgress = TRUE,
                        ...){
-  i <- NULL #to pass CRAN check Notes
+  # to pass CRAN check Notes
+  i <- NULL
+  `%dopar%` <- foreach::`%dopar%`
 
   nRuns <- nrow(paramvar)
 
@@ -77,53 +80,54 @@ mrunLWFB90 <- function(paramvar,
                  paste(nms[which(!nms %in% names(param.b90))], collapse =", ") ))
   }
 
-  # set up local %dopar%
-  `%dopar%` <- foreach::`%dopar%`
 
-  # set up Cluster and progressbar --------------------------------------------------
+  # set up Cluster and foreach-Loop --------------------------------------------
+  # plan multisession does makeClusterPSOCK() in the background
+  # cluster is stopped automagically on exit
+  # a future plan that might have existed before will be restored on exit
+  oplan <- future::plan(future::multisession, workers=cores)
+  on.exit(future::plan(oplan), add=TRUE)
+  doFuture::registerDoFuture()
 
-  progress <- function(nRuns) utils::setTxtProgressBar(pb, nRuns)
+  foreach_loop <- function(){
+    foreach::foreach(
+      i = 1:nRuns,
+      .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
+      .errorhandling = "pass",
+      .export = "param.b90") %dopar% {
 
-  if (showProgress) {
-    opts <- list(progress = progress)
-  } else {
-    opts <- list(progress = NULL)
+        # replace single value parameters
+        param.b90[match(singlepar_nms, names(param.b90))] <- paramvar[i, match(singlepar_nms, paramvar_nms, nomatch = 0)]
+
+        # replace parameters in data.frames and vector elements
+        if (param_ll_len > 0) {
+          for (l in 1:length(param_ll)){
+            list_ind <- which(names(param.b90) == names(param_ll)[l])
+            param.b90[[list_ind]] <- replace_vecelements(param.b90[[list_ind]],
+                                                         varnms = paramvar_nms[param_ll[[l]]],
+                                                         vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
+          }
+        }
+
+        # Run LWFBrook90
+        res <- runLWFB90(param.b90 = param.b90, ...)
+
+        increment_progressbar()
+
+        return(res)
+      }
   }
 
-  cl <- snow::makeSOCKcluster(cores)
-  doSNOW::registerDoSNOW(cl)
-  snow::clusterEvalQ(cl, library("LWFBrook90R"))
-  on.exit(snow::stopCluster(cl), add = T)
-
-  pb <- utils::txtProgressBar(min = 1, max = nRuns, style = 3)
-
-  # foreach-Loop --------------------------------------------------------------------
-  results <- foreach::foreach(i = 1:nRuns,
-                              .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
-                              .errorhandling = "pass",
-                              .options.snow = opts) %dopar% {
-
-                                # replace single value parameters
-                                param.b90[match(singlepar_nms,names(param.b90))] <- paramvar[i,match(singlepar_nms, paramvar_nms, nomatch = 0)]
-
-                                # replace parameters in data.frames and vector elements
-                                if (param_ll_len > 0) {
-                                  for (l in 1:length(param_ll)){
-                                    list_ind <- which(names(param.b90) == names(param_ll)[l])
-                                    param.b90[[ list_ind ]] <- replace_vecelements(param.b90[[ list_ind ]],
-                                                                                   varnms = paramvar_nms[ param_ll[[l]] ],
-                                                                                   vals = unlist(paramvar[i, unlist(param_ll[[l]])]))
-                                  }
-                                }
-
-                                # Run LWFBrook90
-                                runLWFB90(param.b90 = param.b90, ...)
-                              }
+  # with progressbar if wanted
+  if(isTRUE(showProgress)){
+    progressr::with_progress({
+      increment_progressbar <- progressr::progressor(steps=nRuns)
+      results <- foreach_loop()
+    })
+  } else {
+    increment_progressbar <- function(){}
+    results <- foreach_loop()
+  }
 
   return(results)
 }
-
-
-
-
-

@@ -79,6 +79,7 @@ soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 #set up data.frame with variable parameters
 n <- 5
+set.seed(2020)
 vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          shape.budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
