@@ -1,27 +1,24 @@
 Package: LWFBrook90R
 Title: Run the LWF-Brook90 Hydrological Model in R
-Version: 0.3.4
+Version: 0.4.0
 Authors@R: c(person("Paul", "Schmidt-Walter", , "paul.schmidt-walter@nw-fva.de", role = c("aut", "cre")),
              person("Volodymyr", "Trotsiuk", , "vtrotsiuk@gmail.com", role = c("aut")),
              person("Klaus", "Hammel", , ,role = c("aut")),
              person("Martin", "Kennel", , ,role = c("aut")),
-             person("Anthony", "Federer", ,"tony@ecoshift.net", role = c("aut")))
-Description: Run the LWF-BROOK90 hydrological model within R. The central
-    function creates the input objects from model control options, parameters, soil and
-    climate data, runs the LWF-Brook90 hydrological model and returns the output. 
-    Additionally, submodels for defining vegetation dynamics and pedotransfer functions 
-    for deriving soil hydraulic parameters are provided.
+             person("Anthony", "Federer", , , role = c("aut")))
+Description: The LWFBrook90R package simulates water fluxes, soil moisture and drought stress using the 
+    LWF-Brook90 hydrological model. Different functions provide for convenient simulation set-up and model execution.
+    Additional functions allow for parallelization of multiple simulations.
 Depends: R (>= 3.1.0)
 Imports:
     data.table (>= 1.10.4),
     vegperiod (>= 0.2.1),
     foreach,
     iterators,
-    doFuture,
-    future,
-    progressr,
-    sirad,
-    methods
+    doSNOW,
+    snow,
+	sirad,
+	methods
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
