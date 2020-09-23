@@ -3,54 +3,41 @@
 
 # LWFBrook90R
 
------
-
 Run the
 [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
-hydrological model in R
+hydrological model in R.
 
 ## Installation
 
-### Recommended installation
+It is recommended to use the latest **stable version**, which can be
+found at <https://github.com/pschmidtwalter/LWFBrook90R/releases>. If
+`LWFBrook90R_*.tar.gz` / `LWFBrook90R_*.zip` are available for the
+latest release, you can download it and install it on Linux / Windows in
+the usual way.
 
-It is recommended to download and install the latest stable release from
-<https://github.com/pschmidtwalter/LWFBrook90R/releases>
-
-``` r
-install.packages("path/to/package/LWFBrook90R_0.4.0.tar.gz", repos = NULL, type = "source")
-```
-
-For installing the source package in R under Windows,
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/) is required. If
-Rtools is not available, install the (.zip) binary package:
-
-``` r
-install.packages("path/to/package/LWFBrook90R_0.4.0.zip", repos = NULL, type = "binary")
-```
-
-You can also install the latest stable release directly from GitHub,
-using the devtools package:
+Otherwise (or if you want to install from source) you can install a
+tagged version directly from the Github repo. On Windows this requires
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/). The tag of the
+latest release (e.g. `v0.3.4`) can also be found on the
+[releases-page](https://github.com/pschmidtwalter/LWFBrook90R/releases).
 
 ``` r
-if (!requireNamespace("devtools")) {
-    install.packages("devtools")
-}
-devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.4.0.tar.gz",
-                      dependencies = T, build_vignettes = T)
+if(!require("remotes")) install.packages("remotes")
+remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes=TRUE,
+                        ref="v0.3.4") 
 ```
 
-### Development version
+<br />
 
-Instead of installing the latest stable release, you can also install
-the latest development version using the devtools package:
+The current **development version** can be installed in the same way
 
 ``` r
-devtools::install_github(repo = "pschmidtwalter/LWFBrook90R", 
-                         dependencies = T, build_vignettes = T)
+if(!require("remotes")) install.packages("remotes")
+remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes=TRUE) 
 ```
 
-After installation, use `vignette("intro_lwfbrook90r")` to see the
-manual.
+After installation, take a look at the vignette with
+`vignette("intro_lwfbrook90r")`.
 
 ## Basic usage
 
@@ -154,6 +141,6 @@ extended to control this interface function.
 ## License
 
 GPL-3 for all Fortran and R code. brook90r has GPL-3, while LWF-Brook90
-was without license until recently. Lothar Zimmermann and Stephan raspe
+was without license until recently. Lothar Zimmermann and Stephan Raspe
 (LWF), as well as all Fortran contributors agreed to assign GPL-3 to the
 Fortran code.

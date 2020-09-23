@@ -15,44 +15,29 @@ knitr::opts_chunk$set(
 ```
 
 # LWFBrook90R
+Run the [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) hydrological model in R.
 
-------
-
-Run the [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) hydrological model in R
 
 ## Installation
+It is recommended to use the latest **stable version**, which can be found at  <https://github.com/pschmidtwalter/LWFBrook90R/releases>. If `LWFBrook90R_*.tar.gz` / `LWFBrook90R_*.zip` are available for the latest release, you can download it and install it on Linux / Windows in the usual way. 
 
-### Recommended installation
-It is recommended to download and install the latest stable release from https://github.com/pschmidtwalter/LWFBrook90R/releases
+Otherwise (or if you want to install from source) you can install a tagged version directly from the Github repo. On Windows this requires  [Rtools](https://cran.r-project.org/bin/windows/Rtools/). The tag of the latest release (e.g. `v0.3.4`) can also be found on the [releases-page](https://github.com/pschmidtwalter/LWFBrook90R/releases). 
 
 ```{r}
-install.packages("path/to/package/LWFBrook90R_0.4.0.tar.gz", repos = NULL, type = "source")
+if(!require("remotes")) install.packages("remotes")
+remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes=TRUE,
+                        ref="v0.3.4") 
 ```
+<br />
 
-For installing the source package in R under Windows, [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is required. If Rtools is not available, install the (.zip) binary package:
+The current **development version** can be installed in the same way
 ```{r}
-install.packages("path/to/package/LWFBrook90R_0.4.0.zip", repos = NULL, type = "binary")
+if(!require("remotes")) install.packages("remotes")
+remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes=TRUE) 
 ```
 
-You can also install the latest stable release directly from GitHub, using the devtools package:
-```{r}
-if (!requireNamespace("devtools")) {
-    install.packages("devtools")
-}
-devtools::install_url("https://github.com/pschmidtwalter/LWFBrook90R/archive/v0.4.0.tar.gz",
-                      dependencies = T, build_vignettes = T)
+After installation, take a look at the vignette with `vignette("intro_lwfbrook90r")`. 
 
-```
-
-### Development version
-
-Instead of installing the latest stable release, you can also install the latest development version using the devtools package:
-```{r}
-devtools::install_github(repo = "pschmidtwalter/LWFBrook90R", 
-                         dependencies = T, build_vignettes = T)
-```
-
-After installation, use `vignette("intro_lwfbrook90r")` to see the manual. 
 
 ## Basic usage
 
@@ -97,10 +82,10 @@ b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
 str(b90.results.slb1, max.level = 1)
 ```
 
+
 ## Status
 
 ### R-Code
-
 The package works as intended and is fully documented. However, there are some points to be accomplish in the near future:
 
 - [x] enable use of Clapp-Hornberger hydraulic parameterization in addition to the default Mualem-van Genuchten
@@ -109,7 +94,7 @@ The package works as intended and is fully documented. However, there are some p
 - [ ] Run the `check` with Travis.
 
 ### Fortran-Code 
- 
+
 - [x] Model output results tested against the output from the original 'b90.exe' Windows command line Fortran program. 
 - [x] Cleaning up `declared but not used` variables
 - [x] Use of sub-day resolution precipitation interval data.
@@ -123,4 +108,4 @@ Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Tony Feder
 Tony Federer's original [Brook90 Fortran 77 code](http://www.ecoshift.net/brook/b90doc.html) (Brook90_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin Kennel at Bavarian State Institute of Forestry (LWF) around the year 2000. Since then, LWF-BROOK90 is distributed by [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) upon request as a pre-compiled Fortran command line program together with an MS Access User Interface. In 2019, Volodymyr Trotsiuk converted the Fortran 77 code to Fortran 95 and implemented the connection to R. Paul Schmidt-Walter's *brook90r* package for LWF-Brook90 input data generation, model execution and result processing was adapted and extended to control this interface function.
 
 ## License
-GPL-3 for all Fortran and R code. brook90r has GPL-3, while LWF-Brook90 was without license until recently. Lothar Zimmermann and Stephan raspe (LWF), as well as all Fortran contributors agreed to assign GPL-3 to the Fortran code.
+GPL-3 for all Fortran and R code. brook90r has GPL-3, while LWF-Brook90 was without license until recently. Lothar Zimmermann and Stephan Raspe (LWF), as well as all Fortran contributors agreed to assign GPL-3 to the Fortran code.
