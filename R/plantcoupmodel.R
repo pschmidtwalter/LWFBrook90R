@@ -18,7 +18,9 @@
 #' soil-plant-atmosphere systems."
 #' \emph{Royal Institute of Technolgy, Dept of Civil and Environmental Engineering Stockholm}
 #'
-#' @example inst/examples/plantcoupmodel-help.R
+#' @examples
+#' plot(plant.coupmodel(0,5, 121, 200, 280, 0.3, 3, 365))
+#'
 #' @export
 plant.coupmodel <- function(minval,
                             maxval,

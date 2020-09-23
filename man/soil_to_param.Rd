@@ -21,8 +21,9 @@ a list with data.frames 'soil_nodes' and 'soil_materials'
 Split up soil into materials and soil nodes.
 }
 \examples{
+data(slb1_soil)
 soil <- slb1_soil
-soil <- cbind(soil, hydpar_wessolek_mvg(soil$texture))
+soil <- cbind(soil, hydpar_wessolek_tab(soil$texture))
 str(soil)
 
 soil_layers_materials <- soil_to_param(soil)
