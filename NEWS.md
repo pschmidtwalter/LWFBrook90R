@@ -1,8 +1,7 @@
-News for the LWFBrook90R-package
-================
+# News for the LWFBrook90R-package
 
-# LWFBrook90R v0.4.0
-Release date: ???
+
+## Version 0.4.0  (???)
 
 Changes:
 
@@ -19,10 +18,8 @@ Changes:
 - renamed some of the pedotransfer-functions and reorganized the documentation for it. See `?ptfs`.
 - switched `msiterunLWFB90()` and `mrunLWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 
-----
 
-# LWFBrook90R v0.3.4
-Release date: 2020-08-28
+## Version 0.3.4  (2020-08-28)
 
 Changes:
 
@@ -34,10 +31,8 @@ Bug fixes:
 - zero division error causing infinite relawat values in `MISCDAY.ASC`-output item.
 - 'betamodel'-method of `MakeRelRootDens` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
 
-----
 
-# LWFBrook90R v0.3.0
-Release date: 2020-04-21
+## Version 0.3.0 (2020-04-21)
 
 Changes:
 
@@ -47,19 +42,15 @@ Changes:
 	on-the-fly post-processing of model results including model-input is possible now.
 - minor bugs fixed
 
-----
 
-# LWFBrook90R v0.2.0
-Release date: 2019-06-18
+## Version 0.2.0  (2019-06-18)
 
 Changes:
 
 - 'output_fun' argument replaces 'gof_fun'-argument in runLWFB90() for more flexible output.
 - minor bugs fixed
 
-----
 
-# LWFBrook90R v0.1.0
-Release date: 2019-05-13
+## Version 0.1.0  (2019-05-13)
 
 - First beta release: most functionality was taken from [brook90r](https://doi.org/10.5281/zenodo.1433677). However, functions and arguments were renamed, and a lot of functionality was added.
