@@ -8,8 +8,6 @@
 #' respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in \code{param.b90}.
 #' @param param.b90 Named list of parameters, in which the parameters defined in \code{paramvar} will be replaced.
 #' @param paramvar_nms Names of the parameters in \code{paramvar} to be replaced in \code{param.b90}.
-#' @param multirun.dir Directory name where to create the subdirectories for the single runs. Default is 'MultiRuns/'.
-#' @param keep.subdirs Keep sub-directories of the single runs? Default is FALSE.
 #' @param cores Number of CPUs to use for parallel processing. Default is 2.
 #' @param showProgress Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.
 #' @param ... Additional arguments passed to \code{\link{runLWFB90}}:
@@ -20,10 +18,10 @@
 #' Simulation or processing errors are passed on.
 #'
 #' @section Parameter updating:
-#' The transfer of values from a row in paramvar to param.b90 before each single run
-#' simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to adress data.frame
+#' The transfer of values from a row in \code{paramvar} to \code{param.b90} before each single run
+#' simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to address data.frame
 #' or vector elements in \code{param.b90} by a column name in \code{paramvar}, the respective column name
-#' has to be setup from its name and index in \code{param.b90}. To replace, e.g., the 2nd value of \code{ths}
+#' has to be set up from its name and index in \code{param.b90}. To replace, e.g., the 2nd value of \code{ths}
 #' in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
 #' has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
 #' the column has to be named 'maxlai3'.
