@@ -171,7 +171,7 @@ hydpar_wessolek_tab <- function(tex.KA5) {
     stop("Please provide the soil texture according to KA5" )
   }
   out <- data.frame(id=seq(1,length(tex.KA5)), tex.KA5)
-  out <- merge(out, LWFBrook90R:::wessolek_mvg_tab10[,c("tex.KA5","ths","thr","alpha","npar","mpar","ksat","tort")],
+  out <- merge(out, wessolek_mvg_tab10[,c("tex.KA5","ths","thr","alpha","npar","mpar","ksat","tort")],
                by="tex.KA5", all.x = TRUE)
   out$alpha <- out$alpha*100
   out[order(out$id), -which(names(out) %in% c("tex.KA5","id"))]
@@ -183,7 +183,7 @@ hydpar_ff_b90 <- function(n=1) {
   if (length(n) > 1) {
     warning("Only the first element of the supplied vector will be used." )
   }
-  out <- LWFBrook90R:::hydpar_forestfloor[rep(1,n[1]),]
+  out <- hydpar_forestfloor[rep(1,n[1]),]
   out
 }
 
