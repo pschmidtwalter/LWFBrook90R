@@ -56,8 +56,6 @@ row.names(hypres_tab4) <- NULL
 #devtools::use_data(teepe_tables123, hypres_tab4,wessolek_mvg_tab10,din4220_tabA1, internal =T, overwrite = T)
 
 load("data-raw/vign_dat.rda") #mrun_dt, b90res
-b90res$SWATDAY.ASC$dates <- NULL
-b90res$EVAPDAY.ASC$dates <- NULL
 #speichert den Dataframe als internes Objekt, welches nicht exportiert wird. ANsprechen mit brook90r:::wess_mvg_tex
-usethis::use_data(mrun_dt, b90res, wessolek_mvg_tab10,hydpar_forestfloor, hypres_tab4, internal = T, overwrite =T)
+usethis::use_data(mrun_res, b90res, wessolek_mvg_tab10,hydpar_forestfloor, hypres_tab4, internal = T, overwrite =T)
 

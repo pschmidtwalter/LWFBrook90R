@@ -172,16 +172,16 @@ mrun_res <- mrunLWFB90(paramvar = paramvar,
                        output_fun = output_function)
 ```
 
-The result is a list of the individual single-run results, from which we can easily extract the results of our output function and `rbind` them to a data.table:
-
-```{r, eval = F}
-mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]), 
-                      idcol = "singlerun")
+```{r, echo = F}
+mrun_res <- LWFBrook90R:::mrun_res
 ```
 
-```{r, eval = F, echo = F}
-# vignette data: store in data-raw and include later as internal data with script 'make_internal_data'
-save(mrun_dt, b90res, file = file.path(dirname(getwd()),"data-raw/vign_dat.rda"))
+
+The result is a list of the individual single-run results, from which we can easily extract the results of our output function and `rbind` them to a data.table:
+
+```{r, eval = T}
+mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]), 
+                      idcol = "singlerun")
 ```
 
 Now we can plot the results of the 50 simulations:
@@ -189,16 +189,16 @@ Now we can plot the results of the 50 simulations:
 ```{r,results='hide', fig.height=5, fig.width=7, echo =F, fig.cap = "Transpiration and  soil water storage of 50 simulations, with random variation of parameters 'maxlai' and 'glmax' "}
 
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-LWFBrook90R:::mrun_dt[singlerun == "RunNo.1",
+mrun_dt[singlerun == "RunNo.1",
         plot(dates, cumsum(tran),
              type = "n", col = "green",
              ylab = "cum. Transpiration [mm]",
              ylim = c(0,700))]
 
-LWFBrook90R:::mrun_dt[,lines(dates, cumsum(tran), col = "green"),
+mrun_dt[,lines(dates, cumsum(tran), col = "green"),
         by = singlerun]
 
-LWFBrook90R:::mrun_dt[,lines(dates, swat100cm*2, col = "blue"),
+mrun_dt[,lines(dates, swat100cm*2, col = "blue"),
         by = singlerun]
 axis(4, at = seq(0,700,100), labels = seq(0,700,100)/2)
 mtext("Soil water storage in 0-100 cm [mm]", side = 4, line = 3 )
@@ -378,8 +378,8 @@ text(x = as.Date(paste(param.b90$leaffalldoy, years), format = "%j %Y"),
 ```
 
 Another option for incorporating between-year variation of plant properties is to provide a table with yearly values of 'height', 'maxlai', 'sai', 'densef' and 'age'  via the list element `standprop.table` of the `param.b90`-argument of `runLWFB90`. To take effect, the option `options.b90$standprop.input` has to be set to 'table'. In this case, the values passed via parameters `height`, `sai`, `densef` and `age.ini` are ignored. As `maxlai` is also provided via the table, the `maxlai` value from parameters is ignored as well, while the other parameters that affect intra-annual leaf area development (e.g., `shape.budburst`) are still active.
-For demonstration purposes we use the table `slb1_standprop`, that contains observed stand data of the Solling Beech Experimental site from 1966 to 2014, along with estimated leaf and stem area index derived using allometric functions. For creating the daily timeseries of stand properties, we use the runLWFB90, and make use of the option to not run the model (`run = FALSE`), but only return the model input.
-```{r, eval = F, messages = F}
+For demonstration purposes we use the table `slb1_standprop`, that contains observed stand data of the Solling Beech Experimental site from 1966 to 2014, along with estimated leaf and stem area index derived using allometric functions. For creating the daily timeseries of stand properties, we use `runLWFB90`, and make use of the option to not run the model (`run = FALSE`), but only return the model input.
+```{r, messages = F}
 #Extend simulation period
 options.b90$startdate <- as.Date("1980-01-01")
 options.b90$enddate <- as.Date("1999-12-31")
@@ -394,17 +394,19 @@ options.b90$leaffall.method <- "vonWilpert"
 param.b90$budburst.species <- "Fagus sylvatica"
 
 #run LWF-Brook90 without simulation
-b90res.standtable <- runLWFB90(project.dir = "example_run_b90/",
+standprop_daily <- runLWFB90(project.dir = "example_run_b90/",
                                        options.b90 = options.b90,
                                        param.b90 = param.b90,
                                        climate = slb1_meteo,
                                        soil = soil,
                                        output = output, 
                                        run = F,
-                                       verbose = F)
+                                       verbose = F)$standprop_daily
+```
 
+```{r, echo = F, fig.height=5, fig.width=7, fig.cap="Stand properties generated using table input of annual stand characteristics"}
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-with(b90res.standtable$standprop_daily,{
+with(standprop_daily,{
   plot(dates, lai, 
        type = "l", lwd = 2, col = "green", 
        ylab = "lai, sai m²/m²", xlab = "")
@@ -418,7 +420,7 @@ with(b90res.standtable$standprop_daily,{
 })
 axis(4, at = seq(27,32, by = 1))
 mtext("height [m]", side = 4, line = 3)
-legend("bottom",horiz = T, bty = "n",inset = -0.3, xpd =T,
+legend("bottom",horiz = T, bty = "n",inset = -0.25, xpd =T,
        legend = c("lai", "sai", "height"), 
        col  = c("green","brown", "blue"), lwd = 2, pch = NULL)
 ```
