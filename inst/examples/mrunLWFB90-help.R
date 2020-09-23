@@ -29,7 +29,8 @@ param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 b90.multi <- mrunLWFB90(paramvar = vary_parms,
                         param.b90 = param.b90,
                         options.b90 = options.b90,
-                        climate = slb1_meteo)
+                        climate = slb1_meteo,
+                        output.log = FALSE, verbose = FALSE)
 names(b90.multi)
 
 # extract results: EVAPDAY.ASC
@@ -48,3 +49,5 @@ for (i in 1:length(b90.multi)){
   with(evapday[evapday$srun == srun_nms[i], ],
        lines(dates, cumsum(evap)))
 }
+
+
