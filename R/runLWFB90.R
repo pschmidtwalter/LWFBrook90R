@@ -557,6 +557,10 @@ chk_soil <- function(){
 
 process_outputs <- function(simout, output) {
 
+  # to pass CRAN check notes
+  adef<-NULL;awat<-NULL;balerr<-NULL;da<-NULL;doy<-NULL;evap<-NULL;flow<-NULL;gwat<-NULL;
+  intr<-NULL;ints<-NULL;mo<-NULL;nits<-NULL;nl<-NULL;relawat<-NULL;rfal<-NULL;safrac<-NULL;
+  seep<-NULL;sfal<-NULL;snow<-NULL;stres<-NULL;swat<-NULL;vrfln<-NULL;yr<-NULL;
 
   selection <- rownames(output)[which(rowSums(output) > 0)]
 
@@ -575,11 +579,8 @@ process_outputs <- function(simout, output) {
   if (any(selection == "Misc")){
     Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
 
-  moutputs <- list() # results collection
 
-  # yr<-NULL;mo<-NULL;da<-NULL;doy<-NULL;nl<-NULL;rfal<-NULL;sfal<-NULL;flow<-NULL;evap <- NULL;seep<- NULL;
-  # snow <- NULL;swat<- NULL;gwat<-NULL;intr<-NULL;ints<-NULL;vrfln<-NULL;safrac<-NULL;stres<-NULL;adef<-NULL;
-  # awat<-NULL;relawat<-NULL;nits<-NULL;balerr<-NULL;
+  moutputs <- list() # results collection
 
   for (sel in selection) {
     X <- get(sel)

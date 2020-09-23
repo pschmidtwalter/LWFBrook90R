@@ -54,8 +54,9 @@ msiterunLWFB90 <- function(param.b90,
     stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
                "available."))
 
-  # to pass CRAN check
-  clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL
+  # to pass CRAN check notes
+  clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL;
+  thisclim <- NULL; i <- NULL;
   `%dopar%` <- foreach::`%dopar%`
   `%:%` <- foreach::`%:%`
 
@@ -93,6 +94,9 @@ msiterunLWFB90 <- function(param.b90,
   }
 
   foreach_loop <- function(){
+
+    i <- NULL
+
     # outer loop iterates over climate to save memory -> result is nested
     foreach::foreach(
       thisclim = iterators::iter(climate),

@@ -35,6 +35,8 @@ MakeRelRootDens <- function(soilnodes,
                             beta = 0.97,
                             rootdat = NULL
 ) {
+
+
   method <- match.arg(method, choices = c("betamodel", "table", "constant", "linear"))
 
   if (method == "betamodel") {
@@ -76,6 +78,10 @@ MakeRelRootDens <- function(soilnodes,
 
   if (method == "table") {
 
+    # to pass CRAN check notes
+    upper <- NULL; lower <- NULL; i.upper <- NULL; i.lower <- NULL;
+    rootmass <- NULL; rthick <- NULL; thick_ol <- NULL;
+
     # distributes 'measured' relative root densities to the soil layers, preserving total root mass
 
     stopifnot(all(c("upper", "lower", "rootden") %in% tolower(names(rootdat))))
@@ -84,7 +90,7 @@ MakeRelRootDens <- function(soilnodes,
     # create data.tables for overlap join
     rootdat <- data.table::data.table(rootdat, key = c("lower", "upper"))
     rootdat[, rthick := (upper - lower)]
-    rootdat[,rootmass := rootden*rthick]
+    rootdat[, rootmass := (rootden*rthick)]
 
     slayers <- data.table::data.table(upper = soilnodes[1:length(soilnodes)-1],
                                       lower = soilnodes[2:length(soilnodes)])
@@ -93,15 +99,15 @@ MakeRelRootDens <- function(soilnodes,
     rootdat <- data.table::foverlaps(slayers,rootdat, type = "any")
 
     # derive overlap-thickness for soil layers
-    rootdat[,thick_ol := (ifelse(i.upper < upper,i.upper,upper) -
-                            ifelse(i.lower < lower & i.upper > lower,lower,
-                                   ifelse(i.upper < lower,0,i.lower)) ) * (i.upper > lower & i.lower < upper)]
+    rootdat[, thick_ol := (ifelse(i.upper < upper,i.upper,upper) -
+                                ifelse(i.lower < lower & i.upper > lower,lower,
+                                       ifelse(i.upper < lower,0,i.lower)) ) * (i.upper > lower & i.lower < upper)]
 
     # sum up rootmass proportional to overlapping thickness
     out <- rootdat[, list(i.rootmass = sum(rootmass*thick_ol/rthick)), by = list(i.upper ,i.lower)]
 
     # convert rootmass back to root density
-    out[,i.rden := ifelse(!is.na(i.rootmass),i.rootmass / (i.upper - i.lower), 0)]
+    out$i.rden <- with(out, ifelse(!is.na(i.rootmass),i.rootmass / (i.upper - i.lower), 0) )
 
     rootden <- out$i.rden
 

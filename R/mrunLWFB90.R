@@ -58,8 +58,8 @@ mrunLWFB90 <- function(paramvar,
                "available."))
 
   # to pass CRAN check Notes
-  i <- NULL
   `%dopar%` <- foreach::`%dopar%`
+  i <- NULL
 
   nRuns <- nrow(paramvar)
 
@@ -101,6 +101,7 @@ mrunLWFB90 <- function(paramvar,
   doFuture::registerDoFuture()
 
   foreach_loop <- function(){
+
     foreach::foreach(
       i = 1:nRuns,
       .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
