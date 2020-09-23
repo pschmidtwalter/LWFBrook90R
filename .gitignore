@@ -16,3 +16,4 @@ src-x64
 doc
 Meta
 vignettes/intro_lwfbrook90r.R
+^dev$
