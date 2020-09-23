@@ -9,15 +9,10 @@
 *.html
 *.mod
 *.rda
-out
 inst/doc
-data-raw
-example_run_b90
-scratch.R
-MultiRuns
-Poster
 .
 src-i386
 src-x64
 doc
 Meta
+vignettes/intro_lwfbrook90r.R
