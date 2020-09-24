@@ -21,7 +21,9 @@
 #' x
 #' replace_vecelements(x, varnms, vals)
 replace_vecelements <- function(x, varnms, vals) {
+
   if (is.data.frame(x)) {
+    stopifnot(!anyNA(unlist(strsplit(varnms, split = ".", fixed  =T))[2*(1:length(varnms))]))
     varnms <- unlist(strsplit(varnms, split = ".", fixed  =T))[2*(1:length(varnms))]
     vals <- vals[order(varnms)]
     varnms <- varnms[order(varnms)]
@@ -33,7 +35,8 @@ replace_vecelements <- function(x, varnms, vals) {
     x_m <- x_m[order(x_m$var),]
     x_m$values[which(x_m$var %in% varnms)] <- vals
     utils::unstack(x_m, values~ind)
-    } else {
+        } else {
+    stopifnot(!anyNA(as.integer(gsub("[^[:digit:].]", "",  varnms))))
     x[as.integer(gsub("[^[:digit:].]", "",  varnms))] <- vals
     x
   }

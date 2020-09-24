@@ -2,17 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
-
 src/*.o
 src/*.so
 src/*.dll
 src/*.mod
-
 vignettes/*.R
 vignettes/*.html
-
-^dev$
-
+dev/
 # Mac?
 *.DS_Store
 src-i386
