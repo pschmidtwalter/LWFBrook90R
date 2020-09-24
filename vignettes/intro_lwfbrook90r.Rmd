@@ -173,13 +173,13 @@ mrun_res <- mrunLWFB90(paramvar = paramvar,
 ```
 
 ```{r, echo = F}
-mrun_res <- LWFBrook90R:::mrun_res
+mrun_dt <- LWFBrook90R:::mrun_dt
 ```
 
 
 The result is a list of the individual single-run results, from which we can easily extract the results of our output function and `rbind` them to a data.table:
 
-```{r, eval = T}
+```{r, eval = F}
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]), 
                       idcol = "singlerun")
 ```

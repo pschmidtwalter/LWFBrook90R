@@ -37,7 +37,7 @@ layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).}
 \item{precdat}{A matrix of precipitation interval data with 6 columns:
 year, month, day, interval-number (1:precint), prec, mesflp.}
 
-\item{output_log}{Logical wether to print runtime output to console.}
+\item{output_log}{Logical whether to print runtime output to console.}
 }
 \value{
 A list containing the daily and soil layer model outputs (see \code{\link{runLWFB90}}.

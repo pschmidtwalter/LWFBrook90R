@@ -13,7 +13,7 @@ vignettes/*.html
 
 ^dev$
 
-# unklar
+# Mac?
 *.DS_Store
 src-i386
 src-x64

@@ -16,7 +16,7 @@
 #' layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden (-).
 #' @param precdat A matrix of precipitation interval data with 6 columns:
 #' year, month, day, interval-number (1:precint), prec, mesflp.
-#' @param output_log Logical wether to print runtime output to console.
+#' @param output_log Logical whether to print runtime output to console.
 #'
 #' @return A list containing the daily and soil layer model outputs (see \code{\link{runLWFB90}}.
 #'
@@ -34,7 +34,7 @@ r_lwfbrook90 <- function(
   output_log = TRUE
   ){
 
-  # make a matrix of precipitation fille
+  # make a matrix of precipitation input data
   if ( is.null(precdat) ){
     precdat <- matrix(-999, nrow = param[1] * siteparam[[6]], ncol = 6)
   }
