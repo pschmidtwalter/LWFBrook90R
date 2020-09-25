@@ -19,7 +19,7 @@ b90res <- runLWFB90(options.b90 = options.b90,
                     soil = soil,
                     output = -1,
                     verbose = FALSE,
-                    output.log = FALSE)
+                    output.log = T)
 b90res$daily_output <- b90res$daily_output[,names(exe_dout), with =F]
 b90res$layer_output <- b90res$layer_output[,names(exe_lout), with =F]
 
