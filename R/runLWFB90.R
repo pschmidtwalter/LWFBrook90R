@@ -636,7 +636,7 @@ process_outputs <- function(simout, output) {
       for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
         if (per == "Day") {
           moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(yr, mo, da, doy, prec = round(rfal+sfal,1),
-                                                                flow = round(sum(flow),1),evap = round(sum(evap),1),
+                                                                flow = round(flow,1),evap = round(evap,1),
                                                                 seep = round(seep,1), snow = round(snow[which.max(doy)],1),
                                                                 swat = round(swat,1), gwat = round(gwat,1),
                                                                 intr = round(intr,1), ints = round(ints,1))]
