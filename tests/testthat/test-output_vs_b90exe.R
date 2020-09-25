@@ -1,4 +1,4 @@
-skip()
+skip("Will fail as long as the source codes differ!")
 library(LWFBrook90R)
 # ---- load test data ---------------------------------------------------------------
 # b90.exe output produced using 'data-raw/data_for_testing/b90exe_output/create_b90exe_refdat.R'
