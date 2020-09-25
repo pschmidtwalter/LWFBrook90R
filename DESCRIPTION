@@ -28,5 +28,6 @@ RoxygenNote: 7.1.1
 Suggests:
     knitr,
     rmarkdown,
-    roxygen2
+    roxygen2,
+    testthat
 VignetteBuilder: knitr
