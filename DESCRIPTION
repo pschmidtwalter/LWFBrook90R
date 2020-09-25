@@ -12,15 +12,15 @@ Description: The LWFBrook90R package simulates water fluxes, soil moisture and d
     Additional functions allow for parallelization of multiple simulations.
 Depends: R (>= 3.1.0)
 Imports:
+    methods,
+    sirad,
     data.table (>= 1.10.4),
-    vegperiod (>= 0.2.1),
-    foreach,
-    iterators,
-    doFuture,
-    future,
-    progressr,
-	sirad,
-	methods
+    vegperiod (>= 0.3.0),
+    foreach (>= 1.5.0),
+    iterators (>= 1.0.12),
+    doFuture (>= 0.10.0),
+    future (>= 1.19.0),
+    progressr (>= 0.6.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
