@@ -635,15 +635,26 @@ process_outputs <- function(simout, output) {
     if (sel  == "Budg") {
       for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
         if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(yr, mo, da, doy, prec = round(rfal+sfal,1),
-                                                                flow = round(flow,1),evap = round(evap,1),
-                                                                seep = round(seep,1), snow = round(snow,1),
-                                                                swat = round(swat,1), gwat = round(gwat,1),
-                                                                intr = round(intr,1), ints = round(ints,1))]
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(# for fluxes: sum up over period
+                                                                prec = round(sum(rfal+sfal),1),
+                                                                flow = round(sum(flow),1),
+                                                                evap = round(sum(evap),1),
+                                                                seep = round(sum(seep),1),
+                                                                # for state variables: take last entry in period
+                                                                snow = round(snow[which.max(doy)],1),
+                                                                swat = round(swat[which.max(doy)],1), 
+                                                                gwat = round(gwat[which.max(doy)],1),
+                                                                intr = round(intr[which.max(doy)],1), 
+                                                                ints = round(ints[which.max(doy)],1)),
+                                                          by = list(yr, mo, da, doy)]
         }
         if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(prec = round(sum(rfal+sfal),1), flow = round(sum(flow),1),
-                                                                 evap = round(sum(evap),1), seep = round(sum(seep),1),
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(# for fluxes: sum up over period
+                                                                 prec = round(sum(rfal+sfal),1), 
+                                                                 flow = round(sum(flow),1),
+                                                                 evap = round(sum(evap),1), 
+                                                                 seep = round(sum(seep),1),
+                                                                 # for state variables: take last entry in period
                                                                  snow = round(snow[which.max(doy)],1),
                                                                  swat = round(swat[which.max(doy)],1),
                                                                  gwat = round(gwat[which.max(doy)],1),
@@ -652,8 +663,12 @@ process_outputs <- function(simout, output) {
                                                           by = list(yr, mo)]
         }
         if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(prec = round(sum(rfal+sfal),1), flow = round(sum(flow),1),
-                                                                 evap = round(sum(evap),1),seep = round(sum(seep),1),
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(# for fluxes: sum up over period 
+                                                                 prec = round(sum(rfal+sfal),1), 
+                                                                 flow = round(sum(flow),1),
+                                                                 evap = round(sum(evap),1),
+                                                                 seep = round(sum(seep),1),
+                                                                 # for state variables: take last entry in period
                                                                  snow = round(snow[which.max(doy)],1),
                                                                  swat = round(swat[which.max(doy)],1),
                                                                  gwat = round(gwat[which.max(doy)],1),
@@ -666,25 +681,38 @@ process_outputs <- function(simout, output) {
     if (sel  == "Misc") {
       for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
         if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(yr, mo, da, doy, vrfln = round(vrfln,1),
-                                                                 safrac = round(safrac,1), stres = round(stres,3),
-                                                                 adef = round(adef,3), awat = round(awat,1),
+          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(
+                                                                 vrfln   = round(vrfln,1),
+                                                                 safrac  = round(safrac,1), 
+                                                                 stres   = round(stres,3),
+                                                                 adef    = round(adef,3), 
+                                                                 awat    = round(awat,1),
                                                                  relawat = round(relawat,3),
-                                                                 nits, balerr = round(balerr, 3))]
+                                                                 nits, 
+                                                                 balerr  = round(balerr, 3)),
+                                                          by = list(yr, mo, da, doy)]
 
         }
         if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln = round(sum(vrfln),1), safrac = round(sum(safrac),1),
-                                                                 stres = round(mean(stres),3),adef = round(mean(adef),3),
-                                                                 awat = round(mean(awat),1), relawat = round(mean(relawat),3),
-                                                                 nits=sum(nits),balerr = round(sum(balerr), 3)),
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1), 
+                                                                 safrac  = round(sum(safrac),1),
+                                                                 stres   = round(mean(stres),3),
+                                                                 adef    = round(mean(adef),3),
+                                                                 awat    = round(mean(awat),1), 
+                                                                 relawat = round(mean(relawat),3),
+                                                                 nits    = sum(nits),
+                                                                 balerr  = round(sum(balerr), 3)),
                                                           by = list(yr, mo)]
         }
         if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln = round(sum(vrfln),1), safrac = round(sum(safrac),1),
-                                                                 stres = round(mean(stres),3),adef = round(mean(adef),3),
-                                                                 awat = round(mean(awat),1),relawat = round(mean(relawat),3),
-                                                                 nits=sum(nits), balerr = round(sum(balerr), 3)),
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1), 
+                                                                 safrac  = round(sum(safrac),1),
+                                                                 stres   = round(mean(stres),3),
+                                                                 adef    = round(mean(adef),3),
+                                                                 awat    = round(mean(awat),1),
+                                                                 relawat = round(mean(relawat),3),
+                                                                 nits    = sum(nits), 
+                                                                 balerr  = round(sum(balerr), 3)),
                                                           by = list(yr)]
         }
       }
