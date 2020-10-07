@@ -11,7 +11,7 @@ A data.frame with 17 rows and 10 variables
   \item{upper}{upper layer boundary, m}
   \item{lower}{lower layer boundary, m}
   \item{texture}{soil texture according to German soil texture classification system}
-  \item{bd}{bulk density of the fine earth, g cm-3}
+  \item{bd}{bulk density of the fine earth, g/cm³}
   \item{gravel}{fraction of coarse material }
   \item{sand}{sand content, mass-\% }
   \item{silt}{silt content, mass-\% }

@@ -1,12 +1,14 @@
 #' Create a parameter vector for the r_lwfbrook90-function
 #'
-#' The \code{param} vector for \code{\link{r_lwfbrook90}} is created from model parameters.
+#' The \code{param} vector for \code{\link{r_lwfbrook90}} is created from model
+#' parameters.
 #'
 #'
 #' @param param.b90 A named list of model parameters.
 #' @param imodel Name of hydraulic model ('MvG' or 'CH')
 #'
-#' @return A numerical vector with the parameters in the right order for \code{\link{r_lwfbrook90}}.
+#' @return A numerical vector with the parameters in the right order for
+#'   \code{\link{r_lwfbrook90}}.
 #' @export
 param_to_rlwfbrook90 <- function(param.b90,
                               imodel){

@@ -2,29 +2,37 @@
 % Please edit documentation in R/richter_prec_corr.R
 \name{prec_corr}
 \alias{prec_corr}
-\title{Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)}
+\title{Correct rain gauge precipitation data for wind and evaporation errors after
+Richter (1995)}
 \usage{
 prec_corr(month, tavg, prec, station.exposure = "mg", full.output = FALSE)
 }
 \arguments{
 \item{month}{Vector of months.}
 
-\item{tavg}{Vector of air temperature values (deg C). Same length as \code{month}.}
+\item{tavg}{Vector of air temperature values (deg C). Same length as
+\code{month}.}
 
-\item{prec}{Vector of measured rainfall vales (mm). Same length as \code{month}.}
+\item{prec}{Vector of measured rainfall vales (mm). Same length as
+\code{month}.}
 
-\item{station.exposure}{Situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
-(corresponding to full exposure, low protected, moderate protected, strong protected situation).}
+\item{station.exposure}{Situation of the weather station where prec was
+measured: one of 'frei', 'lg', 'mg', 'sg' (corresponding to full exposure,
+low protected, moderate protected, strong protected situation).}
 
-\item{full.output}{Logical wether to return the full data set additionally including input data, correction coefficients.}
+\item{full.output}{Logical wether to return the full data set additionally
+including input data, correction coefficients.}
 }
 \value{
-A vector of corrected rainfall data, or (if \code{full.output == TRUE}) a data.table containing the input objects, the month,
-the precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain, winter; 'N8' = sleet, 'N7' = snow),
-correction coefficients epsilon and b, and the corrected rainfall.
+A vector of corrected rainfall data, or (if \code{full.output ==
+  TRUE}) a data.table containing the input objects, the month, the
+  precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain,
+  winter; 'N8' = sleet, 'N7' = snow), correction coefficients epsilon and b,
+  and the corrected rainfall.
 }
 \description{
-Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)
+Correct rain gauge precipitation data for wind and evaporation errors after
+Richter (1995)
 }
 \examples{
 clim <- slb1_meteo[as.integer(format(slb1_meteo$dates,"\%Y")) \%in\% 2001:2005,]
@@ -51,6 +59,9 @@ legend('bottomright', c('frei', "lg", "mg", "sg"),
        lty = 1, pch = NULL )
 }
 \references{
-Richter, D. (1995): "Ergebnisse methodischer Untersuchungen
-\emph{Berichte des Deutschen Wetterdienstes}, \bold{194}, 93 pp, Offenbach, Germany
+Richter, D. (1995)
+Ergebnisse methodischer Untersuchungen zur Korrektur des systematischen
+Messfehlers des Hellmann-Niederschlagsmessers.
+\emph{Berichte des Deutschen Wetterdienstes}, \bold{194}, 93 pp, Offenbach,
+Germany
 }

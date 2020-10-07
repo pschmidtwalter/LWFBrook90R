@@ -4,7 +4,8 @@
 #'
 #' @param minval Minimum value.
 #' @param maxval Maximum value.
-#' @param doy.incr Day of year when increasing from \code{minval} to \code{maxval} begins.
+#' @param doy.incr Day of year when increasing from \code{minval} to
+#'   \code{maxval} begins.
 #' @param doy.max  Day of year when \code{maxval} is reached.
 #' @param doy.min Day of year when \code{minval} is reached again.
 #' @param shape.incr Shape parameter of the increasing phase.

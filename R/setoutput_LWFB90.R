@@ -1,15 +1,17 @@
 #' Select output for LWF-Brook90
 #'
-#' Returns a [7,5] matrix with a default selection of LWF-Brook90 output data sets for the use
-#' as 'output'-argument \code{\link{runLWFB90}}.
+#' Returns a \code{[7,5]} matrix with a default selection of LWF-Brook90 output
+#' data sets for the use as 'output'-argument \code{\link{runLWFB90}}.
 #'
-#' @param output optional [5,10]-matrix, which is opened on R's data-editor if edit = T.
-#' If no matrix is passed, a default selection of output values is returned opened in R's data-editor.
+#' @param output optional \code{[7,5]}-matrix, which is opened on R's
+#'   data-editor if \code{edit = TRUE}. If no matrix is passed, a default
+#'   selection of output values is returned opened in R's data-editor.
 #' @param edit open R's data-editor ?
 #'
-#' @return a [7,5]-matrix containing 0 and 1 for use as 'output'-argument in \code{\link{runLWFB90}}
-#' @examples
+#' @return a \code{[7,5]}-matrix containing \code{0} and \code{1} for use as
+#'   \code{output}-argument in \code{\link{runLWFB90}}
 #'
+#' @examples
 #' # create matrix with default selection
 #' output <- setoutput_LWFB90()
 #' output

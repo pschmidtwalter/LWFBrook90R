@@ -17,18 +17,20 @@ calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5, full.output = FALSE)
 
 \item{b0}{Angström parameter b, defaults to 0.5.}
 
-\item{full.output}{Return extraterrestrial radiation and daylength along with global radiation?}
+\item{full.output}{Return extraterrestrial radiation and daylength along with
+global radiation?}
 }
 \value{
-A sequence of global radiation in \eqn{MJ m^{-2} d^{-1}} with the length of dates,
-or (if full.output = TRUE) a data.frame holding day of year, dates, sunhours, daylength, and
-extraterrestrial and calculated global solar radiation.
-A warning is generated if some sunshine duration hours are higher than the
-expected daylength at the specified latitude.
+A sequence of global radiation in MJ/(m² d) with the length of dates,
+  or (if \code{full.output = TRUE}) a \code{data.frame} holding day of year,
+  dates, sunhours, daylength, and extraterrestrial and calculated global
+  solar radiation. A warning is generated if some sunshine duration hours are
+  higher than the expected daylength at the specified latitude.
 }
 \description{
-Uses \code{\link[sirad]{extrat}} to determine daylength and extraterrestrial radiation,
-from which global radiation is calculated using the Angström-formula.
+Uses \code{\link[sirad]{extrat}} to determine daylength and extraterrestrial
+radiation, from which global radiation is calculated using the
+Angström-formula.
 }
 \examples{
 dates <- seq.Date(as.Date("2002-01-01"), as.Date("2003-12-31"), by = 'day')

@@ -8,13 +8,13 @@
 A data.frame with 19724 rows and 9 variables
 \describe{
   \item{dates}{date}
-  \item{tmin}{daily minimum temperature, degC}
-  \item{tmax}{daily maximum temperature, degC}
-  \item{tmean}{daily mean temperature, degC}
+  \item{tmin}{daily minimum temperature, deg C}
+  \item{tmax}{daily maximum temperature, deg C}
+  \item{tmean}{daily mean temperature, deg C}
   \item{prec}{daily sum of precipitation, mm}
   \item{relhum}{relative Humidity, \%}
-  \item{globrad}{daily sum of global radiation, MJ m-2}
-  \item{wind}{daily mean wind speed measured at 10 m above ground, m s-2}
+  \item{globrad}{daily sum of global radiation, MJ/m²}
+  \item{wind}{daily mean wind speed measured at 10 m above ground, m/s}
   \item{vappres}{daily vapour pressure, kPa}
 }
 }

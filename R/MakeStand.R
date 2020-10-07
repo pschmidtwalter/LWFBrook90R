@@ -1,13 +1,15 @@
 #' Create daily plant characteristics from parameters and options
 #'
-#' Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from parameters and options
-#' using \code{\link{approx_standprop}} and \code{\link{MakeSeasLAI}}.
+#' Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from
+#' parameters and options using \code{\link{approx_standprop}} and
+#' \code{\link{MakeSeasLAI}}.
 #'
 #' @param options.b90 A list of model control options.
 #' @param param.b90 A parameter list-object.
 #' @param out.years Years for which values are returned.
 #'
-#' @return A data.frame containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
+#' @return A data.frame containing daily sequences of 'age', 'height', 'sai',
+#'   'densef', and 'lai'.
 #' @export
 #'
 #' @example inst/examples/make_standprop-help.R

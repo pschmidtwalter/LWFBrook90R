@@ -14,7 +14,8 @@ replace_vecelements(x, varnms, vals)
 \item{vals}{Vector of values to insert at the specified positions.}
 }
 \value{
-The vector or data.frame in x with the elements 'varnms' replaced by vals.
+The vector or data.frame in x with the elements 'varnms' replaced by
+  vals.
 }
 \description{
 Replace elements in a data.frame or vector of length > 1 by name

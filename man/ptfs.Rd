@@ -26,42 +26,51 @@ hydpar_ff_b90(n = 1)
 
 \item{oc.pct}{Numeric vector of organic carbon content in mass \%.}
 
-\item{topsoil}{Logical: Is the sample from the topsoil? Only for \code{hydpar_hypres_tab}.}
+\item{topsoil}{Logical: Is the sample from the topsoil? Only for
+\code{hydpar_hypres_tab}.}
 
-\item{humconv}{Conversion factor from oc.pct to organic matter percent. Default: 1.72. Only for \code{hydpar_hypres_tab}.}
+\item{humconv}{Conversion factor from oc.pct to organic matter percent.
+Default: 1.72. Only for \code{hydpar_hypres_tab}.}
 
-\item{tex.hypres}{Character vector of soil texture classes according Wösten et al (1999).}
+\item{tex.hypres}{Character vector of soil texture classes according Wösten
+et al (1999).}
 
-\item{tex.KA5}{Character vector of soil texture classes according to KA5. Only for \code{hydpar_wessolek_tab}.}
+\item{tex.KA5}{Character vector of soil texture classes according to KA5.
+Only for \code{hydpar_wessolek_tab}.}
 
-\item{n}{An integer value specifying the number of rows of the returned data.frame
-(i.e. the number of repetitions of the MvG-Parameter set, only for \code{hydpar_ff_hamken}).}
+\item{n}{An integer value specifying the number of rows of the returned
+data.frame (i.e. the number of repetitions of the MvG-Parameter set, only
+for \code{hydpar_ff_hamken}).}
 }
 \value{
-A data.frame with the following variables:
-\describe{
-  \item{ths}{Saturation water content fraction}
-  \item{thr}{Residual water content fraction}
-  \item{npar}{N parameter of the van Genuchten water retention function}
-  \item{mpar}{M parameter of the van Genuchten water retention function}
-  \item{alpha}{Alpha parameter of the van Genuchten water retention function, m-1}
-  \item{ksat}{Saturated hyraulic conductivity parameter of Mualem hydraulic conductivity function, mm d-1}
+A data.frame with the following variables: \describe{
+  \item{ths}{Saturation water content fraction} \item{thr}{Residual water
+  content fraction} \item{npar}{N parameter of the van Genuchten water
+  retention function} \item{mpar}{M parameter of the van Genuchten water
+  retention function} \item{alpha}{Alpha parameter of the van Genuchten water
+  retention function (1/m)} \item{ksat}{Saturated hyraulic conductivity
+  parameter of Mualem hydraulic conductivity function (mm/d)}
   \item{tort}{Tortuosity parameter of Mualem hydraulic conductivity function}
-}
+  }
 }
 \description{
-A set of pedotransfer functions for deriving Mualem - van Genuchten parameters from soil physical
-properties of soil horizons, such as soil texture, bulk density and carbon content.
+A set of pedotransfer functions for deriving Mualem - van Genuchten
+parameters from soil physical properties of soil horizons, such as soil
+texture, bulk density and carbon content.
 }
 \details{
-Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG) parameters using the regression functions developed by
-Puhlmann & von Wilpert (2011). The equations of Wösten et al. (1999) are available via \code{hydpar_hypres},
-and their tabulated values for soil texture classes can be derived using the function \code{hydpar_hypres_tab}.
-The table of MvG parameters from Wesselok et al. (2009; Tab. 10) is accessible by \code{hydpar_wessolek_tab}.
-For this function, only soil texture classes after the German texture classification system
-(KA5, AG Boden 2005) have to be provided. To derive hydraulic parameters of forest floor horizons,
-the function \code{hydpar_ff_b90} can be used. It returns the single MvG parameter set for forest
-floor horizons reported by Hammel & Kennel (2001) in their original LWF-Brook90 publication.
+Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG)
+parameters using the regression functions developed by Puhlmann & von Wilpert
+(2011). The equations of Wösten et al. (1999) are available via
+\code{hydpar_hypres}, and their tabulated values for soil texture classes can
+be derived using the function \code{hydpar_hypres_tab}. The table of MvG
+parameters from Wesselok et al. (2009; Tab. 10) is accessible by
+\code{hydpar_wessolek_tab}. For this function, only soil texture classes
+after the German texture classification system (KA5, AG Boden 2005) have to
+be provided. To derive hydraulic parameters of forest floor horizons, the
+function \code{hydpar_ff_b90} can be used. It returns the single MvG
+parameter set for forest floor horizons reported by Hammel & Kennel (2001) in
+their original LWF-Brook90 publication.
 }
 \examples{
 
@@ -81,20 +90,20 @@ Bodenkundliche Kartieranleitung
 Schweizerbart'sche Verlagsbuchhandlung, Stuttgart
 
 Hammel K & Kennel M (2001)
-Charakterisierung und Analyse der Wasserverfügbarkeit und des Wasserhaushalts von Waldstandorten
-in Bayern mit dem Simulationsmodell BROOK90.
-Forstliche Forschungsberichte München 185
+Charakterisierung und Analyse der Wasserverfügbarkeit und des Wasserhaushalts
+von Waldstandorten in Bayern mit dem Simulationsmodell BROOK90.
+\emph{Forstliche Forschungsberichte München} 185
 
 Puhlmann H, von Wilpert K (2011)
-Testing and development of pedotransfer functions for water retention and hydraulic conductivity
-of forest soils.
-Waldökologie, Landschaftsforschung und Naturschutz 12, pp. 61-71
+Testing and development of pedotransfer functions for water retention and
+hydraulic conductivity of forest soils.
+\emph{Waldökologie, Landschaftsforschung und Naturschutz} 12, pp. 61-71
 
 Wessolek G, Kaupenjohann M and Renger H (2009)
 Bodenphysikalische Kennwerte und Berechnungsverfahren für die Praxis.
-Bodenökologie und Bodengenese 40, Berlin, Germany
+\emph{Bodenökologie und Bodengenese} 40, Berlin, Germany
 
 Woesten JHM, Lilly A, Nemes A, Le Bas C  (1999)
 Development and use of a database of hydraulic properties of European soils.
-Geoderma 90, pp. 169-185
+\emph{Geoderma} 90, pp. 169-185
 }

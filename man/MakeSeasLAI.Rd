@@ -21,39 +21,47 @@ MakeSeasLAI(
 )
 }
 \arguments{
-\item{method}{Name of method for generating the sequence. Must be one of "b90", "linear", "Coupmodel".}
+\item{method}{Name of method for generating the sequence. Must be one of
+"b90", "linear", "Coupmodel".}
 
 \item{year}{Vector of years to be returned.}
 
 \item{maxlai}{Maximum leaf are index.}
 
-\item{winlaifrac}{Fraction of \code{maxlai} during winter (ignored when method = 'linear').}
+\item{winlaifrac}{Fraction of \code{maxlai} during winter (ignored when
+\code{method = 'linear'}).}
 
-\item{budburst.doy}{Budburst day of year (ignored when method = 'linear').}
+\item{budburst.doy}{Budburst day of year (ignored when \code{method =
+'linear'}).}
 
-\item{leaffall.doy}{Day of year when leaf fall begins (ignored when method = 'linear').}
+\item{leaffall.doy}{Day of year when leaf fall begins (ignored when
+\code{method = 'linear'}).}
 
-\item{emerge.dur}{Number of days from budburst until maximum leaf area index is reached.}
+\item{emerge.dur}{Number of days from budburst until maximum leaf area index
+is reached.}
 
 \item{leaffall.dur}{Number of days until minimum leaf are index is reached.}
 
-\item{shape.optdoy}{Day of year when optimum value is reached (required when method = "Coupmodel").}
+\item{shape.optdoy}{Day of year when optimum value is reached (required when
+\code{method = "Coupmodel"}).}
 
-\item{shape.budburst}{Shape parameter for the growth phase (required when method = "Coupmodel").}
+\item{shape.budburst}{Shape parameter for the growth phase (required when
+\code{method = "Coupmodel"}).}
 
-\item{shape.leaffall}{Shape parameter growth cessation (required when method = "Coupmodel").}
+\item{shape.leaffall}{Shape parameter growth cessation (required when
+\code{method = "Coupmodel"}).}
 
 \item{lai.doy}{Integer vector of days of years.}
 
 \item{lai.frac}{Vector of values of fractional leaf area index corresponding
-to lai.doy (required when method = "linear").}
+to lai.doy (required when \code{method = "linear"}).}
 }
 \value{
 A vector of daily lai values covering the years specified.
 }
 \description{
-A daily sequence of leaf area index is derived from maximum and minimum values,
-dates and shape parameters using different methods.
+A daily sequence of leaf area index is derived from maximum and minimum
+values, dates and shape parameters using different methods.
 }
 \examples{
 # Intraannual courses of leaf area index

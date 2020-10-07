@@ -1,32 +1,42 @@
-#' Create a daily sequence of stand properties from parameters using interpolation
+#' Create a daily sequence of stand properties from parameters using
+#' interpolation
 #'
-#' Uses yearly values of inter-annual vegetation development values (e.g. sai, height, densef, age)
-#' and interpolates them to a daily sequence.
+#' Uses yearly values of inter-annual vegetation development values (e.g. sai,
+#' height, densef, age) and interpolates them to a daily sequence.
 #'
 #' @param x.years A sequence of years or a single year.
 #' @param y Vector of the same length as x.years. If approx.method = 'linear',
-#' the values are interpreted to be valid at the end of the respective year in x.years.
+#'   the values are interpreted to be valid at the end of the respective year in
+#'   x.years.
 #' @param y.ini Initial value used as a starting point for linear interpolation.
-#' Interpreted to be valid at the 1st of January of the first year in x.years.
-#' Ignored if approx.method = 'constant'.
-#' @param xout.years Vector of years for which output is generated. May be longer or shorter than
-#' x.years. For years outside x.years, the value of the closest data extrem is returned.
-#' @param use_growthperiod Logical: Use startdoy and enddoy for linear interpolation?
-#' If TRUE, yearly changes take place between startdoy and enddoy, othe wise from end of year to end
-#' of the year after.
-#' @param startdoy A single value or vector of the same length as x.years, with the day of year when growth begins.
-#' @param enddoy A single value or vector of the same length as x.years, with the day of year when growth cessates.
+#'   Interpreted to be valid at the 1st of January of the first year in x.years.
+#'   Ignored if approx.method = 'constant'.
+#' @param xout.years Vector of years for which output is generated. May be
+#'   longer or shorter than x.years. For years outside x.years, the value of the
+#'   closest data extrem is returned.
+#' @param use_growthperiod Logical: Use startdoy and enddoy for linear
+#'   interpolation? If TRUE, yearly changes take place between startdoy and
+#'   enddoy, othe wise from end of year to end of the year after.
+#' @param startdoy A single value or vector of the same length as x.years, with
+#'   the day of year when growth begins.
+#' @param enddoy A single value or vector of the same length as x.years, with
+#'   the day of year when growth cessates.
 #' @param approx.method Name of interpolation method ('constant' or 'linear').
-#' @param return_xout Logical: If true, daily values of y and a date vector are returned in data.frame.
+#' @param return_xout Logical: If true, daily values of y and a date vector are
+#'   returned in data.frame.
 #'
 #' @return A vector of interpolated daily values
 #'
-#' @details For \code{approx.method = 'constant'}, the value of y is returned for the whole respective year in x.years,
-#' which results in a yearly changing step function. If \code{approx.method = 'linear'},
-#' the values of y are interpolated between the years in x.years, and interpreted to be reached
-#' at the 31st of December of the respective x.years. In this case, y.ini is required as an initial value,
-#' from which the sequence is interpolated to the first value of y. The linear changes are either accomplished
-#' between 31st to 31st of December of the years in x.years, or during the growing season only (use_growingperiod = TRUE).
+#' @details For \code{approx.method = 'constant'}, the value of \code{y} is
+#'   returned for the whole respective year in \code{x.years}, which results in
+#'   a yearly changing step function. If \code{approx.method = 'linear'}, the
+#'   values of \code{y} are interpolated between the years in \code{x.years},
+#'   and interpreted to be reached at the 31st of December of the respective
+#'   \code{x.years.} In this case, \code{y.ini} is required as an initial value,
+#'   from which the sequence is interpolated to the first value of \code{y.} The
+#'   linear changes are either accomplished between 31st to 31st of December of
+#'   the years in \code{x.years}, or during the growing season only
+#'   (\code{use_growingperiod = TRUE}).
 #'
 #'@example inst/examples/approx_standprop-help.R
 #'@export

@@ -1,34 +1,46 @@
-#' Make a multi-site simulation using lists of climate, soil, options and parameter input objects.
+#' Make a multi-site simulation using lists of climate, soil, options and
+#' parameter input objects.
 #'
-#' Wrapper function for \code{\link{runLWFB90}} to make multiple parallel simulations for combinations
-#' of climate, soil, and parameters, e.g., for simulating one or several parameter sets
-#' for a series of sites with individual climate and soil, or individual parameter set for each combination.
+#' Wrapper function for \code{\link{runLWFB90}} to make multiple parallel
+#' simulations for combinations of climate, soil, and parameters, e.g., for
+#' simulating one or several parameter sets for a series of sites with
+#' individual climate and soil, or individual parameter set for each
+#' combination.
 #'
-#' @param options.b90 Named list of model control options to be used in all simulations
-#' @param param.b90 Named list of parameters to be used in all simulations, or a list of multiple parameter sets.
-#' @param soil Data.frame with soil properties to be used in all simulations, or a list of data.frames with different soil profiles.
-#' @param climate Data.frame with climate data, or a list of climate data.frames.
+#' @param options.b90 Named list of model control options to be used in all
+#'   simulations
+#' @param param.b90 Named list of parameters to be used in all simulations, or a
+#'   list of multiple parameter sets.
+#' @param soil Data.frame with soil properties to be used in all simulations, or
+#'   a list of data.frames with different soil profiles.
+#' @param climate Data.frame with climate data, or a list of climate
+#'   data.frames.
 #' @param all_combinations Logical: Set up and run all possible combinations of
-#' individual param.b90, climate and soil objects? Default is FALSE,
-#' running one or the list of param.b90 for a series of climate/soil combinations.
+#'   individual \code{param.b90}, \code{climate} and \code{soil} objects?
+#'   Default is \code{FALSE}, running one or the list of \code{param.b90} for a
+#'   series of climate/soil combinations.
 #' @param cores Number of cores to use for parallel processing.
-#' @param showProgress Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.
-#' @param ... Further arguments passed to \code{\link{runLWFB90}}.
-#' It might be a good idea to pass \code{verbose=FALSE} to suppress excessive chatter of \code{runLWFB90}.
+#' @param showProgress Logical: Show progress bar? Default is \code{TRUE}. See
+#'   also section \code{Progress bar} below.
+#' @param ... Further arguments passed to \code{\link{runLWFB90}}. It might be a
+#'   good idea to pass \code{verbose=FALSE} to suppress excessive chatter of
+#'   \code{runLWFB90}.
 #'
-#' @return A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
-#' Simulation or processing errors are passed on. The names of the returned list entries
-#' are concatenated from the names of the input list entries
-#' in the following form: <climate> <soil> <param.b90>.
+#' @return A named list with the results of the single runs as returned by
+#'   \code{\link{runLWFB90}}. Simulation or processing errors are passed on. The
+#'   names of the returned list entries are concatenated from the names of the
+#'   input list entries in the following form: <climate> <soil> <param.b90>.
 #'
-#' @section Data management:
-#' The returned list of single run results can become very large, if many simulations are performed and
-#' the selected output contains daily resolution datasets, especially daily layer-wise soil moisture data.
-#' To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
-#' carefully selecting the output, and make use of the option to pass a list of functions to
-#' \code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
-#' output of a single run simulation, and can be used for aggrating model output on-the-fly,
-#' or writing results to a file or database.
+#' @section Data management: The returned list of single run results can become
+#'   very large, if many simulations are performed and the selected output
+#'   contains daily resolution datasets, especially daily layer-wise soil
+#'   moisture data. To not overload memory, it is advised to reduce the returned
+#'   simulation results to a minimum, by carefully selecting the output, and
+#'   make use of the option to pass a list of functions to
+#'   \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+#'   perform directly on the output of a single run simulation, and can be used
+#'   for aggrating model output on-the-fly, or writing results to a file or
+#'   database.
 #'
 #' @section Progress bar:
 #' This function provides a progress bar via the package \CRANpkg{progressr}

@@ -20,6 +20,7 @@ A data.frame with 4018 rows and 6 variables
 slb1_mpot
 }
 \description{
-A dataset containing daily soil water potential in 10, 20, 40, 100, 180 cm soil depths
+A dataset containing daily soil water potential in 10, 20, 40, 100, 180 cm
+soil depths
 }
 \keyword{datasets}

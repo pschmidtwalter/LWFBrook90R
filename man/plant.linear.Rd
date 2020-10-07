@@ -11,7 +11,8 @@ plant.linear(doys, values, maxdoy)
 
 \item{values}{Numeric vector of values.}
 
-\item{maxdoy}{Integer length of the year, 366 for leap years, 365 for normal years.}
+\item{maxdoy}{Integer length of the year, 366 for leap years, 365 for normal
+years.}
 }
 \value{
 A numeric vector of length \code{maxdoy}.

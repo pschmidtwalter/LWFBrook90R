@@ -4,7 +4,8 @@
 #' @param varnms Variable names to match: Specify position by name and index.
 #' @param vals Vector of values to insert at the specified positions.
 #'
-#' @return The vector or data.frame in x with the elements 'varnms' replaced by vals.
+#' @return The vector or data.frame in x with the elements 'varnms' replaced by
+#'   vals.
 #' @export
 #'
 #' @examples

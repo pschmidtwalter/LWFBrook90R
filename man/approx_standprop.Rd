@@ -2,7 +2,8 @@
 % Please edit documentation in R/approx_standprop.R
 \name{approx_standprop}
 \alias{approx_standprop}
-\title{Create a daily sequence of stand properties from parameters using interpolation}
+\title{Create a daily sequence of stand properties from parameters using
+interpolation}
 \usage{
 approx_standprop(
   x.years,
@@ -20,41 +21,50 @@ approx_standprop(
 \item{x.years}{A sequence of years or a single year.}
 
 \item{y}{Vector of the same length as x.years. If approx.method = 'linear',
-the values are interpreted to be valid at the end of the respective year in x.years.}
+the values are interpreted to be valid at the end of the respective year in
+x.years.}
 
 \item{y.ini}{Initial value used as a starting point for linear interpolation.
 Interpreted to be valid at the 1st of January of the first year in x.years.
 Ignored if approx.method = 'constant'.}
 
-\item{xout.years}{Vector of years for which output is generated. May be longer or shorter than
-x.years. For years outside x.years, the value of the closest data extrem is returned.}
+\item{xout.years}{Vector of years for which output is generated. May be
+longer or shorter than x.years. For years outside x.years, the value of the
+closest data extrem is returned.}
 
-\item{use_growthperiod}{Logical: Use startdoy and enddoy for linear interpolation?
-If TRUE, yearly changes take place between startdoy and enddoy, othe wise from end of year to end
-of the year after.}
+\item{use_growthperiod}{Logical: Use startdoy and enddoy for linear
+interpolation? If TRUE, yearly changes take place between startdoy and
+enddoy, othe wise from end of year to end of the year after.}
 
-\item{startdoy}{A single value or vector of the same length as x.years, with the day of year when growth begins.}
+\item{startdoy}{A single value or vector of the same length as x.years, with
+the day of year when growth begins.}
 
-\item{enddoy}{A single value or vector of the same length as x.years, with the day of year when growth cessates.}
+\item{enddoy}{A single value or vector of the same length as x.years, with
+the day of year when growth cessates.}
 
 \item{approx.method}{Name of interpolation method ('constant' or 'linear').}
 
-\item{return_xout}{Logical: If true, daily values of y and a date vector are returned in data.frame.}
+\item{return_xout}{Logical: If true, daily values of y and a date vector are
+returned in data.frame.}
 }
 \value{
 A vector of interpolated daily values
 }
 \description{
-Uses yearly values of inter-annual vegetation development values (e.g. sai, height, densef, age)
-and interpolates them to a daily sequence.
+Uses yearly values of inter-annual vegetation development values (e.g. sai,
+height, densef, age) and interpolates them to a daily sequence.
 }
 \details{
-For \code{approx.method = 'constant'}, the value of y is returned for the whole respective year in x.years,
-which results in a yearly changing step function. If \code{approx.method = 'linear'},
-the values of y are interpolated between the years in x.years, and interpreted to be reached
-at the 31st of December of the respective x.years. In this case, y.ini is required as an initial value,
-from which the sequence is interpolated to the first value of y. The linear changes are either accomplished
-between 31st to 31st of December of the years in x.years, or during the growing season only (use_growingperiod = TRUE).
+For \code{approx.method = 'constant'}, the value of \code{y} is
+  returned for the whole respective year in \code{x.years}, which results in
+  a yearly changing step function. If \code{approx.method = 'linear'}, the
+  values of \code{y} are interpolated between the years in \code{x.years},
+  and interpreted to be reached at the 31st of December of the respective
+  \code{x.years.} In this case, \code{y.ini} is required as an initial value,
+  from which the sequence is interpolated to the first value of \code{y.} The
+  linear changes are either accomplished between 31st to 31st of December of
+  the years in \code{x.years}, or during the growing season only
+  (\code{use_growingperiod = TRUE}).
 }
 \examples{
 years <- 2002:2004

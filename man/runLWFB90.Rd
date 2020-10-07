@@ -23,72 +23,86 @@ runLWFB90(
 }
 \arguments{
 \item{options.b90}{Named list of model control options. Use
-\code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
+\code{\link{setoptions_LWFB90}} to generate a list with default model
+control options.}
 
 \item{param.b90}{Named list of model input parameters. Use
-\code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
+\code{\link{setparam_LWFB90}} to generate a list with default model
+parameters.}
 
-\item{climate}{Data.frame with daily climate data. See details for the required variables.}
+\item{climate}{Data.frame with daily climate data. See details for the
+required variables.}
 
-\item{precip}{Data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
-Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
-per day defined in \code{options.b90$prec.interval}.}
+\item{precip}{Data.frame with columns 'dates' and 'prec' to supply
+precipitation data separately from climate data. Can be used to provide
+sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+1 (daily resolution) to 240 values of precipitation can be provided, with
+the number of values per day defined in \code{options.b90$prec.interval}.}
 
-\item{soil}{Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'}
+\item{soil}{Data.frame containing the hydraulic properties of the soil layers.
+See section 'Soil parameters'}
 
-\item{output}{A [7,5]-matrix flagging the desired model output datasets at different time intervals. Use
-\code{\link{setoutput_LWFB90}} to generate and edit a default output selection matrix. Alternatively,
-use -1 (the default) to return the raw daily and soil layer outputs.}
+\item{output}{A [7,5]-matrix flagging the desired model output datasets at
+different time intervals. Use \code{\link{setoutput_LWFB90}} to generate and
+edit a default output selection matrix. Alternatively, use -1 (the default)
+to return the raw daily and soil layer outputs.}
 
-\item{output_fun}{A function or a list of functions to be performed on the output objects selected by \code{output}.
-Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
-Useful if the function is evaluated within a large multi-run application, which might overload the memory.
-(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
+\item{output_fun}{A function or a list of functions to be performed on the
+output objects selected by \code{output}. Can be used to aggregate output or
+calculate goodness of fit measures on-the-fly, or to write results instantly
+to a file or database. Useful if the function is evaluated within a large
+multi-run application, which might overload the memory. (see
+\code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
 
-\item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
-properties ('standprop_daily', as derived from parameters) to the result?}
+\item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily
+plant properties ('standprop_daily', as derived from parameters) to the
+result?}
 
 \item{rtrn.output}{Logical: return the simulation results?}
 
-\item{chk.input}{Logical wether to check param.b90, options.b90, climate, precip, and soil
-for completeness and consistency.}
+\item{chk.input}{Logical wether to check param.b90, options.b90, climate,
+precip, and soil for completeness and consistency.}
 
-\item{output.log}{Logical or file name wether to print runtime output, or redirect runtime output to a file.}
+\item{output.log}{Logical or file name wether to print runtime output, or
+redirect runtime output to a file.}
 
-\item{run}{Logical: run LWF-Brook90 or only return model input objects?
-Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
+\item{run}{Logical: run LWF-Brook90 or only return model input objects? Useful
+to inspect the effects of options and parameters on model input. Default is
+TRUE.}
 
 \item{verbose}{Logical: print messages to the console? Default is TRUE.}
 
 \item{...}{Additional arguments passed to \code{output_fun}.}
 }
 \value{
-A list containing the selected model output, the model input (except for \code{climate}) if desired,
-and the return values of \code{output_fun} if specified.
+A list containing the selected model output, the model input (except
+ for \code{climate}) if desired, and the return values of \code{output_fun}
+ if specified.
 }
 \description{
-Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
-and returns the selected results.
+Sets up the input objects for the LWF-Brook90 hydrological model, starts the
+model, and returns the selected results.
 }
 \section{Climate input data}{
-
-The \code{climate} data.frame must contain the following variables in columns named
-\code{dates} (Date), \code{tmax} (deg C), \code{tmin} (deg C), \code{tmean} (deg C),
-\code{wind} (m s-1), \code{prec} (mm) , \code{vappres} (kPa), and either \code{globrad} (MJ d-1 m-2)
-or \code{sunhours} (hours). When using \code{sunhours}, please set \code{options.b90$fornetrad = 'sunhours'}.
+ The \code{climate} data.frame must contain the
+ following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
+ (deg C), 'tmean' (deg C), 'wind' (m/s), 'prec' (mm) , 'vappres' (kPa), and
+ either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using \code{sunhours},
+ please set \code{options.b90$fornetrad = 'sunhours'}.
 }
 
 \section{Soil input parameters}{
-
-Each row of \code{soil} represents one layer, containing the layers' boundaries and soil hydraulic parameters.
-The column names for the upper and lower layer boundaries are \code{upper} and \code{lower} (m, negative downwards).
-When using options.b90$imodel = 'MvG', the hydraulic parameters are  \code{ths}, \code{thr},
- \code{alpha} (m-1), \code{npar}, \code{ksat} (mm d-1) and \code{tort}.  With options.b90$imodel = 'CH',
- the parameters are \code{thsat}, \code{thetaf}, \code{psif} (kPa), \code{bexp},
- \code{kf} (mm d-1), and \code{wetinf}. For both parameterizations, the volume fraction of stones has to be named \code{gravel}.
- If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
- of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
+ Each row of \code{soil} represents one layer,
+ containing the layers' boundaries and soil hydraulic parameters. The column
+ names for the upper and lower layer boundaries are 'upper' and 'lower' (m,
+ negative downwards). When using \code{options.b90$imodel = 'MvG'}, the
+ hydraulic parameters are 'ths', 'thr', 'alpha' (1/m), 'npar', 'ksat' (mm/d)
+ and 'tort'.  With \code{options.b90$imodel = 'CH'}, the parameters are
+ 'thsat', 'thetaf', 'psif' (kPa), 'bexp', 'kf' (mm/d), and 'wetinf'. For both
+ parameterizations, the volume fraction of stones has to be named 'gravel'.
+ If the \code{soil} data.frame is not provided, list items \code{soil_nodes}
+ and \code{soil_materials} of \code{param.b90} are used for the simulation.
+ These have to be set up in advance, see \code{\link{soil_to_param}}.
 }
 
 \section{Daily outputs}{

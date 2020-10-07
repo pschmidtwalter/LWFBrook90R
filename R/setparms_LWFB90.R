@@ -1,7 +1,10 @@
 #' Create the list of model parameters
 #'
 #' @param ... Named arguments to be included in return value.
-#' @return A list with model parameters for use as \code{param.b90}-argument in \code{\link{runLWFB90}}.
+#'
+#' @return A list with model parameters for use as \code{param.b90}-argument in
+#'   \code{\link{runLWFB90}}.
+#'
 #' @section List of input parameters:
 #' \tabular{llcl}{
 #'  \strong{Name} \tab \strong{Description} \tab \strong{Unit} \tab \strong{Group} \cr

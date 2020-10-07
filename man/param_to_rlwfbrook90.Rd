@@ -12,8 +12,10 @@ param_to_rlwfbrook90(param.b90, imodel)
 \item{imodel}{Name of hydraulic model ('MvG' or 'CH')}
 }
 \value{
-A numerical vector with the parameters in the right order for \code{\link{r_lwfbrook90}}.
+A numerical vector with the parameters in the right order for
+  \code{\link{r_lwfbrook90}}.
 }
 \description{
-The \code{param} vector for \code{\link{r_lwfbrook90}} is created from model parameters.
+The \code{param} vector for \code{\link{r_lwfbrook90}} is created from model
+parameters.
 }

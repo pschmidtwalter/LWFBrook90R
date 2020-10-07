@@ -1,20 +1,28 @@
-#' Correct rain gauge precipitation data for wind and evaporation errors after Richter (1995)
+#' Correct rain gauge precipitation data for wind and evaporation errors after
+#' Richter (1995)
 #'
 #' @param month Vector of months.
-#' @param tavg Vector of air temperature values (deg C). Same length as \code{month}.
-#' @param prec Vector of measured rainfall vales (mm). Same length as \code{month}.
-#' @param station.exposure Situation of the weather station where prec was measured: one of 'frei', 'lg', 'mg', 'sg'
-#' (corresponding to full exposure, low protected, moderate protected, strong protected situation).
-#' @param full.output Logical wether to return the full data set additionally including input data, correction coefficients.
+#' @param tavg Vector of air temperature values (deg C). Same length as
+#'   \code{month}.
+#' @param prec Vector of measured rainfall vales (mm). Same length as
+#'   \code{month}.
+#' @param station.exposure Situation of the weather station where prec was
+#'   measured: one of 'frei', 'lg', 'mg', 'sg' (corresponding to full exposure,
+#'   low protected, moderate protected, strong protected situation).
+#' @param full.output Logical wether to return the full data set additionally
+#'   including input data, correction coefficients.
 #'
-#' @return A vector of corrected rainfall data, or (if \code{full.output == TRUE}) a data.table containing the input objects, the month,
-#' the precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain, winter; 'N8' = sleet, 'N7' = snow),
-#' correction coefficients epsilon and b, and the corrected rainfall.
+#' @return A vector of corrected rainfall data, or (if \code{full.output ==
+#'   TRUE}) a data.table containing the input objects, the month, the
+#'   precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain,
+#'   winter; 'N8' = sleet, 'N7' = snow), correction coefficients epsilon and b,
+#'   and the corrected rainfall.
 #'
-#' @references
-#' Richter, D. (1995): "Ergebnisse methodischer Untersuchungen
-# zur Korrektur des systematischen Messfehlers des Hellmann-Niederschlagsmessers."
-#' \emph{Berichte des Deutschen Wetterdienstes}, \bold{194}, 93 pp, Offenbach, Germany
+#' @references Richter, D. (1995)
+#' Ergebnisse methodischer Untersuchungen zur Korrektur des systematischen
+#' Messfehlers des Hellmann-Niederschlagsmessers.
+#' \emph{Berichte des Deutschen Wetterdienstes}, \bold{194}, 93 pp, Offenbach,
+#' Germany
 #'
 #' @export
 #'

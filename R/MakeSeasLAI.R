@@ -1,22 +1,30 @@
 #' Construct the seasonal course of leaf area index from parameters
 #'
-#' A daily sequence of leaf area index is derived from maximum and minimum values,
-#' dates and shape parameters using different methods.
+#' A daily sequence of leaf area index is derived from maximum and minimum
+#' values, dates and shape parameters using different methods.
 #'
-#' @param method Name of method for generating the sequence. Must be one of "b90", "linear", "Coupmodel".
+#' @param method Name of method for generating the sequence. Must be one of
+#'   "b90", "linear", "Coupmodel".
 #' @param year Vector of years to be returned.
 #' @param maxlai Maximum leaf are index.
-#' @param winlaifrac Fraction of \code{maxlai} during winter (ignored when method = 'linear').
-#' @param budburst.doy Budburst day of year (ignored when method = 'linear').
-#' @param leaffall.doy Day of year when leaf fall begins (ignored when method = 'linear').
-#' @param emerge.dur Number of days from budburst until maximum leaf area index is reached.
+#' @param winlaifrac Fraction of \code{maxlai} during winter (ignored when
+#'   \code{method = 'linear'}).
+#' @param budburst.doy Budburst day of year (ignored when \code{method =
+#'   'linear'}).
+#' @param leaffall.doy Day of year when leaf fall begins (ignored when
+#'   \code{method = 'linear'}).
+#' @param emerge.dur Number of days from budburst until maximum leaf area index
+#'   is reached.
 #' @param leaffall.dur Number of days until minimum leaf are index is reached.
-#' @param shape.optdoy Day of year when optimum value is reached (required when method = "Coupmodel").
-#' @param shape.budburst Shape parameter for the growth phase (required when method = "Coupmodel").
-#' @param shape.leaffall Shape parameter growth cessation (required when method = "Coupmodel").
+#' @param shape.optdoy Day of year when optimum value is reached (required when
+#'   \code{method = "Coupmodel"}).
+#' @param shape.budburst Shape parameter for the growth phase (required when
+#'   \code{method = "Coupmodel"}).
+#' @param shape.leaffall Shape parameter growth cessation (required when
+#'   \code{method = "Coupmodel"}).
 #' @param lai.doy Integer vector of days of years.
 #' @param lai.frac Vector of values of fractional leaf area index corresponding
-#' to lai.doy (required when method = "linear").
+#'   to lai.doy (required when \code{method = "linear"}).
 #'
 #' @return A vector of daily lai values covering the years specified.
 #'

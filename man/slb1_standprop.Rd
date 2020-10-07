@@ -11,8 +11,8 @@ A data.frame with 49 rows and 7 variables
   \item{species}{Tree species}
   \item{age}{age of the main stand}
   \item{height}{average height of the trees, m}
-  \item{maxlai}{maximum leaf area index, m2 m-2}
-  \item{sai}{stem area index, m2 m-2 }
+  \item{maxlai}{maximum leaf area index, m²/m²}
+  \item{sai}{stem area index, m²/m²}
   \item{densef}{stand density}
 }
 }

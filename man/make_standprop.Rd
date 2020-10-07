@@ -14,11 +14,13 @@ make_standprop(options.b90, param.b90, out.years)
 \item{out.years}{Years for which values are returned.}
 }
 \value{
-A data.frame containing daily sequences of 'age', 'height', 'sai', 'densef', and 'lai'.
+A data.frame containing daily sequences of 'age', 'height', 'sai',
+  'densef', and 'lai'.
 }
 \description{
-Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from parameters and options
-using \code{\link{approx_standprop}} and \code{\link{MakeSeasLAI}}.
+Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from
+parameters and options using \code{\link{approx_standprop}} and
+\code{\link{MakeSeasLAI}}.
 }
 \examples{
 options.b90 <- setoptions_LWFB90()

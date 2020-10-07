@@ -1,54 +1,68 @@
-#' Run the LWF-Brook90 hydrological model
+#'Run the LWF-Brook90 hydrological model
 #'
-#' Sets up the input objects for the LWF-Brook90 hydrological model, starts the model,
-#' and returns the selected results.
+#'Sets up the input objects for the LWF-Brook90 hydrological model, starts the
+#'model, and returns the selected results.
 #'
-#' @param options.b90 Named list of model control options. Use
-#' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
-#' @param param.b90 Named list of model input parameters. Use
-#' \code{\link{setparam_LWFB90}} to generate a list with default model parameters.
-#' @param climate Data.frame with daily climate data. See details for the required variables.
-#' @param precip Data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
-#' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-#' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
-#' per day defined in \code{options.b90$prec.interval}.
-#' @param soil Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'
-#' @param output A [7,5]-matrix flagging the desired model output datasets at different time intervals. Use
-#' \code{\link{setoutput_LWFB90}} to generate and edit a default output selection matrix. Alternatively,
-#' use -1 (the default) to return the raw daily and soil layer outputs.
-#' @param output_fun A function or a list of functions to be performed on the output objects selected by \code{output}.
-#' Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
-#' Useful if the function is evaluated within a large multi-run application, which might overload the memory.
-#' (see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
-#' @param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
-#' properties ('standprop_daily', as derived from parameters) to the result?
-#' @param rtrn.output Logical: return the simulation results?
-#' @param chk.input Logical wether to check param.b90, options.b90, climate, precip, and soil
-#' for completeness and consistency.
-#' @param output.log Logical or file name wether to print runtime output, or redirect runtime output to a file.
-#' @param run Logical: run LWF-Brook90 or only return model input objects?
-#' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
-#' @param verbose Logical: print messages to the console? Default is TRUE.
-#' @param ... Additional arguments passed to \code{output_fun}.
+#'@param options.b90 Named list of model control options. Use
+#'  \code{\link{setoptions_LWFB90}} to generate a list with default model
+#'  control options.
+#'@param param.b90 Named list of model input parameters. Use
+#'  \code{\link{setparam_LWFB90}} to generate a list with default model
+#'  parameters.
+#'@param climate Data.frame with daily climate data. See details for the
+#'  required variables.
+#'@param precip Data.frame with columns 'dates' and 'prec' to supply
+#'  precipitation data separately from climate data. Can be used to provide
+#'  sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+#'  1 (daily resolution) to 240 values of precipitation can be provided, with
+#'  the number of values per day defined in \code{options.b90$prec.interval}.
+#'@param soil Data.frame containing the hydraulic properties of the soil layers.
+#'  See section 'Soil parameters'
+#'@param output A [7,5]-matrix flagging the desired model output datasets at
+#'  different time intervals. Use \code{\link{setoutput_LWFB90}} to generate and
+#'  edit a default output selection matrix. Alternatively, use -1 (the default)
+#'  to return the raw daily and soil layer outputs.
+#'@param output_fun A function or a list of functions to be performed on the
+#'  output objects selected by \code{output}. Can be used to aggregate output or
+#'  calculate goodness of fit measures on-the-fly, or to write results instantly
+#'  to a file or database. Useful if the function is evaluated within a large
+#'  multi-run application, which might overload the memory. (see
+#'  \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
+#'@param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and daily
+#'  plant properties ('standprop_daily', as derived from parameters) to the
+#'  result?
+#'@param rtrn.output Logical: return the simulation results?
+#'@param chk.input Logical wether to check param.b90, options.b90, climate,
+#'  precip, and soil for completeness and consistency.
+#'@param output.log Logical or file name wether to print runtime output, or
+#'  redirect runtime output to a file.
+#'@param run Logical: run LWF-Brook90 or only return model input objects? Useful
+#'  to inspect the effects of options and parameters on model input. Default is
+#'  TRUE.
+#'@param verbose Logical: print messages to the console? Default is TRUE.
+#'@param ... Additional arguments passed to \code{output_fun}.
 #'
-#' @return A list containing the selected model output, the model input (except for \code{climate}) if desired,
-#' and the return values of \code{output_fun} if specified.
+#'@return A list containing the selected model output, the model input (except
+#'  for \code{climate}) if desired, and the return values of \code{output_fun}
+#'  if specified.
 #'
-#'@section Climate input data:
-#' The \code{climate} data.frame must contain the following variables in columns named
-#' \code{dates} (Date), \code{tmax} (deg C), \code{tmin} (deg C), \code{tmean} (deg C),
-#' \code{wind} (m s-1), \code{prec} (mm) , \code{vappres} (kPa), and either \code{globrad} (MJ d-1 m-2)
-#' or \code{sunhours} (hours). When using \code{sunhours}, please set \code{options.b90$fornetrad = 'sunhours'}.
+#'@section Climate input data: The \code{climate} data.frame must contain the
+#'  following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
+#'  (deg C), 'tmean' (deg C), 'wind' (m/s), 'prec' (mm) , 'vappres' (kPa), and
+#'  either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using \code{sunhours},
+#'  please set \code{options.b90$fornetrad = 'sunhours'}.
 #'
-#' @section Soil input parameters:
-#' Each row of \code{soil} represents one layer, containing the layers' boundaries and soil hydraulic parameters.
-#' The column names for the upper and lower layer boundaries are \code{upper} and \code{lower} (m, negative downwards).
-#' When using options.b90$imodel = 'MvG', the hydraulic parameters are  \code{ths}, \code{thr},
-#'  \code{alpha} (m-1), \code{npar}, \code{ksat} (mm d-1) and \code{tort}.  With options.b90$imodel = 'CH',
-#'  the parameters are \code{thsat}, \code{thetaf}, \code{psif} (kPa), \code{bexp},
-#'  \code{kf} (mm d-1), and \code{wetinf}. For both parameterizations, the volume fraction of stones has to be named \code{gravel}.
-#'  If the soil data.frame is not provided, list items 'soil_nodes' and 'soil_materials'
-#'  of param.b90 are used for the simulation. These have to be set up in advance, see \code{\link{soil_to_param}}.
+#'@section Soil input parameters: Each row of \code{soil} represents one layer,
+#'  containing the layers' boundaries and soil hydraulic parameters. The column
+#'  names for the upper and lower layer boundaries are 'upper' and 'lower' (m,
+#'  negative downwards). When using \code{options.b90$imodel = 'MvG'}, the
+#'  hydraulic parameters are 'ths', 'thr', 'alpha' (1/m), 'npar', 'ksat' (mm/d)
+#'  and 'tort'.  With \code{options.b90$imodel = 'CH'}, the parameters are
+#'  'thsat', 'thetaf', 'psif' (kPa), 'bexp', 'kf' (mm/d), and 'wetinf'. For both
+#'  parameterizations, the volume fraction of stones has to be named 'gravel'.
+#'  If the \code{soil} data.frame is not provided, list items \code{soil_nodes}
+#'  and \code{soil_materials} of \code{param.b90} are used for the simulation.
+#'  These have to be set up in advance, see \code{\link{soil_to_param}}.
 #'
 #' @section Daily outputs:
 #' \tabular{llcl}{
@@ -642,17 +656,17 @@ process_outputs <- function(simout, output) {
                                                                 seep = round(sum(seep),1),
                                                                 # for state variables: take last entry in period
                                                                 snow = round(snow[which.max(doy)],1),
-                                                                swat = round(swat[which.max(doy)],1), 
+                                                                swat = round(swat[which.max(doy)],1),
                                                                 gwat = round(gwat[which.max(doy)],1),
-                                                                intr = round(intr[which.max(doy)],1), 
+                                                                intr = round(intr[which.max(doy)],1),
                                                                 ints = round(ints[which.max(doy)],1)),
                                                           by = list(yr, mo, da, doy)]
         }
         if (per == "Mon") {
           moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(# for fluxes: sum up over period
-                                                                 prec = round(sum(rfal+sfal),1), 
+                                                                 prec = round(sum(rfal+sfal),1),
                                                                  flow = round(sum(flow),1),
-                                                                 evap = round(sum(evap),1), 
+                                                                 evap = round(sum(evap),1),
                                                                  seep = round(sum(seep),1),
                                                                  # for state variables: take last entry in period
                                                                  snow = round(snow[which.max(doy)],1),
@@ -663,8 +677,8 @@ process_outputs <- function(simout, output) {
                                                           by = list(yr, mo)]
         }
         if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(# for fluxes: sum up over period 
-                                                                 prec = round(sum(rfal+sfal),1), 
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(# for fluxes: sum up over period
+                                                                 prec = round(sum(rfal+sfal),1),
                                                                  flow = round(sum(flow),1),
                                                                  evap = round(sum(evap),1),
                                                                  seep = round(sum(seep),1),
@@ -683,35 +697,35 @@ process_outputs <- function(simout, output) {
         if (per == "Day") {
           moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(
                                                                  vrfln   = round(vrfln,1),
-                                                                 safrac  = round(safrac,1), 
+                                                                 safrac  = round(safrac,1),
                                                                  stres   = round(stres,3),
-                                                                 adef    = round(adef,3), 
+                                                                 adef    = round(adef,3),
                                                                  awat    = round(awat,1),
                                                                  relawat = round(relawat,3),
-                                                                 nits, 
+                                                                 nits,
                                                                  balerr  = round(balerr, 3)),
                                                           by = list(yr, mo, da, doy)]
 
         }
         if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1), 
+          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1),
                                                                  safrac  = round(sum(safrac),1),
                                                                  stres   = round(mean(stres),3),
                                                                  adef    = round(mean(adef),3),
-                                                                 awat    = round(mean(awat),1), 
+                                                                 awat    = round(mean(awat),1),
                                                                  relawat = round(mean(relawat),3),
                                                                  nits    = sum(nits),
                                                                  balerr  = round(sum(balerr), 3)),
                                                           by = list(yr, mo)]
         }
         if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1), 
+          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1),
                                                                  safrac  = round(sum(safrac),1),
                                                                  stres   = round(mean(stres),3),
                                                                  adef    = round(mean(adef),3),
                                                                  awat    = round(mean(awat),1),
                                                                  relawat = round(mean(relawat),3),
-                                                                 nits    = sum(nits), 
+                                                                 nits    = sum(nits),
                                                                  balerr  = round(sum(balerr), 3)),
                                                           by = list(yr)]
         }

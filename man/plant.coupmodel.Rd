@@ -20,7 +20,8 @@ plant.coupmodel(
 
 \item{maxval}{Maximum value.}
 
-\item{doy.incr}{Day of year when increasing from \code{minval} to \code{maxval} begins.}
+\item{doy.incr}{Day of year when increasing from \code{minval} to
+\code{maxval} begins.}
 
 \item{doy.max}{Day of year when \code{maxval} is reached.}
 

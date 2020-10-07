@@ -5,13 +5,13 @@
 #' @format A data.frame with 19724 rows and 9 variables
 #' \describe{
 #'   \item{dates}{date}
-#'   \item{tmin}{daily minimum temperature, degC}
-#'   \item{tmax}{daily maximum temperature, degC}
-#'   \item{tmean}{daily mean temperature, degC}
+#'   \item{tmin}{daily minimum temperature, deg C}
+#'   \item{tmax}{daily maximum temperature, deg C}
+#'   \item{tmean}{daily mean temperature, deg C}
 #'   \item{prec}{daily sum of precipitation, mm}
 #'   \item{relhum}{relative Humidity, \%}
-#'   \item{globrad}{daily sum of global radiation, MJ m-2}
-#'   \item{wind}{daily mean wind speed measured at 10 m above ground, m s-2}
+#'   \item{globrad}{daily sum of global radiation, MJ/m²}
+#'   \item{wind}{daily mean wind speed measured at 10 m above ground, m/s}
 #'   \item{vappres}{daily vapour pressure, kPa}
 #' }
 "slb1_meteo"
@@ -26,7 +26,7 @@
 #'   \item{upper}{upper layer boundary, m}
 #'   \item{lower}{lower layer boundary, m}
 #'   \item{texture}{soil texture according to German soil texture classification system}
-#'   \item{bd}{bulk density of the fine earth, g cm-3}
+#'   \item{bd}{bulk density of the fine earth, g/cm³}
 #'   \item{gravel}{fraction of coarse material }
 #'   \item{sand}{sand content, mass-\% }
 #'   \item{silt}{silt content, mass-\% }
@@ -45,8 +45,8 @@
 #'   \item{species}{Tree species}
 #'   \item{age}{age of the main stand}
 #'   \item{height}{average height of the trees, m}
-#'   \item{maxlai}{maximum leaf area index, m2 m-2}
-#'   \item{sai}{stem area index, m2 m-2 }
+#'   \item{maxlai}{maximum leaf area index, m²/m²}
+#'   \item{sai}{stem area index, m²/m²}
 #'   \item{densef}{stand density}
 #' }
 "slb1_standprop"
@@ -54,7 +54,8 @@
 #' Daily values of soil water potential (1999-2009) in different soil depths
 #' measured at the Solling Beech experimental site 'SLB1'.
 #'
-#' A dataset containing daily soil water potential in 10, 20, 40, 100, 180 cm soil depths
+#' A dataset containing daily soil water potential in 10, 20, 40, 100, 180 cm
+#' soil depths
 #'
 #' @format A data.frame with 4018 rows and 6 variables
 #' \describe{

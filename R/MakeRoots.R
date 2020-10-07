@@ -1,26 +1,31 @@
 #' Generates a root density depth function for soil layers
 #'
-#' @param soilnodes Vector of soil layer depth limits (including the top and the bottom of the profile)
-#' for which the relative root distribution will be calculated (m, negative downwards).
-#' @param maxrootdepth The maximum rooting depth (m, negative downwards) below which
-#' relative root length density will be set to zero (not applying when \code{method = 'table'}).
-#' @param method Method name for the root depth distribution. Possible values are 'betamodel',
-#' 'table', 'linear', 'constant'. See details.
+#' @param soilnodes Vector of soil layer depth limits (including the top and the
+#'   bottom of the profile) for which the relative root distribution will be
+#'   calculated (m, negative downwards).
+#' @param maxrootdepth The maximum rooting depth (m, negative downwards) below
+#'   which relative root length density will be set to zero (not applying when
+#'   \code{method = 'table'}).
+#' @param method Method name for the root depth distribution. Possible values
+#'   are 'betamodel', 'table', 'linear', 'constant'. See details.
 #' @param beta Parameter of the root distribution function.
-#' @param rootdat data.frame with a given root depth density distribution. Columns are depth limits
-#' ('upper' and 'lower' in m, negative downwards) and relative root densities of fine or absorbing roots
-#' ('rootden') per unit stonefree volume. Only used when \code{method = 'table'}.
+#' @param rootdat data.frame with a given root depth density distribution.
+#'   Columns are depth limits ('upper' and 'lower' in m, negative downwards) and
+#'   relative root densities of fine or absorbing roots ('rootden') per unit
+#'   stonefree volume. Only used when \code{method = 'table'}.
 #'
-#' @return Vector of relative root length densities for the soil layers framed by \code{soilnodes}.
-#' Length is one less than \code{length(soilnodes)}.
+#' @return Vector of relative root length densities for the soil layers framed
+#'   by \code{soilnodes}. Length is one less than \code{length(soilnodes)}.
 #'
-#' @details \code{method = 'betamodel'} calculates the relative root length densities of the soil layers
-#' from the cumulative proportion of roots derived by the model after Gale & Grigal (1987).
-#' \code{method = 'table'} distributes the relative root densities provided by \code{rootdat} to the soil layers,
-#' under preservation of total root mass. \code{method = 'linear'} returns linearly decreasing root densities
-#' with a value of 1 at the top of the soil profile to 0 at \code{maxrootdepth}.
-#' \code{method = 'constant'} returns a uniform root distribution with a relative root length density of 1
-#' for all soil layers above \code{'maxrootdepth'}.
+#' @details \code{method = 'betamodel'} calculates the relative root length
+#'   densities of the soil layers from the cumulative proportion of roots
+#'   derived by the model after Gale & Grigal (1987). \code{method = 'table'}
+#'   distributes the relative root densities provided by \code{rootdat} to the
+#'   soil layers, under preservation of total root mass. \code{method =
+#'   'linear'} returns linearly decreasing root densities with a value of 1 at
+#'   the top of the soil profile to 0 at \code{maxrootdepth}. \code{method =
+#'   'constant'} returns a uniform root distribution with a relative root length
+#'   density of 1 for all soil layers above \code{'maxrootdepth'}.
 #'
 #' @references
 #' Gale, M.R. & Grigal D.F. (1987): "Vertical root distributions of northern tree

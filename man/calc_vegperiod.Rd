@@ -16,30 +16,37 @@ calc_vegperiod(
 )
 }
 \arguments{
-\item{budburst.method}{name of model for estimating budburst day of year. Either 'fixed'
-or one of the values accepted by the 'start.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.}
+\item{budburst.method}{name of model for estimating budburst day of year.
+Either 'fixed' or one of the values accepted by the 'start.method'-argument
+of the function \code{\link[vegperiod]{vegperiod}}.}
 
-\item{leaffall.method}{name of model for estimating day of year when leaffall begin. Either 'fixed'
-or one of the values accepted by the 'end.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.}
+\item{leaffall.method}{name of model for estimating day of year when leaffall
+begin. Either 'fixed' or one of the values accepted by the
+'end.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.}
 
 \item{dates}{date vector passed to \code{\link[vegperiod]{vegperiod}},
 ignored if both leaffall.method and budburst.method = 'fixed'}
 
-\item{tavg}{vector of daily mean air temperature passed to \code{\link[vegperiod]{vegperiod}},
-ignored if leaffall.method = 'fixed' and budburst.method = 'fixed'.}
+\item{tavg}{vector of daily mean air temperature (deg C) passed to
+\code{\link[vegperiod]{vegperiod}}, ignored if \code{leaffall.method =
+'fixed'} and \code{budburst.method = 'fixed'}.}
 
-\item{out.years}{integer vector of the years to be returned. If not specified,
-values for the years in dates will be returned.}
+\item{out.years}{integer vector of the years to be returned. If not
+specified, values for the years in \code{dates} will be returned.}
 
-\item{budburstdoy.fixed}{vector of values to be returned if budburst.method = 'fixed'.}
+\item{budburstdoy.fixed}{vector of values to be returned if
+\code{budburst.method = 'fixed'}.}
 
-\item{leaffalldoy.fixed}{vector of values to be returned if leaffall.method = 'fixed'.}
+\item{leaffalldoy.fixed}{vector of values to be returned if
+\code{leaffall.method = 'fixed'}.}
 
 \item{...}{additional argument passed to \code{\link[vegperiod]{vegperiod}}.}
 }
 \value{
-a data.frame with columns 'year', 'start', 'end'. if budburst.method = 'fixed' or leaffall.method = 'fixed',
-'start' and 'end' contain the values specified in budburstdoy.fixed and leaffalldoy.fixed respectively.
+a data.frame with columns \code{year}, \code{start}, \code{end}. If
+  \code{budburst.method = 'fixed'} or \code{leaffall.method = 'fixed'},
+  \code{start} and \code{end} contain the values specified in
+  \code{budburstdoy.fixed} and \code{leaffalldoy.fixed} respectively.
 }
 \description{
 Wrapper for \code{\link[vegperiod]{vegperiod}}

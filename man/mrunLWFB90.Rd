@@ -14,50 +14,60 @@ mrunLWFB90(
 )
 }
 \arguments{
-\item{paramvar}{Data.frame of variable input parameters. For each row,
-a simulation is performed, with the elements in \code{param.b90} being replaced by the
-respective column of \code{paramvar}. All parameter names (column names) in \code{paramvar} must be found in \code{param.b90}.}
+\item{paramvar}{Data.frame of variable input parameters. For each row, a
+simulation is performed, with the elements in \code{param.b90} being
+replaced by the respective column of \code{paramvar}. All parameter names
+(column names) in \code{paramvar} must be found in \code{param.b90}. See
+section \code{Parameter updating}.}
 
-\item{param.b90}{Named list of parameters, in which the parameters defined in \code{paramvar} will be replaced.}
+\item{param.b90}{Named list of parameters, in which the parameters defined in
+\code{paramvar} will be replaced.}
 
-\item{paramvar_nms}{Names of the parameters in \code{paramvar} to be replaced in \code{param.b90}.}
+\item{paramvar_nms}{Names of the parameters in \code{paramvar} to be replaced
+in \code{param.b90}.}
 
 \item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
 
-\item{showProgress}{Logical: Show progress bar? Default is TRUE. See also section \code{Progress bar} below.}
+\item{showProgress}{Logical: Show progress bar? Default is TRUE. See also
+section \code{Progress bar} below.}
 
-\item{...}{Additional arguments passed to \code{\link{runLWFB90}}:
-provide at least the arguments that have no defaults (\code{options.b90} and \code{climate})!
-It might be a good idea to also pass \code{verbose=FALSE} to suppress excessive chatter of \code{runLWFB90}.}
+\item{...}{Additional arguments passed to \code{\link{runLWFB90}}: provide at
+least the arguments that have no defaults such as \code{climate}). It might
+be a good idea to also pass \code{verbose=FALSE} to suppress excessive
+chatter of \code{runLWFB90}.}
 }
 \value{
-A named list with the results of the single runs as returned by \code{\link{runLWFB90}}.
-Simulation or processing errors are passed on.
+A named list with the results of the single runs as returned by
+  \code{\link{runLWFB90}}. Simulation or processing errors are passed on.
 }
 \description{
-Wrapper function for \code{\link{runLWFB90}} to make multiple simulations parallel,
-with varying input parameters.
+Wrapper function for \code{\link{runLWFB90}} to make multiple simulations
+parallel, with varying input parameters.
 }
 \section{Parameter updating}{
-
-The transfer of values from a row in \code{paramvar} to \code{param.b90} before each single run
-simulation is done by matching names from \code{paramvar} and \code{param.b90}. In order to address data.frame
-or vector elements in \code{param.b90} by a column name in \code{paramvar}, the respective column name
-has to be set up from its name and index in \code{param.b90}. To replace, e.g., the 2nd value of \code{ths}
-in the \code{soil_materials} data.frame, the respective column name in \code{paramvar}
-has to be called 'soil_materials.ths2'. In order to replace the 3rd value of \code{maxlai} vector in \code{param.b90},
-the column has to be named 'maxlai3'.
+ The transfer of values from a row in
+  \code{paramvar} to \code{param.b90} before each single run simulation is
+  done by matching names from \code{paramvar} and \code{param.b90}. In order
+  to address data.frame or vector elements in \code{param.b90} by a column
+  name in \code{paramvar}, the respective column name has to be set up from
+  its name and index in \code{param.b90}. To replace, e.g., the 2nd value of
+  \code{ths} in the \code{soil_materials} data.frame, the respective column
+  name in \code{paramvar} has to be called 'soil_materials.ths2'. In order to
+  replace the 3rd value of \code{maxlai} vector in \code{param.b90}, the
+  column has to be named 'maxlai3'.
 }
 
 \section{Data management}{
-
-The returned list of single run results can become very large,if many simulations are done and
-the selected output contains daily resolution datasets, and especially daily layer-wise soil moisture data.
-To not overload memory, it is advised to reduce the returned simulation results to a minimum, by
-carefully selecting the output, and make use of the option to pass a list of functions to
-\code{\link{runLWFB90}} (argument \code{output_fun}). These functions perform directly on the
-output of a single run simulation, and can be used for aggrating model output on-the-fly,
-or writing results to a file or database.
+ The returned list of single run results can become
+  very large, if many simulations are done and the selected output contains
+  daily resolution datasets, and especially daily layer-wise soil moisture
+  data. To not overload memory, it is advised to reduce the returned
+  simulation results to a minimum, by carefully selecting the output, and
+  make use of the option to pass a list of functions to
+  \code{\link{runLWFB90}} via argument \code{output_fun}. These functions
+  perform directly on the output of a single run simulation, and can be used
+  for aggrating model output on-the-fly, or writing results to a file or
+  database.
 }
 
 \section{Progress bar}{
