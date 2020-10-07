@@ -1,4 +1,4 @@
-skip("Will fail as long as the source codes differ!")
+skip("Will fail as long as the source codes differ slightly?!")
 library(LWFBrook90R)
 
 # ---- load test data ---------------------------------------------------------------
@@ -36,7 +36,7 @@ test_that("inputs are equal", {
 # ------------------------------------------------------------------------------
 # Tests
 
-tolerance_mm <- 0.01
+tolerance_mm <- 0.001
 
 # ----- ABOV-tests-----------------------------------------------------------
 
@@ -103,21 +103,6 @@ test_that("values in EVAPANN.ASC are equal", {
   expect_equal(b90res$EVAPANN.ASC[,nms, with = F], exe_res$EVAPANN.ASC[,nms, with = F], tolerance = tolerance_mm)
 })
 
-# ----- BELO-tests-----------------------------------------------------------
-exe_res$BELOANN.ASC <- exe_res$BELOANN.ASC[!is.na(yr),]
-
-test_that("values in BELODAY.ASC are equal", {
-  expect_equal(b90res$BELODAY.ASC, exe_res$BELODAY.ASC, tolerance = tolerance_mm)
-})
-
-test_that("values in BELOMON.ASC are equal", {
-  expect_equal(b90res$BELOMON.ASC, exe_res$BELOMON.ASC, tolerance = tolerance_mm)
-})
-
-test_that("values in BELOANN.ASC are equal", {
-  expect_equal(b90res$BELOANN.ASC, exe_res$BELOANN.ASC, tolerance = tolerance_mm)
-})
-
 
 # ----- MISC-tests -----------------------------------------------------------
 exe_res[c("MISCANN.ASC","MISCMON.ASC", "EPVPANN.ASC")] <- NULL
@@ -137,21 +122,18 @@ exe_res$SWATANN.ASC <- exe_res$SWATANN.ASC[!is.na(yr),]
 
 swat_wide <-  extract_layer_output(b90res$SWATDAY.ASC)
 exe_swat_wide <-  extract_layer_output(exe_res$SWATDAY.ASC)
-
 test_that("values in SWATDAY.ASC are equal", {
   expect_equal(swat_wide, exe_swat_wide, tolerance = 0.001)
 })
 
 swat_wide <-  extract_layer_output(b90res$SWATMON.ASC)
 exe_swat_wide <-  extract_layer_output(exe_res$SWATMON.ASC)
-
 test_that("values in SWATMON.ASC are equal", {
   expect_equal(swat_wide, exe_swat_wide, tolerance = 0.001)
 })
 
 swat_wide <-  extract_layer_output(b90res$SWATANN.ASC)
 exe_swat_wide <-  extract_layer_output(exe_res$SWATANN.ASC)
-
 test_that("values in SWATANN.ASC are equal", {
   expect_equal(swat_wide, exe_swat_wide, tolerance = 0.001)
 })
@@ -166,14 +148,14 @@ test_that("values in BELODAY.ASC are equal", {
   expect_equal(belo_wide, exe_belo_wide, tolerance = 0.001)
 })
 
-belo_wide <-  extract_layer_output(b90res$BELODAY.ASC)
-exe_belo_wide <-  extract_layer_output(exe_res$BELODAY.ASC)
+belo_wide <-  extract_layer_output(b90res$BELOMON.ASC)
+exe_belo_wide <-  extract_layer_output(exe_res$BELOMON.ASC)
 test_that("values in BELOMON.ASC are equal", {
   expect_equal(belo_wide, exe_belo_wide, tolerance = 0.001)
 })
 
-belo_wide <-  extract_layer_output(b90res$BELODAY.ASC)
-exe_belo_wide <-  extract_layer_output(exe_res$BELODAY.ASC)
+belo_wide <-  extract_layer_output(b90res$BELOANN.ASC)
+exe_belo_wide <-  extract_layer_output(exe_res$BELOANN.ASC)
 test_that("values in BELOANN.ASC are equal", {
   expect_equal(belo_wide, exe_belo_wide, tolerance = 0.001)
 })
