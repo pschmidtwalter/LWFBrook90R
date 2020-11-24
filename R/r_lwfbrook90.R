@@ -17,6 +17,7 @@
 #' @param precdat A matrix of precipitation interval data with 6 columns:
 #' year, month, day, interval-number (1:precint), prec, mesflp.
 #' @param output_log Logical whether to print runtime output to console.
+#' @param timelimit Integer to set elapsed time limits for running LWF-Brook90
 #'
 #' @return A list containing the daily and soil layer model outputs (see \code{\link{runLWFB90}}.
 #'
@@ -31,13 +32,18 @@ r_lwfbrook90 <- function(
   soil_materials,
   soil_nodes,
   precdat = NULL,
-  output_log = TRUE
+  output_log = FALSE,
+  timelimit  = Inf
   ){
 
   # make a matrix of precipitation input data
   if ( is.null(precdat) ){
     precdat <- matrix(-999, nrow = param[1] * siteparam[[6]], ncol = 6)
   }
+
+  # set timeout
+  setTimeLimit(elapsed = timelimit)
+  on.exit(setTimeLimit(cpu = Inf), add = TRUE)
 
   # Run the model
   out <- .Call(

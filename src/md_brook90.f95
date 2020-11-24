@@ -398,6 +398,10 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             INCLUDE 'ZPINT.h'
 
             !        *  *  *  *  *  *  B E G I N   I T E R A T I O N   *  *  *  *  *  *  *
+            
+            ! Check for timelimits set by R-user
+            CALL rchkusr()
+            
 101         CONTINUE
 !         write(10,*)'begin iteration'
             NITS = NITS + 1
