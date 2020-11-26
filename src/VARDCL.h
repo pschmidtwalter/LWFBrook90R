@@ -81,7 +81,6 @@ real(kind=8) :: DUMM(ML)        ! dummy array for subroutine calls
 real(kind=8) :: DUMMY           ! dummy variable for subroutine calls
 real(kind=8), dimension(12) :: DURATN ! * average duration of daily precip by month, hr
 real(kind=8) :: EA              ! ** vapor pressure for the day, kPa
-!logical(kind=1) :: error        ! if there is error in the subroutine
 real(kind=8) :: ES              ! saturated vapor pressure, kPa
 real(kind=8) :: ESLOPE          ! * slope for evapotranspiration and snowmelt, degrees
 real(kind=8) :: Eta             ! volumetric air content

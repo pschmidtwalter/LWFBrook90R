@@ -32,6 +32,7 @@ r_lwfbrook90 <- function(
   soil_materials,
   soil_nodes,
   precdat = NULL,
+  output_log = TRUE,
   timelimit  = Inf
   ){
 
@@ -42,7 +43,7 @@ r_lwfbrook90 <- function(
 
   # set timeout
   setTimeLimit(elapsed = timelimit)
-  on.exit(setTimeLimit(cpu = Inf), add = TRUE)
+  on.exit(setTimeLimit(elapsed = Inf), add = TRUE)
 
   # Run the model
   out <- .Call(
@@ -54,6 +55,7 @@ r_lwfbrook90 <- function(
     soil_materials = as.matrix(soil_materials, ncol = 8),
     soil_nodes = as.matrix(soil_nodes, ncol = 6),
     precdat = as.matrix(precdat, ncol = 6),
+    pr = output_log,
     n_m = as.integer(param[1]),
     n_l = as.integer(param[65])
     )

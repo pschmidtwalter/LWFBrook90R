@@ -259,7 +259,7 @@ runLWFB90 <- function(options.b90,
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
       soil_nodes = param.b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
-      #output_log = output.log,
+      output_log = output.log,
       timelimit = timelimit
     )
 
