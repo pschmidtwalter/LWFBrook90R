@@ -31,7 +31,7 @@ module fbrook_mod
 contains
 
 subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, &
-                    pr, output_day, output_layer) bind(C, name="s_brook90_f_")
+                    error, output_day, output_layer) bind(C, name="s_brook90_f_")
 
     implicit none
 
@@ -48,8 +48,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     real(kind=c_double), dimension( INT(param(1)),15), intent(in) :: climveg
     real(kind=c_double), dimension( INT(param(1)*siteparam(6)),6), intent(in) :: precdat
 
-    ! Printing
-    logical(kind=c_bool), intent(in) :: pr
+    ! Error-code
+    integer(kind=c_int), intent(inout) :: error
 
     ! Output matrix
     real(kind=c_double), dimension( INT(param(1)),40), intent(inout) :: output_day
@@ -57,7 +57,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     ! Variables
     include 'VARDCL.h'
-    error = .FALSE.
+    error = 0._c_int
     DATA DAYMO / 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/
 
     ! Not sure why temperature is not initialized
@@ -98,8 +98,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     ! soil water parameters and initial variables
     CALL SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
-        PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, pr, error)
-    if ( error ) go to 999
+        PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, error)
+    if ( error .ne. 0 ) go to 999
 
     ! more initial soil water variables
     CALL SOILVAR(NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
@@ -171,9 +171,11 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         DENSEF=MAX(0.050d0,DENSEF)
 
         IF (YEAR .NE. YY .OR. MONTH .NE. MM .OR. DOM .NE. DD) THEN
+            error = 3
             call intpr("STOP - DFILE error, expected", -1, 1, 0)
             !print*, 'STOP - DFILE error, expected', YEAR, MONTH, DOM, ' but got', YY, MM, DD
 !           STOP
+        goto 999
         END IF
 
 !        * *  S E T  R O O T  D I S T R I B U T I O N * * * * *  * * * *  * * * *
@@ -476,7 +478,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 61          CONTINUE
 
             CALL ITER(NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, &
-                Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN, pr)
+                Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN)
 
             IF (DTINEW .LT. DTI) THEN
 !              recalculate flow rates with new DTI
@@ -741,17 +743,17 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         DOY = DOY + 1
         IDAY = IDAY + 1
 
-        if( pr ) then
-            if( MOD(IDAY,20) .eq. 2 ) then
-        call intpr("date         store  inter  snow    rain  et   drain  lat   ep    tp   mbal error", &
-                     -1, 0, 0)
-            end if
+!        if( pr ) then
+!            if( MOD(IDAY,20) .eq. 2 ) then
+!        call intpr("date         store  inter  snow    rain  et   drain  lat   ep    tp   mbal error", &
+!                     -1, 0, 0)
+!            end if
 
-            call intpr(makeString(13, (/real(yy,8),real(mm,8),real(dd,8), SWAT,IRVPD+ISVPD,SNOW, &
-                    PRECD,EVAPD,Flowd,DSFLD,PSLVP,PTRAN,BALERD/), &
-                40, '(F5.0,2F3.0,F6.0,2F7.2,F7.1,5F6.1,F12.3)'),&
-                -1, 0, 0)
-        end if
+!            call intpr(makeString(13, (/real(yy,8),real(mm,8),real(dd,8), SWAT,IRVPD+ISVPD,SNOW, &
+!                    PRECD,EVAPD,Flowd,DSFLD,PSLVP,PTRAN,BALERD/), &
+!                40, '(F5.0,2F3.0,F6.0,2F7.2,F7.1,5F6.1,F12.3)'),&
+!                -1, 0, 0)
+!       end if
 
         TInt=TInt+IRVPD+ISVPD
         TSno=TSno+SNOW
@@ -764,29 +766,31 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     end if
 
-    if( pr ) then
-        call intpr(" ", -1, 0, 0)
-        call intpr("TOTAL:   inter     snow    rain    et      drain     lat", -1, 0, 0)
-        call intpr(makeString(6, (/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/), 21,'(5X,2F9.2,F9.1,3F8.1)'), -1, 0, 0)
-    end if
+!    if( pr ) then
+!        call intpr(" ", -1, 0, 0)
+!        call intpr("TOTAL:   inter     snow    rain    et      drain     lat", -1, 0, 0)
+!        call intpr(makeString(6, (/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/), 21,'(5X,2F9.2,F9.1,3F8.1)'), -1, 0, 0)
+!    end if
 
 !     ***************   E N D    D A Y   L O O P    **************************
-    999 if( error )  call intpr("PARAMETERS COMBINATION ERROR", -1, 0, 0)
-
-    if( pr ) call intpr("THAT IS THE END", -1, 0, 0)
+!999 if ( pr )
+!        if ( error.ne.0 ) call intpr("Finished with errors", -1, 0, 0)
+!        else call intpr("THAT IS THE END", -1, 0, 0)
+!    end if 
+999 if ( error.ne.0 ) call intpr("Finished with errors", -1, 0, 0)
 
 end subroutine s_brook90_f
 
 
-function makeString( nn, num, nf, fmt) result(res)
-    integer, intent(in) :: nn
-    real(kind=8), dimension(nn), intent(in) :: num
-    integer, intent(in) :: nf
-    character(len=nf), intent(in) :: fmt
-    character(len=255) :: res
+!function makeString( nn, num, nf, fmt) result(res)
+!    integer, intent(in) :: nn
+!    real(kind=8), dimension(nn), intent(in) :: num
+!    integer, intent(in) :: nf
+!    character(len=nf), intent(in) :: fmt
+!    character(len=255) :: res
 
-    write(res, fmt ) num
-end function makeString
+!    write(res, fmt ) num
+!end function makeString
 
 
 !*************************************************************************************
@@ -1305,7 +1309,7 @@ subroutine INTER24 (RFAL, PINT, LAI, SAI, FRINTL, FRINTS, CINTRL, CINTRS, DURATN
 end subroutine INTER24
 
 subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, &
-     Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN, pr)
+     Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN)
 ! subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, SWATI, &
 !      Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN)
     IMPLICIT NONE
@@ -1330,7 +1334,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                            ! SWATMX(i)
     real(kind=8) :: DPSIMX    ! maximum potential difference considered
                            ! "equal", kPa
-    logical(kind=1) :: pr  ! write output_log file?
+
 !     output
     real(kind=8) :: DTINEW    ! second estimate of DTI
 !     local
@@ -1375,10 +1379,10 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
 
-                    if (pr) then
-                        call realpr('xxx i=, th=, thr=, netflow=, thick=, K=, Psi=', -1, &
-                            (/real(j,8),th,thr,NTFLI(j),Thick(j),K,PSI/), 7)
-                    end if
+!                    if (pr) then
+!                        call realpr('xxx i=, th=, thr=, netflow=, thick=, K=, Psi=', -1, &
+!                            (/real(j,8),th,thr,NTFLI(j),Thick(j),K,PSI/), 7)
+!                    end if
 21              continue
                 DTINEW=DTIMIN
                 TRANI(i)=0
@@ -1395,10 +1399,10 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
 
-                    if (pr) then
-                        call realpr('xxx i=, th=, netflow=, thick=, K=, Psi=', -1, &
-                            (/real(j,8),th,NTFLI(j),Thick(j),K,PSI/), 6)
-                    end if
+!                    if (pr) then
+!                        call realpr('xxx i=, th=, netflow=, thick=, K=, Psi=', -1, &
+!                            (/real(j,8),th,NTFLI(j),Thick(j),K,PSI/), 6)
+!                    end if
 22              continue
                 DTINEW=DTIMIN
                 TRANI(i)=0
@@ -1890,7 +1894,7 @@ subroutine SNOWPACK (RTHR, STHR, PSNVP, SNOEN, CC, SNOW, SNOWLQ, DTP, TA, MAXLQF
 end subroutine SNOWPACK
 
 subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
-    PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, pr, error)
+    PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, error)
 !       calculated soil water parameters and initial variables
     IMPLICIT NONE
 !       input
@@ -1910,7 +1914,6 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: PSICR     ! minimum plant leaf water potential, MPa
     integer :: iModel    ! parameterization of hydraulic functions
     real(kind=8) :: Par(MPar,ML)  ! parameter array
-    logical(kind=1) :: pr
 !       output
     real(kind=8) :: PSIG(*)   ! gravity potential, kPa
     real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
@@ -1921,7 +1924,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: WETNES(*) ! wetness, fraction of saturation
     real(kind=8) :: SWATI(*)  ! water volume in layer, mm
     real(kind=8) :: KSAT      ! saturated hydraulic conductivity, mm/d
-    logical(kind=1) :: error          ! if the program need to be stopped, 1 = yes
+    integer :: error          ! error code (default 0)
 !       function
 !         real(kind=8) :: FWETK, FPSIM, FWETNES, FTHETA
 !       local
@@ -1929,8 +1932,6 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
 !       intrinsic
     real(kind=8) :: PSIINF(NLAYER)
 !          potential at dry end of near saturation range, kPa
-
-    error = .FALSE.
 
     DO 100 I = 1, NLAYER
 !           gravity potential is negative down from surface
@@ -1958,7 +1959,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             IF (PSIM(I) .GT. 0.0d0) THEN
                 !print*, 'matrix psi must be negative or zero'
                 call intpr("matrix psi must be negative or zero", -1, 1, 0)
-                error = .TRUE.
+                error = 1
                 return
             ELSEIF (PSIM(I) .EQ. 0.0d0) THEN
                 WETNES(I) = 1.0d0
@@ -1977,9 +1978,9 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
         end if
 
         if (imodel .eq. 1) then
-            Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel, pr)
+            Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel)
             if ( Par(5,i) == -99999.d0 ) then
-                error = .TRUE.
+                error = 2  !Warning: failed to determine Wetnes at KF  
                 return
             end if
             Par(4,i)=FPSIM(Par(5,i),Par(1,i),iModel)
@@ -1991,7 +1992,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             IF (PSIM(I) .GT. 0.) THEN
                 call intpr("matrix psi must be negative or zero", -1, 1, 0)
                 !print*, 'matrix psi must be negative or zero'
-                error = .TRUE.
+                error = 1
                 return
             ELSE
                 WETNES(I) =FWETNES(PSIM(i),Par(1,i),iModel)
@@ -2011,7 +2012,7 @@ subroutine SOILVAR (NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
     integer :: MPAR,ML   ! maximum number of parameters and layers
     real(kind=8) :: PSIG(*)   ! gravity potential, kPa
     real(kind=8) :: PSIM(*)   ! matric soil water potential for layer, kPa
-    real(kind=8) :: WETNES(*) ! wetness, fraction of saturation
+    real(kind=8) :: WETNES(*) ! wetness, fraction of saturation.
 !     real(kind=8) :: THSAT     ! theta at saturation, matrix porosity
     real(kind=8) :: KF        ! hydraulic conductivity at field capacity, mm/d
     real(kind=8) :: BEXP      ! exponent for psi-theta relation
@@ -3060,12 +3061,11 @@ function FUNC3 (DEC, L2, L1, T3, T2)
 
 end function FUNC3
 
-function FWETK (K, Par, iModel, pr)
+function FWETK (K, Par, iModel)
 !     wetness from conductivity solved iteratively by Newton method
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
-    logical(kind=1) :: pr !write output_log file?, if
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation
@@ -3085,14 +3085,15 @@ function FWETK (K, Par, iModel, pr)
     real(kind=8) :: WetNew
     real(kind=8) :: KOld
     real(kind=8) :: KNew
-    integer :: It, Itk, ItMax, ItKonv ! number of iterations, maximum of that
+    integer :: It, ItMax !, Itk, ItKonv ! number of iterations, maximum of that
     real(kind=8) :: Eps      ! precision of solution
     real(kind=8) :: DeltaS   ! relative difference for numerical differentiation
     real(kind=8) :: dKdS1, dKdS2, Konver
     real(kind=8) :: b0,b1,b2,b3
 
-    parameter (ItKonv = 1000, ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
-
+!    parameter (ItKonv = 1000, ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
+     parameter (ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
+     
     FWETK = 0.0d0
 
     if(iModel .eq. 0) then
@@ -3104,7 +3105,7 @@ function FWETK (K, Par, iModel, pr)
 
     if(iModel .eq. 1) then
 
-        Itk=0 ! VT 2019.11.29 To limit number of iteration for convergence
+!        Itk=0 ! VT 2019.11.29 To limit number of iteration for convergence
 
 5       WetStart=0.50d0
         WetOld=WetStart
@@ -3127,17 +3128,14 @@ function FWETK (K, Par, iModel, pr)
         end if
 
         if(Konver .gt. 1.0d0) then
+!            if ( pr ) call intpr("FWETK: no convergence found, trying next iteration!", -1, 1, 0)
 
-            if ( pr ) call intpr("FWETK: no convergence found, trying next iteration!", -1, 1, 0)
-
-            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in original program
-                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 1, 0)
-                FWETK = -99999.d0
-                return
-            end if
-
-            Itk=Itk+1
-
+!            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in !original program
+!                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 1, 0)
+!                FWETK = -99999.d0
+!                return
+!            end if
+!            Itk=Itk+1
             K=K/2.0d0
             goto 5
 !               stop
@@ -3151,7 +3149,7 @@ function FWETK (K, Par, iModel, pr)
         if(dKdS1 .ne. 0.0d0) then
             WetNew=WetOld-KOld/dKdS1
         else
-            if ( pr ) call intpr("FWETK: slope is zero, stopping programm!", -1, 1, 0)
+!            if ( pr ) call intpr("FWETK: slope is zero, stopping programm!", -1, 1, 0)
             FWETK = -99999.d0
             return
         end if
@@ -3161,7 +3159,7 @@ function FWETK (K, Par, iModel, pr)
         It=It+1
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
         if(It .eq. ItMax) then
-            if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1, 1, 0)
+!            if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1, 1, 0)
             K=K/2.0d0
             Goto 5
 !              stop
