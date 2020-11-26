@@ -42,7 +42,7 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
 }
 
 static const R_CallMethodDef CallEntries[] = {
-  {"s_brook90_c",   (DL_FUNC) &s_brook90_c,   9},
+  {"s_brook90_c",   (DL_FUNC) &s_brook90_c,   10},
   {NULL,         NULL,                0}
 };
 
