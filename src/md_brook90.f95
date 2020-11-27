@@ -1930,6 +1930,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     integer :: iModel    ! parameterization of hydraulic functions
     real(kind=8) :: Par(MPar,ML)  ! parameter array
     logical(kind=1) :: pr     ! print messages to console?
+    logical(kind=1) :: timer     ! check timelimits set by R-user?
 !       output
     real(kind=8) :: PSIG(*)   ! gravity potential, kPa
     real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
@@ -1994,10 +1995,10 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
         end if
 
         if (imodel .eq. 1) then
-            Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel, pr)
+            Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel, pr, timer)
             if ( Par(5,i) == -99999.d0 ) then
                 call labelpr('Warning: FWETK failed to determine wetness at KF',-1)
-                error = 2 !Warning: FWETK failed to determine wetness at KF
+                error = 2 !STOP: FWETK failed to determine wetness at KF
                 return
             end if
             Par(4,i)=FPSIM(Par(5,i),Par(1,i),iModel)
@@ -3078,12 +3079,13 @@ function FUNC3 (DEC, L2, L1, T3, T2)
 
 end function FUNC3
 
-function FWETK (K, Par, iModel, pr)
+function FWETK (K, Par, iModel, pr, timer)
 !     wetness from conductivity solved iteratively by Newton method
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
-    logical(kind=1) :: pr ! print messages?
+    logical(kind=1) :: pr ! print messages flag
+    logical(kind=1) :: timer ! Check-Flag for timelimits set by user
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation
@@ -3147,7 +3149,7 @@ function FWETK (K, Par, iModel, pr)
 
         if(Konver .gt. 1.0d0) then
             if ( pr ) call labelpr("FWETK: no convergence found, trying next iteration!", -1)
-
+            if ( timer ) call rchkusr()
 !            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in !original program
 !                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 1, 0)
 !                FWETK = -99999.d0
@@ -3178,6 +3180,7 @@ function FWETK (K, Par, iModel, pr)
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
         if(It .eq. ItMax) then
             if ( pr ) call labelpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1)
+            if ( timer ) call rchkusr()
             K=K/2.0d0
             Goto 5
 !              stop

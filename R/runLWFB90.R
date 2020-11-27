@@ -378,7 +378,7 @@ chk_errors <- function(){
     if (simout$error_code != 0L) {
       if (simout$error_code == 1L) stop("Simulation terminated abnormally: 'initial matrix psi > 0'
                                         (rerun with verbose = TRUE to see more information)")
-      if (simout$error_code == 2L) warning("Simulation initialazation failed: 'FWETK failed to determine wetness at KF'
+      if (simout$error_code == 2L) stop("Simulation initialazation failed: 'FWETK failed to determine wetness at KF'
                                            (rerun with verbose = TRUE  to see more information)")
       if (simout$error_code == 3L) stop("Simulation terminated abnormally: 'inconsistent dates in climate!'
                                         (rerun with verbose = TRUE  to see more information)")
