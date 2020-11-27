@@ -10,7 +10,7 @@ Authors@R: c(person("Paul", "Schmidt-Walter", , "paul.schmidt-walter@nw-fva.de",
 Description: The LWFBrook90R package simulates water fluxes, soil moisture and drought stress using the 
     LWF-Brook90 hydrological model. Different functions provide for convenient simulation set-up and model execution.
     Additional functions allow for parallelization of multiple simulations.
-Depends: R (>= 3.1.0)
+Depends: R (>= 4.0.0)
 Imports:
     methods,
     sirad,

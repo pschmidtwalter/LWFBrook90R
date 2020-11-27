@@ -84,7 +84,7 @@ lai_coupmodel <- MakeSeasLAI(method = "Coupmodel",
                              shape.budburst = 0.5,
                              shape.leaffall = 5)
 
-plot(lai_b90, type = "n", xlab = "doy", ylab = "lai [mÂ²/mÂ²]", ylim = c(0,6))
+plot(lai_b90, type = "n", xlab = "doy", ylab = "lai [m²/m²]", ylim = c(0,6))
 lines(lai_b90, col ="green",lwd = 2,)
 lines(lai_linear, col ="red",lwd = 2)
 lines(lai_coupmodel, col ="blue",lwd = 2)
@@ -101,6 +101,6 @@ lai <- MakeSeasLAI(method = "Coupmodel",
                    shape.optdoy =c(210,180,240) )
 
 dates <- seq.Date(as.Date("2001-01-01"), as.Date("2003-12-31"), by = "day")
-plot(dates,lai, col = "green", ylab = "lai [mÂ²/mÂ²]",
+plot(dates,lai, col = "green", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)
 }

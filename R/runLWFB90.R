@@ -25,11 +25,10 @@
 #' @param rtrn.output Logical: return the simulation results?
 #' @param chk.input Logical wether to check param.b90, options.b90, climate, precip, and soil
 #' for completeness and consistency.
-#' @param output.log Logical or file name wether to print runtime output, or redirect runtime output to a file.
 #' @param run Logical: run LWF-Brook90 or only return model input objects?
 #' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
 #' @param timelimit Integer to set elapsed time limits for running LWF-Brook90.
-#' @param verbose Logical: print messages to the console? Default is TRUE.
+#' @param verbose Logical: print messages to the console? Default is FALSE.
 #' @param ... Additional arguments passed to \code{output_fun}.
 #'
 #' @return A list containing the selected model output, the model input (except for \code{climate}) if desired,
@@ -122,20 +121,18 @@ runLWFB90 <- function(options.b90,
                       rtrn.input = TRUE,
                       rtrn.output = TRUE,
                       chk.input = TRUE,
-                      output.log = TRUE,
                       run = TRUE,
                       timelimit = Inf,
                       verbose = TRUE,
                       ...) {
 
 
-  # input checks ----------------------#' @param timelimit Integer to set elapsed time limits for running LWF-Brook90--------------------------------------
+  # input checks ----------------------#'
   if (chk.input) {
     chk_options()
     chk_param()
     chk_clim()
     chk_soil()
-    #chk_obs()
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -259,9 +256,11 @@ runLWFB90 <- function(options.b90,
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
       soil_nodes = param.b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
-      output_log = output.log,
+      output_log = verbose,
       timelimit = timelimit
     )
+
+    chk_errors() # check for simulation errors----------------------------------
 
     finishing_time <- Sys.time()
     simtime <- finishing_time - start
@@ -295,7 +294,6 @@ runLWFB90 <- function(options.b90,
                                                      simout$layer_output$doy,
                                                      simout$layer_output$nl),]
 
-
     # ---- initialize return value ---------------------------------------------------------------
     simres <- list(simulation_duration = simtime,
                    finishing_time = finishing_time)
@@ -308,7 +306,7 @@ runLWFB90 <- function(options.b90,
 
 
     # ---- append simulation results  -------------------------------------------------------
-    # either raw output or only dataset selections
+    # either raw output or only data set selections
     if (is.matrix(output) & all(dim(output) == c(7,5))) {
       simres <- c(simres, process_outputs(simout, output))
     } else {
@@ -374,9 +372,33 @@ runLWFB90 <- function(options.b90,
   return(simres)
 }
 
+# check for errors -------------------------------------------------------------
+chk_errors <- function(){
+  eval.parent(quote({
+    if (simout$error_code != 0L) {
+      if (simout$error_code == 1L) stop("Simulation terminated abnormally: 'initial matrix psi > 0'
+                                        (rerun with verbose = TRUE to see more information)")
+      if (simout$error_code == 2L) warning("Simulation initialazation failed: 'FWETK failed to determine wetness at KF'
+                                           (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 3L) stop("Simulation terminated abnormally: 'inconsistent dates in climate!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 4L) stop("Simulation terminated abnormally: 'inconsistent dates in precipitation input!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 5L) stop("Simulation terminated abnormally: 'wrong precipitation interval input!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 6L) stop("Simulation terminated abnormally: 'negative soil water storage!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 7L) stop("Simulation terminated abnormally: 'water storage exceeds water capacity!'
+                                        (rerun with verbose = TRUE  to see more information)")
+    }
+  }))
+
+}
+
+## check-functions for input ---------------------------------------------------
 
 chk_options <- function(){
-  eval.parent(quote({
+  eval.parent(quote({ # manipulate the calling environment
     names(options.b90) <- tolower(names(options.b90))
 
     stopifnot(all(names(options.b90) %in% c("startdate","enddate","fornetrad","prec.interval",
@@ -402,10 +424,8 @@ chk_options <- function(){
   }))
 }
 
-## check-functions for input
-
 chk_param <- function() {
-  eval.parent(quote({
+  eval.parent(quote({ # manipulate the calling environment
     names(param.b90) <- tolower(names(param.b90))
     nms <- c("maxlai","sai","sai.ini","height","height.ini","densef",
              "densef.ini","age.ini","winlaifrac","budburst.species","budburstdoy",
@@ -436,7 +456,7 @@ chk_param <- function() {
 
 chk_clim <- function() {
 
-  eval.parent(quote({ # manipualte the calling environment
+  eval.parent(quote({
 
     # climate name checks
     names(climate) <- tolower(names(climate))
@@ -557,7 +577,7 @@ chk_soil <- function(){
 
 }
 
-
+# output processing ------------------------------------------------------------
 process_outputs <- function(simout, output) {
 
   # to pass CRAN check notes
@@ -581,7 +601,6 @@ process_outputs <- function(simout, output) {
     Swat <- simout$layer_output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
   if (any(selection == "Misc")){
     Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
-
 
   moutputs <- list() # results collection
 
@@ -725,8 +744,3 @@ process_outputs <- function(simout, output) {
 
   return(moutputs)
 }
-
-
-
-
-

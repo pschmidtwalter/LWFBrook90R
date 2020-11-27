@@ -15,8 +15,8 @@ runLWFB90(
   rtrn.input = TRUE,
   rtrn.output = TRUE,
   chk.input = TRUE,
-  output.log = TRUE,
   run = TRUE,
+  timelimit = Inf,
   verbose = TRUE,
   ...
 )
@@ -54,12 +54,12 @@ properties ('standprop_daily', as derived from parameters) to the result?}
 \item{chk.input}{Logical wether to check param.b90, options.b90, climate, precip, and soil
 for completeness and consistency.}
 
-\item{output.log}{Logical or file name wether to print runtime output, or redirect runtime output to a file.}
-
 \item{run}{Logical: run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
-\item{verbose}{Logical: print messages to the console? Default is TRUE.}
+\item{timelimit}{Integer to set elapsed time limits for running LWF-Brook90.}
+
+\item{verbose}{Logical: print messages to the console? Default is FALSE.}
 
 \item{...}{Additional arguments passed to \code{output_fun}.}
 }
