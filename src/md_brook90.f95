@@ -31,7 +31,7 @@ module fbrook_mod
 contains
 
 subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, &
-                     pr, error, output_day, output_layer) bind(C, name="s_brook90_f_")
+                     pr, timer, error, output_day, output_layer) bind(C, name="s_brook90_f_")
 
     implicit none
 
@@ -50,6 +50,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     ! Printing
     logical(kind=c_bool), intent(in) :: pr
+
+    ! Check execution time
+    logical(kind=c_bool), intent(in) :: timer
 
     ! Error-code
     integer(kind=c_int), intent(inout) :: error
@@ -104,6 +107,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, pr, error)
     if ( error .ne. 0 ) go to 999 
 
+    ! Check for timelimits set by R-user
+    if (timer) call rchkusr()
+    
     ! more initial soil water variables
     CALL SOILVAR(NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
         PSITI, THETA, KK, SWAT, MPar, ML)
@@ -153,6 +159,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             INCLUDE 'LEAP.h'
         END IF
 
+        ! Check for timelimits set by R-user
+        if (timer) call rchkusr()
+        
 !       * * I N P U T   W E A T H E R   L I N E   F R O M   D F I L E . D A T * *
 !       next line can be modified for different input formats
         YY = INT( climveg( IDAY, 1) )
@@ -406,7 +415,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             !        *  *  *  *  *  *  B E G I N   I T E R A T I O N   *  *  *  *  *  *  *
             
             ! Check for timelimits set by R-user
-            CALL rchkusr()
+            if (timer) call rchkusr()
             
 101         CONTINUE
 !         write(10,*)'begin iteration'

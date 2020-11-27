@@ -103,7 +103,7 @@ b90.multi <- mrunLWFB90(paramvar = vary_parms,
                         param.b90 = param.b90,
                         options.b90 = options.b90,
                         climate = slb1_meteo,
-                        output.log = FALSE, verbose = FALSE)
+                        verbose = FALSE)
 names(b90.multi)
 
 # extract results: EVAPDAY.ASC

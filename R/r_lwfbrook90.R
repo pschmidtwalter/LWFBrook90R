@@ -56,6 +56,7 @@ r_lwfbrook90 <- function(
     soil_nodes = as.matrix(soil_nodes, ncol = 6),
     precdat = as.matrix(precdat, ncol = 6),
     pr = output_log,
+    timer = !is.infinite(timelimit),
     n_m = as.integer(param[1]),
     n_l = as.integer(param[65])
     )
