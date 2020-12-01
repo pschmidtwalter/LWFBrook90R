@@ -17,7 +17,7 @@ runLWFB90(
   chk.input = TRUE,
   run = TRUE,
   timelimit = Inf,
-  verbose = TRUE,
+  verbose = FALSE,
   ...
 )
 }
@@ -117,6 +117,7 @@ rfal \tab rainfall \tab mm \cr
 rint \tab rain interception \tab mm \cr
 rnet \tab rainfall to soil surface \tab mm \cr
 rsno \tab rain on snow \tab mm \cr
+rthr \tab rain throughfall rate \tab mm \cr
 safrac \tab source area fraction \tab - \cr
 seep \tab seepage loss \tab mm \cr
 sfal \tab snowfall \tab mm \cr

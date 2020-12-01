@@ -75,6 +75,7 @@
 #' rint \tab rain interception \tab mm \cr
 #' rnet \tab rainfall to soil surface \tab mm \cr
 #' rsno \tab rain on snow \tab mm \cr
+#' rthr \tab rain throughfall rate \tab mm \cr
 #' safrac \tab source area fraction \tab - \cr
 #' seep \tab seepage loss \tab mm \cr
 #' sfal \tab snowfall \tab mm \cr
@@ -123,7 +124,7 @@ runLWFB90 <- function(options.b90,
                       chk.input = TRUE,
                       run = TRUE,
                       timelimit = Inf,
-                      verbose = TRUE,
+                      verbose = FALSE,
                       ...) {
 
 
@@ -276,7 +277,7 @@ runLWFB90 <- function(options.b90,
     # daily outputs
     simout$daily_output <- data.table::data.table(simout$daily_output)
     data.table::setnames(simout$daily_output, names(simout$daily_output),
-                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rsno',
+                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rthr','rsno',
                            'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
                            'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
                            'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
@@ -594,7 +595,7 @@ process_outputs <- function(simout, output) {
   if (any(selection == "Evap")){
     Evap <- simout$daily_output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
   if (any(selection == "Abov")){
-    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rsno","rnet","smlt","slfl","srfl")]}
+    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rthr","rsno","rnet","smlt","slfl","srfl")]}
   if (any(selection == "Belo")){
     Belo <- simout$layer_output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
   if (any(selection == "Swat")){
