@@ -6,11 +6,11 @@
 Changes:
 
 - result datasets are now returned directly by the Fortran model code, without the detour of writing
-  .ASC output text files and reading them back into workspace. This speeds up the simulations and is
-  necessary for the planned release on CRAN.
+  .ASC output text files and reading them back into workspace.
+- run time output to the console was disabled, only messages are printed.
 - `runLWFB90()`: providing output = -1 instead of an output selection matrix returns two tables with
   simulation results: general daily outputs and layer outputs. A proper description 
-  of model output variables was added to the in the help pages.
+  of model output variables was added to the help pages.
 - all column names of the .ASC output objects are now in lower case.
 - `msiterunLWFB90()`: It is now possible to provide individual `param.b90` input parameter objects for
   individual climate/soil combinations (i.e. individual locations). The option to provide a list of

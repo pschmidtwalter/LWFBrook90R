@@ -17,9 +17,10 @@
 #' @param precdat A matrix of precipitation interval data with 6 columns:
 #' year, month, day, interval-number (1:precint), prec, mesflp.
 #' @param output_log Logical whether to print runtime output to console.
-#' @param timelimit Integer to set elapsed time limits for running LWF-Brook90
+#' @param timelimit Integer to set elapsed time limits for running the model.
 #'
-#' @return A list containing the daily and soil layer model outputs (see \code{\link{runLWFB90}}.
+#' @return A list containing the daily and soil layer model outputs, along with
+#'   an error code of the simulation (see \code{\link{runLWFB90}}.
 #'
 #' @export
 #' @useDynLib LWFBrook90R

@@ -31,7 +31,7 @@
 #' @param verbose Logical: print messages to the console? Default is FALSE.
 #' @param ... Additional arguments passed to \code{output_fun}.
 #'
-#' @return A list containing the selected model output, the model input (except for \code{climate}) if desired,
+#' @return A list containing the selected model output, the model input if desired (except for \code{climate}),
 #' and the return values of \code{output_fun} if specified.
 #'
 #'@section Climate input data:
