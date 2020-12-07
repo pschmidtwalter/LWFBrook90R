@@ -1,17 +1,26 @@
 #' Functions to derive soil hydraulic properties from soil properties
 #'
-#' A set of pedotransfer functions for deriving Mualem - van Genuchten parameters from soil physical
-#' properties of soil horizons, such as soil texture, bulk density and carbon content.
+#' A set of pedotransfer functions for deriving Mualem - van Genuchten
+#' parameters from soil physical properties of soil horizons, such as soil
+#' texture, bulk density and carbon content.
 #'
 #' @param clay,silt,sand Numeric vectors of clay, silt, sand in mass \%.
+#'   Particle size ranges for clay, silt and sand correspond to <2, 2-63, and
+#'   63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle size
+#'   limit between silt and sand corresponds to 50 \eqn{\mu m}{\mum}.
 #' @param bd Numeric vector of bulk density in g cm-3.
 #' @param oc.pct Numeric vector of organic carbon content in mass \%.
-#' @param tex.KA5 Character vector of soil texture classes according to KA5. Only for \code{hydpar_wessolek_tab}.
-#' @param tex.hypres Character vector of soil texture classes according Wösten et al (1999).
-#' @param topsoil Logical: Is the sample from the topsoil? Only for \code{hydpar_hypres_tab}.
-#' @param humconv Conversion factor from oc.pct to organic matter percent. Default: 1.72. Only for \code{hydpar_hypres_tab}.
-#' @param n An integer value specifying the number of rows of the returned data.frame
-#' (i.e. the number of repetitions of the MvG-Parameter set, only for \code{hydpar_ff_hamken}).
+#' @param texture Character vector of soil texture classes. For
+#'   \code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
+#'   be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes according
+#'   to FAO (1990) have to provided.
+#' @param topsoil Logical: Is the sample from the topsoil? Used in
+#'   \code{\link{hydpar_hypres_tab}}.
+#' @param humconv Conversion factor from oc.pct to organic matter percent.
+#'   Default: 1.72. Only for \code{hydpar_hypres_tab}.
+#' @param n An integer value specifying the number of rows of the returned
+#'   data.frame (i.e. the number of repetitions of the MvG-Parameter set, only
+#'   for \code{hydpar_ff_hamken}).
 #'
 #' @return A data.frame with the following variables:
 #' \describe{
@@ -25,20 +34,27 @@
 #' }
 #'
 #' @details
-#' Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG) parameters using the regression functions developed by
-#' Puhlmann & von Wilpert (2011). The equations of Wösten et al. (1999) are available via \code{hydpar_hypres},
-#' and their tabulated values for soil texture classes can be derived using the function \code{hydpar_hypres_tab}.
-#' The table of MvG parameters from Wesselok et al. (2009; Tab. 10) is accessible by \code{hydpar_wessolek_tab}.
-#' For this function, only soil texture classes after the German texture classification system
-#' (KA5, AG Boden 2005) have to be provided. To derive hydraulic parameters of forest floor horizons,
-#' the function \code{hydpar_ff_b90} can be used. It returns the single MvG parameter set for forest
-#' floor horizons reported by Hammel & Kennel (2001) in their original LWF-Brook90 publication.
+#' Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG) parameters
+#' using the regression functions developed by Puhlmann & von Wilpert (2011).
+#' The equations of Wösten et al. (1999) are available via \code{hydpar_hypres},
+#' and their tabulated values for soil texture classes can be derived using the
+#' function \code{hydpar_hypres_tab}. The table of MvG parameters from Wesselok
+#' et al. (2009; Tab. 10) is accessible by \code{hydpar_wessolek_tab}. For this
+#' function, soil texture classes after the German texture classification system
+#' (KA5, AG Boden 2005) have to be provided. To derive hydraulic parameters of
+#' forest floor horizons, the function \code{hydpar_ff_b90} can be used. It
+#' returns the single MvG parameter set for forest floor horizons reported by
+#' Hammel & Kennel (2001) in their original LWF-Brook90 publication.
 #'
 #' @references
 #'
 #' AG Boden (2005)
 #' Bodenkundliche Kartieranleitung
 #' Schweizerbart'sche Verlagsbuchhandlung, Stuttgart
+#'
+#' Food and Agriculture Organisation (FAO) (1990)
+#' Guidelines for soil description
+#' FAO/ISRIC, Rome, 3rd edition
 #'
 #' Hammel K & Kennel M (2001)
 #' Charakterisierung und Analyse der Wasserverfügbarkeit und des Wasserhaushalts von Waldstandorten
@@ -101,10 +117,10 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
                     stringsAsFactors=F)
 
 
-  #constrains
+  #constrain OC (FAO definition for histic horizons)
   out$h <- ifelse( (out$clay >0.6 & out$h>0.18) ,0.18, out$h )
   out$h <- ifelse( (out$clay <=0.6 & out$h > (0.12+ 0.1 * out$clay) ), (0.12 + 0.1 * out$clay), out$h)
-  out$h <- out$h*humconv #humus conversion
+  out$h <- out$h*humconv # conversion from organic carbon to organic matter
 
   out$bd <- ifelse(out$bd<500, 500, out$bd)
   out$clay <- ifelse(out$clay <0.005, 0.005, out$clay)
@@ -147,34 +163,34 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
 
 #' @rdname ptfs
 #' @export
-hydpar_hypres_tab <- function(tex.hypres, topsoil){
-  if (is.null(tex.hypres) || is.null(topsoil)){
-    stop("Please provide soil texture according to hypres (C, M, MF, F, VF or Org)
-         and if the sample was taken in the topsoil or not.")
+hydpar_hypres_tab <- function(texture, topsoil){
+  if (is.null(texture) || is.null(topsoil)){
+    stop("Please provide soil texture according to FAO definition (C, M, MF, F, VF or Org)
+         and state if the sample was taken in the topsoil or not.")
   }
-  if (length(tex.hypres) != length(topsoil)) {
+  if (length(texture) != length(topsoil)) {
     stop("soil texture and bulk density must have equal lengths!")
   }
   topsoil <- as.logical(topsoil)
 
-  out <- data.frame(id = 1:length(tex.hypres),tex.hypres, topsoil,
+  out <- data.frame(id = 1:length(texture),texture, topsoil,
                     stringsAsFactors = FALSE)
-  out <- merge(out, hypres_tab4, by=c("tex.hypres","topsoil" ), all.x = T )
+  out <- merge(out, hypres_tab4, by=c("texture","topsoil" ), all.x = T )
   out$alpha <- out$alpha*100
   out[order(out$id), c("ths", "thr", "alpha","npar","mpar","ksat","tort")]
 }
 
 #' @rdname ptfs
 #' @export
-hydpar_wessolek_tab <- function(tex.KA5) {
-  if (is.null(tex.KA5)) {
+hydpar_wessolek_tab <- function(texture) {
+  if (is.null(texture)) {
     stop("Please provide the soil texture according to KA5" )
   }
-  out <- data.frame(id=seq(1,length(tex.KA5)), tex.KA5)
-  out <- merge(out, wessolek_mvg_tab10[,c("tex.KA5","ths","thr","alpha","npar","mpar","ksat","tort")],
-               by="tex.KA5", all.x = TRUE)
+  out <- data.frame(id=seq(1,length(texture)), texture)
+  out <- merge(out, wessolek_mvg_tab10[,c("texture","ths","thr","alpha","npar","mpar","ksat","tort")],
+               by="texture", all.x = TRUE)
   out$alpha <- out$alpha*100
-  out[order(out$id), -which(names(out) %in% c("tex.KA5","id"))]
+  out[order(out$id), -which(names(out) %in% c("texture","id"))]
 }
 
 #' @rdname ptfs

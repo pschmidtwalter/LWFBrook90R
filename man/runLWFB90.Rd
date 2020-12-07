@@ -64,7 +64,7 @@ Useful to inspect the effects of options and parameters on model input. Default 
 \item{...}{Additional arguments passed to \code{output_fun}.}
 }
 \value{
-A list containing the selected model output, the model input (except for \code{climate}) if desired,
+A list containing the selected model output, the model input if desired (except for \code{climate}),
 and the return values of \code{output_fun} if specified.
 }
 \description{

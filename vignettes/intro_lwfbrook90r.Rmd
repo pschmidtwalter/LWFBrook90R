@@ -56,7 +56,7 @@ The created objects can be easily manipulated by reference, or simply by assigni
 We want to run LWF-BROOK90 using the sample data from the Solling site and we need to prepare the soil dataset for LWF-BROOK90. The data.frame `slb1_soil` contains soil physical data of the soil horizons, but not yet the hydraulic parameters that LWF-BROOK90 requires. Fortunately, *LWFBrook90R* comes with a set of pedotransfer functions to derive the Mualem/van Genuchten parameters of the soil water retention and hydraulic conductivity functions. Here we use texture tabulated values from Wessolek, Renger & Kaupenjohann [-@wessolek_bodenphysikalische_2009] and create a data.frame containing the required MvG-parameters along with the soil physical data:
 
 ```{r}
-soil <- cbind(slb1_soil, hydpar_wessolek_tab(tex.KA5 = slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 ```
 
 Before we run the simulation, we need to select the output variables and their temporal resolution. Sets of output variables are chosen in a `[7,5]`-matrix, that is used as argument in `runLWFB90`. To create the matrix, you can use the function `setoutput_LWFB90`. It will create a `[7,5]`-matrix, with a default set of output selected. You can modify the selection by flagging groups of output variables with `0` and `1`. The default selection are annual, monthly and daily evapotranspiration datasets and layer by layer daily soil water state variables.

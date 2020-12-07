@@ -1,10 +1,10 @@
 options(stringsAsFactors = F)
 
 #Wessolek-MVG
-wessolek_mvg_tab10 <- read.csv("data-raw/wessolek_MVG_tab10.csv")
+wessolek_mvg_tab10 <- read.csv("data-raw/internal_data/wessolek_MVG_tab10.csv")
 wessolek_mvg_tab10$mpar <- 1-1/wessolek_mvg_tab10$n
 wessolek_mvg_tab10$ksat <- wessolek_mvg_tab10$ksat*10
-names(wessolek_mvg_tab10)[5] <- "npar"
+names(wessolek_mvg_tab10)[c(1,5)] <- c("texture", "npar")
 
 
 hydpar_forestfloor <- data.frame(ths = 0.848, thr = 0, alpha = 98, npar = 1.191,
@@ -12,8 +12,8 @@ hydpar_forestfloor <- data.frame(ths = 0.848, thr = 0, alpha = 98, npar = 1.191,
 
 
 # # hypres tab
-hypres_tab4 <- read.csv("H:/RProjects/PTF-Validierung/RESULTS1/PTF_tables&functions/HypresKlassPTF.csv", stringsAsFactor=F)
-names(hypres_tab4) <- c("tex.hypres", "topsoil", "ths", "thr", "alpha", "npar","mpar","ksat", "tort")
+hypres_tab4 <- read.csv("data-raw/internal_data/HypresKlassPTF.csv", stringsAsFactor=F)
+names(hypres_tab4) <- c("texture", "topsoil", "ths", "thr", "alpha", "npar","mpar","ksat", "tort")
 hypres_tab4$topsoil <- as.logical(hypres_tab4$topsoil)
 hypres_tab4 <- rbind(hypres_tab4, hypres_tab4[hypres_tab4$tex.hypres=="Org",])
 hypres_tab4$topsoil[11] <- TRUE
@@ -65,7 +65,7 @@ paramvar <- data.frame(maxlai = runif(N, 4,7),
 
 mrun_res <- mrunLWFB90(paramvar = paramvar,
                        param.b90 = param.b90,
-                       cores = 3,
+                       cores = 5,
                        options.b90 = options.b90, # the following args are passed to runLWFB90
                        climate = slb1_meteo,
                        soil = soil,
@@ -76,8 +76,6 @@ mrun_res <- mrunLWFB90(paramvar = paramvar,
 
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]),
                      idcol = "singlerun")
-
-
 
 
 #speichert den Dataframe als internes Objekt, welches nicht exportiert wird. ANsprechen mit brook90r:::wess_mvg_tex

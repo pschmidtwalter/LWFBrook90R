@@ -40,10 +40,11 @@ year, month, day, interval-number (1:precint), prec, mesflp.}
 
 \item{output_log}{Logical whether to print runtime output to console.}
 
-\item{timelimit}{Integer to set elapsed time limits for running LWF-Brook90}
+\item{timelimit}{Integer to set elapsed time limits for running the model.}
 }
 \value{
-A list containing the daily and soil layer model outputs (see \code{\link{runLWFB90}}.
+A list containing the daily and soil layer model outputs, along with
+  an error code of the simulation (see \code{\link{runLWFB90}}.
 }
 \description{
 Passes input data matrices to the Fortran model code and returns the results

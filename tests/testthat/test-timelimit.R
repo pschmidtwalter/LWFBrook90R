@@ -6,7 +6,7 @@ data("slb1_meteo")
 options.b90 <- setoptions_LWFB90(startdate = as.Date("1990-01-01"))
 param.b90 <- setparam_LWFB90()
 
-soil <- cbind(slb1_soil, hydpar_wessolek_tab(tex.KA5 = slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 
 test_that("timelimit works",{
 expect_error(runLWFB90(options.b90 = options.b90,
