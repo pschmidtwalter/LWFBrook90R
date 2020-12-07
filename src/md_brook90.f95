@@ -525,10 +525,6 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                     THS=Par(1,i)
                     THR=Par(10,i)
                     WETNES(I) = (THS * SWATI(I) / SWATMX(I) -THR) / (THS - THR)
-!       Strange behaviour under LINUX -> WETNES can be 1.00002, which is not allowed!
-                    if( WETNES(I) .gt. 1.0d0 ) then
-                        WETNES(I) = 1.0d0
-                    end if
                 end if
                 PSIM(I) = FPSIM(WETNES(I),Par(1,i),iModel)
 91          CONTINUE
@@ -2919,6 +2915,7 @@ function FK (Wetnes, Par, iModel)
         MVGN=Par(8)
         A=Par(9)
         AWET=MAX(WETNES,TINY)
+        AWET=MIN(WETNES,1.0d0)
         FK =KS*AWET**A*(1.0d0-(1.0d0-AWET**(MVGN/(MVGN-1.0d0)))** (1.0d0-1.0d0/MVGN))**2
 !        write(10,*) FK,AWET,log(FK)
     end if
@@ -2979,6 +2976,7 @@ function FPSIM (WETNES, Par, iModel)
         MVGN=Par(8)
         MVGM=1.0d0-1.0d0/MVGN;
         AWET=MAX(WETNES,TINY)
+        AWET=MIN(WETNES,1.0d0)
         FPSIM = (-1.0d0/ALFA)*(AWET**(-1.0d0/MVGM)-1)**(1.0d0/MVGN)
         FPSIM = FPSIM * 9.810d0  ! conversion from m to kPa
     end if

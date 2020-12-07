@@ -311,7 +311,7 @@ runLWFB90 <- function(options.b90,
     if (is.matrix(output) & all(dim(output) == c(7,5))) {
       simres <- c(simres, process_outputs(simout, output))
     } else {
-      simres[names(simout)] <- simout
+      simres[names(simout)[-1]] <- simout[-1]
     }
 
     # ---- apply functions on simulation output -------------------------------
@@ -334,7 +334,7 @@ runLWFB90 <- function(options.b90,
 
       # TODO: simres is copied for use in each output_fun.
       # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
-      # instead of adressing the whole list x.
+      # instead of addressing the whole list x.
       simres$output_fun <- tryCatch( {
 
         Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))
@@ -351,14 +351,12 @@ runLWFB90 <- function(options.b90,
       } else {
         simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
       }
-
-      # remove the model_input if not required
-      if (!rtrn.input) {
-        simres <- simres[-which(names(simres) == "model_input")]
-      }
-
     }
 
+    # remove the model_input if not required
+    if (!rtrn.input) {
+      simres <- simres[-which(names(simres) == "model_input")]
+    }
 
   } else {
     # 'dry' run = FALSE -> always return model input
@@ -391,6 +389,7 @@ chk_errors <- function(){
                                         (rerun with verbose = TRUE  to see more information)")
       if (simout$error_code == 7L) stop("Simulation terminated abnormally: 'water storage exceeds water capacity!'
                                         (rerun with verbose = TRUE  to see more information)")
+
     }
   }))
 
