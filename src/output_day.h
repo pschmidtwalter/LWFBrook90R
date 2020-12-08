@@ -11,32 +11,33 @@ output_day( IDAY, 5) = RFALD
 output_day( IDAY, 6) = RINTD
 output_day( IDAY, 7) = SFALD
 output_day( IDAY, 8) = SINTD
-output_day( IDAY, 9) = RSNOD
-output_day( IDAY, 10) = RNETD
-output_day( IDAY, 11) = SMLTD
+output_day( IDAY, 9) = RTHRD
+output_day( IDAY, 10) = RSNOD
+output_day( IDAY, 11) = RNETD
+output_day( IDAY, 12) = SMLTD
 
-output_day( IDAY, 12) = SNOW
-output_day( IDAY, 13) = SWAT
-output_day( IDAY, 14) = GWAT
-output_day( IDAY, 15) = INTR
-output_day( IDAY, 16) = INTS
-output_day( IDAY, 17) = EVAPD
-output_day( IDAY, 18) = TRAND
-output_day( IDAY, 19) = IRVPD
-output_day( IDAY, 20) = ISVPD
-output_day( IDAY, 21) = SLVPD
-output_day( IDAY, 22) = SNVPD
-output_day( IDAY, 23) = PINTD
-output_day( IDAY, 24) = PTRAND
-output_day( IDAY, 25) = PSLVPD
-output_day( IDAY, 26) = FLOWD
-output_day( IDAY, 27) = SEEPD
-output_day( IDAY, 28) = SRFLD
-output_day( IDAY, 29) = SLFLD
-output_day( IDAY, 30) = BYFLD
-output_day( IDAY, 31) = DSFLD
-output_day( IDAY, 32) = GWFLD
-output_day( IDAY, 33) = VRFLDI(NLAYER)
+output_day( IDAY, 13) = SNOW
+output_day( IDAY, 14) = SWAT
+output_day( IDAY, 15) = GWAT
+output_day( IDAY, 16) = INTR
+output_day( IDAY, 17) = INTS
+output_day( IDAY, 18) = EVAPD
+output_day( IDAY, 19) = TRAND
+output_day( IDAY, 20) = IRVPD
+output_day( IDAY, 21) = ISVPD
+output_day( IDAY, 22) = SLVPD
+output_day( IDAY, 23) = SNVPD
+output_day( IDAY, 24) = PINTD
+output_day( IDAY, 25) = PTRAND
+output_day( IDAY, 26) = PSLVPD
+output_day( IDAY, 27) = FLOWD
+output_day( IDAY, 28) = SEEPD
+output_day( IDAY, 29) = SRFLD
+output_day( IDAY, 30) = SLFLD
+output_day( IDAY, 31) = BYFLD
+output_day( IDAY, 32) = DSFLD
+output_day( IDAY, 33) = GWFLD
+output_day( IDAY, 34) = VRFLDI(NLAYER)
 
 
 IF (SRFLD + SLFLD .GT. 0.d0) THEN
@@ -96,10 +97,10 @@ END IF
 
 RELAWAT = AWAT / AWATFK
 
-output_day( IDAY, 34) = SAFRAC
-output_day( IDAY, 35) = STRES
-output_day( IDAY, 36) = Eta
-output_day( IDAY, 37) = AWAT
-output_day( IDAY, 38) = RELAWAT
-output_day( IDAY, 39) = NITSD
-output_day( IDAY, 40) = BALERD
+output_day( IDAY, 35) = SAFRAC
+output_day( IDAY, 36) = STRES
+output_day( IDAY, 37) = Eta
+output_day( IDAY, 38) = AWAT
+output_day( IDAY, 39) = RELAWAT
+output_day( IDAY, 40) = NITSD
+output_day( IDAY, 41) = BALERD

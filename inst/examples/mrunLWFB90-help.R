@@ -29,8 +29,7 @@ param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 b90.multi <- mrunLWFB90(paramvar = vary_parms,
                         param.b90 = param.b90,
                         options.b90 = options.b90,
-                        climate = slb1_meteo,
-                        output.log = FALSE, verbose = FALSE)
+                        climate = slb1_meteo)
 names(b90.multi)
 
 # extract results: EVAPDAY.ASC

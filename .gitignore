@@ -8,6 +8,7 @@ src/*.dll
 src/*.mod
 vignettes/*.R
 vignettes/*.html
+*.Rproj
 dev/
 # Mac?
 *.DS_Store

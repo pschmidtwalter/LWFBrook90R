@@ -24,9 +24,10 @@
 #' @param precdat A matrix of precipitation interval data with 6 columns: year,
 #'   month, day, interval-number (1:precint), prec, mesflp.
 #' @param output_log Logical whether to print runtime output to console.
+#' @param timelimit Integer to set elapsed time limits for running the model.
 #'
-#' @return A list containing the daily and soil layer model outputs (see
-#'   \code{\link{runLWFB90}}.
+#' @return A list containing the daily and soil layer model outputs, along with
+#'   an error code of the simulation (see \code{\link{runLWFB90}}.
 #'
 #' @export
 #' @useDynLib LWFBrook90R
@@ -39,13 +40,18 @@ r_lwfbrook90 <- function(
   soil_materials,
   soil_nodes,
   precdat = NULL,
-  output_log = TRUE
+  output_log = TRUE,
+  timelimit  = Inf
   ){
 
   # make a matrix of precipitation input data
   if ( is.null(precdat) ){
     precdat <- matrix(-999, nrow = param[1] * siteparam[[6]], ncol = 6)
   }
+
+  # set timeout
+  setTimeLimit(elapsed = timelimit)
+  on.exit(setTimeLimit(elapsed = Inf), add = TRUE)
 
   # Run the model
   out <- .Call(
@@ -58,11 +64,12 @@ r_lwfbrook90 <- function(
     soil_nodes = as.matrix(soil_nodes, ncol = 6),
     precdat = as.matrix(precdat, ncol = 6),
     pr = output_log,
+    timer = !is.infinite(timelimit),
     n_m = as.integer(param[1]),
     n_l = as.integer(param[65])
     )
 
-  return( list( daily_output = out[[1]], layer_output = out[[2]]) )
+  return( list(error_code = out[[1]], daily_output = out[[2]], layer_output = out[[3]]) )
 }
 
 .onUnload <- function(libpath) {

@@ -3,48 +3,36 @@
 #'Sets up the input objects for the LWF-Brook90 hydrological model, starts the
 #'model, and returns the selected results.
 #'
-#'@param options.b90 Named list of model control options. Use
-#'  \code{\link{setoptions_LWFB90}} to generate a list with default model
-#'  control options.
-#'@param param.b90 Named list of model input parameters. Use
-#'  \code{\link{setparam_LWFB90}} to generate a list with default model
-#'  parameters.
-#'@param climate Data.frame with daily climate data. See details for the
-#'  required variables.
-#'@param precip Data.frame with columns 'dates' and 'prec' to supply
-#'  precipitation data separately from climate data. Can be used to provide
-#'  sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-#'  1 (daily resolution) to 240 values of precipitation can be provided, with
-#'  the number of values per day defined in \code{options.b90$prec.interval}.
-#'@param soil Data.frame containing the hydraulic properties of the soil layers.
-#'  See section 'Soil parameters'
-#'@param output A [7,5]-matrix flagging the desired model output datasets at
-#'  different time intervals. Use \code{\link{setoutput_LWFB90}} to generate and
-#'  edit a default output selection matrix. Alternatively, use -1 (the default)
-#'  to return the raw daily and soil layer outputs.
-#'@param output_fun A function or a list of functions to be performed on the
-#'  output objects selected by \code{output}. Can be used to aggregate output or
-#'  calculate goodness of fit measures on-the-fly, or to write results instantly
-#'  to a file or database. Useful if the function is evaluated within a large
-#'  multi-run application, which might overload the memory. (see
-#'  \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
-#'@param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and daily
-#'  plant properties ('standprop_daily', as derived from parameters) to the
-#'  result?
-#'@param rtrn.output Logical: return the simulation results?
-#'@param chk.input Logical wether to check param.b90, options.b90, climate,
-#'  precip, and soil for completeness and consistency.
-#'@param output.log Logical or file name wether to print runtime output, or
-#'  redirect runtime output to a file.
-#'@param run Logical: run LWF-Brook90 or only return model input objects? Useful
-#'  to inspect the effects of options and parameters on model input. Default is
-#'  TRUE.
-#'@param verbose Logical: print messages to the console? Default is TRUE.
-#'@param ... Additional arguments passed to \code{output_fun}.
+#' @param options.b90 Named list of model control options. Use
+#' \code{\link{setoptions_LWFB90}} to generate a list with default model control options.
+#' @param param.b90 Named list of model input parameters. Use
+#' \code{\link{setparam_LWFB90}} to generate a list with default model parameters.
+#' @param climate Data.frame with daily climate data. See details for the required variables.
+#' @param precip Data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+#' Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+#' 1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
+#' per day defined in \code{options.b90$prec.interval}.
+#' @param soil Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'
+#' @param output A [7,5]-matrix flagging the desired model output datasets at different time intervals. Use
+#' \code{\link{setoutput_LWFB90}} to generate and edit a default output selection matrix. Alternatively,
+#' use -1 (the default) to return the raw daily and soil layer outputs.
+#' @param output_fun A function or a list of functions to be performed on the output objects selected by \code{output}.
+#' Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
+#' Useful if the function is evaluated within a large multi-run application, which might overload the memory.
+#' (see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
+#' @param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
+#' properties ('standprop_daily', as derived from parameters) to the result?
+#' @param rtrn.output Logical: return the simulation results?
+#' @param chk.input Logical wether to check param.b90, options.b90, climate, precip, and soil
+#' for completeness and consistency.
+#' @param run Logical: run LWF-Brook90 or only return model input objects?
+#' Useful to inspect the effects of options and parameters on model input. Default is TRUE.
+#' @param timelimit Integer to set elapsed time limits for running LWF-Brook90.
+#' @param verbose Logical: print messages to the console? Default is FALSE.
+#' @param ... Additional arguments passed to \code{output_fun}.
 #'
-#'@return A list containing the selected model output, the model input (except
-#'  for \code{climate}) if desired, and the return values of \code{output_fun}
-#'  if specified.
+#' @return A list containing the selected model output, the model input if desired (except for \code{climate}),
+#' and the return values of \code{output_fun} if specified.
 #'
 #'@section Climate input data: The \code{climate} data.frame must contain the
 #'  following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
@@ -89,6 +77,7 @@
 #' rint \tab rain interception \tab mm \cr
 #' rnet \tab rainfall to soil surface \tab mm \cr
 #' rsno \tab rain on snow \tab mm \cr
+#' rthr \tab rain throughfall rate \tab mm \cr
 #' safrac \tab source area fraction \tab - \cr
 #' seep \tab seepage loss \tab mm \cr
 #' sfal \tab snowfall \tab mm \cr
@@ -135,19 +124,18 @@ runLWFB90 <- function(options.b90,
                       rtrn.input = TRUE,
                       rtrn.output = TRUE,
                       chk.input = TRUE,
-                      output.log = TRUE,
                       run = TRUE,
-                      verbose = TRUE,
+                      timelimit = Inf,
+                      verbose = FALSE,
                       ...) {
 
 
-  # input checks ------------------------------------------------------------
+  # input checks ----------------------#'
   if (chk.input) {
     chk_options()
     chk_param()
     chk_clim()
     chk_soil()
-    #chk_obs()
   }
 
   # ---- Simulation period ----------------------------------------------------------
@@ -271,8 +259,11 @@ runLWFB90 <- function(options.b90,
       pdur = param.b90$pdur,
       soil_materials = param.b90$soil_materials,
       soil_nodes = param.b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
-      output_log = output.log
+      output_log = verbose,
+      timelimit = timelimit
     )
+
+    chk_errors() # check for simulation errors----------------------------------
 
     finishing_time <- Sys.time()
     simtime <- finishing_time - start
@@ -288,7 +279,7 @@ runLWFB90 <- function(options.b90,
     # daily outputs
     simout$daily_output <- data.table::data.table(simout$daily_output)
     data.table::setnames(simout$daily_output, names(simout$daily_output),
-                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rsno',
+                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rthr','rsno',
                            'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
                            'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
                            'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
@@ -306,7 +297,6 @@ runLWFB90 <- function(options.b90,
                                                      simout$layer_output$doy,
                                                      simout$layer_output$nl),]
 
-
     # ---- initialize return value ---------------------------------------------------------------
     simres <- list(simulation_duration = simtime,
                    finishing_time = finishing_time)
@@ -319,11 +309,11 @@ runLWFB90 <- function(options.b90,
 
 
     # ---- append simulation results  -------------------------------------------------------
-    # either raw output or only dataset selections
+    # either raw output or only data set selections
     if (is.matrix(output) & all(dim(output) == c(7,5))) {
       simres <- c(simres, process_outputs(simout, output))
     } else {
-      simres[names(simout)] <- simout
+      simres[names(simout)[-1]] <- simout[-1]
     }
 
     # ---- apply functions on simulation output -------------------------------
@@ -346,7 +336,7 @@ runLWFB90 <- function(options.b90,
 
       # TODO: simres is copied for use in each output_fun.
       # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
-      # instead of adressing the whole list x.
+      # instead of addressing the whole list x.
       simres$output_fun <- tryCatch( {
 
         Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))
@@ -363,14 +353,12 @@ runLWFB90 <- function(options.b90,
       } else {
         simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
       }
-
-      # remove the model_input if not required
-      if (!rtrn.input) {
-        simres <- simres[-which(names(simres) == "model_input")]
-      }
-
     }
 
+    # remove the model_input if not required
+    if (!rtrn.input) {
+      simres <- simres[-which(names(simres) == "model_input")]
+    }
 
   } else {
     # 'dry' run = FALSE -> always return model input
@@ -385,9 +373,34 @@ runLWFB90 <- function(options.b90,
   return(simres)
 }
 
+# check for errors -------------------------------------------------------------
+chk_errors <- function(){
+  eval.parent(quote({
+    if (simout$error_code != 0L) {
+      if (simout$error_code == 1L) stop("Simulation terminated abnormally: 'initial matrix psi > 0'
+                                        (rerun with verbose = TRUE to see more information)")
+      if (simout$error_code == 2L) stop("Simulation initialazation failed: 'FWETK failed to determine wetness at KF'
+                                           (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 3L) stop("Simulation terminated abnormally: 'inconsistent dates in climate!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 4L) stop("Simulation terminated abnormally: 'inconsistent dates in precipitation input!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 5L) stop("Simulation terminated abnormally: 'wrong precipitation interval input!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 6L) stop("Simulation terminated abnormally: 'negative soil water storage!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (simout$error_code == 7L) stop("Simulation terminated abnormally: 'water storage exceeds water capacity!'
+                                        (rerun with verbose = TRUE  to see more information)")
+
+    }
+  }))
+
+}
+
+## check-functions for input ---------------------------------------------------
 
 chk_options <- function(){
-  eval.parent(quote({
+  eval.parent(quote({ # manipulate the calling environment
     names(options.b90) <- tolower(names(options.b90))
 
     stopifnot(all(names(options.b90) %in% c("startdate","enddate","fornetrad","prec.interval",
@@ -413,10 +426,8 @@ chk_options <- function(){
   }))
 }
 
-## check-functions for input
-
 chk_param <- function() {
-  eval.parent(quote({
+  eval.parent(quote({ # manipulate the calling environment
     names(param.b90) <- tolower(names(param.b90))
     nms <- c("maxlai","sai","sai.ini","height","height.ini","densef",
              "densef.ini","age.ini","winlaifrac","budburst.species","budburstdoy",
@@ -447,7 +458,7 @@ chk_param <- function() {
 
 chk_clim <- function() {
 
-  eval.parent(quote({ # manipualte the calling environment
+  eval.parent(quote({
 
     # climate name checks
     names(climate) <- tolower(names(climate))
@@ -568,7 +579,7 @@ chk_soil <- function(){
 
 }
 
-
+# output processing ------------------------------------------------------------
 process_outputs <- function(simout, output) {
 
   # to pass CRAN check notes
@@ -585,14 +596,13 @@ process_outputs <- function(simout, output) {
   if (any(selection == "Evap")){
     Evap <- simout$daily_output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
   if (any(selection == "Abov")){
-    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rsno","rnet","smlt","slfl","srfl")]}
+    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rthr","rsno","rnet","smlt","slfl","srfl")]}
   if (any(selection == "Belo")){
     Belo <- simout$layer_output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
   if (any(selection == "Swat")){
     Swat <- simout$layer_output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
   if (any(selection == "Misc")){
     Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
-
 
   moutputs <- list() # results collection
 
@@ -736,8 +746,3 @@ process_outputs <- function(simout, output) {
 
   return(moutputs)
 }
-
-
-
-
-

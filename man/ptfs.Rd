@@ -13,30 +13,32 @@ hydpar_puh2(clay, silt, sand, bd, oc.pct = 0.5)
 
 hydpar_hypres(clay, silt, bd, oc.pct = 0.1, topsoil = TRUE, humconv = 1.72)
 
-hydpar_hypres_tab(tex.hypres, topsoil)
+hydpar_hypres_tab(texture, topsoil)
 
-hydpar_wessolek_tab(tex.KA5)
+hydpar_wessolek_tab(texture)
 
 hydpar_ff_b90(n = 1)
 }
 \arguments{
-\item{clay, silt, sand}{Numeric vectors of clay, silt, sand in mass \%.}
+\item{clay, silt, sand}{Numeric vectors of clay, silt, sand in mass \%.
+Particle size ranges for clay, silt and sand correspond to <2, 2-63, and
+63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle size
+limit between silt and sand corresponds to 50 \eqn{\mu m}{\mum}.}
 
 \item{bd}{Numeric vector of bulk density in g cm-3.}
 
 \item{oc.pct}{Numeric vector of organic carbon content in mass \%.}
 
-\item{topsoil}{Logical: Is the sample from the topsoil? Only for
-\code{hydpar_hypres_tab}.}
+\item{topsoil}{Logical: Is the sample from the topsoil? Used in
+\code{\link{hydpar_hypres_tab}}.}
 
 \item{humconv}{Conversion factor from oc.pct to organic matter percent.
 Default: 1.72. Only for \code{hydpar_hypres_tab}.}
 
-\item{tex.hypres}{Character vector of soil texture classes according Wösten
-et al (1999).}
-
-\item{tex.KA5}{Character vector of soil texture classes according to KA5.
-Only for \code{hydpar_wessolek_tab}.}
+\item{texture}{Character vector of soil texture classes. For
+\code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
+be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes according
+to FAO (1990) have to provided.}
 
 \item{n}{An integer value specifying the number of rows of the returned
 data.frame (i.e. the number of repetitions of the MvG-Parameter set, only
@@ -59,18 +61,17 @@ parameters from soil physical properties of soil horizons, such as soil
 texture, bulk density and carbon content.
 }
 \details{
-Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG)
-parameters using the regression functions developed by Puhlmann & von Wilpert
-(2011). The equations of Wösten et al. (1999) are available via
-\code{hydpar_hypres}, and their tabulated values for soil texture classes can
-be derived using the function \code{hydpar_hypres_tab}. The table of MvG
-parameters from Wesselok et al. (2009; Tab. 10) is accessible by
-\code{hydpar_wessolek_tab}. For this function, only soil texture classes
-after the German texture classification system (KA5, AG Boden 2005) have to
-be provided. To derive hydraulic parameters of forest floor horizons, the
-function \code{hydpar_ff_b90} can be used. It returns the single MvG
-parameter set for forest floor horizons reported by Hammel & Kennel (2001) in
-their original LWF-Brook90 publication.
+Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG) parameters
+using the regression functions developed by Puhlmann & von Wilpert (2011).
+The equations of Wösten et al. (1999) are available via \code{hydpar_hypres},
+and their tabulated values for soil texture classes can be derived using the
+function \code{hydpar_hypres_tab}. The table of MvG parameters from Wesselok
+et al. (2009; Tab. 10) is accessible by \code{hydpar_wessolek_tab}. For this
+function, soil texture classes after the German texture classification system
+(KA5, AG Boden 2005) have to be provided. To derive hydraulic parameters of
+forest floor horizons, the function \code{hydpar_ff_b90} can be used. It
+returns the single MvG parameter set for forest floor horizons reported by
+Hammel & Kennel (2001) in their original LWF-Brook90 publication.
 }
 \examples{
 
@@ -78,7 +79,7 @@ hydpar_puh2(clay = c(10,20), silt = c(40,20), sand = c(50,60), bd = c(1.6, 1.4))
 
 hydpar_hypres(20,20,1.5,2)
 
-hydpar_hypres_tab(tex.hypres = c("C","MF"), topsoil = c(TRUE,FALSE))
+hydpar_hypres_tab(texture = c("C","MF"), topsoil = c(TRUE,FALSE))
 
 hydpar_wessolek_tab(c("Us", "Ls2", "mSfS"))
 
@@ -88,6 +89,10 @@ hydpar_ff_b90(n = 5)
 AG Boden (2005)
 Bodenkundliche Kartieranleitung
 Schweizerbart'sche Verlagsbuchhandlung, Stuttgart
+
+Food and Agriculture Organisation (FAO) (1990)
+Guidelines for soil description
+FAO/ISRIC, Rome, 3rd edition
 
 Hammel K & Kennel M (2001)
 Charakterisierung und Analyse der Wasserverfügbarkeit und des Wasserhaushalts

@@ -12,7 +12,8 @@ r_lwfbrook90(
   soil_materials,
   soil_nodes,
   precdat = NULL,
-  output_log = TRUE
+  output_log = TRUE,
+  timelimit = Inf
 )
 }
 \arguments{
@@ -45,10 +46,12 @@ number), layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden
 month, day, interval-number (1:precint), prec, mesflp.}
 
 \item{output_log}{Logical whether to print runtime output to console.}
+
+\item{timelimit}{Integer to set elapsed time limits for running the model.}
 }
 \value{
-A list containing the daily and soil layer model outputs (see
-  \code{\link{runLWFB90}}.
+A list containing the daily and soil layer model outputs, along with
+  an error code of the simulation (see \code{\link{runLWFB90}}.
 }
 \description{
 Passes input data matrices to the Fortran model code and returns the results

@@ -15,69 +15,57 @@ runLWFB90(
   rtrn.input = TRUE,
   rtrn.output = TRUE,
   chk.input = TRUE,
-  output.log = TRUE,
   run = TRUE,
-  verbose = TRUE,
+  timelimit = Inf,
+  verbose = FALSE,
   ...
 )
 }
 \arguments{
 \item{options.b90}{Named list of model control options. Use
-\code{\link{setoptions_LWFB90}} to generate a list with default model
-control options.}
+\code{\link{setoptions_LWFB90}} to generate a list with default model control options.}
 
 \item{param.b90}{Named list of model input parameters. Use
-\code{\link{setparam_LWFB90}} to generate a list with default model
-parameters.}
+\code{\link{setparam_LWFB90}} to generate a list with default model parameters.}
 
-\item{climate}{Data.frame with daily climate data. See details for the
-required variables.}
+\item{climate}{Data.frame with daily climate data. See details for the required variables.}
 
-\item{precip}{Data.frame with columns 'dates' and 'prec' to supply
-precipitation data separately from climate data. Can be used to provide
-sub-day resolution precipitation data to LWFBrook90. For each day in dates,
-1 (daily resolution) to 240 values of precipitation can be provided, with
-the number of values per day defined in \code{options.b90$prec.interval}.}
+\item{precip}{Data.frame with columns 'dates' and 'prec' to supply precipitation data separately from climate data.
+Can be used to provide sub-day resolution precipitation data to LWFBrook90. For each day in dates,
+1 (daily resolution) to 240 values of precipitation can be provided, with the number of values
+per day defined in \code{options.b90$prec.interval}.}
 
-\item{soil}{Data.frame containing the hydraulic properties of the soil layers.
-See section 'Soil parameters'}
+\item{soil}{Data.frame containing the hydraulic properties of the soil layers. See section 'Soil parameters'}
 
-\item{output}{A [7,5]-matrix flagging the desired model output datasets at
-different time intervals. Use \code{\link{setoutput_LWFB90}} to generate and
-edit a default output selection matrix. Alternatively, use -1 (the default)
-to return the raw daily and soil layer outputs.}
+\item{output}{A [7,5]-matrix flagging the desired model output datasets at different time intervals. Use
+\code{\link{setoutput_LWFB90}} to generate and edit a default output selection matrix. Alternatively,
+use -1 (the default) to return the raw daily and soil layer outputs.}
 
-\item{output_fun}{A function or a list of functions to be performed on the
-output objects selected by \code{output}. Can be used to aggregate output or
-calculate goodness of fit measures on-the-fly, or to write results instantly
-to a file or database. Useful if the function is evaluated within a large
-multi-run application, which might overload the memory. (see
-\code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
+\item{output_fun}{A function or a list of functions to be performed on the output objects selected by \code{output}.
+Can be used to aggregate output or calculate goodness of fit measures on-the-fly, or to write results instantly to a file or database.
+Useful if the function is evaluated within a large multi-run application, which might overload the memory.
+(see \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
 
-\item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily
-plant properties ('standprop_daily', as derived from parameters) to the
-result?}
+\item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and daily plant
+properties ('standprop_daily', as derived from parameters) to the result?}
 
 \item{rtrn.output}{Logical: return the simulation results?}
 
-\item{chk.input}{Logical wether to check param.b90, options.b90, climate,
-precip, and soil for completeness and consistency.}
+\item{chk.input}{Logical wether to check param.b90, options.b90, climate, precip, and soil
+for completeness and consistency.}
 
-\item{output.log}{Logical or file name wether to print runtime output, or
-redirect runtime output to a file.}
+\item{run}{Logical: run LWF-Brook90 or only return model input objects?
+Useful to inspect the effects of options and parameters on model input. Default is TRUE.}
 
-\item{run}{Logical: run LWF-Brook90 or only return model input objects? Useful
-to inspect the effects of options and parameters on model input. Default is
-TRUE.}
+\item{timelimit}{Integer to set elapsed time limits for running LWF-Brook90.}
 
-\item{verbose}{Logical: print messages to the console? Default is TRUE.}
+\item{verbose}{Logical: print messages to the console? Default is FALSE.}
 
 \item{...}{Additional arguments passed to \code{output_fun}.}
 }
 \value{
-A list containing the selected model output, the model input (except
- for \code{climate}) if desired, and the return values of \code{output_fun}
- if specified.
+A list containing the selected model output, the model input if desired (except for \code{climate}),
+and the return values of \code{output_fun} if specified.
 }
 \description{
 Sets up the input objects for the LWF-Brook90 hydrological model, starts the
@@ -131,6 +119,7 @@ rfal \tab rainfall \tab mm \cr
 rint \tab rain interception \tab mm \cr
 rnet \tab rainfall to soil surface \tab mm \cr
 rsno \tab rain on snow \tab mm \cr
+rthr \tab rain throughfall rate \tab mm \cr
 safrac \tab source area fraction \tab - \cr
 seep \tab seepage loss \tab mm \cr
 sfal \tab snowfall \tab mm \cr
