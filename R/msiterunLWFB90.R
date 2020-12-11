@@ -1,11 +1,10 @@
-#' Make a multi-site simulation using lists of climate, soil, options and
+#' Make a multi-site simulation using lists of climate, soil, and
 #' parameter input objects.
 #'
 #' Wrapper function for \code{\link{runLWFB90}} to make multiple parallel
-#' simulations for combinations of climate, soil, and parameters, e.g., for
-#' simulating one or several parameter sets for a series of sites with
-#' individual climate and soil, or individual parameter set for each
-#' combination.
+#' simulations of one or several parameter sets, for a series of sites with
+#' individual climate and soil, or individual parameter sets for each
+#' climate/soil combinations.
 #'
 #' @param options.b90 Named list of model control options to be used in all
 #'   simulations
@@ -14,41 +13,55 @@
 #' @param soil Data.frame with soil properties to be used in all simulations, or
 #'   a list of data.frames with different soil profiles.
 #' @param climate Data.frame with climate data, or a list of climate
-#'   data.frames.
+#'   data.frames. Alternatively, a function can be supplied that returns a
+#'   data.frame. Arguments to the function can be passed via
+#'   \code{climate_args}.
+#' @param climate_args  List of named lists of arguments passed to
+#'   \code{climate}, if this is a function.
 #' @param all_combinations Logical: Set up and run all possible combinations of
 #'   individual \code{param.b90}, \code{climate} and \code{soil} objects?
-#'   Default is \code{FALSE}, running one or the list of \code{param.b90} for a
-#'   series of climate/soil combinations.
+#'   Default is \code{FALSE}, running one object or the list of \code{param.b90}
+#'   objects for a series of climate/soil combinations.
 #' @param cores Number of cores to use for parallel processing.
 #' @param showProgress Logical: Show progress bar? Default is \code{TRUE}. See
 #'   also section \code{Progress bar} below.
-#' @param ... Further arguments passed to \code{\link{runLWFB90}}. It might be a
-#'   good idea to pass \code{verbose=FALSE} to suppress excessive chatter of
-#'   \code{runLWFB90}.
+#' @param ... Further arguments passed to \code{\link{runLWFB90}}.
 #'
 #' @return A named list with the results of the single runs as returned by
 #'   \code{\link{runLWFB90}}. Simulation or processing errors are passed on. The
 #'   names of the returned list entries are concatenated from the names of the
-#'   input list entries in the following form: <climate> <soil> <param.b90>.
+#'   input list entries in the following form: <climate> <soil> <param.b90>. If
+#'   \code{climate} is a function, the names for <climate> are taken from the
+#'   names of \code{climate_args}.
 #'
 #' @section Data management: The returned list of single run results can become
 #'   very large, if many simulations are performed and the selected output
-#'   contains daily resolution datasets, especially daily layer-wise soil
+#'   contains daily resolution data sets, especially daily layer-wise soil
 #'   moisture data. To not overload memory, it is advised to reduce the returned
 #'   simulation results to a minimum, by carefully selecting the output, and
 #'   make use of the option to pass a list of functions to
 #'   \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
 #'   perform directly on the output of a single run simulation, and can be used
-#'   for aggrating model output on-the-fly, or writing results to a file or
-#'   database.
+#'   for aggregating model output on-the-fly, or save results to a file or
+#'   database. The regular output of \code{\link{runLWFB90}} can be suppressed
+#'   by setting \code{rtrn.output = FALSE}, for exclusively returning the output
+#'   of such functions. To provide full flexibility, the names of the current
+#'   \code{soil}, \code{param.b90}, and \code{climate} are automatically passed
+#'   as additional arguments (\code{soil_nm}, \code{param_nm},\code{clim_nm}) to
+#'   \code{\link{runLWFB90}} and in this way become available to functions
+#'   passed via \code{output_fun}. In order to not overload the memory with
+#'   simulation input data, it is advised to provide a function instead of a
+#'   list of \code{climate} data.frames, and specify its arguments for
+#'   individual sites in \code{climate_args}, in case many sites with individual
+#'   climates will be simulated.
 #'
-#' @section Progress bar:
-#' This function provides a progress bar via the package \CRANpkg{progressr}
-#' if \code{showProgress=TRUE}. The parallel computation is then wrapped with
-#' \code{progressr::with_progress()} to enable progress reporting from
-#' distributed calculations. The appearance of the progress bar (including
-#' audible notification) can be customized by the user for the entire session
-#' using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+#' @section Progress bar: This function provides a progress bar via the package
+#'   \CRANpkg{progressr} if \code{showProgress=TRUE}. The parallel computation
+#'   is then wrapped with \code{progressr::with_progress()} to enable progress
+#'   reporting from distributed calculations. The appearance of the progress bar
+#'   (including audible notification) can be customized by the user for the
+#'   entire session using \code{progressr::handlers()} (see
+#'   \code{vignette('progressr-intro')}).
 #'
 #' @export
 #'
@@ -56,12 +69,14 @@
 #'
 msiterunLWFB90 <- function(param.b90,
                            options.b90,
-                           climate,
                            soil = NULL,
+                           climate,
+                           climate_args = NULL,
                            all_combinations = FALSE,
                            cores = 2,
                            showProgress = TRUE,
                            ...){
+
   if(cores > future::availableCores())
     stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
                "available."))
@@ -75,20 +90,40 @@ msiterunLWFB90 <- function(param.b90,
   #determine list lengths and setup the names
   param_len <- nstlist_length(param.b90)
   soil_len <- nstlist_length(soil)
-  clim_len <- nstlist_length(climate)
+  if (is.function(climate)) {
+    clim_len <- nstlist_length(climate_args)
+  } else {
+    clim_len <- nstlist_length(climate)
+  }
 
-  if (all(c(param_len, clim_len, soil_len) == 1L)) {
+  if (all(c(param_len, clim_len, soil_len) <= 1L)) {
     stop("No variation of inputs provided. Please provide at least one of param.b90,
            soil or climate as a list for a multi-site simulation.")
   }
-  # ---- Prepare names and list structures for foreach-loop
+
+  # Prepare names and list structures for foreach-loop
   make_nms_climsoilparmopts()
+
+  # check climate-function for missing arguments
+  if (is.function(climate)) {
+    # if (!all(methods::formalArgs(climate) %in% names(climate_args[[1]]))) {
+    #   stop("Missing arguments for 'climate'-function in the list of variable arguments as specified in 'climate_args' ")
+    # }
+    if (!all(names(climate_args[[1]]) %in% methods::formalArgs(climate))) {
+      stop("Some elements in the 'climate_args' list of arguments for 'climate'-function are unknown.")
+    }
+  }
 
   # ---- set up multirun-combinations climate, soil, param, options
   combinations <- setup_combinations(param_len,soil_len,clim_len,
                                      all_combinations = all_combinations)
 
   nRuns <- nrow(combinations)
+
+  # setup names
+  # names(results) <- trimws(paste(clim_nms[combinations$clim],
+  #                                soil_nms[combinations$soil],
+  #                                param_nms[combinations$param]))
 
 
   # set up Cluster and foreach-Loop ------------------------------------------
@@ -99,10 +134,11 @@ msiterunLWFB90 <- function(param.b90,
   on.exit(future::plan(oplan), add=TRUE)
   doFuture::registerDoFuture()
 
-  if (is.null(clim_nms)) {
-    outer_nms <- "clim_1"
+  # set up iterator for climate
+  if (is.function(climate)) {
+    clim_iter <- fct_iter(f = climate, args = climate_args)
   } else {
-    outer_nms <- clim_nms
+    clim_iter <- iterators::iter(climate)
   }
 
   foreach_loop <- function(){
@@ -111,23 +147,27 @@ msiterunLWFB90 <- function(param.b90,
 
     # outer loop iterates over climate to save memory -> result is nested
     foreach::foreach(
-      thisclim = iterators::iter(climate),
+      thisclim = clim_iter,
       clim_no = iterators::icount(),
       .final = function(x) stats::setNames(x, clim_nms),
       .errorhandling = "pass") %:%
 
-      # inner loop iterates over the combinations using thisclim
+      # inner loop iterates over the combinations in thisclim
       foreach::foreach(
         i = 1:nrow(combinations[which(combinations$clim == clim_no), ]),
         .errorhandling = "pass") %dopar% {
 
-          #subset for readibility
+          #subset for readability
           combi_thisclim <- combinations[which(combinations$clim == clim_no), ]
+
 
           res <- runLWFB90(options.b90 = options.b90,
                            param.b90 = param.b90[[combi_thisclim$param[i]]],
                            soil = soil[[combi_thisclim$soil[i]]],
                            climate = thisclim,
+                           soil_nm = soil_nms[combi_thisclim$soil[i]],
+                           param_nm = param_nms[combi_thisclim$param[i]],
+                           clim_nm = clim_nms[clim_no],
                            ...)
 
           increment_progressbar()
@@ -136,7 +176,7 @@ msiterunLWFB90 <- function(param.b90,
         }
   }
 
-  # with progressbar if wanted
+  # with progress bar if desired
   if(isTRUE(showProgress)){
     progressr::with_progress({
       increment_progressbar <- progressr::progressor(steps=nRuns)
@@ -174,6 +214,17 @@ nstlist_length <- function(ll) {
   return(len)
 }
 
+fct_iter <- function (f, args)
+{
+  xit <- iterators::iter(args)
+  nextEl <- function() {
+    do.call(f, iterators::nextElem(xit))
+  }
+  it <- list(nextElem = nextEl)
+  class(it) <- c("abstractiter", "iter")
+  it
+}
+
 make_nms_climsoilparmopts <- function() {
 
   eval.parent(quote({
@@ -200,13 +251,23 @@ make_nms_climsoilparmopts <- function() {
     }
 
     if (clim_len > 0) {
-      if (is.null(names(climate))) {
-        clim_nms <- as.character(1:clim_len)
-      } else {clim_nms <- names(climate)}
+      if (is.function(climate)) {
+        if (is.null(names(climate_args))) {
+          clim_nms <- as.character(1:clim_len)
+        } else {clim_nms <- names(climate_args)}
+      } else {
+        if (is.null(names(climate))) {
+          clim_nms <- as.character(1:clim_len)
+        } else {clim_nms <- names(climate)}
+      }
     } else {
-      clim_nms <- NULL
-      climate <- list(climate)
+      if (is.function(climate)) {
+        climate_args <- list(climate_args)
+      } else {
+        climate <- list(climate)
+      }
       clim_len <- 1L
+      clim_nms <- NULL
     }
   }))
 }
