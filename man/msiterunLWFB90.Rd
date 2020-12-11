@@ -2,14 +2,15 @@
 % Please edit documentation in R/msiterunLWFB90.R
 \name{msiterunLWFB90}
 \alias{msiterunLWFB90}
-\title{Make a multi-site simulation using lists of climate, soil, options and
+\title{Make a multi-site simulation using lists of climate, soil, and
 parameter input objects.}
 \usage{
 msiterunLWFB90(
   param.b90,
   options.b90,
-  climate,
   soil = NULL,
+  climate,
+  climate_args = NULL,
   all_combinations = FALSE,
   cores = 2,
   showProgress = TRUE,
@@ -23,60 +24,74 @@ list of multiple parameter sets.}
 \item{options.b90}{Named list of model control options to be used in all
 simulations}
 
-\item{climate}{Data.frame with climate data, or a list of climate
-data.frames.}
-
 \item{soil}{Data.frame with soil properties to be used in all simulations, or
 a list of data.frames with different soil profiles.}
 
+\item{climate}{Data.frame with climate data, or a list of climate
+data.frames. Alternatively, a function can be supplied that returns a
+data.frame. Arguments to the function can be passed via
+\code{climate_args}.}
+
+\item{climate_args}{List of named lists of arguments passed to
+\code{climate}, if this is a function.}
+
 \item{all_combinations}{Logical: Set up and run all possible combinations of
 individual \code{param.b90}, \code{climate} and \code{soil} objects?
-Default is \code{FALSE}, running one or the list of \code{param.b90} for a
-series of climate/soil combinations.}
+Default is \code{FALSE}, running one object or the list of \code{param.b90}
+objects for a series of climate/soil combinations.}
 
 \item{cores}{Number of cores to use for parallel processing.}
 
 \item{showProgress}{Logical: Show progress bar? Default is \code{TRUE}. See
 also section \code{Progress bar} below.}
 
-\item{...}{Further arguments passed to \code{\link{runLWFB90}}. It might be a
-good idea to pass \code{verbose=FALSE} to suppress excessive chatter of
-\code{runLWFB90}.}
+\item{...}{Further arguments passed to \code{\link{runLWFB90}}.}
 }
 \value{
 A named list with the results of the single runs as returned by
   \code{\link{runLWFB90}}. Simulation or processing errors are passed on. The
   names of the returned list entries are concatenated from the names of the
-  input list entries in the following form: <climate> <soil> <param.b90>.
+  input list entries in the following form: <climate> <soil> <param.b90>. If
+  \code{climate} is a function, the names for <climate> are taken from the
+  names of \code{climate_args}.
 }
 \description{
 Wrapper function for \code{\link{runLWFB90}} to make multiple parallel
-simulations for combinations of climate, soil, and parameters, e.g., for
-simulating one or several parameter sets for a series of sites with
-individual climate and soil, or individual parameter set for each
-combination.
+simulations of one or several parameter sets, for a series of sites with
+individual climate and soil, or individual parameter sets for each
+climate/soil combinations.
 }
 \section{Data management}{
  The returned list of single run results can become
   very large, if many simulations are performed and the selected output
-  contains daily resolution datasets, especially daily layer-wise soil
+  contains daily resolution data sets, especially daily layer-wise soil
   moisture data. To not overload memory, it is advised to reduce the returned
   simulation results to a minimum, by carefully selecting the output, and
   make use of the option to pass a list of functions to
   \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
   perform directly on the output of a single run simulation, and can be used
-  for aggrating model output on-the-fly, or writing results to a file or
-  database.
+  for aggregating model output on-the-fly, or save results to a file or
+  database. The regular output of \code{\link{runLWFB90}} can be suppressed
+  by setting \code{rtrn.output = FALSE}, for exclusively returning the output
+  of such functions. To provide full flexibility, the names of the current
+  \code{soil}, \code{param.b90}, and \code{climate} are automatically passed
+  as additional arguments (\code{soil_nm}, \code{param_nm},\code{clim_nm}) to
+  \code{\link{runLWFB90}} and in this way become available to functions
+  passed via \code{output_fun}. In order to not overload the memory with
+  simulation input data, it is advised to provide a function instead of a
+  list of \code{climate} data.frames, and specify its arguments for
+  individual sites in \code{climate_args}, in case many sites with individual
+  climates will be simulated.
 }
 
 \section{Progress bar}{
-
-This function provides a progress bar via the package \CRANpkg{progressr}
-if \code{showProgress=TRUE}. The parallel computation is then wrapped with
-\code{progressr::with_progress()} to enable progress reporting from
-distributed calculations. The appearance of the progress bar (including
-audible notification) can be customized by the user for the entire session
-using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
+ This function provides a progress bar via the package
+  \CRANpkg{progressr} if \code{showProgress=TRUE}. The parallel computation
+  is then wrapped with \code{progressr::with_progress()} to enable progress
+  reporting from distributed calculations. The appearance of the progress bar
+  (including audible notification) can be customized by the user for the
+  entire session using \code{progressr::handlers()} (see
+  \code{vignette('progressr-intro')}).
 }
 
 \examples{
