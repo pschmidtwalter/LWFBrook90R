@@ -84,7 +84,7 @@ msiterunLWFB90 <- function(param.b90,
   # to pass CRAN check notes
   clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL;
   thisclim <- NULL; i <- NULL;
-  `%dopar%` <- foreach::`%dopar%`
+  `%do%` <- foreach::`%do%`
   `%:%` <- foreach::`%:%`
 
   #determine list lengths and setup the names
@@ -155,7 +155,7 @@ msiterunLWFB90 <- function(param.b90,
       # inner loop iterates over the combinations in thisclim
       foreach::foreach(
         i = 1:nrow(combinations[which(combinations$clim == clim_no), ]),
-        .errorhandling = "pass") %dopar% {
+        .errorhandling = "pass") %do% {
 
           #subset for readability
           combi_thisclim <- combinations[which(combinations$clim == clim_no), ]
