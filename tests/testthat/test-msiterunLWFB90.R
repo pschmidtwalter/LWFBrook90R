@@ -24,11 +24,8 @@ test_that("basic runs using msiterunLWFB90 works",{
                  rtrn.input = F))
 })
 
-<<<<<<< HEAD
-# test climate-input
 
-=======
->>>>>>> 1dd2d2ab8492553427ccf5ed51c6aeaa9d620bc1
+# test climate-input
 clim <- slb1_meteo[year(slb1_meteo$dates) == 2002,]
 names(clim)[1] <- "Datum"
 climfun <- function(met) {
