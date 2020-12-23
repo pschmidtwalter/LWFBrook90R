@@ -5,23 +5,25 @@
 
 Changes:
 
-- result datasets are now returned directly by the Fortran model code, without the detour of writing
-  .ASC output text files and reading them back into workspace.
-- run time output to the console was disabled, only messages are printed.  
+- result datasets are now returned directly by the Fortran model code, without 
+  the detour of writing .ASC output text files and reading them back into workspace.
+- run time output to the console was disabled, only messages are printed when `verbose = T` (the new default).  
 - `runLWFB90()`: 
-  - providing output = -1 instead of an output selection matrix returns two tables with
-  simulation results: general daily outputs and layer outputs. A proper description 
-  of model output variables was added to the help pages.
-  - all column names of the .ASC output objects are now in lower case.
-  - it is now possible to provide a function as `climate`-argument, instead of a `data.frame`
+  - without specification of an output selection matrix via `output`, two tables 
+  including all available output variables are returned: general daily outputs 
+  and layer outputs. A proper description of model output variables was added to the help pages.
+  - all column names of the .ASC output objects (as selected via `output`) are now in lower case.
+  - it is now possible to provide a function as `climate`-argument, instead of a `data.frame`.
   - an execution time limit (elapsed time) can be set to prevent simulations from running too long. 
 - `msiterunLWFB90()`: 
   - It is now possible to provide individual `param.b90` input parameter objects for
-  individual climate/soil combinations (i.e. individual locations). The option to provide a list of
-  `options.b90` input objects was disabled
-  - instead of a list of `climate`-data.frames for a multisite-simulation, a function can be provided for on-the-fly creation of    `climate`-`data.frames`. Arguments for the function have to specified via the new `climate_args`-argument of `msiterunLWFB90`. 
-  - names of current `climate`, `soil` and `param.b90` objects are automatically passed to `runLWFB90()` and thus become available to `output_fun`  
-
+  individual climate/soil combinations (i.e. individual locations). The option to 
+  provide a list of `options.b90` input objects was disabled.
+  - Instead of a list of `climate`-data.frames for a multisite-simulation, a function 
+  can be provided for on-the-fly creation of `climate`-`data.frames`. Arguments 
+  for the function have to specified via the new `climate_args`-argument of `msiterunLWFB90`. 
+  - Names of current `climate`, `soil` and `param.b90` objects are automatically 
+   passed from  `msiterunLWFB90()` to `runLWFB90()` and thus become available to `output_fun`.  
 - renamed some of the pedotransfer-functions and reorganized the documentation for it. See `?ptfs`.
 - switched `msiterunLWFB90()` and `mrunLWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 

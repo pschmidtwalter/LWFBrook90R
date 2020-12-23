@@ -10,7 +10,7 @@
 #'   \code{\link{setparam_LWFB90}} to generate a list with default model
 #'   parameters.
 #' @param climate Data.frame with daily climatic data, or a function that
-#'   returns that data.frame. See details for the required variables.
+#'   returns a suitable data.frame. See details for the required variables.
 #' @param precip Data.frame with columns 'dates' and 'prec' to supply
 #'   precipitation data separately from climate data. Can be used to provide
 #'   sub-day resolution precipitation data to LWFBrook90. For each day in dates,
@@ -22,12 +22,14 @@
 #'   different time intervals. Use \code{\link{setoutput_LWFB90}} to generate
 #'   and edit a default output selection matrix. Alternatively, use -1 (the
 #'   default) to return the raw daily and soil layer outputs.
-#' @param output_fun A function or a list of functions to be performed on the
-#'   output objects selected by \code{output}. Can be used to aggregate output
-#'   or calculate goodness of fit measures on-the-fly, or to write results
-#'   instantly to a file or database. Useful if the function is evaluated within
-#'   a large multi-run application, which might overload the memory. (see
-#'   \code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).
+#' @param output_fun A function or a list of functions of the form
+#'   \code{f(x,...)}, where \code{x} is the object regularly returned by
+#'   \code{runLWFB90}. During function evaluation, \code{x} contains model input
+#'   and selected output objects, irrespective of \code{rtrn.input} and
+#'   \code{rtrn.output}. Can be used to  aggregate output on-the-fly, and is
+#'   especially useful if the function is evaluated within a large multi-run
+#'   application, for which the output might overload the memory. (see \code{\link{mrunLWFB90}}
+#'   and \code{\link{msiterunLWFB90}}).
 #' @param rtrn.input Logical: append 'param.b90', 'options.b90', 'soil' and
 #'   daily plant properties ('standprop_daily', as derived from parameters) to
 #'   the result?
@@ -130,7 +132,7 @@ runLWFB90 <- function(options.b90,
                       climate,
                       precip = NULL,
                       soil = NULL,
-                      output = setoutput_LWFB90(),
+                      output = NULL,
                       output_fun = NULL,
                       rtrn.input = TRUE,
                       rtrn.output = TRUE,
@@ -150,7 +152,7 @@ runLWFB90 <- function(options.b90,
     climate <- do.call(climate,xfunargs[climfunargsnms])
    }
 
-  # input checks ----------------------#'
+  # input checks -----
   if (chk.input) {
     chk_options()
     chk_param()
@@ -158,17 +160,17 @@ runLWFB90 <- function(options.b90,
     chk_soil()
   }
 
-  # ---- Simulation period ----------------------------------------------------------
+  # Simulation period ----
   climyears <-  unique(as.integer(format(climate$dates,"%Y")))
   simyears <- seq(from = as.integer(format(options.b90$startdate,"%Y")),
                   to = as.integer(format(options.b90$enddate,"%Y")),
                   by = 1)
 
-  # Number of Simulation days
+  ## Number of Simulation days
   param.b90$ndays <-  as.integer(difftime(options.b90$enddate,options.b90$startdate)) + 1
 
 
-  # Vegetation-Period: calculate budburst and leaffall days of year  ----------------
+  ## Vegetation-Period: calculate budburst and leaffall days of year  ----
   budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
                                       out.years = simyears,
                                       budburst.method = options.b90$budburst.method,
@@ -181,7 +183,7 @@ runLWFB90 <- function(options.b90,
   param.b90$budburstdoy <- budburst_leaffall$start
   param.b90$leaffalldoy <- budburst_leaffall$end
 
-  # ---- Vegetation -----------------------------------------------------------------
+  # Vegetation ----
   # Prepare vegetation parameters
   if (tolower(options.b90$standprop.input) == "table") {
     if (verbose == T) {message("Creating long term stand dynamics from table 'standprop.table'...")}
@@ -196,37 +198,35 @@ runLWFB90 <- function(options.b90,
 
   }
 
-  # ---- Create daily standproperties from parameters
+  ## Create daily standproperties from parameters ----
   standprop_daily <- make_standprop(options.b90, param.b90, out.years = simyears)
 
-  # constrain to simulation period
+  ### constrain to simulation period
   standprop_daily <- standprop_daily[which(standprop_daily$dates >= options.b90$startdate
                                            & standprop_daily$dates <= options.b90$enddate),]
-
   if (verbose == T) {
     message("Standproperties created succesfully")
   }
 
-  # ---- Prepare climate for input----------------------------------------------------
-
+  # Prepare climate ----
   # constrain data to simulation period
   climate <- climate[which(climate$dates >= options.b90$startdate
                            & climate$dates <= options.b90$enddate),]
 
-  # Precipitation correction (Richter)
+  ## Precipitation correction (Richter) ----
   if (options.b90$prec.corr == TRUE) {
     climate$prec <- with(climate, prec_corr(month, tmean, prec,
                                             station.exposure = param.b90$prec.corr.statexp))
   }
 
-  #Calculate global radiation from sunshine duration
+  ## Calculate global radiation from sunshine duration ----
   if (options.b90$fornetrad == "sunhours") {
     climate$globrad <- with(climate,
                             calc_globrad( as.integer(format(dates, "%j")),
                                           sunhours, param.b90$coords_y ))
   }
 
-  # ---- Make soilnodes & soil materials --------------------------------------------
+  ## Make soilnodes & soil materials ----
   # soil provided as argument -> create soil nodes and materials and add them to param.b90
   if (!is.null(soil)) {
     param.b90[c("soil_nodes","soil_materials" )] <- soil_to_param(soil, options.b90$imodel)
@@ -238,10 +238,10 @@ runLWFB90 <- function(options.b90,
     param.b90$soil_materials <- param.b90$soil_materials[,c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel")]
   }
 
-  # add initial water potential from parameters
+  ### add initial water potential from parameters
   param.b90$soil_nodes$psiini <- param.b90$psiini
 
-  # Make Roots ----------------------------------------------------------------------
+  ## Make Roots -----
   if (options.b90$root.method != "soilvar") {
     param.b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = c(max(param.b90$soil_nodes$upper),
                                                                       param.b90$soil_nodes$lower),
@@ -257,7 +257,7 @@ runLWFB90 <- function(options.b90,
     }
   }
 
-  # ---- Execute LWF-Brook90  -------------------------------------------------------
+  # Execute LWF-Brook90  ----
   if (run) {
 
     if (verbose == T) {
@@ -282,8 +282,8 @@ runLWFB90 <- function(options.b90,
       output_log = verbose,
       timelimit = timelimit
     )
-
-    chk_errors() # check for simulation errors----------------------------------
+    ## check for simulation errors ----
+    chk_errors()
 
     finishing_time <- Sys.time()
     simtime <- finishing_time - start
@@ -293,7 +293,7 @@ runLWFB90 <- function(options.b90,
       message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
     }
 
-    # ---- process and manage outputs ---------------------------------------------------------------
+    ## process and manage outputs ----
     # precipitation interval outputs (to come)
 
     # daily outputs
@@ -317,26 +317,26 @@ runLWFB90 <- function(options.b90,
                                                      simout$layer_output$doy,
                                                      simout$layer_output$nl),]
 
-    # ---- initialize return value ---------------------------------------------------------------
+    ## initialize return value ----
     simres <- list(simulation_duration = simtime,
                    finishing_time = finishing_time)
 
-    # ---- append model input -------------------------------------------------------
+    ## append model input ----
     # might be needed for access from output_fun. Will be removed again later, if not required
     simres$model_input <- list(options.b90 = options.b90,
                                param.b90 = param.b90,
                                standprop_daily = standprop_daily)
 
 
-    # ---- append simulation results  -------------------------------------------------------
+    ## append simulation results  ----
     # either raw output or only data set selections
     if (is.matrix(output) & all(dim(output) == c(7,5))) {
       simres <- c(simres, process_outputs(simout, output))
     } else {
-      simres[names(simout)[-1]] <- simout[-1] # without error-code
+      simres[names(simout)[-1]] <- simout[-1] # append without error-code
     }
 
-    # ---- apply functions on simulation output -------------------------------
+    ## apply functions on simulation output ----
     if (!is.null(output_fun)) {
       if (verbose == T) {
         message("Applying custom functions on simulation output...")
@@ -366,7 +366,7 @@ runLWFB90 <- function(options.b90,
       error = function(err){return(err)})
     }
 
-    # remove the basic results again if they are not required
+    ## remove the basic results again if they are not required ----
     if (!rtrn.output) {
       if (is.matrix(output) & all(dim(output) == c(7,5))) {
         simres <- simres[-which(grepl(".ASC", names(simres), fixed = T))]
@@ -375,7 +375,7 @@ runLWFB90 <- function(options.b90,
       }
     }
 
-    # remove the model_input if not required
+    ## remove the model_input if not required ----
     if (!rtrn.input) {
       simres <- simres[-which(names(simres) == "model_input")]
     }
