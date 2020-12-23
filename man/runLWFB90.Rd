@@ -87,7 +87,7 @@ model, and returns the selected results.
 \section{Climate input data}{
  The \code{climate} data.frame must contain the
  following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
- (deg C), 'tmean' (deg C), 'wind' (m/s), 'prec' (mm) , 'vappres' (kPa), and
+ (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec' (mm) , 'vappres' (kPa), and
  either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using \code{sunhours},
  please set \code{options.b90$fornetrad = 'sunhours'}.
 }

@@ -49,7 +49,7 @@
 #'
 #'@section Climate input data: The \code{climate} data.frame must contain the
 #'  following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
-#'  (deg C), 'tmean' (deg C), 'wind' (m/s), 'prec' (mm) , 'vappres' (kPa), and
+#'  (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec' (mm) , 'vappres' (kPa), and
 #'  either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using \code{sunhours},
 #'  please set \code{options.b90$fornetrad = 'sunhours'}.
 #'
@@ -272,7 +272,7 @@ runLWFB90 <- function(options.b90,
                              param.b90$coords_y, param.b90$snowini, param.b90$gwatini,
                              options.b90$prec.interval),
       climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
-                                  "vappres","wind","prec","mesfl")],
+                                  "vappres","windspeed","prec","mesfl")],
                       standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
       precdat = precip,
       param = param_to_rlwfbrook90(param.b90, options.b90$imodel),
@@ -482,7 +482,7 @@ chk_clim <- function() {
 
     # climate name checks
     names(climate) <- tolower(names(climate))
-    stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "wind") %in% tolower(names(climate))))
+    stopifnot(all(c("dates", "tmax", "tmin",options.b90$fornetrad, "vappres", "windspeed") %in% tolower(names(climate))))
     stopifnot(inherits(climate$dates, "Date"))
     if (min(climate$dates) > options.b90$startdate | max(climate$dates) < options.b90$enddate){
       stop("climate not covering requested simulation period completely.")
