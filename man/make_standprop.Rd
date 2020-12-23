@@ -4,12 +4,12 @@
 \alias{make_standprop}
 \title{Create daily plant characteristics from parameters and options}
 \usage{
-make_standprop(options.b90, param.b90, out.years)
+make_standprop(options_b90, param_b90, out.years)
 }
 \arguments{
-\item{options.b90}{A list of model control options.}
+\item{options_b90}{A list of model control options.}
 
-\item{param.b90}{A parameter list-object.}
+\item{param_b90}{A parameter list-object.}
 
 \item{out.years}{Years for which values are returned.}
 }
@@ -23,11 +23,11 @@ parameters and options using \code{\link{approx_standprop}} and
 \code{\link{MakeSeasLAI}}.
 }
 \examples{
-options.b90 <- setoptions_LWFB90()
-param.b90 <- setparam_LWFB90()
+options_b90 <- setoptions_LWFB90()
+param_b90 <- setparam_LWFB90()
 
-standprop <- make_standprop(options.b90,
-                            param.b90,
+standprop <- make_standprop(options_b90,
+                            param_b90,
                             out.years = 2002:2004)
 plot(standprop$dates, standprop$lai, type = "l")
 }

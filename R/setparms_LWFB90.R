@@ -2,7 +2,7 @@
 #'
 #' @param ... Named arguments to be included in return value.
 #'
-#' @return A list with model parameters for use as \code{param.b90}-argument in
+#' @return A list with model parameters for use as \code{param_b90}-argument in
 #'   \code{\link{runLWFB90}}.
 #'
 #' @section List of input parameters:
@@ -59,7 +59,7 @@
 #'  eslope       \tab slope for evapotranspiration and snowmelt calculation. Default:  0\tab deg               \tab Meteo                  \cr
 #'  aspect       \tab Mean exposition of soil surface at soil profile (north: 0, east: 90, south: 180, west: 270). Default: 0\tab deg               \tab Meteo                  \cr
 #'  obsheight    \tab Mean height of obstacles on soil surface (grass, furrows etc.), used to calculate soil surface roughness. Default: 0.025 \tab m                 \tab Meteo                  \cr
-#'  prec.corr.statexp \tab station exposure situation of prec measurements (passed to \code{\link{prec_corr}} Default: 'mg' \tab                  \tab Meteo                  \cr
+#'  prec_corr.statexp \tab station exposure situation of prec measurements (passed to \code{\link{prec_corr}} Default: 'mg' \tab                  \tab Meteo                  \cr
 #'  dpsimax      \tab maximum potential difference considered equal. Default: 5e-04 \tab kPa               \tab Numerical              \cr
 #'  dswmax       \tab maximum change allowed in SWATI. Default: 0.05 \tab percent of SWATMX \tab Numerical              \cr
 #'  dtimax       \tab maximum iteration time step. Default: 0.5 \tab d                 \tab Numerical              \cr
@@ -212,7 +212,7 @@ setparam_LWFB90 <- function(...) {
     maxlqf = 0.05,
     snoden = 0.3,
     obsheight = 0.025,
-    prec.corr.statexp = 'mg',
+    prec_corr.statexp = 'mg',
     rssa = 100,
     rssb = 1,
     soil_nodes = NULL,

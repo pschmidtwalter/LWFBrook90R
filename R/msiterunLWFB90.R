@@ -6,9 +6,9 @@
 #' individual climate and soil, or individual parameter sets for each
 #' climate/soil combinations.
 #'
-#' @param options.b90 Named list of model control options to be used in all
+#' @param options_b90 Named list of model control options to be used in all
 #'   simulations
-#' @param param.b90 Named list of parameters to be used in all simulations, or a
+#' @param param_b90 Named list of parameters to be used in all simulations, or a
 #'   list of multiple parameter sets.
 #' @param soil Data.frame with soil properties to be used in all simulations, or
 #'   a list of data.frames with different soil profiles.
@@ -19,8 +19,8 @@
 #' @param climate_args  List of named lists of arguments passed to
 #'   \code{climate}, if this is a function.
 #' @param all_combinations Logical: Set up and run all possible combinations of
-#'   individual \code{param.b90}, \code{climate} and \code{soil} objects?
-#'   Default is \code{FALSE}, running one object or the list of \code{param.b90}
+#'   individual \code{param_b90}, \code{climate} and \code{soil} objects?
+#'   Default is \code{FALSE}, running one object or the list of \code{param_b90}
 #'   objects for a series of climate/soil combinations.
 #' @param cores Number of cores to use for parallel processing.
 #' @param showProgress Logical: Show progress bar? Default is \code{TRUE}. See
@@ -30,7 +30,7 @@
 #' @return A named list with the results of the single runs as returned by
 #'   \code{\link{runLWFB90}}. Simulation or processing errors are passed on. The
 #'   names of the returned list entries are concatenated from the names of the
-#'   input list entries in the following form: <climate> <soil> <param.b90>. If
+#'   input list entries in the following form: <climate> <soil> <param_b90>. If
 #'   \code{climate} is a function, the names for <climate> are taken from the
 #'   names of \code{climate_args}.
 #'
@@ -46,7 +46,7 @@
 #'   database. The regular output of \code{\link{runLWFB90}} can be suppressed
 #'   by setting \code{rtrn.output = FALSE}, for exclusively returning the output
 #'   of such functions. To provide full flexibility, the names of the current
-#'   \code{soil}, \code{param.b90}, and \code{climate} are automatically passed
+#'   \code{soil}, \code{param_b90}, and \code{climate} are automatically passed
 #'   as additional arguments (\code{soil_nm}, \code{param_nm},\code{clim_nm}) to
 #'   \code{\link{runLWFB90}} and in this way become available to functions
 #'   passed via \code{output_fun}. In order to not overload the memory with
@@ -67,8 +67,8 @@
 #'
 #' @example inst/examples/msiterunLWFB90-help.R
 #'
-msiterunLWFB90 <- function(param.b90,
-                           options.b90,
+msiterunLWFB90 <- function(param_b90,
+                           options_b90,
                            soil = NULL,
                            climate,
                            climate_args = NULL,
@@ -88,7 +88,7 @@ msiterunLWFB90 <- function(param.b90,
   `%:%` <- foreach::`%:%`
 
   #determine list lengths and setup the names
-  param_len <- nstlist_length(param.b90)
+  param_len <- nstlist_length(param_b90)
   soil_len <- nstlist_length(soil)
   if (is.function(climate)) {
     clim_len <- nstlist_length(climate_args)
@@ -97,7 +97,7 @@ msiterunLWFB90 <- function(param.b90,
   }
 
   if (all(c(param_len, clim_len, soil_len) <= 1L)) {
-    stop("No variation of inputs provided. Please provide at least one of param.b90,
+    stop("No variation of inputs provided. Please provide at least one of param_b90,
            soil or climate as a list for a multi-site simulation.")
   }
 
@@ -161,8 +161,8 @@ msiterunLWFB90 <- function(param.b90,
           combi_thisclim <- combinations[which(combinations$clim == clim_no), ]
 
 
-          res <- runLWFB90(options.b90 = options.b90,
-                           param.b90 = param.b90[[combi_thisclim$param[i]]],
+          res <- runLWFB90(options_b90 = options_b90,
+                           param_b90 = param_b90[[combi_thisclim$param[i]]],
                            soil = soil[[combi_thisclim$soil[i]]],
                            climate = thisclim,
                            soil_nm = soil_nms[combi_thisclim$soil[i]],
@@ -230,12 +230,12 @@ make_nms_climsoilparmopts <- function() {
   eval.parent(quote({
 
     if (param_len > 0) {
-      if (is.null(names(param.b90))) {
+      if (is.null(names(param_b90))) {
         param_nms <- as.character(1:param_len)
-      } else {param_nms <- names(param.b90)}
+      } else {param_nms <- names(param_b90)}
     } else {
       param_nms <- NULL
-      param.b90 <- list(param.b90) # lift up one level for foreach loop
+      param_b90 <- list(param_b90) # lift up one level for foreach loop
       param_len <- 1L
     }
 

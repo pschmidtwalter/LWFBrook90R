@@ -48,8 +48,8 @@ library(data.table)
 The central function to run LWF-BROOK90 from within R is `runLWFB90`. Before we use it, we need to set up the required input objects that are passed as arguments. Aside from meteorological and soil data, we need to define the model control options and model parameter objects. The model options contains basic information about the simulation and which submodels to use (e.g. the start and end dates of the simulation, the precipitation interval, the phenology model, root length density depth distribution function, etc). The model parameter object contains about 100 parameters, of which most are required to run the model, but some only take effect if certain model options are selected (see section [Model control options](#options)). Two functions are defined in LWFBrook90R that can be used to generate default lists of model options and parameters:
 
 ```{r}
-options.b90 <- setoptions_LWFB90()
-param.b90 <- setparam_LWFB90()
+options_b90 <- setoptions_LWFB90()
+param_b90 <- setparam_LWFB90()
 ```
 The created objects can be easily manipulated by reference, or simply by assigning values to the option and parameter names directly in the function calls. To look up the meanings of the various options and parameters see `?setoption_LWFB90` and `?setparam_LWFB90`. The meaning and context of most input parameters (and output variables) can also be looked up in the documentation of the original Brook90 model version on [Tony Federer's webpages](http://www.ecoshift.net/brook/b90doc.html), which is always a recommended source of information when working with any Brook90 version.
 
@@ -69,8 +69,8 @@ output
 
 Now we are ready to perform the single-run simulation using the central function `runLWFB90`:
 ```{r, eval = F}
-b90res <- runLWFB90(options.b90 = options.b90,
-                    param.b90 = param.b90,
+b90res <- runLWFB90(options_b90 = options_b90,
+                    param_b90 = param_b90,
                     climate = slb1_meteo,
                     soil = soil,
                     output = output, output.log = F)
@@ -81,7 +81,7 @@ b90res <- LWFBrook90R:::b90res
 ```
 
 
-`runLWFB90` thereby derives the daily stand properties (`lai`, `sai`, `height`, `densef`, `age`) and root distribution from parameters, and passes climate, vegetation properties and parameters to the Fortran dynamic library. After the simulation has finished, `runLWFB90` returns the selected output (if `read.output = TRUE`). The return value is a list containing the model output (as specified by the `output`-argument), along with the model input (`options.b90`, `param.b90` and derived daily vegetation properties `standprop_daily`), if desired (`rtrn.input = TRUE`). The model output items in the result list are data.tables. In this example, the EVAPDAY.ASC data.table contains daily evaporation water fluxes:
+`runLWFB90` thereby derives the daily stand properties (`lai`, `sai`, `height`, `densef`, `age`) and root distribution from parameters, and passes climate, vegetation properties and parameters to the Fortran dynamic library. After the simulation has finished, `runLWFB90` returns the selected output (if `read.output = TRUE`). The return value is a list containing the model output (as specified by the `output`-argument), along with the model input (`options_b90`, `param_b90` and derived daily vegetation properties `standprop_daily`), if desired (`rtrn_input = TRUE`). The model output items in the result list are data.tables. In this example, the EVAPDAY.ASC data.table contains daily evaporation water fluxes:
 
 ```{r}
 str(b90res$EVAPDAY.ASC)
@@ -129,9 +129,9 @@ With LWFBrook90R, parallelized multi-run simulations can be conveniently perform
 
 For the first case, the function `mrunLWFB90` is available. The second problem can be tackled using the function `msiterunLWFB90`. Both functions are wrapper functions for `runLWFB90` and allow for parallel processing of tasks using a specified number of CPUs to speed up the execution of a multi-run simulation. 
 
-The functions return lists of the individual single run simulation results, as they are returned by `runLWFB90`. These lists can become very large when many simulations are performed, the selected output comprises daily data sets (e.g. `EVAPDAY.ASC`) and especially soil moisture state variables of individual soil layers (`SWATDAY.ASC`). To minimize memory allocation, it is therefore recommended to reduce the selected output to a minimum and make use of the `output_fun`-argument in `runLWFB90`. With this argument, it is possible to pass custom functions to `runLWFB90`, which directly perform on the simulation output list object. With `rtrn.output` set to `FALSE`, the original simulation output list containing .ASC file contents can be discarded, and only the results from the `output_fun`-argument are returned. This can be very useful for model calibration or sensitivity analyses tasks comprising ten thousands of simulations in a Monte-Carlo setting. With this magnitude, only a relatively small output can be returned for each individual simulation, e.g., a measure of agreement between simulated and observed values. Similarly, it is possible to define functions to aggregate model output on-the-fly, or to redirect the output to a database or individual files, when Multi-Site forward simulations shall be performed for a large number of sites. 
+The functions return lists of the individual single run simulation results, as they are returned by `runLWFB90`. These lists can become very large when many simulations are performed, the selected output comprises daily data sets (e.g. `EVAPDAY.ASC`) and especially soil moisture state variables of individual soil layers (`SWATDAY.ASC`). To minimize memory allocation, it is therefore recommended to reduce the selected output to a minimum and make use of the `output_fun`-argument in `runLWFB90`. With this argument, it is possible to pass custom functions to `runLWFB90`, which directly perform on the simulation output list object. With `rtrn_output` set to `FALSE`, the original simulation output list containing .ASC file contents can be discarded, and only the results from the `output_fun`-argument are returned. This can be very useful for model calibration or sensitivity analyses tasks comprising ten thousands of simulations in a Monte-Carlo setting. With this magnitude, only a relatively small output can be returned for each individual simulation, e.g., a measure of agreement between simulated and observed values. Similarly, it is possible to define functions to aggregate model output on-the-fly, or to redirect the output to a database or individual files, when Multi-Site forward simulations shall be performed for a large number of sites. 
 
-To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo simulation using the function `mrunLWFB90`. The function is a simple wrapper function for `runLWFB90` and takes a data.frame `paramvar`, that contains variable parameter values in columns and their realisations in rows. For each row in `paramvar`, the respective parameter values in `param.b90` are replaced by name, and `runLWFB90` is executed. The return of `mrunLWFB90` is a list containing the individual single-run simulation results, as returned by `runLWFB90`. In order to reduce the returned output, we define a function that integrates depth-specific soil moisture to soil water storage in 0-100 cm soil depths (as we did in the first example) and return the calculated values in a data.frame along with daily transpiration:
+To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo simulation using the function `mrunLWFB90`. The function is a simple wrapper function for `runLWFB90` and takes a data.frame `paramvar`, that contains variable parameter values in columns and their realisations in rows. For each row in `paramvar`, the respective parameter values in `param_b90` are replaced by name, and `runLWFB90` is executed. The return of `mrunLWFB90` is a list containing the individual single-run simulation results, as returned by `runLWFB90`. In order to reduce the returned output, we define a function that integrates depth-specific soil moisture to soil water storage in 0-100 cm soil depths (as we did in the first example) and return the calculated values in a data.frame along with daily transpiration:
 
 ```{r}
 output_function <- function(x) {
@@ -162,13 +162,13 @@ Now we can run the simulation. We use our custom output function, and suppress t
 
 ```{r, eval = F}
 mrun_res <- mrunLWFB90(paramvar = paramvar,
-                       param.b90 = param.b90,
+                       param_b90 = param_b90,
                        cores = 3,
-                       options.b90 = options.b90, # the following args are passed to runLWFB90
+                       options_b90 = options_b90, # the following args are passed to runLWFB90
                        climate = slb1_meteo,
                        soil = soil,
                        output = output, 
-                       rtrn.input = F, rtrn.output = F,
+                       rtrn_input = F, rtrn_output = F,
                        output_fun = output_function)
 ```
 
@@ -209,55 +209,55 @@ legend("bottomright",
 ```
 
 # Options and parameters {#options}
-The model control options (`options.b90`-argument in `runLWFB90`) let you select basic information about the simulation like start and end dates of the simulation (`startdate`, `enddate`), the radiation input (global radiation or sunshine duration, `fornetrad`), the precipitation interval (`prec.interval`), correction for evaporation bias of precipitation (`prec.corr`), and which  water retention and hydraulic conductivity model to use (`imodel`, Mualem/van Genuchten or Clapp/Hornberger). 
+The model control options (`options_b90`-argument in `runLWFB90`) let you select basic information about the simulation like start and end dates of the simulation (`startdate`, `enddate`), the radiation input (global radiation or sunshine duration, `fornetrad`), the precipitation interval (`prec_interval`), correction for evaporation bias of precipitation (`prec.corr`), and which  water retention and hydraulic conductivity model to use (`imodel`, Mualem/van Genuchten or Clapp/Hornberger). 
 
-Aside from the basic technical information, the options control the basic shape of the annual course of leaf area index, which phenology model, and which root density depth distribution function to use. The interplay of options and parameters is shown briefly in the following paragraphs, by describing how options and parameters are passed from the `options.b90` and `param.b90` arguments to the individual functions that are called from within `runLWFB90`.
+Aside from the basic technical information, the options control the basic shape of the annual course of leaf area index, which phenology model, and which root density depth distribution function to use. The interplay of options and parameters is shown briefly in the following paragraphs, by describing how options and parameters are passed from the `options_b90` and `param_b90` arguments to the individual functions that are called from within `runLWFB90`.
 
 ## Aboveground vegetation characteristics
 
 ### Intra-annual variation of leaf area index
 
-In the simulation, we used the default parameters representing a deciduous forest stand, without leafs in winter and maximum leaf area index in summer. The maximum leaf area index is defined by the parameter `param.b90$maxlai`, the minimum value in winter is internally calculated as a fraction (`param.b90$winlaifrac`) of `param.b90$maxlai`. 
-The basic shape of the intra-annual leaf area index dynamics can be selected by the option `options.b90$lai.method`. The default setting `'b90'` is also implemented in the original LWF-BROOK90 GUI and makes use of the parameters `budburstdoy`, `leaffalldoy`, `emergedur` and `leaffalldur`, that define the dates of budburst and leaffall, and the durations of leaf unfolding and leaf shedding until `maxlai`, and  respectively `winlaifrac` are reached. Within `runLWFB90()`, the parameters are passed to `MakeSeasLAI` that constructs the daily timeseries of leaf area index development for a single year:
+In the simulation, we used the default parameters representing a deciduous forest stand, without leafs in winter and maximum leaf area index in summer. The maximum leaf area index is defined by the parameter `param_b90$maxlai`, the minimum value in winter is internally calculated as a fraction (`param_b90$winlaifrac`) of `param_b90$maxlai`. 
+The basic shape of the intra-annual leaf area index dynamics can be selected by the option `options_b90$lai_method`. The default setting `'b90'` is also implemented in the original LWF-BROOK90 GUI and makes use of the parameters `budburstdoy`, `leaffalldoy`, `emergedur` and `leaffalldur`, that define the dates of budburst and leaffall, and the durations of leaf unfolding and leaf shedding until `maxlai`, and  respectively `winlaifrac` are reached. Within `runLWFB90()`, the parameters are passed to `MakeSeasLAI` that constructs the daily timeseries of leaf area index development for a single year:
 
 ```{r}
-LAI_b90 <-  MakeSeasLAI(method = options.b90$lai.method,
+LAI_b90 <-  MakeSeasLAI(method = options_b90$lai_method,
                         year = 2003,
-                        maxlai = param.b90$maxlai,
-                        winlaifrac = param.b90$winlaifrac,
-                        budburst.doy = param.b90$budburstdoy,
-                        leaffall.doy = param.b90$leaffalldoy,
-                        emerge.dur = param.b90$emergedur,
-                        leaffall.dur = param.b90$leaffalldur)
+                        maxlai = param_b90$maxlai,
+                        winlaifrac = param_b90$winlaifrac,
+                        budburst.doy = param_b90$budburstdoy,
+                        leaffall.doy = param_b90$leaffalldoy,
+                        emerge.dur = param_b90$emergedur,
+                        leaffall.dur = param_b90$leaffalldur)
 ```
 
-`MakeSeasLAI()` also provides other shape functions, that require additional parameters. For example, the model control option `options.b90$lai.method = 'linear'` uses value pairs of day-of-year and leaf area index as fraction of `maxlai` passed from parameters `param.b90$lai.doy` and `param.b90$lai.frac`. The doy/value-pairs are then used to interpolate the intra-annual course of leaf area index to a daily time series.
+`MakeSeasLAI()` also provides other shape functions, that require additional parameters. For example, the model control option `options_b90$lai_method = 'linear'` uses value pairs of day-of-year and leaf area index as fraction of `maxlai` passed from parameters `param_b90$lai.doy` and `param_b90$lai.frac`. The doy/value-pairs are then used to interpolate the intra-annual course of leaf area index to a daily time series.
 
 ```{r}
-options.b90$lai.method <- "linear"
-param.b90$lai.doy <- c(1,110,117,135,175,220,250,290,365)
-param.b90$lai.frac <- c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)
-LAI_linear <-  MakeSeasLAI(method = options.b90$lai.method,
+options_b90$lai_method <- "linear"
+param_b90$lai.doy <- c(1,110,117,135,175,220,250,290,365)
+param_b90$lai.frac <- c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)
+LAI_linear <-  MakeSeasLAI(method = options_b90$lai_method,
                            year = 2003,
-                           maxlai = param.b90$maxlai,
-                           lai.doy = param.b90$lai.doy ,
-                           lai.frac = param.b90$lai.frac)
+                           maxlai = param_b90$maxlai,
+                           lai.doy = param_b90$lai.doy ,
+                           lai.frac = param_b90$lai.frac)
 ```
 
-A third shape-option for the intra-annual variation of leaf area index is called 'Coupmodel' and uses the interpolation method as implemented in the 'Coupmodel' [@jansson_coupled_2004]. With `option.b90$lai.method ='Coupmodel`, form parameters for leaf unfolding and leaf fall (`shape.budburst`, `shape.leaffall`), and the date when leaf area is at its maximum (`shape.optdoy`) come into action.
+A third shape-option for the intra-annual variation of leaf area index is called 'Coupmodel' and uses the interpolation method as implemented in the 'Coupmodel' [@jansson_coupled_2004]. With `options_b90$lai_method ='Coupmodel`, form parameters for leaf unfolding and leaf fall (`shape.budburst`, `shape.leaffall`), and the date when leaf area is at its maximum (`shape.optdoy`) come into action.
 ```{r}
-options.b90$lai.method <- "Coupmodel"
-param.b90$shape.budburst <- 0.5
-param.b90$shape.leaffall <- 5
-param.b90$shape.optdoy <- 180
-LAI_coupmodel <-  MakeSeasLAI(method = options.b90$lai.method,
+options_b90$lai_method <- "Coupmodel"
+param_b90$shape.budburst <- 0.5
+param_b90$shape.leaffall <- 5
+param_b90$shape.optdoy <- 180
+LAI_coupmodel <-  MakeSeasLAI(method = options_b90$lai_method,
                               year = 2003,
-                              maxlai = param.b90$maxlai,
-                              budburst.doy = param.b90$budburstdoy,
-                              leaffall.doy = param.b90$leaffalldoy,
-                              shape.budburst = param.b90$shape.budburst,
-                              shape.leaffall = param.b90$shape.leaffall,
-                              shape.optdoy = param.b90$shape.optdoy)
+                              maxlai = param_b90$maxlai,
+                              budburst.doy = param_b90$budburstdoy,
+                              leaffall.doy = param_b90$leaffalldoy,
+                              shape.budburst = param_b90$shape.budburst,
+                              shape.leaffall = param_b90$shape.leaffall,
+                              shape.optdoy = param_b90$shape.optdoy)
 ```
 
 A plot of all three methods shows the roles of the different parameters:
@@ -266,26 +266,26 @@ A plot of all three methods shows the roles of the different parameters:
 par(xpd = TRUE, mar = c(5.1,4.1,2.1,2.1), oma = c(1,1,1,1))
 
 plot(LAI_b90, type = "n", xlab = "doy", ylab = "lai [m²/m²]", ylim = c(0,6))
-with(param.b90, abline(v = c(budburstdoy,budburstdoy+emergedur,
+with(param_b90, abline(v = c(budburstdoy,budburstdoy+emergedur,
                              leaffalldoy, leaffalldoy+leaffalldur), lty = 2, xpd = F))
 lines(LAI_b90, col ="green",lwd = 2,)
 lines(LAI_linear, col ="red",lwd = 2)
 lines(LAI_coupmodel, col ="blue",lwd = 2)
 
-with(param.b90, arrows(x0 = c(budburstdoy,leaffalldoy,shape.optdoy,budburstdoy,leaffalldoy),
+with(param_b90, arrows(x0 = c(budburstdoy,leaffalldoy,shape.optdoy,budburstdoy,leaffalldoy),
                        x1 = c(budburstdoy,leaffalldoy, shape.optdoy,
                               budburstdoy+emergedur, leaffalldoy + leaffalldur),
                        y0 = c(-1.6,-1.6,3.5,2.5,2.5),y1 = c(-0.3,-0.3,4.8,2.5,2.5), 
                        length = 0.15, code = 2))
-with(param.b90, arrows(x0 = c(budburstdoy,leaffalldoy),
+with(param_b90, arrows(x0 = c(budburstdoy,leaffalldoy),
                        x1 = c(budburstdoy+emergedur, leaffalldoy + leaffalldur),
                        y0 = c(2.5,2.5),y1 = c(2.5,2.5), 
                        length = 0.15, code = 3))
 
-with(param.b90, text(x = c(budburstdoy, leaffalldoy, shape.optdoy), y = c(-1.9,-1.9,3.2), c("budburstdoy", "leaffalldoy", "shape.optdoy")))
-with(param.b90, text(x = c(budburstdoy+0.5*emergedur,leaffalldoy+0.5*leaffalldur),
+with(param_b90, text(x = c(budburstdoy, leaffalldoy, shape.optdoy), y = c(-1.9,-1.9,3.2), c("budburstdoy", "leaffalldoy", "shape.optdoy")))
+with(param_b90, text(x = c(budburstdoy+0.5*emergedur,leaffalldoy+0.5*leaffalldur),
                      y = 2, c("emergedur","leaffalldur")))
-with(param.b90, text(
+with(param_b90, text(
   x = c(budburstdoy/2, (leaffalldoy - budburstdoy - emergedur)/2 + budburstdoy + emergedur),y = c(winlaifrac*maxlai+0.4,maxlai+0.4), c("winlaifrac * maxlai", "maxlai")))
 
 legend("topleft",c("'b90'","'linear'", "'Coupmodel'"), pch = NULL, lwd =2, col = c("green", "red", "blue"), bty = "n")
@@ -293,62 +293,62 @@ legend("topleft",c("'b90'","'linear'", "'Coupmodel'"), pch = NULL, lwd =2, col =
 ```
 
 ### Inter-annual variation of leaf area index 
-By passing a single value via `param.b90$maxlai` we used the same maximum leaf area index for each year of the simulation period. In order to incorporate between-year variation of the leaf area index, we can simply assign vectors of values for each year of the simulation period to any of the parameters used by function `MakeSeasLAI()`. In the following example, we pass three values for maxlai and shape.optdoy, to get different seasonal courses of leaf area index for the three years of the simulation period. Additionally, we add variation to the dates of budburst, by assigning a vector of values to the parameter `budburstdoy`.
+By passing a single value via `param_b90$maxlai` we used the same maximum leaf area index for each year of the simulation period. In order to incorporate between-year variation of the leaf area index, we can simply assign vectors of values for each year of the simulation period to any of the parameters used by function `MakeSeasLAI()`. In the following example, we pass three values for maxlai and shape.optdoy, to get different seasonal courses of leaf area index for the three years of the simulation period. Additionally, we add variation to the dates of budburst, by assigning a vector of values to the parameter `budburstdoy`.
 ```{r,echo = 1:6, results = 'hide',fig.height=5, fig.width=7, fig.cap = "Options and parameters affecting interannual variation of leaf area index."}
 years <- 2001:2003
-param.b90$maxlai <- c(4,6,5)
-param.b90$shape.optdoy <- c(210,180,240)
-param.b90$shape.budburst <- c(3,1,0.3)
-param.b90$budburstdoy <- c(100,135,121) 
-lai_variation <- MakeSeasLAI(method = options.b90$lai.method,
+param_b90$maxlai <- c(4,6,5)
+param_b90$shape.optdoy <- c(210,180,240)
+param_b90$shape.budburst <- c(3,1,0.3)
+param_b90$budburstdoy <- c(100,135,121) 
+lai_variation <- MakeSeasLAI(method = options_b90$lai_method,
                               year = years,
-                              maxlai = param.b90$maxlai,
-                              budburst.doy = param.b90$budburstdoy,
-                              leaffall.doy = param.b90$leaffalldoy,
-                              shape.budburst = param.b90$shape.budburst,
-                              shape.leaffall = param.b90$shape.leaffall,
-                              shape.optdoy = param.b90$shape.optdoy)
+                              maxlai = param_b90$maxlai,
+                              budburst.doy = param_b90$budburstdoy,
+                              leaffall.doy = param_b90$leaffalldoy,
+                              shape.budburst = param_b90$shape.budburst,
+                              shape.leaffall = param_b90$shape.leaffall,
+                              shape.optdoy = param_b90$shape.optdoy)
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
 plot(seq.Date(as.Date("2001-01-01"), as.Date("2003-12-31"), by = "day"),
      lai_variation, col = "green", ylab = "lai [m²/m²]",
                                            type ="l", xlab = "", lwd = 2)
-arrows( x0 = as.Date(paste(param.b90$budburstdoy, years),format = "%j %Y"),
+arrows( x0 = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
      y0 = -1.0, y1 = -0.3, length = 0.15, code = 2, xpd =T)
-text(x = as.Date(paste(param.b90$budburstdoy, years),format = "%j %Y"),
-     y = -1.3, paste("doy", param.b90$budburstdoy), xpd = T)
+text(x = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
+     y = -1.3, paste("doy", param_b90$budburstdoy), xpd = T)
 ```
 
-Beside the obvious between-year variation of maximum leaf area index, we can also see the effect of the shape parameter for the leaf unfolding phase `shape.budburst`. Values greater 1 result in concave, values below 1 in convex functions, while values of 1 give linear progressions. The budburst day-of-year is varying as specified in the parameters, but can also be estimated using temperature based phenology models. By selecting other settings than the default `options.b90$budburst.method = 'fixed'` and `options.b90$leaffall.method = 'fixed'`, the `vegperiod()` function of the 'vegperiod'-Package is called from within `runLWFB90`. `budburstdoy` and/or `leaffalldoy` are then calculated for each year from the climate data using the desired methods. See `vegperiod` for a list of available models. The estimated values for `budburstdoy` and/or `leaffalldoy` can be found in the `param.b90` list element of the results object after the simulation.
+Beside the obvious between-year variation of maximum leaf area index, we can also see the effect of the shape parameter for the leaf unfolding phase `shape.budburst`. Values greater 1 result in concave, values below 1 in convex functions, while values of 1 give linear progressions. The budburst day-of-year is varying as specified in the parameters, but can also be estimated using temperature based phenology models. By selecting other settings than the default `options_b90$budburst_method = 'fixed'` and `options_b90$leaffall_method = 'fixed'`, the `vegperiod()` function of the 'vegperiod'-Package is called from within `runLWFB90`. `budburstdoy` and/or `leaffalldoy` are then calculated for each year from the climate data using the desired methods. See `vegperiod` for a list of available models. The estimated values for `budburstdoy` and/or `leaffalldoy` can be found in the `param_b90` list element of the results object after the simulation.
 
 ### Other plant properties (height, sai, densef)
-Like the leaf area index parameters and budburst/leaffall-dates, it is also possible to provide vectors of values for stand height, stem area index, and stand density to generate between-year variation of stand characteristics. From the yearly values, daily values are interpolated using the function `approx_standprop`. The `approx.method`- argument of the function defines how to interpolate the yearly values passed by `y`. Within `runLWFB90`, the option `options.b90$standprop.interp` is passed to the `approx.method`- argument of `approx_standprop`. The default interpolation method 'constant' results in a yearly changing step function, while 'linear' interpolates the values:
+Like the leaf area index parameters and budburst/leaffall-dates, it is also possible to provide vectors of values for stand height, stem area index, and stand density to generate between-year variation of stand characteristics. From the yearly values, daily values are interpolated using the function `approx_standprop`. The `approx.method`- argument of the function defines how to interpolate the yearly values passed by `y`. Within `runLWFB90`, the option `options_b90$standprop_interp` is passed to the `approx.method`- argument of `approx_standprop`. The default interpolation method 'constant' results in a yearly changing step function, while 'linear' interpolates the values:
 ```{r}
 # constant 'interpolation'
-options.b90$standprop.interp <- 'constant'
-param.b90$height <- c(20.2,20.8,21.3)
+options_b90$standprop_interp <- 'constant'
+param_b90$height <- c(20.2,20.8,21.3)
 simyears <- 2002:2003
 height_c <- approx_standprop(x.years=years,
-                                 y = param.b90$height,
-                                 approx.method = options.b90$standprop.interp)
+                                 y = param_b90$height,
+                                 approx.method = options_b90$standprop_interp)
 
 # linear interpolation       
-options.b90$standprop.interp <- 'linear'
-param.b90$height.ini <- 19.1
+options_b90$standprop_interp <- 'linear'
+param_b90$height.ini <- 19.1
 height_l <- approx_standprop(x.years=years,
-                             y = param.b90$height,
-                             y.ini = param.b90$height.ini,
-                             approx.method = options.b90$standprop.interp)
+                             y = param_b90$height,
+                             y.ini = param_b90$height.ini,
+                             approx.method = options_b90$standprop_interp)
 ```
-For linear interpolation, additional parameters `height.ini`, `sai.ini`, `densef.ini` have to be provided to `runLWFB90` via the `param.b90`-argument. These parameters define the values at the beginning of the simulation, to which the value of the first year is interpolated to. By default, the yearly values are interpreted to be valid at December 31st of the respective years, so that the interpolated timeseries are linearly increasing or decreasing during the whole year. In order to constrain the interpolation to the growth period only, the option `options.b90$standprop.use_growthperiod` was introduced, which requires the arguments `startdoy` and `enddoy`, when set to TRUE. Then, values decrease or increase between budburst and leaffall only, and remain constant during winter.
+For linear interpolation, additional parameters `height.ini`, `sai.ini`, `densef.ini` have to be provided to `runLWFB90` via the `param_b90`-argument. These parameters define the values at the beginning of the simulation, to which the value of the first year is interpolated to. By default, the yearly values are interpreted to be valid at December 31st of the respective years, so that the interpolated timeseries are linearly increasing or decreasing during the whole year. In order to constrain the interpolation to the growth period only, the option `options_b90$use_growthperiod` was introduced, which requires the arguments `startdoy` and `enddoy`, when set to TRUE. Then, values decrease or increase between budburst and leaffall only, and remain constant during winter.
 ```{r}
-options.b90$standprop.use_growthperiod <- TRUE
+options_b90$use_growthperiod <- TRUE
 height_l_gp <- approx_standprop(x.years = years,
-                             y = param.b90$height,
-                             y.ini = param.b90$height.ini,
-                             use_growthperiod = options.b90$standprop.use_growthperiod,
-                             startdoy = param.b90$budburstdoy,
-                             enddoy = param.b90$leaffalldoy,
-                             approx.method = options.b90$standprop.interp)
+                             y = param_b90$height,
+                             y.ini = param_b90$height.ini,
+                             use_growthperiod = options_b90$use_growthperiod,
+                             startdoy = param_b90$budburstdoy,
+                             enddoy = param_b90$leaffalldoy,
+                             approx.method = options_b90$standprop_interp)
 ```
 The following plot explains the differences between the interpolated timeseries of stand height using the different options and parameters
 
@@ -367,36 +367,36 @@ lines(dates, height_l_gp,
 legend("topleft", legend = c("approx.method = 'constant'", "approx.method = 'linear'", "approx.method = 'linear', use_growthperiod = TRUE"), 
        col  = c("black", "blue", "green"),  lwd = 2, pch = NULL,
        bty = "n")
-arrows( x0 = as.Date(paste(param.b90$budburstdoy, years),format = "%j %Y"),
-     y0 = c(param.b90$height.in,param.b90$height[1:2])-0.5, y1 = c(param.b90$height.in,param.b90$height[1:2])-0.1, length = 0.15, code = 2, xpd =T)
-text(x = as.Date(paste(param.b90$budburstdoy, years), format = "%j %Y"),
-     y = c(param.b90$height.in,param.b90$height[1:2])-0.7, paste("doy", param.b90$budburstdoy), xpd = T)
-arrows( x0 = as.Date(paste(param.b90$leaffalldoy, years),format = "%j %Y"),
-     y0 = param.b90$height-0.5, y1 = param.b90$height-0.1, length = 0.15, code = 2, xpd =T)
-text(x = as.Date(paste(param.b90$leaffalldoy, years), format = "%j %Y"),
-     y = param.b90$height-0.7, paste("doy", param.b90$leaffalldoy), xpd = T)
+arrows( x0 = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
+     y0 = c(param_b90$height.in,param_b90$height[1:2])-0.5, y1 = c(param_b90$height.in,param_b90$height[1:2])-0.1, length = 0.15, code = 2, xpd =T)
+text(x = as.Date(paste(param_b90$budburstdoy, years), format = "%j %Y"),
+     y = c(param_b90$height.in,param_b90$height[1:2])-0.7, paste("doy", param_b90$budburstdoy), xpd = T)
+arrows( x0 = as.Date(paste(param_b90$leaffalldoy, years),format = "%j %Y"),
+     y0 = param_b90$height-0.5, y1 = param_b90$height-0.1, length = 0.15, code = 2, xpd =T)
+text(x = as.Date(paste(param_b90$leaffalldoy, years), format = "%j %Y"),
+     y = param_b90$height-0.7, paste("doy", param_b90$leaffalldoy), xpd = T)
 ```
 
-Another option for incorporating between-year variation of plant properties is to provide a table with yearly values of 'height', 'maxlai', 'sai', 'densef' and 'age'  via the list element `standprop.table` of the `param.b90`-argument of `runLWFB90`. To take effect, the option `options.b90$standprop.input` has to be set to 'table'. In this case, the values passed via parameters `height`, `sai`, `densef` and `age.ini` are ignored. As `maxlai` is also provided via the table, the `maxlai` value from parameters is ignored as well, while the other parameters that affect intra-annual leaf area development (e.g., `shape.budburst`) are still active.
+Another option for incorporating between-year variation of plant properties is to provide a table with yearly values of 'height', 'maxlai', 'sai', 'densef' and 'age'  via the list element `standprop.table` of the `param_b90`-argument of `runLWFB90`. To take effect, the option `options_b90$standprop_input` has to be set to 'table'. In this case, the values passed via parameters `height`, `sai`, `densef` and `age.ini` are ignored. As `maxlai` is also provided via the table, the `maxlai` value from parameters is ignored as well, while the other parameters that affect intra-annual leaf area development (e.g., `shape.budburst`) are still active.
 For demonstration purposes we use the table `slb1_standprop`, that contains observed stand data of the Solling Beech Experimental site from 1966 to 2014, along with estimated leaf and stem area index derived using allometric functions. For creating the daily timeseries of stand properties, we use `runLWFB90`, and make use of the option to not run the model (`run = FALSE`), but only return the model input.
 ```{r, messages = F}
 #Extend simulation period
-options.b90$startdate <- as.Date("1980-01-01")
-options.b90$enddate <- as.Date("1999-12-31")
+options_b90$startdate <- as.Date("1980-01-01")
+options_b90$enddate <- as.Date("1999-12-31")
 
 #set up options for table input 
-options.b90$standprop.input <- 'table'
-param.b90$standprop.table <- slb1_standprop
+options_b90$standprop_input <- 'table'
+param_b90$standprop.table <- slb1_standprop
 
 # Set up dynamic budburst and leaf fall
-options.b90$budburst.method <- "Menzel"
-options.b90$leaffall.method <- "vonWilpert"
-param.b90$budburst.species <- "Fagus sylvatica"
+options_b90$budburst_method <- "Menzel"
+options_b90$leaffall_method <- "vonWilpert"
+param_b90$budburst.species <- "Fagus sylvatica"
 
 #run LWF-Brook90 without simulation
 standprop_daily <- runLWFB90(project.dir = "example_run_b90/",
-                                       options.b90 = options.b90,
-                                       param.b90 = param.b90,
+                                       options_b90 = options_b90,
+                                       param_b90 = param_b90,
                                        climate = slb1_meteo,
                                        soil = soil,
                                        output = output, 
@@ -426,7 +426,7 @@ legend("bottom",horiz = T, bty = "n",inset = -0.25, xpd =T,
 ```
 
 ## Root density depth distribution
-The root depth density depth distribution can either be provided in the column `rootden` of the `soil`- argument of `runLWFB90()`, or can be derived from parameters using the function `MakeRelRootDens()`. In order to use root density as specified in the soil data, the `root.method` element of the `options.b90`-list has to be set to 'soilvar'. Other method names are passed to `MakeRelRootDens()`. Currently, the function provides four methods to assign values of relative root density to a vector of soil depths. The default method 'betamodel' uses the model of Gale & Grigal (-@gale_vertical_1987), which is of the form $y = 1- \beta^d$, where $y$ is the cumulative root fraction down to soil depth $d$ and $\beta$ is the depth coefficient. Larger values of $\beta$ correspond to a greater proportion of roots in deeper soil layers:
+The root depth density depth distribution can either be provided in the column `rootden` of the `soil`- argument of `runLWFB90()`, or can be derived from parameters using the function `MakeRelRootDens()`. In order to use root density as specified in the soil data, the `root_method` element of the `options_b90`-list has to be set to 'soilvar'. Other method names are passed to `MakeRelRootDens()`. Currently, the function provides four methods to assign values of relative root density to a vector of soil depths. The default method 'betamodel' uses the model of Gale & Grigal (-@gale_vertical_1987), which is of the form $y = 1- \beta^d$, where $y$ is the cumulative root fraction down to soil depth $d$ and $\beta$ is the depth coefficient. Larger values of $\beta$ correspond to a greater proportion of roots in deeper soil layers:
 
 ```{r, echo = F, fig.height=4, fig.width=4}
 plot(MakeRelRootDens(soilnodes = seq(0,-2, by = -0.01), 
@@ -458,38 +458,38 @@ legend("bottomright",legend = c(expression(paste(beta, "= 0.93")),expression(pas
 For larger values of $\beta$, the root density will reach zero only in very deep soil layer. In order to set the root density to zero at any desired soil depth, the parameter `maxrootdepth` was defined. With this parameter, the root density is set to zero in all soil layers that lie deeper than `maxrootdepth`. 
 Within `runLWFB90()`, the function is called in the following way:
 ```{r}
-param.b90$maxrootdepth <- -1.4
-options.b90$root.method <- "betamodel" 
+param_b90$maxrootdepth <- -1.4
+options_b90$root_method <- "betamodel" 
 roots_beta <- MakeRelRootDens(soilnodes = c(max(slb1_soil$upper), slb1_soil$lower), 
-                              maxrootdepth = param.b90$maxrootdepth,
-                              beta = param.b90$betaroot,
-                              method = options.b90$root.method)
+                              maxrootdepth = param_b90$maxrootdepth,
+                              beta = param_b90$betaroot,
+                              method = options_b90$root_method)
 ```
 
 A second option to define the root distribution for the soil layers is to provide value pairs of soil depth and root density, that are  interpolated to midpoints of the soil layers. The value pairs are  passed from the `rootden.table`-entry of the parameter list to `mrunLWFB90()` As an example, we set up a hypothetical root density depth distribution:
 
 ```{r}
-options.b90$root.method <- 'table'
-param.b90$rootden.table <- data.frame(
+options_b90$root_method <- 'table'
+param_b90$rootden.table <- data.frame(
   upper = c(0.03,0,-0.02, -0.15, -0.35, -0.5, -0.65,-0.9,-1.1,-1.3),
   lower = c(0,-0.02, -0.15, -0.35, -0.5, -0.65,-0.9,-1.1,-1.3,-1.6),
   rootden = c(10,15, 35, 15, 7.5, 4, 12, 2, 2, 0))
 roots_table <- MakeRelRootDens(soilnodes = c(max(slb1_soil$upper), slb1_soil$lower), 
-                              method = options.b90$root.method, 
-                              rootdat = param.b90$rootden.table)
+                              method = options_b90$root_method, 
+                              rootdat = param_b90$rootden.table)
 ```
 
 A third option generates a linear root density depth distriution, with the maximum at the uppermost soil layer and a root density of 0 at 'maxrootdepth'. If the parameter 'relrootden' is provided, the first element of the vector is used as the maximum, otherwise the interpolation is made between 0 and 1. The last option returns a uniform root distribution, with the first vector-element of 'relrootden' (if provided) as value for all layers down to 'maxrootdepth'.
 
 ```{r, echo = 1:4, fig.height=4, fig.width=4}
-options.b90$root.method <- 'linear'
+options_b90$root_method <- 'linear'
 roots_linear <- MakeRelRootDens(soilnodes = c(max(slb1_soil$upper), slb1_soil$lower), 
-                              maxrootdepth = param.b90$maxrootdepth,
-                              method = options.b90$root.method)
-options.b90$root.method <- 'const'
+                              maxrootdepth = param_b90$maxrootdepth,
+                              method = options_b90$root_method)
+options_b90$root_method <- 'const'
 roots_constant <- MakeRelRootDens(soilnodes = c(max(slb1_soil$upper), slb1_soil$lower), 
-                              maxrootdepth = param.b90$maxrootdepth,
-                              method = options.b90$root.method)
+                              maxrootdepth = param_b90$maxrootdepth,
+                              method = options_b90$root_method)
 
 plot(roots_constant, slb1_soil$lower,
      type = 's', lwd = 1.5,ylab = "soil depth [m]",xlab = "relative root density",

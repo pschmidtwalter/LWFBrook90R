@@ -6,7 +6,7 @@
 \usage{
 mrunLWFB90(
   paramvar,
-  param.b90,
+  param_b90,
   paramvar_nms = names(paramvar),
   cores = 2,
   showProgress = TRUE,
@@ -15,16 +15,16 @@ mrunLWFB90(
 }
 \arguments{
 \item{paramvar}{Data.frame of variable input parameters. For each row, a
-simulation is performed, with the elements in \code{param.b90} being
+simulation is performed, with the elements in \code{param_b90} being
 replaced by the respective column of \code{paramvar}. All parameter names
-(column names) in \code{paramvar} must be found in \code{param.b90}. See
+(column names) in \code{paramvar} must be found in \code{param_b90}. See
 section \code{Parameter updating}.}
 
-\item{param.b90}{Named list of parameters, in which the parameters defined in
+\item{param_b90}{Named list of parameters, in which the parameters defined in
 \code{paramvar} will be replaced.}
 
 \item{paramvar_nms}{Names of the parameters in \code{paramvar} to be replaced
-in \code{param.b90}.}
+in \code{param_b90}.}
 
 \item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
 
@@ -46,14 +46,14 @@ parallel, with varying input parameters.
 }
 \section{Parameter updating}{
  The transfer of values from a row in
-  \code{paramvar} to \code{param.b90} before each single run simulation is
-  done by matching names from \code{paramvar} and \code{param.b90}. In order
-  to address data.frame or vector elements in \code{param.b90} by a column
+  \code{paramvar} to \code{param_b90} before each single run simulation is
+  done by matching names from \code{paramvar} and \code{param_b90}. In order
+  to address data.frame or vector elements in \code{param_b90} by a column
   name in \code{paramvar}, the respective column name has to be set up from
-  its name and index in \code{param.b90}. To replace, e.g., the 2nd value of
+  its name and index in \code{param_b90}. To replace, e.g., the 2nd value of
   \code{ths} in the \code{soil_materials} data.frame, the respective column
   name in \code{paramvar} has to be called 'soil_materials.ths2'. In order to
-  replace the 3rd value of \code{maxlai} vector in \code{param.b90}, the
+  replace the 3rd value of \code{maxlai} vector in \code{param_b90}, the
   column has to be named 'maxlai3'.
 }
 
@@ -82,14 +82,14 @@ using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 
 \examples{
 # Set up lists containing model control options and model parameters:
-param.b90 <- setparam_LWFB90()
+parms <- setparam_LWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
 # with fixed budburst and leaf fall dates:
-options.b90 <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
+opts <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
                                  enddate = as.Date("2003-06-30"),
-                                 lai.method = 'Coupmodel',
-                                 budburst.method = 'fixed',
-                                 leaffall.method = 'fixed')
+                                 lai_method = 'Coupmodel',
+                                 budburst_method = 'fixed',
+                                 leaffall_method = 'fixed')
 
 # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
@@ -104,16 +104,16 @@ vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
                          maxlai = runif(n,2,7))
 
-# add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
-param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+# add the soil as soil_nodes and soil materials to param_b90, so ths3 can be looked up
+parms[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 
 # select outputs
 output <- setoutput_LWFB90()
 
 # Make a Multirun-Simulation
 b90.multi <- mrunLWFB90(paramvar = vary_parms,
-                        param.b90 = param.b90,
-                        options.b90 = options.b90,
+                        param_b90 = parms,
+                        options_b90 = opts,
                         climate = slb1_meteo,
                         output = output)
 names(b90.multi)

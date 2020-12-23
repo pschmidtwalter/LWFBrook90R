@@ -4,17 +4,17 @@
 \alias{standprop_yearly_to_param}
 \title{Transfer standproperties height, maxlai, sai, densef, age to parameter-list}
 \usage{
-standprop_yearly_to_param(standprop_yearly, param.b90, out.years)
+standprop_yearly_to_param(standprop_yearly, param_b90, out.years)
 }
 \arguments{
 \item{standprop_yearly}{A data.frame or data.table with columns 'year', 'height', 'maxlai', 'sai', 'densef', 'age'.}
 
-\item{param.b90}{A list object to update.}
+\item{param_b90}{A list object to update.}
 
 \item{out.years}{Vector of years for which parameters should be updated.}
 }
 \value{
-The param.b90 list-object with updated items maxlai, height, height.ini,
+The param_b90 list-object with updated items maxlai, height, height.ini,
 sai, sai.ini, densef, densef.ini, age, age.ini.
 }
 \description{
@@ -22,12 +22,12 @@ Takes a data.frame of yearly standproperties, trims/extends the columns height, 
 sai, densef, and age for the years in out.years, and updates the provided parameter list
 }
 \examples{
-param.b90 <- setparam_LWFB90()
+param_b90 <- setparam_LWFB90()
 dat <- slb1_standprop
 
 years <- 2002:2005
 param.new <- standprop_yearly_to_param(dat,
-                                       param.b90,
+                                       param_b90,
                                        years)
 
 identical(param.new$maxlai, dat$maxlai[dat$year \%in\% years])

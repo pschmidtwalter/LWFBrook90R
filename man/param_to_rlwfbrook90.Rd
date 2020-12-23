@@ -4,10 +4,10 @@
 \alias{param_to_rlwfbrook90}
 \title{Create a parameter vector for the r_lwfbrook90-function}
 \usage{
-param_to_rlwfbrook90(param.b90, imodel)
+param_to_rlwfbrook90(param_b90, imodel)
 }
 \arguments{
-\item{param.b90}{A named list of model parameters.}
+\item{param_b90}{A named list of model parameters.}
 
 \item{imodel}{Name of hydraulic model ('MvG' or 'CH')}
 }

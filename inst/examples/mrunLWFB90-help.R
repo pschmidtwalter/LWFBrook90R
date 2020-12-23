@@ -1,12 +1,12 @@
 # Set up lists containing model control options and model parameters:
-param.b90 <- setparam_LWFB90()
+parms <- setparam_LWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
 # with fixed budburst and leaf fall dates:
-options.b90 <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
+opts <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
                                  enddate = as.Date("2003-06-30"),
-                                 lai.method = 'Coupmodel',
-                                 budburst.method = 'fixed',
-                                 leaffall.method = 'fixed')
+                                 lai_method = 'Coupmodel',
+                                 budburst_method = 'fixed',
+                                 leaffall_method = 'fixed')
 
 # Derive soil hydraulic properties from soil physical properties using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
@@ -21,16 +21,16 @@ vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
                          soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3
                          maxlai = runif(n,2,7))
 
-# add the soil as soil_nodes and soil materials to param.b90, so ths3 can be looked up
-param.b90[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
+# add the soil as soil_nodes and soil materials to param_b90, so ths3 can be looked up
+parms[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 
 # select outputs
 output <- setoutput_LWFB90()
 
 # Make a Multirun-Simulation
 b90.multi <- mrunLWFB90(paramvar = vary_parms,
-                        param.b90 = param.b90,
-                        options.b90 = options.b90,
+                        param_b90 = parms,
+                        options_b90 = opts,
                         climate = slb1_meteo,
                         output = output)
 names(b90.multi)

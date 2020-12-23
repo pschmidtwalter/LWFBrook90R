@@ -5,8 +5,8 @@
 \title{Calculate the dates of budburst and beginning of leaf fall}
 \usage{
 calc_vegperiod(
-  budburst.method,
-  leaffall.method,
+  budburst_method,
+  leaffall_method,
   dates = NULL,
   tavg = NULL,
   out.years = NULL,
@@ -16,35 +16,35 @@ calc_vegperiod(
 )
 }
 \arguments{
-\item{budburst.method}{name of model for estimating budburst day of year.
+\item{budburst_method}{name of model for estimating budburst day of year.
 Either 'fixed' or one of the values accepted by the 'start.method'-argument
 of the function \code{\link[vegperiod]{vegperiod}}.}
 
-\item{leaffall.method}{name of model for estimating day of year when leaffall
+\item{leaffall_method}{name of model for estimating day of year when leaffall
 begin. Either 'fixed' or one of the values accepted by the
 'end.method'-argument of the function \code{\link[vegperiod]{vegperiod}}.}
 
 \item{dates}{date vector passed to \code{\link[vegperiod]{vegperiod}},
-ignored if both leaffall.method and budburst.method = 'fixed'}
+ignored if both leaffall_method and budburst_method = 'fixed'}
 
 \item{tavg}{vector of daily mean air temperature (deg C) passed to
-\code{\link[vegperiod]{vegperiod}}, ignored if \code{leaffall.method =
-'fixed'} and \code{budburst.method = 'fixed'}.}
+\code{\link[vegperiod]{vegperiod}}, ignored if \code{leaffall_method =
+'fixed'} and \code{budburst_method = 'fixed'}.}
 
 \item{out.years}{integer vector of the years to be returned. If not
 specified, values for the years in \code{dates} will be returned.}
 
 \item{budburstdoy.fixed}{vector of values to be returned if
-\code{budburst.method = 'fixed'}.}
+\code{budburst_method = 'fixed'}.}
 
 \item{leaffalldoy.fixed}{vector of values to be returned if
-\code{leaffall.method = 'fixed'}.}
+\code{leaffall_method = 'fixed'}.}
 
 \item{...}{additional argument passed to \code{\link[vegperiod]{vegperiod}}.}
 }
 \value{
 a data.frame with columns \code{year}, \code{start}, \code{end}. If
-  \code{budburst.method = 'fixed'} or \code{leaffall.method = 'fixed'},
+  \code{budburst_method = 'fixed'} or \code{leaffall_method = 'fixed'},
   \code{start} and \code{end} contain the values specified in
   \code{budburstdoy.fixed} and \code{leaffalldoy.fixed} respectively.
 }
@@ -54,24 +54,24 @@ Wrapper for \code{\link[vegperiod]{vegperiod}}
 \examples{
 # fixed budburst and leaffall doy
 calc_vegperiod(out.years = 2001:2010,
-               budburst.method = "fixed",
-               leaffall.method = "fixed",
+               budburst_method = "fixed",
+               leaffall_method = "fixed",
                budburstdoy.fixed = floor(runif(10, 120,130)),
                leaffalldoy.fixed = floor(runif(2, 260,280)))
 
 # dynamic budburst and leaffall using air temperature
 data(slb1_meteo)
 
-calc_vegperiod(budburst.method = "Menzel",
-               leaffall.method = "fixed",
+calc_vegperiod(budburst_method = "Menzel",
+               leaffall_method = "fixed",
                leaffalldoy.fixed = 280,
                dates = slb1_meteo$dates,
                tavg = slb1_meteo$tmean,
                species = "Fagus sylvatica",
                est.prev = 3)
 
-calc_vegperiod(budburst.method = "Menzel",
-               leaffall.method = "ETCCDI",
+calc_vegperiod(budburst_method = "Menzel",
+               leaffall_method = "ETCCDI",
                dates = slb1_meteo$dates,
                tavg = slb1_meteo$tmean,
                species = "Quercus robur",
