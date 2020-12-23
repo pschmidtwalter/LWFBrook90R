@@ -10,7 +10,7 @@ runLWFB90(
   climate,
   precip = NULL,
   soil = NULL,
-  output = setoutput_LWFB90(),
+  output = NULL,
   output_fun = NULL,
   rtrn.input = TRUE,
   rtrn.output = TRUE,
@@ -31,7 +31,7 @@ control options.}
 parameters.}
 
 \item{climate}{Data.frame with daily climatic data, or a function that
-returns that data.frame. See details for the required variables.}
+returns a suitable data.frame. See details for the required variables.}
 
 \item{precip}{Data.frame with columns 'dates' and 'prec' to supply
 precipitation data separately from climate data. Can be used to provide
@@ -47,12 +47,14 @@ different time intervals. Use \code{\link{setoutput_LWFB90}} to generate
 and edit a default output selection matrix. Alternatively, use -1 (the
 default) to return the raw daily and soil layer outputs.}
 
-\item{output_fun}{A function or a list of functions to be performed on the
-output objects selected by \code{output}. Can be used to aggregate output
-or calculate goodness of fit measures on-the-fly, or to write results
-instantly to a file or database. Useful if the function is evaluated within
-a large multi-run application, which might overload the memory. (see
-\code{\link{mrunLWFB90}} and \code{\link{msiterunLWFB90}}).}
+\item{output_fun}{A function or a list of functions of the form
+\code{f(x,...)}, where \code{x} is the object regularly returned by
+\code{runLWFB90}. During function evaluation, \code{x} contains model input
+and selected output objects, irrespective of \code{rtrn.input} and
+\code{rtrn.output}. Can be used to  aggregate output on-the-fly, and is
+especially useful if the function is evaluated within a large multi-run
+application, for which the output might overload the memory. (see \code{\link{mrunLWFB90}}
+and \code{\link{msiterunLWFB90}}).}
 
 \item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and
 daily plant properties ('standprop_daily', as derived from parameters) to

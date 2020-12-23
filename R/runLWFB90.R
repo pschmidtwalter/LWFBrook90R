@@ -502,7 +502,6 @@ chk_clim <- function() {
     #     stop("Please either provide 'globrad' or 'sunhours' with your climate!")}
     # }
 
-
     if (any(!c("yr", "mo", "da") %in% names(climate))) {
       climate$yr <- as.integer(format(climate$dates, "%Y"))
       climate$mo <- as.integer(format(climate$dates, "%m"))

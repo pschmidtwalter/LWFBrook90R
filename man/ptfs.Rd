@@ -23,7 +23,7 @@ hydpar_ff_b90(n = 1)
 \item{clay, silt, sand}{Numeric vectors of clay, silt, sand in mass \%.
 Particle size ranges for clay, silt and sand correspond to <2, 2-63, and
 63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle size
-limit between silt and sand corresponds to 50 \eqn{\mu m}{\mum}.}
+limit between silt and sand should be 50 \eqn{\mu m}{\mum}.}
 
 \item{bd}{Numeric vector of bulk density in g cm-3.}
 

@@ -64,14 +64,14 @@ test_that("input/output complete",{
 # climate input ----
 
 # test climate-input
-clim <- slb1_meteo[year(slb1_meteo$dates) == 2002,]
+clim <- slb1_meteo[data.table::year(slb1_meteo$dates) == 2002,]
 names(clim)[1] <- "Datum"
 climfun <- function(met) {
   names(met)[1] <- "dates"
   met
 }
 
-test_that("climate input from function works"{
+test_that("climate input from function works", {
   expect_type(runLWFB90(options.b90 = opts,
                         param.b90 = parms,
                         soil = soil,
@@ -92,20 +92,7 @@ outfun2 <- function(x) {
   x$daily_output[doy >= vpstart & doy <= vpend, list(ptranvp = sum(ptran)) ]
 }
 
-
-testout2 <- runLWFB90(options.b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
-                                                  enddate = as.Date("2002-12-31")),
-                  param.b90 = parms,
-                  soil = soil,
-                  climate = climfun,
-                  met = clim,
-                  output_fun = list(no1 = outfun1,no2 = outfun2),
-                  rtrn.input = F,
-                  rtrn.output = F
-                  )
-
-outfun1(test)
-test_that("single output functions works"{
+test_that("single output functions works", {
   expect_type(
     runLWFB90(options.b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
                                               enddate = as.Date("2002-12-31")),
