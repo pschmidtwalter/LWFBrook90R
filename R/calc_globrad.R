@@ -21,7 +21,7 @@
 #' @export
 #' @examples
 #' dates <- seq.Date(as.Date("2002-01-01"), as.Date("2003-12-31"), by = 'day')
-#' calc_globrad(dates, sunhours = runif(365, 0, 8),lat = 52.8)
+#' calc_globrad(dates, sunhours = runif(365, 0, 7),lat = 52.8)
 calc_globrad <- function(dates, sunhours, lat,
                         a0=0.25,
                         b0=0.5,
@@ -29,15 +29,14 @@ calc_globrad <- function(dates, sunhours, lat,
 
   dat <- data.frame(dates, doy = as.integer(format(dates, "%j")), sunhours)
 
-
-  latrad <- sirad::radians(lat)
-
-  exterr.DayL <- data.frame(doy = 1:366, sirad::extrat(1:366,latrad)[c(1,3)])
+  exterr.DayL <- data.frame(doy = 1:366,
+             daylength = dayLength(lat * pi/180, i = 1:366),
+             extrat = exd(lat * pi/180, i = 1:366))
 
   dat <- merge(dat, exterr.DayL, by = "doy")[order(dat$dates),]
-  dat$globrad <- with(dat, (a0 + b0 * sunhours / DayLength) * ExtraTerrestrialSolarRadiationDaily)
+  dat$globrad <- with(dat, (a0 + b0 * sunhours / daylength) * extrat)
 
-  if (any(dat$DayLength < dat$sunhours)) {
+  if (any(dat$daylength < dat$sunhours)) {
     warning("Some sunshine duration hours seem to be higher than the expected daylength at this latitude!")
   }
 
@@ -47,4 +46,97 @@ calc_globrad <- function(dates, sunhours, lat,
     dat
   }
 }
+
+#==============================================================================
+#  Code from package sirad version 2.3-3
+#  https://CRAN.R-project.org/package=sirad
+#==============================================================================
+
+
+#--  dayLength  ---------------------------------------------------------------
+dayLength <- function(lat, i) {
+  if (abs(degrees(lat)) < 66.5) {
+    DL <-  24 * daylightTimeFactor(lat, i) / pi
+  }
+  if (abs(degrees(lat)) >= 66.5) {
+    DL <- c()
+    for (ii in 1:length(i)) {
+      DLi <- length(which(exh(i = i[ii], lat = lat) > 0))
+      DL <- c(DL, DLi)
+    }
+  }
+  DL
+}
+
+degrees <- function(radians) {
+  deg <- radians * 180 / pi
+  deg
+}
+
+daylightTimeFactor <- function(lat, i) {
+  ws <- acos(-tan(lat) * tan(solarDecl(i)))
+  ws
+}
+
+solarDecl <- function(i) {
+  rod <-  0.4093 * sin((2 * pi * (284 + i)) / 365)
+  rod
+}
+
+exh <- function (i, lat, hr = NA, Con = 4.921) {
+  rval <- c()
+  for (j in i) {
+    if (is.na(hr)) {
+      vshr <- vector()
+      for (ho in 0:23) {
+        vshr <-
+          c(vshr,
+            Con * corrEarthSunDist(j) * cos(solarZenithAngle(lat, ho, j)))
+      }
+      shr <- vshr
+    }
+    if (is.numeric(hr)) {
+      shr <- Con * corrEarthSunDist(j) * cos(solarZenithAngle(lat, hr, j))
+    }
+    rval <- c(rval, shr)
+  }
+  rval[rval < 0] <- 0
+  rval
+}
+
+solarZenithAngle <- function(lat, hr, i, tr = 0.2618, hr0 = 12) {
+  y <- acos(sin(lat) * sin(solarDecl(i)) +
+              cos(lat) * cos(solarDecl(i)) * cos(tr * (hr - hr0)))
+  y
+}
+
+
+#--  exd  ---------------------------------------------------------------------
+exd <- function(i, lat, Con = 4.921) {
+  if (abs(degrees(lat)) < 66.5) {
+    Sd <-
+      Con * 24 / pi * corrEarthSunDist(i) * (
+        sin(lat) * sin(solarDecl(i)) * daylightTimeFactor(lat=lat, i=i) +
+          cos(lat) * cos(solarDecl(i)) * sin(daylightTimeFactor(lat=lat, i=i))
+      )
+  }
+
+  if (abs(degrees(lat)) >= 66.5) {
+    Sd <- vector()
+    for (ii in 1:length(i)) {
+      ss <- exh(i = i[ii], lat = lat)
+
+      sdi <- sum(ss[ss > 0])
+      Sd <- c(Sd, sdi)
+    }
+  }
+  Sd[Sd < 0] <- 0
+  Sd  #[MJ]
+}
+
+corrEarthSunDist <- function(i) {
+  d <- 1 + 0.0334 * cos(0.01721 * i - 0.0552)
+  d
+}
+
 

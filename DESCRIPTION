@@ -13,7 +13,6 @@ Description: The LWFBrook90R package simulates water fluxes, soil moisture and d
 Depends: R (>= 4.0.0)
 Imports:
     methods,
-    sirad,
     data.table (>= 1.10.4),
     vegperiod (>= 0.3.0),
     foreach (>= 1.5.0),
@@ -26,6 +25,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Suggests:
+    sirad,
     knitr,
     rmarkdown,
     roxygen2,
