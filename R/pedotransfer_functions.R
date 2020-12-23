@@ -7,7 +7,7 @@
 #' @param clay,silt,sand Numeric vectors of clay, silt, sand in mass \%.
 #'   Particle size ranges for clay, silt and sand correspond to <2, 2-63, and
 #'   63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle size
-#'   limit between silt and sand corresponds to 50 \eqn{\mu m}{\mum}.
+#'   limit between silt and sand should be 50 \eqn{\mu m}{\mum}.
 #' @param bd Numeric vector of bulk density in g cm-3.
 #' @param oc.pct Numeric vector of organic carbon content in mass \%.
 #' @param texture Character vector of soil texture classes. For
