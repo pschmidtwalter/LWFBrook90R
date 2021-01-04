@@ -95,14 +95,17 @@ climate/soil combinations.
 }
 
 \examples{
+data("slb1_meteo")
+data("slb1_soil")
+
 opts <- setoptions_LWFB90(budburst_method = "Menzel")
 
 # define parameter sets
 param_l <- list(spruce = setparam_LWFB90(maxlai = 5,
-                                         budburst.species = "Picea abies (frueh)",
+                                         budburst_species = "Picea abies (frueh)",
                                          winlaifrac = 0.8),
                 beech = setparam_LWFB90(maxlai = 6,
-                                        budburst.species = "Fagus sylvatica",
+                                        budburst_species = "Fagus sylvatica",
                                         winlaifrac = 0))
 
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
@@ -141,9 +144,9 @@ param_l <- lapply(names(climates), function(x, loc_parms) {
 names(param_l) <- c("locpar1", "locpar2")
 
 res <- msiterunLWFB90(param_b90 = param_l,
-                      options_b90 = options_b90,
+                      options_b90 = opts,
                       soil = soils,
                       climate = climates,
-                      run = FALSE)
+                      run = F)
 names(res)
 }

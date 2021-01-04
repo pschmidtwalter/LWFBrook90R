@@ -4,14 +4,14 @@
 \alias{make_standprop}
 \title{Create daily plant characteristics from parameters and options}
 \usage{
-make_standprop(options_b90, param_b90, out.years)
+make_standprop(options_b90, param_b90, out_yrs)
 }
 \arguments{
 \item{options_b90}{A list of model control options.}
 
 \item{param_b90}{A parameter list-object.}
 
-\item{out.years}{Years for which values are returned.}
+\item{out_yrs}{Years for which values are returned.}
 }
 \value{
 A data.frame containing daily sequences of 'age', 'height', 'sai',
@@ -28,6 +28,6 @@ param_b90 <- setparam_LWFB90()
 
 standprop <- make_standprop(options_b90,
                             param_b90,
-                            out.years = 2002:2004)
+                            out_yrs = 2002:2004)
 plot(standprop$dates, standprop$lai, type = "l")
 }

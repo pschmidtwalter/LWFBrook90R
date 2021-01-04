@@ -4,7 +4,7 @@
 \alias{calc_globrad}
 \title{Calculate global solar radiation from sunshine duration hours}
 \usage{
-calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5, full.output = FALSE)
+calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5, full_output = FALSE)
 }
 \arguments{
 \item{dates}{Date vector}
@@ -17,12 +17,12 @@ calc_globrad(dates, sunhours, lat, a0 = 0.25, b0 = 0.5, full.output = FALSE)
 
 \item{b0}{Angström parameter b, defaults to 0.5.}
 
-\item{full.output}{Return extraterrestrial radiation and daylength along with
+\item{full_output}{Return extraterrestrial radiation and daylength along with
 global radiation?}
 }
 \value{
 A sequence of global radiation in MJ/(m² d) with the length of dates,
-  or (if \code{full.output = TRUE}) a \code{data.frame} holding day of year,
+  or (if \code{full_output = TRUE}) a \code{data.frame} holding day of year,
   dates, sunhours, daylength, and extraterrestrial and calculated global
   solar radiation. A warning is generated if some sunshine duration hours are
   higher than the expected daylength at the specified latitude.

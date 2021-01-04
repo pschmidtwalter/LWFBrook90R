@@ -5,7 +5,7 @@
 \title{Correct rain gauge precipitation data for wind and evaporation errors after
 Richter (1995)}
 \usage{
-prec_corr(month, tavg, prec, station.exposure = "mg", full.output = FALSE)
+prec_corr(month, tavg, prec, station.exposure = "mg", full_output = FALSE)
 }
 \arguments{
 \item{month}{Vector of months.}
@@ -20,11 +20,11 @@ prec_corr(month, tavg, prec, station.exposure = "mg", full.output = FALSE)
 measured: one of 'frei', 'lg', 'mg', 'sg' (corresponding to full exposure,
 low protected, moderate protected, strong protected situation).}
 
-\item{full.output}{Logical wether to return the full data set additionally
+\item{full_output}{Logical wether to return the full data set additionally
 including input data, correction coefficients.}
 }
 \value{
-A vector of corrected rainfall data, or (if \code{full.output ==
+A vector of corrected rainfall data, or (if \code{full_output ==
   TRUE}) a data.table containing the input objects, the month, the
   precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain,
   winter; 'N8' = sleet, 'N7' = snow), correction coefficients epsilon and b,

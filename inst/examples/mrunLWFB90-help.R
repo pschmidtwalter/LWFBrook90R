@@ -1,3 +1,5 @@
+data("slb1_meteo")
+data("slb1_soil")
 # Set up lists containing model control options and model parameters:
 parms <- setparam_LWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
@@ -14,8 +16,8 @@ soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 #set up data.frame with variable parameters
 n <- 5
 set.seed(2020)
-vary_parms <- data.frame(shape.optdoy = runif(n,180,240),
-                         shape.budburst = runif(n, 0.1,1),
+vary_parms <- data.frame(shp_optdoy = runif(n,180,240),
+                         shp_budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),
                          budburstdoy = runif(n,100,150),
                          soil_materials.ths3 = runif(n, 0.3,0.5), # ths of material 3

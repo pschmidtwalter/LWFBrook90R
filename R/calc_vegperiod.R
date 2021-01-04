@@ -13,7 +13,7 @@
 #' @param tavg vector of daily mean air temperature (deg C) passed to
 #'   \code{\link[vegperiod]{vegperiod}}, ignored if \code{leaffall_method =
 #'   'fixed'} and \code{budburst_method = 'fixed'}.
-#' @param out.years integer vector of the years to be returned. If not
+#' @param out_yrs integer vector of the years to be returned. If not
 #'   specified, values for the years in \code{dates} will be returned.
 #' @param budburstdoy.fixed vector of values to be returned if
 #'   \code{budburst_method = 'fixed'}.
@@ -32,7 +32,7 @@ calc_vegperiod <- function(budburst_method,
                            leaffall_method,
                            dates = NULL,
                            tavg = NULL,
-                           out.years = NULL,
+                           out_yrs = NULL,
                            budburstdoy.fixed = 121,
                            leaffalldoy.fixed = 279,
                            ...){
@@ -46,16 +46,16 @@ calc_vegperiod <- function(budburst_method,
   if (is.null(dates) & is.null(tavg) & any(c(budburst_method, leaffall_method) != "fixed")) {
     stop("Please provide 'dates' and 'tavg' for using the specified methods!")
   }
-  if (is.null(out.years) & is.null(dates)) {
-    stop("Please provide 'out.years'!")
+  if (is.null(out_yrs) & is.null(dates)) {
+    stop("Please provide 'out_yrs'!")
   }
 
-  if (is.null(out.years)) {
-    out.years <- as.integer(unique(format(dates, "%Y")))
+  if (is.null(out_yrs)) {
+    out_yrs <- as.integer(unique(format(dates, "%Y")))
   } else {
     if (!is.null(dates)) {
-      if (!all(out.years %in% as.integer(unique(format(dates, "%Y"))))) {
-        stop("date vector not covering out.years")
+      if (!all(out_yrs %in% as.integer(unique(format(dates, "%Y"))))) {
+        stop("date vector not covering out_yrs")
       }
     }
   }
@@ -64,7 +64,7 @@ calc_vegperiod <- function(budburst_method,
 
   # both fixed
   if (budburst_method == "fixed" & leaffall_method == "fixed") {
-    budburst_leaffall <- data.frame(year = out.years,
+    budburst_leaffall <- data.frame(year = out_yrs,
                                       start = budburstdoy.fixed,
                                       end = leaffalldoy.fixed)
 
@@ -75,25 +75,25 @@ calc_vegperiod <- function(budburst_method,
                                                 start.method = budburst_method,
                                                 end.method = leaffall_method,
                                                 ...)
-      budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% out.years),]
+      budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% out_yrs),]
     } else {
       #only start dynamic
       if (budburst_method != "fixed" & leaffall_method == "fixed")   {
-        if (length(leaffalldoy.fixed) > 1 & length(leaffalldoy.fixed) != length(out.years)) {
+        if (length(leaffalldoy.fixed) > 1 & length(leaffalldoy.fixed) != length(out_yrs)) {
           stop("When leaffall_method == 'fixed', either provide a single value
-                 for leaffalldoy.fixed or a sequence of values, one for each in out.years.")
+                 for leaffalldoy.fixed or a sequence of values, one for each in out_yrs.")
         }
         budburst_leaffall <- vegperiod::vegperiod(dates = dates,
                                                   Tavg = tavg,
                                                   start.method = budburst_method,
                                                   end.method = "StdMeteo",
                                                   ...)
-        budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% out.years),]
+        budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% out_yrs),]
         budburst_leaffall$end <- leaffalldoy.fixed
       } else { #only end dynamic
-        if (length(budburstdoy.fixed) > 1 & length(budburstdoy.fixed) != length(out.years)) {
+        if (length(budburstdoy.fixed) > 1 & length(budburstdoy.fixed) != length(out_yrs)) {
           stop("When budburst_method == 'fixed', either provide a single value
-                for budburstdoy.fixed or a sequence of values, one for each in out.years.")
+                for budburstdoy.fixed or a sequence of values, one for each in out_yrs.")
 
         }
         budburst_leaffall <- vegperiod::vegperiod(dates = dates,
@@ -101,7 +101,7 @@ calc_vegperiod <- function(budburst_method,
                                                   start.method = "StdMeteo",
                                                   end.method = leaffall_method,
                                                   ...)
-        budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% out.years),]
+        budburst_leaffall <- budburst_leaffall[which(budburst_leaffall$year %in% out_yrs),]
         budburst_leaffall$start <- budburstdoy.fixed
 
 

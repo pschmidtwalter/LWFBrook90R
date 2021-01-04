@@ -9,10 +9,10 @@
 #' @param station.exposure Situation of the weather station where prec was
 #'   measured: one of 'frei', 'lg', 'mg', 'sg' (corresponding to full exposure,
 #'   low protected, moderate protected, strong protected situation).
-#' @param full.output Logical wether to return the full data set additionally
+#' @param full_output Logical wether to return the full data set additionally
 #'   including input data, correction coefficients.
 #'
-#' @return A vector of corrected rainfall data, or (if \code{full.output ==
+#' @return A vector of corrected rainfall data, or (if \code{full_output ==
 #'   TRUE}) a data.table containing the input objects, the month, the
 #'   precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain,
 #'   winter; 'N8' = sleet, 'N7' = snow), correction coefficients epsilon and b,
@@ -51,7 +51,7 @@
 #'        lty = 1, pch = NULL )
 prec_corr <-  function(month,tavg,prec,
                        station.exposure = "mg",
-                       full.output = FALSE
+                       full_output = FALSE
 ){
 
   if (length(month) != length(tavg))
@@ -88,7 +88,7 @@ prec_corr <-  function(month,tavg,prec,
   dat$preccorr <- prec + dat$b * prec**dat$eps
 
   #output
-  if (full.output == FALSE) {
+  if (full_output == FALSE) {
     return(dat$preccorr)
   } else return(dat)
 }

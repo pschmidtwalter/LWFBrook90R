@@ -17,4 +17,4 @@ df$var2 <- runif(nrow(df), 2,3)
 extract_layer_output(df,layers = 2:4, sep = "_")
 
 #extract specific variables
-extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
+extract_layer_output(df, layers = 2:4, value_vars = c("var1", "var2"), sep = "_")

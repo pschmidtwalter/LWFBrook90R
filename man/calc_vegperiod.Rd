@@ -9,7 +9,7 @@ calc_vegperiod(
   leaffall_method,
   dates = NULL,
   tavg = NULL,
-  out.years = NULL,
+  out_yrs = NULL,
   budburstdoy.fixed = 121,
   leaffalldoy.fixed = 279,
   ...
@@ -31,7 +31,7 @@ ignored if both leaffall_method and budburst_method = 'fixed'}
 \code{\link[vegperiod]{vegperiod}}, ignored if \code{leaffall_method =
 'fixed'} and \code{budburst_method = 'fixed'}.}
 
-\item{out.years}{integer vector of the years to be returned. If not
+\item{out_yrs}{integer vector of the years to be returned. If not
 specified, values for the years in \code{dates} will be returned.}
 
 \item{budburstdoy.fixed}{vector of values to be returned if
@@ -53,7 +53,7 @@ Wrapper for \code{\link[vegperiod]{vegperiod}}
 }
 \examples{
 # fixed budburst and leaffall doy
-calc_vegperiod(out.years = 2001:2010,
+calc_vegperiod(out_yrs = 2001:2010,
                budburst_method = "fixed",
                leaffall_method = "fixed",
                budburstdoy.fixed = floor(runif(10, 120,130)),

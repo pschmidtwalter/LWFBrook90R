@@ -71,29 +71,29 @@ Create the list of model parameters
  eslope       \tab slope for evapotranspiration and snowmelt calculation. Default:  0\tab deg               \tab Meteo                  \cr
  aspect       \tab Mean exposition of soil surface at soil profile (north: 0, east: 90, south: 180, west: 270). Default: 0\tab deg               \tab Meteo                  \cr
  obsheight    \tab Mean height of obstacles on soil surface (grass, furrows etc.), used to calculate soil surface roughness. Default: 0.025 \tab m                 \tab Meteo                  \cr
- prec_corr.statexp \tab station exposure situation of prec measurements (passed to \code{\link{prec_corr}} Default: 'mg' \tab                  \tab Meteo                  \cr
+ prec_corr_statexp \tab station exposure situation of prec measurements (passed to \code{\link{prec_corr}} Default: 'mg' \tab                  \tab Meteo                  \cr
  dpsimax      \tab maximum potential difference considered equal. Default: 5e-04 \tab kPa               \tab Numerical              \cr
  dswmax       \tab maximum change allowed in SWATI. Default: 0.05 \tab percent of SWATMX \tab Numerical              \cr
  dtimax       \tab maximum iteration time step. Default: 0.5 \tab d                 \tab Numerical              \cr
- budburst.species  \tab Name of tree species for estimating budburst doy using Menzel-model (passed to \code{\link[vegperiod]{vegperiod}}) Default: 'Fagus sylvatica' \tab -                  \tab Plant                  \cr
+ budburst_species \tab Name of tree species for estimating budburst doy using Menzel-model (passed to \code{\link[vegperiod]{vegperiod}}) Default: 'Fagus sylvatica' \tab -                  \tab Plant                  \cr
  budburstdoy  \tab Budburst day of year - passed to \code{\link{MakeSeasLAI}}. Default: 121\tab doy                  \tab Plant                  \cr
  emergedur    \tab Leaf growth duration until maxlai is reached.. Default: 28\tab d                 \tab Plant                  \cr
  height       \tab plant height. Default: 25 \tab m                 \tab Plant                  \cr
- height.ini   \tab initial plant height at the beginning of the simulaton. Used for interpolation , ignored if length(height) . Default: 25 \tab m                 \tab Plant                  \cr
+ heightini   \tab initial plant height at the beginning of the simulaton. Used for interpolation , ignored if length(height) . Default: 25 \tab m                 \tab Plant                  \cr
  leaffalldoy  \tab number of days until maximum lai is reached - passed to \code{\link{MakeSeasLAI}} Default: 279\tab doy               \tab Plant                  \cr
  leaffalldur  \tab number of days until minimum lai is reached - passed to \code{\link{MakeSeasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
  sai          \tab steam area index. Default: 1 \tab -                 \tab Plant                  \cr
- sai.ini      \tab steam area index at the end of the simulation. Ignored if length(height) == 1, Default: 1 \tab -                 \tab Plant                  \cr
- shape.leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{MakeSeasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
- shape.budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{MakeSeasLAI}} Default: 3\tab -                  \tab Plant                  \cr
- shape.optdoy \tab day of year when optimum value is reached - passed to \code{\link{MakeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
- lai.doy \tab day of year values for lai-interpolation - passed to \code{\link{MakeSeasLAI}} \tab doy               \tab Plant                  \cr
- lai.frac \tab fractional lai values for lai interpolation, corresponding to lai.doy - passed to \code{\link{MakeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+ saiini      \tab steam area index at the end of the simulation. Ignored if length(height) == 1, Default: 1 \tab -                 \tab Plant                  \cr
+ shp_leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{MakeSeasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
+ shp_budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{MakeSeasLAI}} Default: 3\tab -                  \tab Plant                  \cr
+ shp_optdoy \tab day of year when optimum value is reached - passed to \code{\link{MakeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+ lai_doy \tab day of year values for lai-interpolation - passed to \code{\link{MakeSeasLAI}} \tab doy               \tab Plant                  \cr
+ lai_frac \tab fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{MakeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
  winlaifrac   \tab Minimum LAI as a fraction of maxlai. Default: 0 \tab -                  \tab Plant                  \cr
- standprop.table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
+ standprop_table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
  cs           \tab Ratio of projected stem area index to canopy height. Default: 0.035 \tab m-1\tab Plant\cr
  densef       \tab Density factor for MaxLAI, CS, RtLen, RPlant, not <.001, 1 for typical stand. Default: 1\tab -                  \tab Plant                  \cr
- densef.ini   \tab density factor (see densef) at the end of the simulation. Ignored if length(densef) == 1. Default: 1\tab -                  \tab Plant\cr
+ densefini   \tab density factor (see densef) at the end of the simulation. Ignored if length(densef) == 1. Default: 1\tab -                  \tab Plant\cr
  maxlai       \tab Maximum projected leaf area index - passed to \code{\link{MakeSeasLAI}} Default: 5 \tab - \tab Plant                  \cr
  radex        \tab Extinction coefficient for solar radiation and net radiation in the canopy. Default: 0.5\tab -                  \tab Potential Transpiration \cr
  cvpd         \tab Vapour pressure deficit at which leaf conductance is halved. Default: 2\tab kPa               \tab Potential Transpiration\cr
@@ -120,7 +120,7 @@ Create the list of model parameters
  rssb         \tab exponent in relation of RSS to water potential. Default: 1 \tab - \tab Soilevap               \cr
  soil_nodes   \tab a data.frame with soil nodes discretization passed to LWF-Brook90 \tab - \tab Soil               \cr
  soil_materials \tab a data.frame with soil materials (hydrualic parameters) passed to LWF-Brook90 \tab -  \tab Soil               \cr
- age.ini      \tab Age of stand (for root development). Default: 100\tab a                 \tab Water supply           \cr
+ ageini      \tab Age of stand (for root development). Default: 100\tab a                 \tab Water supply           \cr
  initrdep     \tab Initial root depth. Default: 0.25\tab m                 \tab Water supply           \cr
  initrlen     \tab Initial water-absorbing root length per unit area. Default: 12\tab m/m-2             \tab Water supply           \cr
  rgroper      \tab Period of net root growth. Default: 30 \tab a                  \tab Water supply           \cr

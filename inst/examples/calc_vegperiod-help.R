@@ -1,5 +1,5 @@
 # fixed budburst and leaffall doy
-calc_vegperiod(out.years = 2001:2010,
+calc_vegperiod(out_yrs = 2001:2010,
                budburst_method = "fixed",
                leaffall_method = "fixed",
                budburstdoy.fixed = floor(runif(10, 120,130)),

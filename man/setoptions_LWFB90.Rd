@@ -39,7 +39,7 @@ Create a list of model control options
   \item{standprop_input}{name of input for longterm (interannual) plant
   development. \code{standprop_input = 'parameters'}: yearly values of stand
   properties height, sai, densef, lai are taken from individual parameters,
-  \code{standprop_input = 'table'}:  values from \code{standprop.table}
+  \code{standprop_input = 'table'}:  values from \code{standprop_table}
   provided in parameters are used.} \item{standprop_interp}{interpolation
   method for aboveground stand properties. \code{'linear'} or
   \code{'constant'}, see \code{approx.method}-argument of

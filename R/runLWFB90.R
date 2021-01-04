@@ -172,12 +172,12 @@ runLWFB90 <- function(options_b90,
 
   ## Vegetation-Period: calculate budburst and leaffall days of year  ----
   budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
-                                      out.years = simyears,
+                                      out_yrs = simyears,
                                       budburst_method = options_b90$budburst_method,
                                       leaffall_method = options_b90$leaffall_method,
                                       budburstdoy.fixed = param_b90$budburstdoy,
                                       leaffalldoy.fixed = param_b90$leaffalldoy,
-                                      species = param_b90$budburst.species,
+                                      species = param_b90$budburst_species,
                                       est.prev = ifelse(length(climyears) <= 5,
                                                         length(climyears) - 1, 5))
   param_b90$budburstdoy <- budburst_leaffall$start
@@ -186,20 +186,20 @@ runLWFB90 <- function(options_b90,
   # Vegetation ----
   # Prepare vegetation parameters
   if (tolower(options_b90$standprop_input) == "table") {
-    if (verbose == T) {message("Creating long term stand dynamics from table 'standprop.table'...")}
-    param_b90 <- standprop_yearly_to_param(param_b90$standprop.table,
+    if (verbose == T) {message("Creating long term stand dynamics from table 'standprop_table'...")}
+    param_b90 <- standprop_yearly_to_param(param_b90$standprop_table,
                                            param_b90,
-                                           out.years = simyears)
+                                           out_yrs = simyears)
   } else {
     if (verbose == T) {message("Creating stand properties from parameters...")}
-    # derive age from age.ini for simyears
-    param_b90$age <- seq(from = param_b90$age.ini + 1,
+    # derive age from ageini for simyears
+    param_b90$age <- seq(from = param_b90$ageini + 1,
                          by = 1, length.out = length(simyears))
 
   }
 
   ## Create daily standproperties from parameters ----
-  standprop_daily <- make_standprop(options_b90, param_b90, out.years = simyears)
+  standprop_daily <- make_standprop(options_b90, param_b90, out_yrs = simyears)
 
   ### constrain to simulation period
   standprop_daily <- standprop_daily[which(standprop_daily$dates >= options_b90$startdate
@@ -216,7 +216,7 @@ runLWFB90 <- function(options_b90,
   ## Precipitation correction (Richter) ----
   if (options_b90$prec_corr == TRUE) {
     climate$prec <- with(climate, prec_corr(month, tmean, prec,
-                                            station.exposure = param_b90$prec_corr.statexp))
+                                            station.exposure = param_b90$prec_corr_statexp))
   }
 
   ## Calculate global radiation from sunshine duration ----
@@ -449,10 +449,10 @@ chk_options <- function(){
 chk_param <- function() {
   eval.parent(quote({ # manipulate the calling environment
     names(param_b90) <- tolower(names(param_b90))
-    nms <- c("maxlai","sai","sai.ini","height","height.ini","densef",
-             "densef.ini","age.ini","winlaifrac","budburst.species","budburstdoy",
-             "leaffalldoy","shape.budburst","shape.leaffall","shape.optdoy","emergedur","leaffalldur",
-             "lai.doy","lai.frac","alb","albsn","ksnvp","fxylem",
+    nms <- c("maxlai","sai","saiini","height","heightini","densef",
+             "densefini","ageini","winlaifrac","budburst_species","budburstdoy",
+             "leaffalldoy","shp_budburst","shp_leaffall","shp_optdoy","emergedur","leaffalldur",
+             "lai_doy","lai_frac","alb","albsn","ksnvp","fxylem",
              "mxkpl","lwidth","psicr","nooutf","lpc","cs",
              "czs","czr","hs","hr","rhotp","nn",
              "maxrlen","initrlen","initrdep","rrad","rgrorate","rgroper",
