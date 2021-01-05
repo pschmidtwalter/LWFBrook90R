@@ -9,50 +9,50 @@
 #' @param maxlai Maximum leaf are index.
 #' @param winlaifrac Fraction of \code{maxlai} during winter (ignored when
 #'   \code{method = 'linear'}).
-#' @param budburst.doy Budburst day of year (ignored when \code{method =
+#' @param budburst_doy Budburst day of year (ignored when \code{method =
 #'   'linear'}).
-#' @param leaffall.doy Day of year when leaf fall begins (ignored when
+#' @param leaffall_doy Day of year when leaf fall begins (ignored when
 #'   \code{method = 'linear'}).
-#' @param emerge.dur Number of days from budburst until maximum leaf area index
+#' @param emerge_dur Number of days from budburst until maximum leaf area index
 #'   is reached.
-#' @param leaffall.dur Number of days until minimum leaf are index is reached.
-#' @param shape.optdoy Day of year when optimum value is reached (required when
+#' @param leaffall_dur Number of days until minimum leaf are index is reached.
+#' @param shp_optdoy Day of year when optimum value is reached (required when
 #'   \code{method = "Coupmodel"}).
-#' @param shape.budburst Shape parameter for the growth phase (required when
+#' @param shp_budburst Shape parameter for the growth phase (required when
 #'   \code{method = "Coupmodel"}).
-#' @param shape.leaffall Shape parameter growth cessation (required when
+#' @param shp_leaffall Shape parameter growth cessation (required when
 #'   \code{method = "Coupmodel"}).
-#' @param lai.doy Integer vector of days of years.
-#' @param lai.frac Vector of values of fractional leaf area index corresponding
-#'   to lai.doy (required when \code{method = "linear"}).
+#' @param lai_doy Integer vector of days of years.
+#' @param lai_frac Vector of values of fractional leaf area index corresponding
+#'   to lai_doy (required when \code{method = "linear"}).
 #'
 #' @return A vector of daily lai values covering the years specified.
 #'
-#' @example inst/examples/MakeSeasLAI-help.R
+#' @example inst/examples/makeSeasLAI-help.R
 #' @export
-MakeSeasLAI <- function(method="b90",
+makeSeasLAI <- function(method="b90",
                         year,
                         maxlai,
                         winlaifrac = 0, #LAI in Winter
-                        budburst.doy = 121, #Budburst DOY
-                        leaffall.doy = 279, # DOY when leaffall is begins
-                        emerge.dur = 28, # Duration until maximum LAI is reached (b90)
-                        leaffall.dur = 58, # Duration until Winter LAI is reached  (b90)
-                        shape.optdoy=220, #MaxLAI DOY (Coupmodel)
-                        shape.budburst=0.5, #Form parameter for leaf expension period (Coupmodel)
-                        shape.leaffall=10, #Form parameter for leaf Fall (Coupmodel)
-                        lai.doy = c(1,121,150,280,320,365),
-                        lai.frac = c(0,0,0.5,1,0.5,0)) {
+                        budburst_doy = 121, #Budburst DOY
+                        leaffall_doy = 279, # DOY when leaffall is begins
+                        emerge_dur = 28, # Duration until maximum LAI is reached (b90)
+                        leaffall_dur = 58, # Duration until Winter LAI is reached  (b90)
+                        shp_optdoy=220, #MaxLAI DOY (Coupmodel)
+                        shp_budburst=0.5, #Form parameter for leaf expension period (Coupmodel)
+                        shp_leaffall=10, #Form parameter for leaf Fall (Coupmodel)
+                        lai_doy = c(1,121,150,280,320,365),
+                        lai_frac = c(0,0,0.5,1,0.5,0)) {
   method <- match.arg(method, choices = c("b90", "linear", "Coupmodel"))
 
   if (method %in% c("b90", "Coupmodel")) {
 
     dat <- suppressWarnings(
       data.table::data.table(year = year, maxlai = maxlai, winlaifrac = winlaifrac,
-                 budburst.doy = budburst.doy, leaffall.doy = leaffall.doy,
-                 emerge.dur = emerge.dur, leaffall.dur = leaffall.dur,
-                 shape.optdoy = shape.optdoy, shape.budburst = shape.budburst,
-                 shape.leaffall = shape.leaffall)
+                 budburst_doy = budburst_doy, leaffall_doy = leaffall_doy,
+                 emerge_dur = emerge_dur, leaffall_dur = leaffall_dur,
+                 shp_optdoy = shp_optdoy, shp_budburst = shp_budburst,
+                 shp_leaffall = shp_leaffall)
     )
 
     maxdoy <- NULL; minlai <- NULL # CRAN Check Notes
@@ -64,17 +64,17 @@ MakeSeasLAI <- function(method="b90",
 
     if (method == "b90") {
        out <- dat[, plant.b90(minval = minlai, maxval = maxlai,
-                                         doy.incr = budburst.doy, incr.dur = emerge.dur,
-                                         doy.decr = leaffall.doy, decr.dur = leaffall.dur,
+                                         doy.incr = budburst_doy, incr.dur = emerge_dur,
+                                         doy.decr = leaffall_doy, decr.dur = leaffall_dur,
                                          maxdoy = maxdoy),
                   by = year]$V1
      }
      if (method == "Coupmodel") {
        out <- dat[, plant.coupmodel(minval = minlai, maxval = maxlai,
-                                               doy.incr = budburst.doy,
-                                               doy.max = shape.optdoy,
-                                               doy.min = leaffall.doy + leaffall.dur,
-                                               shape.incr = shape.budburst, shape.decr = shape.leaffall,
+                                               doy.incr = budburst_doy,
+                                               doy.max = shp_optdoy,
+                                               doy.min = leaffall_doy + leaffall_dur,
+                                               shape.incr = shp_budburst, shape.decr = shp_leaffall,
                                                maxdoy = maxdoy),
                   by = year]$V1
      }
@@ -85,7 +85,7 @@ MakeSeasLAI <- function(method="b90",
                        maxdoy = ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
                                         366, 365),
                        maxlai = maxlai)
-     out <- dat[, plant.linear(doys = lai.doy, values = lai.frac*maxlai, maxdoy = maxdoy),
+     out <- dat[, plant.linear(doys = lai_doy, values = lai_frac*maxlai, maxdoy = maxdoy),
                 by = year]$V1
 
   }

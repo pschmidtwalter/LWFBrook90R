@@ -6,10 +6,10 @@
 interpolation}
 \usage{
 approx_standprop(
-  x.years,
+  x_yrs,
   y,
-  y.ini = NULL,
-  xout.years = x.years,
+  y_ini = NULL,
+  xout_yrs = x_yrs,
   use_growthperiod = FALSE,
   startdoy = 121,
   enddoy = 279,
@@ -18,34 +18,34 @@ approx_standprop(
 )
 }
 \arguments{
-\item{x.years}{A sequence of years or a single year.}
+\item{x_yrs}{A sequence of years or a single year.}
 
-\item{y}{Vector of the same length as x.years. If approx.method = 'linear',
+\item{y}{Vector of the same length as \code{x_yrs}. If \code{approx.method = 'linear'},
 the values are interpreted to be valid at the end of the respective year in
-x.years.}
+\code{x_yrs}}
 
-\item{y.ini}{Initial value used as a starting point for linear interpolation.
-Interpreted to be valid at the 1st of January of the first year in x.years.
-Ignored if approx.method = 'constant'.}
+\item{y_ini}{Initial value used as a starting point for linear interpolation.
+Interpreted to be valid at the 1st of January of the first year in \code{x_yrs}.
+Ignored if \code{approx.method = 'constant'}.}
 
-\item{xout.years}{Vector of years for which output is generated. May be
-longer or shorter than x.years. For years outside x.years, the value of the
+\item{xout_yrs}{Vector of years for which output is generated. May be
+longer or shorter than \code{x_yrs}. For years outside \code{x_yrs}, the value of the
 closest data extrem is returned.}
 
 \item{use_growthperiod}{Logical: Use startdoy and enddoy for linear
 interpolation? If TRUE, yearly changes take place between startdoy and
 enddoy, othe wise from end of year to end of the year after.}
 
-\item{startdoy}{A single value or vector of the same length as x.years, with
+\item{startdoy}{A single value or vector of the same length as \code{x_yrs}, with
 the day of year when growth begins.}
 
-\item{enddoy}{A single value or vector of the same length as x.years, with
+\item{enddoy}{A single value or vector of the same length as \code{x_yrs}, with
 the day of year when growth cessates.}
 
 \item{approx.method}{Name of interpolation method ('constant' or 'linear').}
 
-\item{return_xout}{Logical: If true, daily values of y and a date vector are
-returned in data.frame.}
+\item{return_xout}{Logical: If true, daily values of \code{y} and a date vector are
+returned in a data.frame.}
 }
 \value{
 A vector of interpolated daily values
@@ -56,14 +56,14 @@ height, densef, age) and interpolates them to a daily sequence.
 }
 \details{
 For \code{approx.method = 'constant'}, the value of \code{y} is
-  returned for the whole respective year in \code{x.years}, which results in
+  returned for the whole respective year in \code{x_yrs}, which results in
   a yearly changing step function. If \code{approx.method = 'linear'}, the
-  values of \code{y} are interpolated between the years in \code{x.years},
+  values of \code{y} are interpolated between the years in \code{x_yrs},
   and interpreted to be reached at the 31st of December of the respective
-  \code{x.years.} In this case, \code{y.ini} is required as an initial value,
+  \code{x_yrs.} In this case, \code{y_ini} is required as an initial value,
   from which the sequence is interpolated to the first value of \code{y.} The
   linear changes are either accomplished between 31st to 31st of December of
-  the years in \code{x.years}, or during the growing season only
+  the years in \code{x_yrs}, or during the growing season only
   (\code{use_growingperiod = TRUE}).
 }
 \examples{
@@ -71,20 +71,20 @@ years <- 2002:2004
 height_yearly <- c(20.2,20.8,21.3)
 
 # constant 'interpolation'
-height_c <- approx_standprop(x.years=years,
+height_c <- approx_standprop(x_yrs = years,
                              y = height_yearly)
 
 # linear interpolation
-height.ini <- 19.1
-height_l <- approx_standprop(x.years=years,
+height_ini <- 19.1
+height_l <- approx_standprop(x_yrs=years,
                              y = height_yearly,
-                             y.ini = height.ini,
+                             y_ini = height_ini,
                              approx.method = 'linear')
 
 # use growthperiod
-height_l_gp <- approx_standprop(x.years = years,
+height_l_gp <- approx_standprop(x_yrs = years,
                                 y = height_yearly,
-                                y.ini = height.ini,
+                                y_ini = height_ini,
                                 use_growthperiod = TRUE,
                                 startdoy = 121,
                                 enddoy = 279,

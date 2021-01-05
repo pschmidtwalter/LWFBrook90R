@@ -9,11 +9,11 @@
 #' @param lat Latitude in decimal degrees.
 #' @param a0 Angström parameter a, defaults to 0.25.
 #' @param b0 Angström parameter b, defaults to 0.5.
-#' @param full.output Return extraterrestrial radiation and daylength along with
+#' @param full_output Return extraterrestrial radiation and daylength along with
 #'   global radiation?
 #'
 #' @return A sequence of global radiation in MJ/(m² d) with the length of dates,
-#'   or (if \code{full.output = TRUE}) a \code{data.frame} holding day of year,
+#'   or (if \code{full_output = TRUE}) a \code{data.frame} holding day of year,
 #'   dates, sunhours, daylength, and extraterrestrial and calculated global
 #'   solar radiation. A warning is generated if some sunshine duration hours are
 #'   higher than the expected daylength at the specified latitude.
@@ -25,7 +25,7 @@
 calc_globrad <- function(dates, sunhours, lat,
                         a0=0.25,
                         b0=0.5,
-                        full.output = FALSE) {
+                        full_output = FALSE) {
 
   dat <- data.frame(dates, doy = as.integer(format(dates, "%j")), sunhours)
 
@@ -40,7 +40,7 @@ calc_globrad <- function(dates, sunhours, lat,
     warning("Some sunshine duration hours seem to be higher than the expected daylength at this latitude!")
   }
 
-  if (!full.output) {
+  if (!full_output) {
     dat$globrad
   } else {
     dat

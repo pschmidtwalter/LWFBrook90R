@@ -9,8 +9,8 @@
 #' @param layers Integer vector addressing the layer numbers (nl) to be
 #'   extracted from dat. If not supplied, values from all layers will be
 #'   returned.
-#' @param value.vars Character vector containing names of value-variables to be
-#'   extracted from dat. If not supplied, value.var will be guessed.
+#' @param value_vars Character vector containing names of value-variables to be
+#'   extracted from dat. If not supplied, \code{value_vars} will be guessed.
 #' @param sep Separation character for constructig names from variable name and
 #'   layer index.
 #'
@@ -22,7 +22,7 @@
 #' @import data.table
 extract_layer_output <- function(dat,
                                  layers = NULL,
-                                 value.vars=NULL,
+                                 value_vars = NULL,
                                  sep = ""){
   nl <- NULL # to pass CRAN check NOTES
 
@@ -38,10 +38,10 @@ extract_layer_output <- function(dat,
   }
 
   # value and id vars
-  if (is.null(value.vars)) {
-    value.vars <- names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))]
+  if (is.null(value_vars)) {
+    value_vars <- names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))]
   } else {
-    value.vars <- match.arg(tolower(value.vars), choices = names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))], several.ok = T)
+    value_vars <- match.arg(tolower(value_vars), choices = names(dat)[-which(names(dat) %in% c("yr","mo","da","doy", "nl"))], several.ok = T)
   }
 
   id.vars <- names(dat)[which(names(dat) %in% c("yr","mo","da","doy"))]
@@ -50,7 +50,7 @@ extract_layer_output <- function(dat,
 
   datm <- data.table::melt(dat[list(layers), ], # extract layers of interest
                id.vars = c(id.vars,"nl"),
-               measure.vars = value.vars)
+               measure.vars = value_vars)
   castf <- paste(paste(id.vars, collapse = "+"), "~ variable+nl")
   data.table::dcast(datm, stats::as.formula(castf), sep = sep)
 }

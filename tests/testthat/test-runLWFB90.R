@@ -10,28 +10,28 @@ output <- setoutput_LWFB90()
 output[,] <- 1L
 
 # return value (outputs) ----
-test_default <- runLWFB90(options.b90 = opts,
-          param.b90 = parms,
+test_default <- runLWFB90(options_b90 = opts,
+          param_b90 = parms,
           climate = slb1_meteo,
           soil = soil)
 
-test_asc <- runLWFB90(options.b90 = opts,
-                      param.b90 = parms,
+test_asc <- runLWFB90(options_b90 = opts,
+                      param_b90 = parms,
                       climate = slb1_meteo,
                       soil = soil,
                       output = output)
 
-test_noinput <- runLWFB90(options.b90 = opts,
-                          param.b90 = parms,
+test_noinput <- runLWFB90(options_b90 = opts,
+                          param_b90 = parms,
                           climate = slb1_meteo,
                           soil = soil,
-                          rtrn.input = F)
+                          rtrn_input = F)
 
-test_nooutput <- runLWFB90(options.b90 = opts,
-                          param.b90 = parms,
+test_nooutput <- runLWFB90(options_b90 = opts,
+                          param_b90 = parms,
                           climate = slb1_meteo,
                           soil = soil,
-                          rtrn.output = F)
+                          rtrn_output = F)
 
 test_that("input/output complete",{
 
@@ -39,8 +39,8 @@ test_that("input/output complete",{
   expect_type(test_default$daily_output, "list")
   expect_type(test_default$layer_output, "list")
   expect_type(test_default$model_input, "list")
-  expect_type(test_default$model_input$param.b90, "list")
-  expect_type(test_default$model_input$options.b90, "list")
+  expect_type(test_default$model_input$param_b90, "list")
+  expect_type(test_default$model_input$options_b90, "list")
   expect_type(test_default$model_input$standprop_daily, "list")
 
   # no input
@@ -72,8 +72,8 @@ climfun <- function(met) {
 }
 
 test_that("climate input from function works", {
-  expect_type(runLWFB90(options.b90 = opts,
-                        param.b90 = parms,
+  expect_type(runLWFB90(options_b90 = opts,
+                        param_b90 = parms,
                         soil = soil,
                         climate = climfun,
                         met = clim),"list")
@@ -82,38 +82,38 @@ test_that("climate input from function works", {
 # output function ----
 # define some output functions that taps output AND input
 outfun1 <- function(x) {
-  vpstart <- x$model_input$param.b90$budburstdoy
-  vpend <- x$model_input$param.b90$leaffalldoy
+  vpstart <- x$model_input$param_b90$budburstdoy
+  vpend <- x$model_input$param_b90$leaffalldoy
   x$daily_output[doy >= vpstart & doy <= vpend, list(tranvp = sum(tran)) ]
 }
 outfun2 <- function(x) {
-  vpstart <- x$model_input$param.b90$budburstdoy
-  vpend <- x$model_input$param.b90$leaffalldoy
+  vpstart <- x$model_input$param_b90$budburstdoy
+  vpend <- x$model_input$param_b90$leaffalldoy
   x$daily_output[doy >= vpstart & doy <= vpend, list(ptranvp = sum(ptran)) ]
 }
 
 test_that("single output functions works", {
   expect_type(
-    runLWFB90(options.b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+    runLWFB90(options_b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
                                               enddate = as.Date("2002-12-31")),
-              param.b90 = parms,
+              param_b90 = parms,
               soil = soil,
               climate = climfun,
               met = clim,
               output_fun = outfun1,
-              rtrn.input =F,
-              rtrn.output = F)$output_fun,
+              rtrn_input =F,
+              rtrn_output = F)$output_fun,
               "list")
   expect_type(
-    runLWFB90(options.b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+    runLWFB90(options_b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
                                               enddate = as.Date("2002-12-31")),
-              param.b90 = parms,
+              param_b90 = parms,
               soil = soil,
               climate = climfun,
               met = clim,
               output_fun = list(out1 = outfun1, out2 = outfun2),
-              rtrn.input =F,
-              rtrn.output = F)$output_fun,
+              rtrn_input =F,
+              rtrn_output = F)$output_fun,
     "list")
 })
 

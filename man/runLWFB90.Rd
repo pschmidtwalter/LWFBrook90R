@@ -5,16 +5,16 @@
 \title{Run the LWF-Brook90 hydrological model}
 \usage{
 runLWFB90(
-  options.b90,
-  param.b90,
+  options_b90,
+  param_b90,
   climate,
   precip = NULL,
   soil = NULL,
   output = NULL,
   output_fun = NULL,
-  rtrn.input = TRUE,
-  rtrn.output = TRUE,
-  chk.input = TRUE,
+  rtrn_input = TRUE,
+  rtrn_output = TRUE,
+  chk_input = TRUE,
   run = TRUE,
   timelimit = Inf,
   verbose = FALSE,
@@ -22,11 +22,11 @@ runLWFB90(
 )
 }
 \arguments{
-\item{options.b90}{Named list of model control options. Use
+\item{options_b90}{Named list of model control options. Use
 \code{\link{setoptions_LWFB90}} to generate a list with default model
 control options.}
 
-\item{param.b90}{Named list of model input parameters. Use
+\item{param_b90}{Named list of model input parameters. Use
 \code{\link{setparam_LWFB90}} to generate a list with default model
 parameters.}
 
@@ -37,7 +37,7 @@ returns a suitable data.frame. See details for the required variables.}
 precipitation data separately from climate data. Can be used to provide
 sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 1 (daily resolution) to 240 values of precipitation can be provided, with
-the number of values per day defined in \code{options.b90$prec.interval}.}
+the number of values per day defined in \code{options_b90$prec_interval}.}
 
 \item{soil}{Data.frame containing the hydraulic properties of the soil
 layers. See section 'Soil parameters'}
@@ -50,19 +50,19 @@ default) to return the raw daily and soil layer outputs.}
 \item{output_fun}{A function or a list of functions of the form
 \code{f(x,...)}, where \code{x} is the object regularly returned by
 \code{runLWFB90}. During function evaluation, \code{x} contains model input
-and selected output objects, irrespective of \code{rtrn.input} and
-\code{rtrn.output}. Can be used to  aggregate output on-the-fly, and is
+and selected output objects, irrespective of \code{rtrn_input} and
+\code{rtrn_output}. Can be used to  aggregate output on-the-fly, and is
 especially useful if the function is evaluated within a large multi-run
 application, for which the output might overload the memory. (see \code{\link{mrunLWFB90}}
 and \code{\link{msiterunLWFB90}}).}
 
-\item{rtrn.input}{Logical: append 'param.b90', 'options.b90', 'soil' and
+\item{rtrn_input}{Logical: append 'param_b90', 'options_b90', 'soil' and
 daily plant properties ('standprop_daily', as derived from parameters) to
 the result?}
 
-\item{rtrn.output}{Logical: return the simulation results?}
+\item{rtrn_output}{Logical: return the simulation results?}
 
-\item{chk.input}{Logical wether to check param.b90, options.b90, climate,
+\item{chk_input}{Logical wether to check param_b90, options_b90, climate,
 precip, and soil for completeness and consistency.}
 
 \item{run}{Logical: run LWF-Brook90 or only return model input objects?
@@ -87,22 +87,22 @@ model, and returns the selected results.
 \section{Climate input data}{
  The \code{climate} data.frame must contain the
  following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
- (deg C), 'tmean' (deg C), 'wind' (m/s), 'prec' (mm) , 'vappres' (kPa), and
+ (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec' (mm) , 'vappres' (kPa), and
  either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using \code{sunhours},
- please set \code{options.b90$fornetrad = 'sunhours'}.
+ please set \code{options_b90$fornetrad = 'sunhours'}.
 }
 
 \section{Soil input parameters}{
  Each row of \code{soil} represents one layer,
  containing the layers' boundaries and soil hydraulic parameters. The column
  names for the upper and lower layer boundaries are 'upper' and 'lower' (m,
- negative downwards). When using \code{options.b90$imodel = 'MvG'}, the
+ negative downwards). When using \code{options_b90$imodel = 'MvG'}, the
  hydraulic parameters are 'ths', 'thr', 'alpha' (1/m), 'npar', 'ksat' (mm/d)
- and 'tort'.  With \code{options.b90$imodel = 'CH'}, the parameters are
+ and 'tort'.  With \code{options_b90$imodel = 'CH'}, the parameters are
  'thsat', 'thetaf', 'psif' (kPa), 'bexp', 'kf' (mm/d), and 'wetinf'. For both
  parameterizations, the volume fraction of stones has to be named 'gravel'.
  If the \code{soil} data.frame is not provided, list items \code{soil_nodes}
- and \code{soil_materials} of \code{param.b90} are used for the simulation.
+ and \code{soil_materials} of \code{param_b90} are used for the simulation.
  These have to be set up in advance, see \code{\link{soil_to_param}}.
 }
 
@@ -172,20 +172,20 @@ ntfl \tab net flow into soil layer \tab mm \cr
 
 \examples{
 # Set up lists containing model control options and model parameters:
-param.b90 <- setparam_LWFB90()
-options.b90 <- setoptions_LWFB90()
+param_b90 <- setparam_LWFB90()
+options_b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2003-01-01")
-options.b90$enddate <- as.Date("2003-12-31")
+options_b90$startdate <- as.Date("2003-01-01")
+options_b90$enddate <- as.Date("2003-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 # Run LWF-Brook90
-b90.result <- runLWFB90(options.b90 = options.b90,
-                        param.b90 = param.b90,
+b90.result <- runLWFB90(options_b90 = options_b90,
+                        param_b90 = param_b90,
                         climate = slb1_meteo,
                         soil = soil)
 
@@ -199,12 +199,12 @@ agg_swat <- function(x, layer) {
   out[order(out$yr, out$doy),]}
 
 # run model, without returning the original output.
-b90.aggswat <- runLWFB90(options.b90 = options.b90,
-                         param.b90 = param.b90,
+b90.aggswat <- runLWFB90(options_b90 = options_b90,
+                         param_b90 = param_b90,
                          climate = slb1_meteo,
                          soil = soil,
                          output_fun = list(swat = agg_swat),
-                         rtrn.output = FALSE,
+                         rtrn_output = FALSE,
                          layer = 10)  # passed to output_fun
 str(b90.aggswat$output_fun$swat)
 }

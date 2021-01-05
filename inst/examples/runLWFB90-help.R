@@ -1,18 +1,18 @@
 # Set up lists containing model control options and model parameters:
-param.b90 <- setparam_LWFB90()
-options.b90 <- setoptions_LWFB90()
+param_b90 <- setparam_LWFB90()
+options_b90 <- setoptions_LWFB90()
 
 # Set start and end Dates for the simulation
-options.b90$startdate <- as.Date("2003-01-01")
-options.b90$enddate <- as.Date("2003-12-31")
+options_b90$startdate <- as.Date("2003-01-01")
+options_b90$enddate <- as.Date("2003-12-31")
 
 # Derive soil hydraulic properties from soil physical properties
 # using pedotransfer functions
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 # Run LWF-Brook90
-b90.result <- runLWFB90(options.b90 = options.b90,
-                        param.b90 = param.b90,
+b90.result <- runLWFB90(options_b90 = options_b90,
+                        param_b90 = param_b90,
                         climate = slb1_meteo,
                         soil = soil)
 
@@ -26,11 +26,11 @@ agg_swat <- function(x, layer) {
   out[order(out$yr, out$doy),]}
 
 # run model, without returning the original output.
-b90.aggswat <- runLWFB90(options.b90 = options.b90,
-                         param.b90 = param.b90,
+b90.aggswat <- runLWFB90(options_b90 = options_b90,
+                         param_b90 = param_b90,
                          climate = slb1_meteo,
                          soil = soil,
                          output_fun = list(swat = agg_swat),
-                         rtrn.output = FALSE,
+                         rtrn_output = FALSE,
                          layer = 10)  # passed to output_fun
 str(b90.aggswat$output_fun$swat)

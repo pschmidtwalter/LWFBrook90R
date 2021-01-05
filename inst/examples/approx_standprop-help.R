@@ -2,20 +2,20 @@ years <- 2002:2004
 height_yearly <- c(20.2,20.8,21.3)
 
 # constant 'interpolation'
-height_c <- approx_standprop(x.years=years,
+height_c <- approx_standprop(x_yrs = years,
                              y = height_yearly)
 
 # linear interpolation
-height.ini <- 19.1
-height_l <- approx_standprop(x.years=years,
+height_ini <- 19.1
+height_l <- approx_standprop(x_yrs=years,
                              y = height_yearly,
-                             y.ini = height.ini,
+                             y_ini = height_ini,
                              approx.method = 'linear')
 
 # use growthperiod
-height_l_gp <- approx_standprop(x.years = years,
+height_l_gp <- approx_standprop(x_yrs = years,
                                 y = height_yearly,
-                                y.ini = height.ini,
+                                y_ini = height_ini,
                                 use_growthperiod = TRUE,
                                 startdoy = 121,
                                 enddoy = 279,

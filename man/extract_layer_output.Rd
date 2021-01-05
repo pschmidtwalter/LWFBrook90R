@@ -4,7 +4,7 @@
 \alias{extract_layer_output}
 \title{Extracts values from layer data and organizes layer-wise variables in columns}
 \usage{
-extract_layer_output(dat, layers = NULL, value.vars = NULL, sep = "")
+extract_layer_output(dat, layers = NULL, value_vars = NULL, sep = "")
 }
 \arguments{
 \item{dat}{Data.frame with layer data organized in rows and identified by a
@@ -14,8 +14,8 @@ layer number column \code{nl}.}
 extracted from dat. If not supplied, values from all layers will be
 returned.}
 
-\item{value.vars}{Character vector containing names of value-variables to be
-extracted from dat. If not supplied, value.var will be guessed.}
+\item{value_vars}{Character vector containing names of value-variables to be
+extracted from dat. If not supplied, \code{value_vars} will be guessed.}
 
 \item{sep}{Separation character for constructig names from variable name and
 layer index.}
@@ -50,5 +50,5 @@ df$var2 <- runif(nrow(df), 2,3)
 extract_layer_output(df,layers = 2:4, sep = "_")
 
 #extract specific variables
-extract_layer_output(df, layers = 2:4, value.vars = c("var1", "var2"), sep = "_")
+extract_layer_output(df, layers = 2:4, value_vars = c("var1", "var2"), sep = "_")
 }

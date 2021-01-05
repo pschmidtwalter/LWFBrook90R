@@ -13,10 +13,10 @@ source("writeclimatein.R")
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
-options.b90 <- setoptions_LWFB90()
-param.b90 <- setparam_LWFB90()
+opts <- setoptions_LWFB90()
+parms <- setparam_LWFB90()
 
-soil <- cbind(slb1_soil, hydpar_wessolek_tab(tex.KA5 = slb1_soil$texture))
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 
 # Create directories for b90.exe
 dir.create("in")
@@ -24,8 +24,8 @@ dir.create("out")
 
 # Create Param.in file --------------
 # produce model input
-pkg_input <- runLWFB90(options.b90 = options.b90,
-                    param.b90 = param.b90,
+pkg_input <- runLWFB90(options_b90 = opts,
+                    param_b90 = parms,
                     climate = slb1_meteo,
                     soil = soil,
                     run = F)
