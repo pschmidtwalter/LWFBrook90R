@@ -32,9 +32,9 @@
 #' species in relation to successional status."
 #' \emph{Canadian Journal of Forest Research}, \emph{17:829-834}
 #'
-#' @example inst/examples/MakeRelRootDens-help.R
+#' @example inst/examples/makeRootden-help.R
 #' @export
-MakeRelRootDens <- function(soilnodes,
+makeRootden <- function(soilnodes,
                             maxrootdepth = min(soilnodes),
                             method = "betamodel",
                             beta = 0.97,

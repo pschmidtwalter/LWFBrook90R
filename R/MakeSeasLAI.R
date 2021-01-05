@@ -28,9 +28,9 @@
 #'
 #' @return A vector of daily lai values covering the years specified.
 #'
-#' @example inst/examples/MakeSeasLAI-help.R
+#' @example inst/examples/makeSeasLAI-help.R
 #' @export
-MakeSeasLAI <- function(method="b90",
+makeSeasLAI <- function(method="b90",
                         year,
                         maxlai,
                         winlaifrac = 0, #LAI in Winter

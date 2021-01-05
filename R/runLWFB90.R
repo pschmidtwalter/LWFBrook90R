@@ -192,8 +192,8 @@ runLWFB90 <- function(options_b90,
                                            out_yrs = simyears)
   } else {
     if (verbose == T) {message("Creating stand properties from parameters...")}
-    # derive age from ageini for simyears
-    param_b90$age <- seq(from = param_b90$ageini + 1,
+    # derive age from age_ini for simyears
+    param_b90$age <- seq(from = param_b90$age_ini + 1,
                          by = 1, length.out = length(simyears))
 
   }
@@ -243,7 +243,7 @@ runLWFB90 <- function(options_b90,
 
   ## Make Roots -----
   if (options_b90$root_method != "soilvar") {
-    param_b90$soil_nodes$rootden <- MakeRelRootDens(soilnodes = c(max(param_b90$soil_nodes$upper),
+    param_b90$soil_nodes$rootden <- makeRootden(soilnodes = c(max(param_b90$soil_nodes$upper),
                                                                       param_b90$soil_nodes$lower),
                                                     maxrootdepth = param_b90$maxrootdepth,
                                                     method = options_b90$root_method,
@@ -449,8 +449,8 @@ chk_options <- function(){
 chk_param <- function() {
   eval.parent(quote({ # manipulate the calling environment
     names(param_b90) <- tolower(names(param_b90))
-    nms <- c("maxlai","sai","saiini","height","heightini","densef",
-             "densefini","ageini","winlaifrac","budburst_species","budburstdoy",
+    nms <- c("maxlai","sai","sai_ini","height","height_ini","densef",
+             "densef_ini","age_ini","winlaifrac","budburst_species","budburstdoy",
              "leaffalldoy","shp_budburst","shp_leaffall","shp_optdoy","emergedur","leaffalldur",
              "lai_doy","lai_frac","alb","albsn","ksnvp","fxylem",
              "mxkpl","lwidth","psicr","nooutf","lpc","cs",

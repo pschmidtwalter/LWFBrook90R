@@ -2,7 +2,7 @@
 #'
 #' Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from
 #' parameters and options using \code{\link{approx_standprop}} and
-#' \code{\link{MakeSeasLAI}}.
+#' \code{\link{makeSeasLAI}}.
 #'
 #' @param options_b90 A list of model control options.
 #' @param param_b90 A parameter list-object.
@@ -24,28 +24,28 @@ standprop_daily <- data.frame(
                    by = "day"),
   age = approx_standprop(x_yrs = out_yrs,
                          y = param_b90$age,
-                         y_ini = param_b90$ageini,
+                         y_ini = param_b90$age_ini,
                          use_growthperiod = options_b90$use_growthperiod,
                          startdoy = param_b90$budburstdoy,
                          enddoy = param_b90$leaffalldoy,
                          approx.method = "linear"),
   height = approx_standprop(x_yrs = out_yrs,
                             y = param_b90$height,
-                            y_ini = param_b90$heightini,
+                            y_ini = param_b90$height_ini,
                             use_growthperiod = options_b90$use_growthperiod,
                             startdoy = param_b90$budburstdoy,
                             enddoy = param_b90$leaffalldoy,
                             approx.method = options_b90$standprop_interp),
   sai = approx_standprop(x_yrs = out_yrs,
                          y = param_b90$sai,
-                         y_ini = param_b90$saiini,
+                         y_ini = param_b90$sai_ini,
                          use_growthperiod = options_b90$use_growthperiod,
                          startdoy = param_b90$budburstdoy,
                          enddoy = param_b90$leaffalldoy,
                          approx.method = options_b90$standprop_interp),
   densef = approx_standprop(x_yrs = out_yrs,
                             y = param_b90$densef,
-                            y_ini = param_b90$densefini,
+                            y_ini = param_b90$densef_ini,
                             use_growthperiod = options_b90$use_growthperiod,
                             startdoy = param_b90$budburstdoy,
                             enddoy = param_b90$leaffalldoy,
@@ -53,7 +53,7 @@ standprop_daily <- data.frame(
 )
 
 # daily leaf area index from parameters
-standprop_daily$lai <- MakeSeasLAI(out_yrs,
+standprop_daily$lai <- makeSeasLAI(out_yrs,
                                      method = options_b90$lai_method,
                                      maxlai = param_b90$maxlai,
                                      winlaifrac = param_b90$winlaifrac,

@@ -64,25 +64,25 @@
 #'  dswmax       \tab maximum change allowed in SWATI. Default: 0.05 \tab percent of SWATMX \tab Numerical              \cr
 #'  dtimax       \tab maximum iteration time step. Default: 0.5 \tab d                 \tab Numerical              \cr
 #'  budburst_species \tab Name of tree species for estimating budburst doy using Menzel-model (passed to \code{\link[vegperiod]{vegperiod}}) Default: 'Fagus sylvatica' \tab -                  \tab Plant                  \cr
-#'  budburstdoy  \tab Budburst day of year - passed to \code{\link{MakeSeasLAI}}. Default: 121\tab doy                  \tab Plant                  \cr
+#'  budburstdoy  \tab Budburst day of year - passed to \code{\link{makeSeasLAI}}. Default: 121\tab doy                  \tab Plant                  \cr
 #'  emergedur    \tab Leaf growth duration until maxlai is reached.. Default: 28\tab d                 \tab Plant                  \cr
 #'  height       \tab plant height. Default: 25 \tab m                 \tab Plant                  \cr
-#'  heightini   \tab initial plant height at the beginning of the simulaton. Used for interpolation , ignored if length(height) . Default: 25 \tab m                 \tab Plant                  \cr
-#'  leaffalldoy  \tab number of days until maximum lai is reached - passed to \code{\link{MakeSeasLAI}} Default: 279\tab doy               \tab Plant                  \cr
-#'  leaffalldur  \tab number of days until minimum lai is reached - passed to \code{\link{MakeSeasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
+#'  height_ini   \tab initial plant height at the beginning of the simulaton. Used for interpolation , ignored if length(height) . Default: 25 \tab m                 \tab Plant                  \cr
+#'  leaffalldoy  \tab number of days until maximum lai is reached - passed to \code{\link{makeSeasLAI}} Default: 279\tab doy               \tab Plant                  \cr
+#'  leaffalldur  \tab number of days until minimum lai is reached - passed to \code{\link{makeSeasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
 #'  sai          \tab steam area index. Default: 1 \tab -                 \tab Plant                  \cr
-#'  saiini      \tab steam area index at the end of the simulation. Ignored if length(height) == 1, Default: 1 \tab -                 \tab Plant                  \cr
-#'  shp_leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{MakeSeasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
-#'  shp_budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{MakeSeasLAI}} Default: 3\tab -                  \tab Plant                  \cr
-#'  shp_optdoy \tab day of year when optimum value is reached - passed to \code{\link{MakeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
-#'  lai_doy \tab day of year values for lai-interpolation - passed to \code{\link{MakeSeasLAI}} \tab doy               \tab Plant                  \cr
-#'  lai_frac \tab fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{MakeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+#'  sai_ini      \tab steam area index at the end of the simulation. Ignored if length(height) == 1, Default: 1 \tab -                 \tab Plant                  \cr
+#'  shp_leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{makeSeasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
+#'  shp_budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{makeSeasLAI}} Default: 3\tab -                  \tab Plant                  \cr
+#'  shp_optdoy \tab day of year when optimum value is reached - passed to \code{\link{makeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+#'  lai_doy \tab day of year values for lai-interpolation - passed to \code{\link{makeSeasLAI}} \tab doy               \tab Plant                  \cr
+#'  lai_frac \tab fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{makeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
 #'  winlaifrac   \tab Minimum LAI as a fraction of maxlai. Default: 0 \tab -                  \tab Plant                  \cr
 #'  standprop_table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
 #'  cs           \tab Ratio of projected stem area index to canopy height. Default: 0.035 \tab m-1\tab Plant\cr
 #'  densef       \tab Density factor for MaxLAI, CS, RtLen, RPlant, not <.001, 1 for typical stand. Default: 1\tab -                  \tab Plant                  \cr
-#'  densefini   \tab density factor (see densef) at the end of the simulation. Ignored if length(densef) == 1. Default: 1\tab -                  \tab Plant\cr
-#'  maxlai       \tab Maximum projected leaf area index - passed to \code{\link{MakeSeasLAI}} Default: 5 \tab - \tab Plant                  \cr
+#'  densef_ini   \tab density factor (see densef) at the end of the simulation. Ignored if length(densef) == 1. Default: 1\tab -                  \tab Plant\cr
+#'  maxlai       \tab Maximum projected leaf area index - passed to \code{\link{makeSeasLAI}} Default: 5 \tab - \tab Plant                  \cr
 #'  radex        \tab Extinction coefficient for solar radiation and net radiation in the canopy. Default: 0.5\tab -                  \tab Potential Transpiration \cr
 #'  cvpd         \tab Vapour pressure deficit at which leaf conductance is halved. Default: 2\tab kPa               \tab Potential Transpiration\cr
 #'  glmax        \tab Maximum leaf vapour conductance when stomata are fully open. Default: 0.0053 \tab m s-1             \tab Potential Transpiration\cr
@@ -94,8 +94,8 @@
 #'  th           \tab Upper temperature threshold for stomata closure. Default: 40 \tab deg C             \tab Potential Transpiration\cr
 #'  tl           \tab Lower temperature threshold for stomata closure. Default: 0\tab deg C             \tab Potential Transpiration\cr
 #'  betaroot     \tab Shape parameter for rootlength density depth distribution. Default: 0.97 \tab -                 \tab Roots                  \cr
-#'  maxrootdepth \tab Maximum root depth (positive downward) - passed to MakeRelRootDens. Default: -1.5 \tab m                \tab Roots                  \cr
-#'  rootden.table \tab Data.frame of relative root density depth distribution with columns 'depth' and 'rootden' \tab                   \tab Roots\cr
+#'  maxrootdepth \tab Maximum root depth (positive downward) - passed to makeRootden. Default: -1.5 \tab m                \tab Roots                  \cr
+#'  rootden_table \tab Data.frame of relative root density depth distribution with columns 'depth' and 'rootden' \tab                   \tab Roots\cr
 #'  rstemp       \tab base temperature for snow-rain transition. Default: -0.5 \tab deg C              \tab Snow                   \cr
 #'  ccfac        \tab cold content factor. Default: 0.3 \tab MJ m-2 d-1 K-1    \tab Snow                   \cr
 #'  grdmlt       \tab rate of groundmelt of snowpack. Default: 0.35 \tab mm d-1            \tab Snow                   \cr
@@ -108,7 +108,7 @@
 #'  rssb         \tab exponent in relation of RSS to water potential. Default: 1 \tab - \tab Soilevap               \cr
 #'  soil_nodes   \tab a data.frame with soil nodes discretization passed to LWF-Brook90 \tab - \tab Soil               \cr
 #'  soil_materials \tab a data.frame with soil materials (hydrualic parameters) passed to LWF-Brook90 \tab -  \tab Soil               \cr
-#'  ageini      \tab Age of stand (for root development). Default: 100\tab a                 \tab Water supply           \cr
+#'  age_ini      \tab Age of stand (for root development). Default: 100\tab a                 \tab Water supply           \cr
 #'  initrdep     \tab Initial root depth. Default: 0.25\tab m                 \tab Water supply           \cr
 #'  initrlen     \tab Initial water-absorbing root length per unit area. Default: 12\tab m/m-2             \tab Water supply           \cr
 #'  rgroper      \tab Period of net root growth. Default: 30 \tab a                  \tab Water supply           \cr
@@ -131,12 +131,12 @@ setparam_LWFB90 <- function(...) {
   param <- list(
     maxlai = 5,
     sai = 1,
-    saiini = 1,
+    sai_ini = 1,
     height = 25,
-    heightini = 25,
+    height_ini = 25,
     densef = 1,
-    densefini = 1,
-    ageini = 100,
+    densef_ini = 1,
+    age_ini = 100,
     standprop_table = NULL,
     winlaifrac = 0,
     budburst_species = "Fagus sylvatica",
@@ -173,7 +173,7 @@ setparam_LWFB90 <- function(...) {
     rgroper = 30,
     maxrootdepth = -1.5,
     betaroot = 0.97,
-    rootden.table = NULL,
+    rootden_table = NULL,
     radex = 0.5,
     glmax = 0.0053,
     glmin = 3e-04,

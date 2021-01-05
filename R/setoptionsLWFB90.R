@@ -40,11 +40,11 @@
 #'   \code{budburstdoy} and \code{leaffalldoy}. See \code{use_growthperiod}-argument of
 #'   \code{\link{approx_standprop}}.} \item{lai_method}{name of method for
 #'   constructing seasonal course leaf area index development from parameters.
-#'   Passed to \code{method}-argument of \code{\link{MakeSeasLAI}}. }
+#'   Passed to \code{method}-argument of \code{\link{makeSeasLAI}}. }
 #'   \item{imodel}{name of retention & conductivity model: "CH" for
 #'   Clapp/Hornberger, "MvG" for Mualem/van Genuchten} \item{root_method}{method
 #'   name of the root length density depth distribution function. Any of the
-#'   names accepted by \code{\link{MakeRelRootDens}} are allowed. Additionally,
+#'   names accepted by \code{\link{makeRootden}} are allowed. Additionally,
 #'   \code{'soilvar'} can be used if the root length density depth distribution
 #'   is specified in column 'rootden' in the \code{soil}-data.frame}
 #' }

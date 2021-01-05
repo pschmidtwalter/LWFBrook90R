@@ -1,5 +1,5 @@
 # Intraannual courses of leaf area index
-lai_b90 <- MakeSeasLAI(method = "b90",
+lai_b90 <- makeSeasLAI(method = "b90",
                        year = 2001,
                        maxlai = 5,
                        winlaifrac = 0,
@@ -10,13 +10,13 @@ lai_b90 <- MakeSeasLAI(method = "b90",
 
 lai_doy <- c(1,110,117,135,175,220,250,290,365)
 lai_frac <- c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)
-lai_linear <- MakeSeasLAI(method = "linear",
+lai_linear <- makeSeasLAI(method = "linear",
                           year = 2001,
                           maxlai = 5,
                           lai_doy = lai_doy,
                           lai_frac = lai_frac)
 
-lai_coupmodel <- MakeSeasLAI(method = "Coupmodel",
+lai_coupmodel <- makeSeasLAI(method = "Coupmodel",
                              year = 2001,
                              maxlai = 5,
                              winlaifrac = 0.1,
@@ -33,7 +33,7 @@ lines(lai_coupmodel, col ="blue",lwd = 2)
 
 # incorparating between-year variability
 years <- 2001:2003
-lai <- MakeSeasLAI(method = "Coupmodel",
+lai <- makeSeasLAI(method = "Coupmodel",
                    year = years,
                    maxlai = c(4,6,5),
                    budburst_doy = c(100,135,121),

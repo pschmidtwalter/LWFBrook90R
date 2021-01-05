@@ -32,13 +32,13 @@ Changes:
 
 Changes:
 
-- Adjusted 'table'-method in `MakeRelRootDens`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
-- Input changed for 'soilnodes'-argument of `MakeRelRootDens`. See `?MakeRelRootDens`.
+- Adjusted 'table'-method in `makeRootden`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
+- Input changed for 'soilnodes'-argument of `makeRootden`. See `?makeRootden`.
 
 Bug fixes:
 
 - zero division error causing infinite relawat values in `MISCDAY.ASC`-output item.
-- 'betamodel'-method of `MakeRelRootDens` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
+- 'betamodel'-method of `makeRootden` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
 
 
 ## Version 0.3.0 (2020-04-21)

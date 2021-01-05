@@ -14,8 +14,8 @@ standprop_yearly_to_param(standprop_yearly, param_b90, out_yrs)
 \item{out_yrs}{Vector of years for which parameters should be updated.}
 }
 \value{
-The param_b90 list-object with updated items maxlai, height, heightini,
-sai, saiini, densef, densefini, age, ageini.
+The param_b90 list-object with updated items maxlai, height, height_ini,
+sai, sai_ini, densef, densef_ini, age, age_ini.
 }
 \description{
 Takes a data.frame of yearly standproperties, trims/extends the columns height, maxlai,
