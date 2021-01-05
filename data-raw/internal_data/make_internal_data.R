@@ -33,17 +33,16 @@ row.names(hypres_tab4) <- NULL
 library(LWFBrook90R)
 library(data.table)
 # b90res ---------------
-options.b90 <- setoptions_LWFB90()
-param.b90 <- setparam_LWFB90()
-soil <- cbind(slb1_soil, hydpar_wessolek_tab(tex.KA5 = slb1_soil$texture))
+options_b90 <- setoptions_LWFB90()
+param_b90 <- setparam_LWFB90()
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 output <- setoutput_LWFB90()
 
-b90res <- runLWFB90(options.b90 = options.b90,
-                    param.b90 = param.b90,
+b90res <- runLWFB90(options_b90 = options_b90,
+                    param_b90 = param_b90,
                     climate = slb1_meteo,
                     soil = soil,
-                    output = output, output.log = F)
-
+                    output = output)
 
 
 # mrun_res -------------
@@ -60,19 +59,19 @@ output_function <- function(x) {
 }
 
 N=50
+set.seed(2021)
 paramvar <- data.frame(maxlai = runif(N, 4,7),
                        glmax = runif(N,0.003, 0.01))
 
 mrun_res <- mrunLWFB90(paramvar = paramvar,
-                       param.b90 = param.b90,
+                       param_b90 = param_b90,
                        cores = 5,
-                       options.b90 = options.b90, # the following args are passed to runLWFB90
+                       options_b90 = options_b90, # arguments below are passed to runLWFB90()
                        climate = slb1_meteo,
                        soil = soil,
                        output = output,
-                       rtrn.input = F, rtrn.output = F,
-                       output_fun = output_function,
-                       output.log = F, verbose = F)
+                       rtrn_input = F, rtrn_output = F,
+                       output_fun = output_function)
 
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]),
                      idcol = "singlerun")
