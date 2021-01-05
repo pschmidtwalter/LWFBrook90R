@@ -2,7 +2,7 @@
 % Please edit documentation in R/runLWFB90.R
 \name{runLWFB90}
 \alias{runLWFB90}
-\title{Run the LWF-Brook90 hydrological model}
+\title{Run the LWF-Brook90 hydrologic model}
 \usage{
 runLWFB90(
   options_b90,
@@ -56,14 +56,14 @@ especially useful if the function is evaluated within a large multi-run
 application, for which the output might overload the memory. (see \code{\link{mrunLWFB90}}
 and \code{\link{msiterunLWFB90}}).}
 
-\item{rtrn_input}{Logical: append 'param_b90', 'options_b90', 'soil' and
-daily plant properties ('standprop_daily', as derived from parameters) to
+\item{rtrn_input}{Logical: append \code{param_b90}, \code{options_b90}, and
+daily plant properties (\code{standprop_daily}, as derived from parameters) to
 the result?}
 
-\item{rtrn_output}{Logical: return the simulation results?}
+\item{rtrn_output}{Logical: return the simulation results select via \code{output}?}
 
-\item{chk_input}{Logical wether to check param_b90, options_b90, climate,
-precip, and soil for completeness and consistency.}
+\item{chk_input}{Logical wether to check \code{param_b90}, \code{options_b90}, \code{climate},
+\code{precip}, and \code{soil} for completeness and consistency.}
 
 \item{run}{Logical: run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input.
@@ -81,7 +81,7 @@ A list containing the selected model output, the model input if desired (except 
 and the return values of \code{output_fun} if specified.
 }
 \description{
-Sets up the input objects for the LWF-Brook90 hydrological model, starts the
+Sets up the input objects for the LWF-Brook90 hydrologic model, starts the
 model, and returns the selected results.
 }
 \section{Climate input data}{
@@ -110,7 +110,11 @@ model, and returns the selected results.
 
 \tabular{llcl}{
 \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
-adef \tab air deficit in the root zone \tab - \cr
+yr \tab year \tab - \cr
+mo \tab month \tab - \cr
+da \tab day of month \tab - \cr
+doy \tab day of year \tab - \cr
+adef \tab available water deficit in root zone \tab mm \cr
 awat \tab total available soil water in layers with roots between -6.18 kPa and PSICR \tab mm \cr
 balerr \tab error in water balance \tab mm \cr
 byfl \tab total bypass flow \tab mm \cr
@@ -154,6 +158,10 @@ vrfln \tab vertical matrix drainage from lowest layer \tab mm \cr
 
 \tabular{llcl}{
 \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
+yr \tab year \tab - \cr
+mo \tab month \tab - \cr
+da \tab day of month \tab - \cr
+doy \tab day of year \tab - \cr
 nl \tab index of soil layer \tab \cr
 swati \tab soil water volume in layer \tab mm \cr
 theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr

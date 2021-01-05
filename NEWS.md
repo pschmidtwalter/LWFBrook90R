@@ -7,6 +7,7 @@ Changes:
 
 - result datasets are now returned directly by the Fortran model code, without 
   the detour of writing .ASC output text files and reading them back into workspace.
+- arguments and functions were renamed for consistency.
 - run time output to the console was disabled, only messages are printed when `verbose = T` (the new default).  
 - `runLWFB90()`: 
   - without specification of an output selection matrix via `output`, two tables 

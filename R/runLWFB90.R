@@ -1,7 +1,7 @@
-#'Run the LWF-Brook90 hydrological model
+#' Run the LWF-Brook90 hydrologic model
 #'
-#'Sets up the input objects for the LWF-Brook90 hydrological model, starts the
-#'model, and returns the selected results.
+#' Sets up the input objects for the LWF-Brook90 hydrologic model, starts the
+#' model, and returns the selected results.
 #'
 #' @param options_b90 Named list of model control options. Use
 #'   \code{\link{setoptions_LWFB90}} to generate a list with default model
@@ -30,12 +30,12 @@
 #'   especially useful if the function is evaluated within a large multi-run
 #'   application, for which the output might overload the memory. (see \code{\link{mrunLWFB90}}
 #'   and \code{\link{msiterunLWFB90}}).
-#' @param rtrn_input Logical: append 'param_b90', 'options_b90', 'soil' and
-#'   daily plant properties ('standprop_daily', as derived from parameters) to
+#' @param rtrn_input Logical: append \code{param_b90}, \code{options_b90}, and
+#'   daily plant properties (\code{standprop_daily}, as derived from parameters) to
 #'   the result?
-#' @param rtrn_output Logical: return the simulation results?
-#' @param chk_input Logical wether to check param_b90, options_b90, climate,
-#'   precip, and soil for completeness and consistency.
+#' @param rtrn_output Logical: return the simulation results select via \code{output}?
+#' @param chk_input Logical wether to check \code{param_b90}, \code{options_b90}, \code{climate},
+#'   \code{precip}, and \code{soil} for completeness and consistency.
 #' @param run Logical: run LWF-Brook90 or only return model input objects?
 #'   Useful to inspect the effects of options and parameters on model input.
 #'   Default is TRUE.
@@ -68,7 +68,11 @@
 #' @section Daily outputs:
 #' \tabular{llcl}{
 #' \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
-#' adef \tab air deficit in the root zone \tab - \cr
+#' yr \tab year \tab - \cr
+#' mo \tab month \tab - \cr
+#' da \tab day of month \tab - \cr
+#' doy \tab day of year \tab - \cr
+#' adef \tab available water deficit in root zone \tab mm \cr
 #' awat \tab total available soil water in layers with roots between -6.18 kPa and PSICR \tab mm \cr
 #' balerr \tab error in water balance \tab mm \cr
 #' byfl \tab total bypass flow \tab mm \cr
@@ -110,6 +114,10 @@
 #' @section Layer outputs:
 #' \tabular{llcl}{
 #' \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
+#' yr \tab year \tab - \cr
+#' mo \tab month \tab - \cr
+#' da \tab day of month \tab - \cr
+#' doy \tab day of year \tab - \cr
 #' nl \tab index of soil layer \tab \cr
 #' swati \tab soil water volume in layer \tab mm \cr
 #' theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr

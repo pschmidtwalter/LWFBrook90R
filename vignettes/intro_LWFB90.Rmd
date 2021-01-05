@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrological model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and soil water tension of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrological model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions [@mualem_new_1976; @van_genuchten_closed-form_1980], and the option to take interannual variation of aboveground vegetation characteristics into account. The core function of the 'LWFBrook90R'-package, `runLWFB90()`, runs LWF-Brook90 by:
+LWF-BROOK90 [@hammel_charakterisierung_2001] is a hydrologic model to calculate daily evaporation (transpiration, interception, and soil evaporation) and soil water fluxes, along with soil water contents and soil water tension of a soil profile covered with vegetation. It is an upgraded version of the original BROOK90 hydrologic model [@federer_sensitivity_2003; @federer_brook_2002], featuring additional parameterizations of the soil water retention and conductivity functions [@mualem_new_1976; @van_genuchten_closed-form_1980], and the option to take interannual variation of aboveground vegetation characteristics into account. The core function of the 'LWFBrook90R'-package, `runLWFB90()`, runs LWF-Brook90 by:
 
 * creating model input objects from climate driving data, model control options and parameters,
 * executing the model code,
@@ -107,13 +107,13 @@ par(new =T)
 plot(swat100cm$dates,
      swat100cm$swat100cm, 
      ylim=c(100, 350), type ='l', col = "blue",
-     xaxt = "n", yaxt ="n", xlab= "", ylab = "")swatday.asc
+     xaxt = "n", yaxt ="n", xlab= "", ylab = "")
 axis(4,pretty(c(100,350)))
 mtext("swat_100cm [mm]", side = 4, line =3)
 legend("bottom",inset = -0.25,
        legend = c("tran", "swat100cm"),
        col = c("green", "blue"),  lty = 1, 
-      bty = "n", xpd = T,  horiz = T,  text.width = 100)swatday.asc
+      bty = "n", xpd = T,  horiz = T,  text.width = 100)
 ```
 
 ## Multi-run Simulations
