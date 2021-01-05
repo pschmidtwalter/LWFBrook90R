@@ -2,7 +2,7 @@
 % Please edit documentation in R/standprop_yrly_to_param.R
 \name{standprop_yearly_to_param}
 \alias{standprop_yearly_to_param}
-\title{Transfer standproperties height, maxlai, sai, densef, age to parameter-list}
+\title{Transfer standproperties height, maxlai, sai, densef, age to parameter list obeject}
 \usage{
 standprop_yearly_to_param(standprop_yearly, param_b90, out_yrs)
 }
@@ -18,8 +18,8 @@ The param_b90 list-object with updated items maxlai, height, height_ini,
 sai, sai_ini, densef, densef_ini, age, age_ini.
 }
 \description{
-Takes a data.frame of yearly standproperties, trims/extends the columns height, maxlai,
-sai, densef, and age for the years in out_yrs, and updates the provided parameter list
+Takes a data.frame of yearly stand properties, trims/extends the columns height, maxlai,
+sai, densef, and age for the years in \code{out_yrs}, and updates the provided parameter list.
 }
 \examples{
 param_b90 <- setparam_LWFB90()

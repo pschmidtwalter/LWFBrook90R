@@ -14,8 +14,8 @@ opts <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 #set up data.frame with variable parameters
-n <- 5
-set.seed(2020)
+n <- 2
+set.seed(2021)
 vary_parms <- data.frame(shp_optdoy = runif(n,180,240),
                          shp_budburst = runif(n, 0.1,1),
                          winlaifrac = runif(n, 0,0.5),

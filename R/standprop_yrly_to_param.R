@@ -21,7 +21,7 @@
 #'                                        years)
 #'
 #' identical(param.new$maxlai, dat$maxlai[dat$year %in% years])
-#' identical(param.new$height, dat$height[daparam_b90t$year %in% years])
+#' identical(param.new$height, dat$height[dat$year %in% years])
 
 standprop_yearly_to_param <- function(standprop_yearly,
                                            param_b90,

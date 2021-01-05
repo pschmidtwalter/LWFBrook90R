@@ -105,11 +105,11 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     ! soil water parameters and initial variables
     CALL SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
         PSIG, SWATMX, WETC, WETNES, SWATI, MPar, ML, pr, error)
-    if ( error .ne. 0 ) go to 999 
+    if ( error .ne. 0 ) go to 999
 
     ! Check for timelimits set by R-user
     if (timer) call rchkusr()
-    
+
     ! more initial soil water variables
     CALL SOILVAR(NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
         PSITI, THETA, KK, SWAT, MPar, ML)
@@ -161,7 +161,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
         ! Check for timelimits set by R-user
         if (timer) call rchkusr()
-        
+
 !       * * I N P U T   W E A T H E R   L I N E   F R O M   D F I L E . D A T * *
 !       next line can be modified for different input formats
         YY = INT( climveg( IDAY, 1) )
@@ -413,10 +413,10 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             INCLUDE 'ZPINT.h'
 
             !        *  *  *  *  *  *  B E G I N   I T E R A T I O N   *  *  *  *  *  *  *
-            
+
             ! Check for timelimits set by R-user
             if (timer) call rchkusr()
-            
+
 101         CONTINUE
 !         write(10,*)'begin iteration'
             NITS = NITS + 1
@@ -783,9 +783,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 !     ***************   E N D    D A Y   L O O P    **************************
 999 if ( pr ) then
-        if ( error.ne.0 ) then 
+        if ( error.ne.0 ) then
             call labelpr("Finished with errors", -1)
-        else 
+        else
             call labelpr("THAT IS THE END", -1)
         end if
     end if
@@ -3111,7 +3111,7 @@ function FWETK (K, Par, iModel, pr, timer)
 
 !    parameter (ItKonv = 1000, ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
      parameter (ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
-     
+
     FWETK = 0.0d0
 
     if(iModel .eq. 0) then

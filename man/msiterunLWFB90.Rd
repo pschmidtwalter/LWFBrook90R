@@ -147,6 +147,6 @@ res <- msiterunLWFB90(param_b90 = param_l,
                       options_b90 = opts,
                       soil = soils,
                       climate = climates,
-                      run = F)
+                      run = FALSE)
 names(res)
 }

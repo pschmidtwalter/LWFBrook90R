@@ -193,7 +193,7 @@
 
     DO 206 I=1,NLAYER
         tini(I) = 1.e+20
-        if( (I .GE. i1) .AND. (I .LE. i2) ) frelden(I) = MAX( frelden(I), 1.01e-6)
+        if( (I .GE. i1) .AND. (I .LE. i2) ) frelden(I) = MAX( frelden(I), 1.e-6)
         if( (frelden(I) .GE. 1.e-6) .AND. (depmax-dep(I)) .LE. inirdep) then
             tini(I) = 0.0d0
         end if
