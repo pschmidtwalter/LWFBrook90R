@@ -28,7 +28,7 @@ vals = c(0.999, 0.001, 99)
 soil_materials
 replace_vecelements(soil_materials, varnms, vals)
 
-x <- setparam_LWFB90()[["pdur"]]
+x <- set_paramLWFB90()[["pdur"]]
 varnms <- c("pdur2", "pdur12")
 vals <- c(0,10)
 x

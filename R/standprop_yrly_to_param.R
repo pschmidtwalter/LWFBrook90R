@@ -9,10 +9,11 @@
 #'
 #' @return The param_b90 list-object with updated items maxlai, height, height_ini,
 #' sai, sai_ini, densef, densef_ini, age, age_ini.
+#'
 #' @export
 #'
 #' @examples
-#' param_b90 <- setparam_LWFB90()
+#' param_b90 <- set_paramLWFB90()
 #' dat <- slb1_standprop
 #'
 #' years <- 2002:2005
@@ -24,8 +25,8 @@
 #' identical(param.new$height, dat$height[dat$year %in% years])
 
 standprop_yearly_to_param <- function(standprop_yearly,
-                                           param_b90,
-                                           out_yrs) {
+                                      param_b90,
+                                      out_yrs) {
 
   if (is.null(standprop_yearly)) {
     stop("standprop_yearly is missing. Required if options_b90$standprop_input = 'table'!")
@@ -38,33 +39,33 @@ standprop_yearly_to_param <- function(standprop_yearly,
 
   # transfer table to parameters, trim/extend to out_yrs using constant interpolation and rule = 2 in approx
   param_b90$height <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-12-31")),
-                             y = standprop_yearly$height,
-                             xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
-                             method = 'constant', rule = 2)$y
+                                    y = standprop_yearly$height,
+                                    xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
+                                    method = 'constant', rule = 2)$y
   param_b90$height_ini <- param_b90$height[1]
   param_b90$height <- param_b90$height[-1]
 
   param_b90$sai <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-12-31")),
-                          y = standprop_yearly$sai,
-                          xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
-                          method = 'constant', rule = 2)$y
+                                 y = standprop_yearly$sai,
+                                 xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
+                                 method = 'constant', rule = 2)$y
   param_b90$sai_ini <- param_b90$sai[1]
   param_b90$sai <- param_b90$sai[-1]
 
   param_b90$densef <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-12-31")),
-                             y = standprop_yearly$densef,
-                             xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
-                             method = 'constant', rule = 2)$y
+                                    y = standprop_yearly$densef,
+                                    xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
+                                    method = 'constant', rule = 2)$y
 
   param_b90$densef_ini <- param_b90$densef[1]
   param_b90$densef <- param_b90$densef[-1]
 
   param_b90$maxlai <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-01-01")),
-                             y = standprop_yearly$maxlai,
-                             xout = as.Date(paste0(out_yrs,"-01-01")),
-                             method = 'constant', rule = 2)$y
+                                    y = standprop_yearly$maxlai,
+                                    xout = as.Date(paste0(out_yrs,"-01-01")),
+                                    method = 'constant', rule = 2)$y
 
-    # extend or constrain age from table for out_yrs
+  # extend or constrain age from table for out_yrs
   param_b90$age <- seq(standprop_yearly$age[1] - (standprop_yearly$year[1] - min(out_yrs)),
                        by = 1, length.out = length(out_yrs))
 

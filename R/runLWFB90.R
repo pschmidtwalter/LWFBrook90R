@@ -4,10 +4,10 @@
 #' model, and returns the selected results.
 #'
 #' @param options_b90 Named list of model control options. Use
-#'   \code{\link{setoptions_LWFB90}} to generate a list with default model
+#'   \code{\link{set_optionsLWFB90}} to generate a list with default model
 #'   control options.
 #' @param param_b90 Named list of model input parameters. Use
-#'   \code{\link{setparam_LWFB90}} to generate a list with default model
+#'   \code{\link{set_paramLWFB90}} to generate a list with default model
 #'   parameters.
 #' @param climate Data.frame with daily climatic data, or a function that
 #'   returns a suitable data.frame. See details for the required variables.
@@ -19,23 +19,25 @@
 #' @param soil Data.frame containing the hydraulic properties of the soil
 #'   layers. See section 'Soil parameters'
 #' @param output A [7,5]-matrix flagging the desired model output datasets at
-#'   different time intervals. Use \code{\link{setoutput_LWFB90}} to generate
+#'   different time intervals. Use \code{\link{set_outputLWFB90}} to generate
 #'   and edit a default output selection matrix. Alternatively, use -1 (the
 #'   default) to return the raw daily and soil layer outputs.
 #' @param output_fun A function or a list of functions of the form
 #'   \code{f(x,...)}, where \code{x} is the object regularly returned by
-#'   \code{runLWFB90}. During function evaluation, \code{x} contains model input
-#'   and selected output objects, irrespective of \code{rtrn_input} and
+#'   \code{run_LWFB90}. During function evaluation, \code{x} contains model
+#'   input and selected output objects, irrespective of \code{rtrn_input} and
 #'   \code{rtrn_output}. Can be used to  aggregate output on-the-fly, and is
 #'   especially useful if the function is evaluated within a large multi-run
-#'   application, for which the output might overload the memory. (see \code{\link{mrunLWFB90}}
-#'   and \code{\link{msiterunLWFB90}}).
+#'   application, for which the output might overload the memory. (see
+#'   \code{\link{run_multi_LWFB90}} and \code{\link{run_multisite_LWFB90}}).
 #' @param rtrn_input Logical: append \code{param_b90}, \code{options_b90}, and
-#'   daily plant properties (\code{standprop_daily}, as derived from parameters) to
-#'   the result?
-#' @param rtrn_output Logical: return the simulation results select via \code{output}?
-#' @param chk_input Logical wether to check \code{param_b90}, \code{options_b90}, \code{climate},
-#'   \code{precip}, and \code{soil} for completeness and consistency.
+#'   daily plant properties (\code{standprop_daily}, as derived from parameters)
+#'   to the result?
+#' @param rtrn_output Logical: return the simulation results select via
+#'   \code{output}?
+#' @param chk_input Logical wether to check \code{param_b90},
+#'   \code{options_b90}, \code{climate}, \code{precip}, and \code{soil} for
+#'   completeness and consistency.
 #' @param run Logical: run LWF-Brook90 or only return model input objects?
 #'   Useful to inspect the effects of options and parameters on model input.
 #'   Default is TRUE.
@@ -44,14 +46,15 @@
 #' @param ... Additional arguments passed to \code{output_fun} and/or
 #'   \code{climate}, if the latter is a function.
 #'
-#' @return A list containing the selected model output, the model input if desired (except for \code{climate}),
-#' and the return values of \code{output_fun} if specified.
+#' @return A list containing the selected model output, the model input if
+#'   desired (except for \code{climate}), and the return values of
+#'   \code{output_fun} if specified.
 #'
 #'@section Climate input data: The \code{climate} data.frame must contain the
 #'  following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
-#'  (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec' (mm) , 'vappres' (kPa), and
-#'  either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using \code{sunhours},
-#'  please set \code{options_b90$fornetrad = 'sunhours'}.
+#'  (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec' (mm) , 'vappres' (kPa),
+#'  and either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using
+#'  \code{sunhours}, please set \code{options_b90$fornetrad = 'sunhours'}.
 #'
 #'@section Soil input parameters: Each row of \code{soil} represents one layer,
 #'  containing the layers' boundaries and soil hydraulic parameters. The column
@@ -134,31 +137,31 @@
 #'}
 #'
 #' @export
-#' @example inst/examples/runLWFB90-help.R
-runLWFB90 <- function(options_b90,
-                      param_b90,
-                      climate,
-                      precip = NULL,
-                      soil = NULL,
-                      output = NULL,
-                      output_fun = NULL,
-                      rtrn_input = TRUE,
-                      rtrn_output = TRUE,
-                      chk_input = TRUE,
-                      run = TRUE,
-                      timelimit = Inf,
-                      verbose = FALSE,
-                      ...) {
+#' @example inst/examples/run_LWFB90-help.R
+run_LWFB90 <- function(options_b90,
+                       param_b90,
+                       climate,
+                       precip = NULL,
+                       soil = NULL,
+                       output = NULL,
+                       output_fun = NULL,
+                       rtrn_input = TRUE,
+                       rtrn_output = TRUE,
+                       chk_input = TRUE,
+                       run = TRUE,
+                       timelimit = Inf,
+                       verbose = FALSE,
+                       ...) {
 
   xfunargs <- list(...)
 
   if (is.function(climate)) {
-    if (verbose == T) {
+    if (verbose == TRUE) {
       message("Applying climate input function")
     }
-    climfunargsnms <- match.arg(methods::formalArgs(climate), names(xfunargs),several.ok = T)
+    climfunargsnms <- match.arg(methods::formalArgs(climate), names(xfunargs),several.ok = TRUE)
     climate <- do.call(climate,xfunargs[climfunargsnms])
-   }
+  }
 
   # input checks -----
   if (chk_input) {
@@ -194,12 +197,12 @@ runLWFB90 <- function(options_b90,
   # Vegetation ----
   # Prepare vegetation parameters
   if (tolower(options_b90$standprop_input) == "table") {
-    if (verbose == T) {message("Creating long term stand dynamics from table 'standprop_table'...")}
+    if (verbose == TRUE) {message("Creating long term stand dynamics from table 'standprop_table'...")}
     param_b90 <- standprop_yearly_to_param(param_b90$standprop_table,
                                            param_b90,
                                            out_yrs = simyears)
   } else {
-    if (verbose == T) {message("Creating stand properties from parameters...")}
+    if (verbose == TRUE) {message("Creating stand properties from parameters...")}
     # derive age from age_ini for simyears
     param_b90$age <- seq(from = param_b90$age_ini + 1,
                          by = 1, length.out = length(simyears))
@@ -212,7 +215,7 @@ runLWFB90 <- function(options_b90,
   ### constrain to simulation period
   standprop_daily <- standprop_daily[which(standprop_daily$dates >= options_b90$startdate
                                            & standprop_daily$dates <= options_b90$enddate),]
-  if (verbose == T) {
+  if (verbose == TRUE) {
     message("Standproperties created succesfully")
   }
 
@@ -222,9 +225,9 @@ runLWFB90 <- function(options_b90,
                            & climate$dates <= options_b90$enddate),]
 
   ## Precipitation correction (Richter) ----
-  if (options_b90$prec_corr == TRUE) {
-    climate$prec <- with(climate, prec_corr(month, tmean, prec,
-                                            station.exposure = param_b90$prec_corr_statexp))
+  if (options_b90$correct_prec == TRUE) {
+    climate$prec <- with(climate, correct_prec(month, tmean, prec,
+                                               station.exposure = param_b90$prec_corr_statexp))
   }
 
   ## Calculate global radiation from sunshine duration ----
@@ -251,12 +254,12 @@ runLWFB90 <- function(options_b90,
 
   ## Make Roots -----
   if (options_b90$root_method != "soilvar") {
-    param_b90$soil_nodes$rootden <- makeRootden(soilnodes = c(max(param_b90$soil_nodes$upper),
-                                                                      param_b90$soil_nodes$lower),
-                                                    maxrootdepth = param_b90$maxrootdepth,
-                                                    method = options_b90$root_method,
-                                                    beta = param_b90$betaroot,
-                                                    rootdat = param_b90$rootden.tab)
+    param_b90$soil_nodes$rootden <- make_rootden(soilnodes = c(max(param_b90$soil_nodes$upper),
+                                                               param_b90$soil_nodes$lower),
+                                                 maxrootdepth = param_b90$maxrootdepth,
+                                                 method = options_b90$root_method,
+                                                 beta = param_b90$betaroot,
+                                                 rootdat = param_b90$rootden.tab)
   } else {
     if (!is.null(soil)) {
       param_b90$soil_nodes$rootden <- soil$rootden
@@ -268,7 +271,7 @@ runLWFB90 <- function(options_b90,
   # Execute LWF-Brook90  ----
   if (run) {
 
-    if (verbose == T) {
+    if (verbose == TRUE) {
       message("Running model..." )
     }
 
@@ -297,7 +300,7 @@ runLWFB90 <- function(options_b90,
     simtime <- finishing_time - start
     units(simtime) <- "secs"
 
-    if (verbose == T) {
+    if (verbose == TRUE) {
       message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
     }
 
@@ -346,7 +349,7 @@ runLWFB90 <- function(options_b90,
 
     ## apply functions on simulation output ----
     if (!is.null(output_fun)) {
-      if (verbose == T) {
+      if (verbose == TRUE) {
         message("Applying custom functions on simulation output...")
       }
 
@@ -359,7 +362,7 @@ runLWFB90 <- function(options_b90,
       outfunargsnms <- lapply(output_fun, FUN = function(x,argsnms) {
         match.arg(methods::formalArgs(x),
                   argsnms,
-                  several.ok = T)},
+                  several.ok = TRUE)},
         argsnms = names(outfunargs))
 
       # TODO: simres is copied for use in each output_fun.
@@ -377,7 +380,7 @@ runLWFB90 <- function(options_b90,
     ## remove the basic results again if they are not required ----
     if (!rtrn_output) {
       if (is.matrix(output) & all(dim(output) == c(7,5))) {
-        simres <- simres[-which(grepl(".ASC", names(simres), fixed = T))]
+        simres <- simres[-which(grepl(".ASC", names(simres), fixed = TRUE))]
       } else {
         simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
       }
@@ -395,7 +398,7 @@ runLWFB90 <- function(options_b90,
                 standprop_daily = standprop_daily))
   }
 
-  if (verbose == T) {
+  if (verbose == TRUE) {
     message("Finished!")
   }
   return(simres)
@@ -432,7 +435,7 @@ chk_options <- function(){
     names(options_b90) <- tolower(names(options_b90))
 
     stopifnot(all(names(options_b90) %in% c("startdate","enddate","fornetrad","prec_interval",
-                                            "prec_corr","budburst_method",
+                                            "correct_prec","budburst_method",
                                             "leaffall_method", "standprop_input", "standprop_interp",
                                             "use_growthperiod","lai_method","imodel", "root_method")))
 
@@ -575,7 +578,7 @@ chk_soil <- function(){
     if (is.null(soil)) {
       if (is.null(param_b90$soil_nodes) | is.null(param_b90$soil_materials)) {
         stop("Please provide soil parameters as items 'soil_nodes' and 'soil_materials' via 'param_b90',
-           when not using 'soil'-argument in runLWFB90.")
+           when not using 'soil'-argument in run_LWFB90.")
       }
 
       names(param_b90$soil_nodes) <- tolower(names(param_b90$soil_nodes))
@@ -687,45 +690,45 @@ process_outputs <- function(simout, output) {
       for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
         if (per == "Day") {
           moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(# for fluxes: sum up over period
-                                                                prec = round(sum(rfal+sfal),1),
-                                                                flow = round(sum(flow),1),
-                                                                evap = round(sum(evap),1),
-                                                                seep = round(sum(seep),1),
-                                                                # for state variables: take last entry in period
-                                                                snow = round(snow[which.max(doy)],1),
-                                                                swat = round(swat[which.max(doy)],1),
-                                                                gwat = round(gwat[which.max(doy)],1),
-                                                                intr = round(intr[which.max(doy)],1),
-                                                                ints = round(ints[which.max(doy)],1)),
-                                                          by = list(yr, mo, da, doy)]
+            prec = round(sum(rfal+sfal),1),
+            flow = round(sum(flow),1),
+            evap = round(sum(evap),1),
+            seep = round(sum(seep),1),
+            # for state variables: take last entry in period
+            snow = round(snow[which.max(doy)],1),
+            swat = round(swat[which.max(doy)],1),
+            gwat = round(gwat[which.max(doy)],1),
+            intr = round(intr[which.max(doy)],1),
+            ints = round(ints[which.max(doy)],1)),
+            by = list(yr, mo, da, doy)]
         }
         if (per == "Mon") {
           moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(# for fluxes: sum up over period
-                                                                 prec = round(sum(rfal+sfal),1),
-                                                                 flow = round(sum(flow),1),
-                                                                 evap = round(sum(evap),1),
-                                                                 seep = round(sum(seep),1),
-                                                                 # for state variables: take last entry in period
-                                                                 snow = round(snow[which.max(doy)],1),
-                                                                 swat = round(swat[which.max(doy)],1),
-                                                                 gwat = round(gwat[which.max(doy)],1),
-                                                                 intr = round(intr[which.max(doy)],1),
-                                                                 ints = round(ints[which.max(doy)],1)),
-                                                          by = list(yr, mo)]
+            prec = round(sum(rfal+sfal),1),
+            flow = round(sum(flow),1),
+            evap = round(sum(evap),1),
+            seep = round(sum(seep),1),
+            # for state variables: take last entry in period
+            snow = round(snow[which.max(doy)],1),
+            swat = round(swat[which.max(doy)],1),
+            gwat = round(gwat[which.max(doy)],1),
+            intr = round(intr[which.max(doy)],1),
+            ints = round(ints[which.max(doy)],1)),
+            by = list(yr, mo)]
         }
         if (per == "Ann") {
           moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(# for fluxes: sum up over period
-                                                                 prec = round(sum(rfal+sfal),1),
-                                                                 flow = round(sum(flow),1),
-                                                                 evap = round(sum(evap),1),
-                                                                 seep = round(sum(seep),1),
-                                                                 # for state variables: take last entry in period
-                                                                 snow = round(snow[which.max(doy)],1),
-                                                                 swat = round(swat[which.max(doy)],1),
-                                                                 gwat = round(gwat[which.max(doy)],1),
-                                                                 intr = round(intr[which.max(doy)],1),
-                                                                 ints = round(ints[which.max(doy)],1)),
-                                                          by = list(yr)]
+            prec = round(sum(rfal+sfal),1),
+            flow = round(sum(flow),1),
+            evap = round(sum(evap),1),
+            seep = round(sum(seep),1),
+            # for state variables: take last entry in period
+            snow = round(snow[which.max(doy)],1),
+            swat = round(swat[which.max(doy)],1),
+            gwat = round(gwat[which.max(doy)],1),
+            intr = round(intr[which.max(doy)],1),
+            ints = round(ints[which.max(doy)],1)),
+            by = list(yr)]
         }
       }
     }
@@ -733,15 +736,15 @@ process_outputs <- function(simout, output) {
       for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
         if (per == "Day") {
           moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(
-                                                                 vrfln   = round(vrfln,1),
-                                                                 safrac  = round(safrac,1),
-                                                                 stres   = round(stres,3),
-                                                                 adef    = round(adef,3),
-                                                                 awat    = round(awat,1),
-                                                                 relawat = round(relawat,3),
-                                                                 nits,
-                                                                 balerr  = round(balerr, 3)),
-                                                          by = list(yr, mo, da, doy)]
+            vrfln   = round(vrfln,1),
+            safrac  = round(safrac,1),
+            stres   = round(stres,3),
+            adef    = round(adef,3),
+            awat    = round(awat,1),
+            relawat = round(relawat,3),
+            nits,
+            balerr  = round(balerr, 3)),
+            by = list(yr, mo, da, doy)]
 
         }
         if (per == "Mon") {

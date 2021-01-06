@@ -51,7 +51,7 @@ month, day, interval-number (1:precint), prec, mesflp.}
 }
 \value{
 A list containing the daily and soil layer model outputs, along with
-  an error code of the simulation (see \code{\link{runLWFB90}}.
+  an error code of the simulation (see \code{\link{run_LWFB90}}.
 }
 \description{
 Passes input data matrices to the Fortran model code and returns the results

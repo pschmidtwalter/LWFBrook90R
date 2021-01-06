@@ -3,31 +3,31 @@ library(LWFBrook90R)
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
-opts <- setoptions_LWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-02"))
-parms <- setparam_LWFB90()
+opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-02"))
+parms <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
-output <- setoutput_LWFB90()
+output <- set_outputLWFB90()
 output[,] <- 1L
 
 # return value (outputs) ----
-test_default <- runLWFB90(options_b90 = opts,
+test_default <- run_LWFB90(options_b90 = opts,
           param_b90 = parms,
           climate = slb1_meteo,
           soil = soil)
 
-test_asc <- runLWFB90(options_b90 = opts,
+test_asc <- run_LWFB90(options_b90 = opts,
                       param_b90 = parms,
                       climate = slb1_meteo,
                       soil = soil,
                       output = output)
 
-test_noinput <- runLWFB90(options_b90 = opts,
+test_noinput <- run_LWFB90(options_b90 = opts,
                           param_b90 = parms,
                           climate = slb1_meteo,
                           soil = soil,
                           rtrn_input = F)
 
-test_nooutput <- runLWFB90(options_b90 = opts,
+test_nooutput <- run_LWFB90(options_b90 = opts,
                           param_b90 = parms,
                           climate = slb1_meteo,
                           soil = soil,
@@ -72,7 +72,7 @@ climfun <- function(met) {
 }
 
 test_that("climate input from function works", {
-  expect_type(runLWFB90(options_b90 = opts,
+  expect_type(run_LWFB90(options_b90 = opts,
                         param_b90 = parms,
                         soil = soil,
                         climate = climfun,
@@ -94,7 +94,7 @@ outfun2 <- function(x) {
 
 test_that("single output functions works", {
   expect_type(
-    runLWFB90(options_b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-01-01"),
                                               enddate = as.Date("2002-12-31")),
               param_b90 = parms,
               soil = soil,
@@ -105,7 +105,7 @@ test_that("single output functions works", {
               rtrn_output = F)$output_fun,
               "list")
   expect_type(
-    runLWFB90(options_b90 = setoptions_LWFB90(startdate = as.Date("2002-01-01"),
+    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-01-01"),
                                               enddate = as.Date("2002-12-31")),
               param_b90 = parms,
               soil = soil,

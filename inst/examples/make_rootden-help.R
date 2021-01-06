@@ -1,5 +1,5 @@
 depths <- c(max(slb1_soil$upper), slb1_soil$lower)
-roots_beta <- makeRootden(soilnodes = depths,
+roots_beta <- make_rootden(soilnodes = depths,
                               maxrootdepth = -1,4,
                               beta = 0.97,
                               method = "betamodel")
@@ -9,15 +9,15 @@ rootden_table <- data.frame(
   lower = c(0,-0.02, -0.15, -0.35, -0.5, -0.65,-0.9,-1.1,-1.3,-1.6),
   rootden = c(10,15, 35, 15, 7.5, 4, 12, 2, 2, 0))
 
-roots_table <- makeRootden(soilnodes = depths,
+roots_table <- make_rootden(soilnodes = depths,
                                method = "table",
                                rootdat = rootden_table)
 
-roots_linear <- makeRootden(soilnodes = depths,
+roots_linear <- make_rootden(soilnodes = depths,
                                 maxrootdepth = -1.4,
                                 method = 'linear')
 
-roots_constant <- makeRootden(soilnodes = depths,
+roots_constant <- make_rootden(soilnodes = depths,
                                   maxrootdepth = -1.4,
                                   method = 'const')
 

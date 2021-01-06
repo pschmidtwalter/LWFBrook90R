@@ -21,8 +21,8 @@
 soil_to_param <- function(soil, imodel="MvG") {
 
   if (imodel == "MvG") {
-  dubl <- duplicated(soil[,c("ths","thr","alpha","npar","ksat","tort","gravel")])
-  materials <- soil[!dubl,c("ths","thr","alpha","npar","ksat","tort","gravel")]
+    dubl <- duplicated(soil[,c("ths","thr","alpha","npar","ksat","tort","gravel")])
+    materials <- soil[!dubl,c("ths","thr","alpha","npar","ksat","tort","gravel")]
   } else {
     dubl <- duplicated(soil[,c("thsat","thetaf","psif","bexp","kf","wetinf","gravel")])
     materials <- soil[!dubl,c("thsat","thetaf","psif","bexp","kf","wetinf","gravel")]

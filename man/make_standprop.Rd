@@ -20,11 +20,11 @@ A data.frame containing daily sequences of 'age', 'height', 'sai',
 \description{
 Creates daily sequences of 'age', 'height', 'sai', 'densef', and 'lai' from
 parameters and options using \code{\link{approx_standprop}} and
-\code{\link{makeSeasLAI}}.
+\code{\link{make_seasLAI}}.
 }
 \examples{
-options_b90 <- setoptions_LWFB90()
-param_b90 <- setparam_LWFB90()
+options_b90 <- set_optionsLWFB90()
+param_b90 <- set_paramLWFB90()
 
 standprop <- make_standprop(options_b90,
                             param_b90,

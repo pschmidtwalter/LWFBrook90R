@@ -1,5 +1,5 @@
-options_b90 <- setoptions_LWFB90()
-param_b90 <- setparam_LWFB90()
+options_b90 <- set_optionsLWFB90()
+param_b90 <- set_paramLWFB90()
 
 standprop <- make_standprop(options_b90,
                             param_b90,

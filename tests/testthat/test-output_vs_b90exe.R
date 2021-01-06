@@ -9,15 +9,15 @@ load("data-raw/data_for_testing/b90exe_output/exe_output.rda")
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
-opts <- setoptions_LWFB90()
-parms <- setparam_LWFB90()
+opts <- set_optionsLWFB90()
+parms <- set_paramLWFB90()
 
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
-output <- setoutput_LWFB90()
+output <- set_outputLWFB90()
 output[,] <- 0L
 output[,1:3] <- 1L
 # produce model input
-b90res <- runLWFB90(options_b90 = opts,
+b90res <- run_LWFB90(options_b90 = opts,
                     param_b90 = parms,
                     climate = slb1_meteo,
                     soil = soil,

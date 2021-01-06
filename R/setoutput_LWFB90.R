@@ -1,7 +1,7 @@
 #' Select output for LWF-Brook90
 #'
 #' Returns a \code{[7,5]} matrix with a default selection of LWF-Brook90 output
-#' data sets for the use as 'output'-argument \code{\link{runLWFB90}}.
+#' data sets for the use as 'output'-argument \code{\link{run_LWFB90}}.
 #'
 #' @param output optional \code{[7,5]}-matrix, which is opened on R's
 #'   data-editor if \code{edit = TRUE}. If no matrix is passed, a default
@@ -9,20 +9,20 @@
 #' @param edit open R's data-editor ?
 #'
 #' @return a \code{[7,5]}-matrix containing \code{0} and \code{1} for use as
-#'   \code{output}-argument in \code{\link{runLWFB90}}
+#'   \code{output}-argument in \code{\link{run_LWFB90}}
 #'
 #' @examples
 #' # create matrix with default selection
-#' output <- setoutput_LWFB90()
+#' output <- set_outputLWFB90()
 #' output
 #'
 #' # modify
 #' output[,] <- 0L
 #' output[,3] <- 1L
-#' output["Evap", c("Ann","Mon")] <- 1
+#' output["Evap", c("Ann","Mon")] <- 1L
 #' output
 #' @export
-setoutput_LWFB90 <- function(output = NULL,
+set_outputLWFB90 <- function(output = NULL,
                              edit = FALSE) {
   if (is.null(output)) {
     output <- matrix(ncol = 5,nrow = 7,
@@ -39,7 +39,7 @@ setoutput_LWFB90 <- function(output = NULL,
                               0,    0,     0,   0,   0  #Misc
                      ))
 
-    if (edit == T) {
+    if (edit == TRUE) {
       output <- edit(output)}
   } else {
     if (all(dim(output) == c(7,5)) ) {

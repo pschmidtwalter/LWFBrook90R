@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 # LWFBrook90R
-Run the [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) hydrological model in R.
+Run the [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php) hydrologic model in R.
 
 
 ## Installation
@@ -54,8 +54,8 @@ data("slb1_soil")
 
 Set up lists containing default model control options and model parameters:
 ```{r}
-options.b90 <- setoptions_LWFB90()
-param.b90 <- setparam_LWFB90()
+options.b90 <- set_optionsLWFB90()
+param.b90 <- set_paramLWFB90()
 ```
 Set start and end dates in model control options:
 ```{r}
@@ -74,7 +74,7 @@ soil <- cbind(slb1_soil, hydpar_puh2(clay = slb1_soil$clay,
 
 Run LWF-Brook90 with the created model input objects and capture results in `b90.results.slb1`:
 ```{r, results = 'hide', message=FALSE}
-b90.results.slb1 <- runLWFB90(project.dir = "example_run_b90/",
+b90.results.slb1 <- run_LWFB90(project.dir = "example_run_b90/",
                               param.b90 = param.b90,
                               options.b90 = options.b90,
                               climate = slb1_meteo,

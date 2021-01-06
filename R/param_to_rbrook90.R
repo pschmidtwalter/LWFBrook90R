@@ -11,7 +11,7 @@
 #'   \code{\link{r_lwfbrook90}}.
 #' @export
 param_to_rlwfbrook90 <- function(param_b90,
-                              imodel){
+                                 imodel){
 
   fparms <- c(param_b90$ndays,
               0, # heat always 0, it doesnt work.
@@ -98,5 +98,5 @@ param_to_rlwfbrook90 <- function(param_b90,
               param_b90$dswmax,
               param_b90$dpsimax)
 
-return(fparms)
+  return(fparms)
 }

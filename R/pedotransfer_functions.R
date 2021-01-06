@@ -6,14 +6,14 @@
 #'
 #' @param clay,silt,sand Numeric vectors of clay, silt, sand in mass \%.
 #'   Particle size ranges for clay, silt and sand correspond to <2, 2-63, and
-#'   63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle size
-#'   limit between silt and sand should be 50 \eqn{\mu m}{\mum}.
+#'   63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle
+#'   size limit between silt and sand should be 50 \eqn{\mu m}{\mum}.
 #' @param bd Numeric vector of bulk density in g cm-3.
 #' @param oc.pct Numeric vector of organic carbon content in mass \%.
 #' @param texture Character vector of soil texture classes. For
 #'   \code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
-#'   be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes according
-#'   to FAO (1990) have to provided.
+#'   be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes
+#'   according to FAO (1990) have to provided.
 #' @param topsoil Logical: Is the sample from the topsoil? Used in
 #'   \code{\link{hydpar_hypres_tab}}.
 #' @param humconv Conversion factor from oc.pct to organic matter percent.
@@ -86,7 +86,7 @@ hydpar_puh2 <- function(clay, silt, sand, bd, oc.pct=0.5){
   if (length(unique(lengths(list(clay, silt, sand, bd))))>1) {
     stop("Sand, silt, clay, bulk density must have equal lengths")
   }
-  out <- data.frame( clay, silt, sand, bd, oc.pct, stringsAsFactors=F)
+  out <- data.frame( clay, silt, sand, bd, oc.pct, stringsAsFactors=FALSE)
   out$id= 1:nrow(out)
   #out[which( !(out$bodenart %in% wess_nfk$Texture.KA5)), c("clay", "silt", "sand", "bd", "ocpct") ] <- NA # Sicherheit dass f?r Torfe nichts berechnet wird
 
@@ -113,7 +113,7 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
 
   out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,
                     h=ifelse(oc.pct < 0.1,0.001,oc.pct/100), topsoil,
-                    stringsAsFactors=F)
+                    stringsAsFactors=FALSE)
 
 
   #constrain OC (FAO definition for histic horizons)
@@ -129,9 +129,9 @@ hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72
 
     thr <- 0
     ths <-  (0.7919 + 0.1691 * clay - 0.00029619 * bd - 0.01491 * silt * silt +
-             0.821 * h * h + 0.0002427 / clay + 0.0001113 / silt +
-             0.01472 * log(silt * 100) - 0.733 * h * clay - 0.0000619 * bd * clay -
-             0.0001183 * bd * h - 0.01664 * topsoil * silt)
+               0.821 * h * h + 0.0002427 / clay + 0.0001113 / silt +
+               0.01472 * log(silt * 100) - 0.733 * h * clay - 0.0000619 * bd * clay -
+               0.0001183 * bd * h - 0.01664 * topsoil * silt)
 
     alpha <- exp(-14.96 + 3.135 * clay + 3.51 * silt + 64.6 * h +
                    0.01529 * bd - 0.192 * topsoil - 0.000004671 * bd * bd - 7.81 * clay * clay -
@@ -174,7 +174,7 @@ hydpar_hypres_tab <- function(texture, topsoil){
 
   out <- data.frame(id = 1:length(texture),texture, topsoil,
                     stringsAsFactors = FALSE)
-  out <- merge(out, hypres_tab4, by=c("texture","topsoil" ), all.x = T )
+  out <- merge(out, hypres_tab4, by=c("texture","topsoil" ), all.x = TRUE )
   out$alpha <- out$alpha*100
   out[order(out$id), c("ths", "thr", "alpha","npar","mpar","ksat","tort")]
 }

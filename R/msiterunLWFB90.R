@@ -1,7 +1,7 @@
 #' Make a multi-site simulation using lists of climate, soil, and
 #' parameter input objects.
 #'
-#' Wrapper function for \code{\link{runLWFB90}} to make multiple parallel
+#' Wrapper function for \code{\link{run_LWFB90}} to make multiple parallel
 #' simulations of one or several parameter sets, for a series of sites with
 #' individual climate and soil, or individual parameter sets for each
 #' climate/soil combinations.
@@ -25,10 +25,10 @@
 #' @param cores Number of cores to use for parallel processing.
 #' @param showProgress Logical: Show progress bar? Default is \code{TRUE}. See
 #'   also section \code{Progress bar} below.
-#' @param ... Further arguments passed to \code{\link{runLWFB90}}.
+#' @param ... Further arguments passed to \code{\link{run_LWFB90}}.
 #'
 #' @return A named list with the results of the single runs as returned by
-#'   \code{\link{runLWFB90}}. Simulation or processing errors are passed on. The
+#'   \code{\link{run_LWFB90}}. Simulation or processing errors are passed on. The
 #'   names of the returned list entries are concatenated from the names of the
 #'   input list entries in the following form: <climate> <soil> <param_b90>. If
 #'   \code{climate} is a function, the names for <climate> are taken from the
@@ -40,15 +40,15 @@
 #'   moisture data. To not overload memory, it is advised to reduce the returned
 #'   simulation results to a minimum, by carefully selecting the output, and
 #'   make use of the option to pass a list of functions to
-#'   \code{\link{runLWFB90}} (argument \code{output_fun}). These functions
+#'   \code{\link{run_LWFB90}} (argument \code{output_fun}). These functions
 #'   perform directly on the output of a single run simulation, and can be used
 #'   for aggregating model output on-the-fly, or save results to a file or
-#'   database. The regular output of \code{\link{runLWFB90}} can be suppressed
+#'   database. The regular output of \code{\link{run_LWFB90}} can be suppressed
 #'   by setting \code{rtrn.output = FALSE}, for exclusively returning the output
 #'   of such functions. To provide full flexibility, the names of the current
 #'   \code{soil}, \code{param_b90}, and \code{climate} are automatically passed
 #'   as additional arguments (\code{soil_nm}, \code{param_nm},\code{clim_nm}) to
-#'   \code{\link{runLWFB90}} and in this way become available to functions
+#'   \code{\link{run_LWFB90}} and in this way become available to functions
 #'   passed via \code{output_fun}. In order to not overload the memory with
 #'   simulation input data, it is advised to provide a function instead of a
 #'   list of \code{climate} data.frames, and specify its arguments for
@@ -65,17 +65,17 @@
 #'
 #' @export
 #'
-#' @example inst/examples/msiterunLWFB90-help.R
+#' @example inst/examples/run_multisite_LWFB90-help.R
 #'
-msiterunLWFB90 <- function(param_b90,
-                           options_b90,
-                           soil = NULL,
-                           climate,
-                           climate_args = NULL,
-                           all_combinations = FALSE,
-                           cores = 2,
-                           showProgress = TRUE,
-                           ...){
+run_multisite_LWFB90 <- function(param_b90,
+                                 options_b90,
+                                 soil = NULL,
+                                 climate,
+                                 climate_args = NULL,
+                                 all_combinations = FALSE,
+                                 cores = 2,
+                                 showProgress = TRUE,
+                                 ...){
 
   if(cores > future::availableCores())
     stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
@@ -84,7 +84,7 @@ msiterunLWFB90 <- function(param_b90,
   # to pass CRAN check notes
   clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL;
   thisclim <- NULL; i <- NULL;
-  `%do%` <- foreach::`%do%`
+  `%dopar%` <- foreach::`%dopar%`
   `%:%` <- foreach::`%:%`
 
   #determine list lengths and setup the names
@@ -155,20 +155,20 @@ msiterunLWFB90 <- function(param_b90,
       # inner loop iterates over the combinations in thisclim
       foreach::foreach(
         i = 1:nrow(combinations[which(combinations$clim == clim_no), ]),
-        .errorhandling = "pass") %do% {
+        .errorhandling = "pass") %dopar% {
 
           #subset for readability
           combi_thisclim <- combinations[which(combinations$clim == clim_no), ]
 
 
-          res <- runLWFB90(options_b90 = options_b90,
-                           param_b90 = param_b90[[combi_thisclim$param[i]]],
-                           soil = soil[[combi_thisclim$soil[i]]],
-                           climate = thisclim,
-                           soil_nm = soil_nms[combi_thisclim$soil[i]],
-                           param_nm = param_nms[combi_thisclim$param[i]],
-                           clim_nm = clim_nms[clim_no],
-                           ...)
+          res <- run_LWFB90(options_b90 = options_b90,
+                            param_b90 = param_b90[[combi_thisclim$param[i]]],
+                            soil = soil[[combi_thisclim$soil[i]]],
+                            climate = thisclim,
+                            soil_nm = soil_nms[combi_thisclim$soil[i]],
+                            param_nm = param_nms[combi_thisclim$param[i]],
+                            clim_nm = clim_nms[clim_no],
+                            ...)
 
           increment_progressbar()
 
@@ -189,7 +189,7 @@ msiterunLWFB90 <- function(param_b90,
 
 
   # unnest results
-  results <- unlist(results, recursive = F)
+  results <- unlist(results, recursive = FALSE)
 
   # set names
   names(results) <- trimws(paste(clim_nms[combinations$clim],

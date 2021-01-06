@@ -32,13 +32,13 @@
 #' species in relation to successional status."
 #' \emph{Canadian Journal of Forest Research}, \emph{17:829-834}
 #'
-#' @example inst/examples/makeRootden-help.R
+#' @example inst/examples/make_rootden-help.R
 #' @export
-makeRootden <- function(soilnodes,
-                            maxrootdepth = min(soilnodes),
-                            method = "betamodel",
-                            beta = 0.97,
-                            rootdat = NULL
+make_rootden <- function(soilnodes,
+                         maxrootdepth = min(soilnodes),
+                         method = "betamodel",
+                         beta = 0.97,
+                         rootdat = NULL
 ) {
 
 
@@ -105,8 +105,8 @@ makeRootden <- function(soilnodes,
 
     # derive overlap-thickness for soil layers
     rootdat[, thick_ol := (ifelse(i.upper < upper,i.upper,upper) -
-                                ifelse(i.lower < lower & i.upper > lower,lower,
-                                       ifelse(i.upper < lower,0,i.lower)) ) * (i.upper > lower & i.lower < upper)]
+                             ifelse(i.lower < lower & i.upper > lower,lower,
+                                    ifelse(i.upper < lower,0,i.lower)) ) * (i.upper > lower & i.lower < upper)]
 
     # sum up rootmass proportional to overlapping thickness
     out <- rootdat[, list(i.rootmass = sum(rootmass*thick_ol/rthick)), by = list(i.upper ,i.lower)]

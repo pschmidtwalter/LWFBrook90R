@@ -27,7 +27,7 @@
 #' @param timelimit Integer to set elapsed time limits for running the model.
 #'
 #' @return A list containing the daily and soil layer model outputs, along with
-#'   an error code of the simulation (see \code{\link{runLWFB90}}.
+#'   an error code of the simulation (see \code{\link{run_LWFB90}}.
 #'
 #' @export
 #' @useDynLib LWFBrook90R
@@ -42,7 +42,7 @@ r_lwfbrook90 <- function(
   precdat = NULL,
   output_log = TRUE,
   timelimit  = Inf
-  ){
+){
 
   # make a matrix of precipitation input data
   if ( is.null(precdat) ){
@@ -67,7 +67,7 @@ r_lwfbrook90 <- function(
     timer = !is.infinite(timelimit),
     n_m = as.integer(param[1]),
     n_l = as.integer(param[65])
-    )
+  )
 
   return( list(error_code = out[[1]], daily_output = out[[2]], layer_output = out[[3]]) )
 }

@@ -33,12 +33,12 @@ row.names(hypres_tab4) <- NULL
 library(LWFBrook90R)
 library(data.table)
 # b90res ---------------
-options_b90 <- setoptions_LWFB90()
-param_b90 <- setparam_LWFB90()
+options_b90 <- set_optionsLWFB90()
+param_b90 <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
-output <- setoutput_LWFB90()
+output <- set_outputLWFB90()
 
-b90res <- runLWFB90(options_b90 = options_b90,
+b90res <- run_LWFB90(options_b90 = options_b90,
                     param_b90 = param_b90,
                     climate = slb1_meteo,
                     soil = soil,
@@ -63,10 +63,10 @@ set.seed(2021)
 paramvar <- data.frame(maxlai = runif(N, 4,7),
                        glmax = runif(N,0.003, 0.01))
 
-mrun_res <- mrunLWFB90(paramvar = paramvar,
+mrun_res <- run_multi_LWFB90(paramvar = paramvar,
                        param_b90 = param_b90,
                        cores = 5,
-                       options_b90 = options_b90, # arguments below are passed to runLWFB90()
+                       options_b90 = options_b90, # arguments below are passed to run_LWFB90()
                        climate = slb1_meteo,
                        soil = soil,
                        output = output,

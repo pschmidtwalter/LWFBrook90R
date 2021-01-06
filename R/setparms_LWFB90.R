@@ -3,7 +3,7 @@
 #' @param ... Named arguments to be included in return value.
 #'
 #' @return A list with model parameters for use as \code{param_b90}-argument in
-#'   \code{\link{runLWFB90}}.
+#'   \code{\link{run_LWFB90}}.
 #'
 #' @section List of input parameters:
 #' \tabular{llcl}{
@@ -59,30 +59,30 @@
 #'  eslope       \tab slope for evapotranspiration and snowmelt calculation. Default:  0\tab deg               \tab Meteo                  \cr
 #'  aspect       \tab Mean exposition of soil surface at soil profile (north: 0, east: 90, south: 180, west: 270). Default: 0\tab deg               \tab Meteo                  \cr
 #'  obsheight    \tab Mean height of obstacles on soil surface (grass, furrows etc.), used to calculate soil surface roughness. Default: 0.025 \tab m                 \tab Meteo                  \cr
-#'  prec_corr_statexp \tab station exposure situation of prec measurements (passed to \code{\link{prec_corr}} Default: 'mg' \tab                  \tab Meteo                  \cr
+#'  prec_corr_statexp \tab station exposure situation of prec measurements (passed to \code{\link{correct_prec}} Default: 'mg' \tab                  \tab Meteo                  \cr
 #'  dpsimax      \tab maximum potential difference considered equal. Default: 5e-04 \tab kPa               \tab Numerical              \cr
 #'  dswmax       \tab maximum change allowed in SWATI. Default: 0.05 \tab percent of SWATMX \tab Numerical              \cr
 #'  dtimax       \tab maximum iteration time step. Default: 0.5 \tab d                 \tab Numerical              \cr
 #'  budburst_species \tab Name of tree species for estimating budburst doy using Menzel-model (passed to \code{\link[vegperiod]{vegperiod}}) Default: 'Fagus sylvatica' \tab -                  \tab Plant                  \cr
-#'  budburstdoy  \tab Budburst day of year - passed to \code{\link{makeSeasLAI}}. Default: 121\tab doy                  \tab Plant                  \cr
+#'  budburstdoy  \tab Budburst day of year - passed to \code{\link{make_seasLAI}}. Default: 121\tab doy                  \tab Plant                  \cr
 #'  emergedur    \tab Leaf growth duration until maxlai is reached.. Default: 28\tab d                 \tab Plant                  \cr
 #'  height       \tab plant height. Default: 25 \tab m                 \tab Plant                  \cr
 #'  height_ini   \tab initial plant height at the beginning of the simulaton. Used for interpolation , ignored if length(height) . Default: 25 \tab m                 \tab Plant                  \cr
-#'  leaffalldoy  \tab number of days until maximum lai is reached - passed to \code{\link{makeSeasLAI}} Default: 279\tab doy               \tab Plant                  \cr
-#'  leaffalldur  \tab number of days until minimum lai is reached - passed to \code{\link{makeSeasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
+#'  leaffalldoy  \tab number of days until maximum lai is reached - passed to \code{\link{make_seasLAI}} Default: 279\tab doy               \tab Plant                  \cr
+#'  leaffalldur  \tab number of days until minimum lai is reached - passed to \code{\link{make_seasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
 #'  sai          \tab steam area index. Default: 1 \tab -                 \tab Plant                  \cr
 #'  sai_ini      \tab steam area index at the end of the simulation. Ignored if length(height) == 1, Default: 1 \tab -                 \tab Plant                  \cr
-#'  shp_leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{makeSeasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
-#'  shp_budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{makeSeasLAI}} Default: 3\tab -                  \tab Plant                  \cr
-#'  shp_optdoy \tab day of year when optimum value is reached - passed to \code{\link{makeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
-#'  lai_doy \tab day of year values for lai-interpolation - passed to \code{\link{makeSeasLAI}} \tab doy               \tab Plant                  \cr
-#'  lai_frac \tab fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{makeSeasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+#'  shp_leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{make_seasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
+#'  shp_budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{make_seasLAI}} Default: 3\tab -                  \tab Plant                  \cr
+#'  shp_optdoy \tab day of year when optimum value is reached - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+#'  lai_doy \tab day of year values for lai-interpolation - passed to \code{\link{make_seasLAI}} \tab doy               \tab Plant                  \cr
+#'  lai_frac \tab fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
 #'  winlaifrac   \tab Minimum LAI as a fraction of maxlai. Default: 0 \tab -                  \tab Plant                  \cr
 #'  standprop_table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
 #'  cs           \tab Ratio of projected stem area index to canopy height. Default: 0.035 \tab m-1\tab Plant\cr
 #'  densef       \tab Density factor for MaxLAI, CS, RtLen, RPlant, not <.001, 1 for typical stand. Default: 1\tab -                  \tab Plant                  \cr
 #'  densef_ini   \tab density factor (see densef) at the end of the simulation. Ignored if length(densef) == 1. Default: 1\tab -                  \tab Plant\cr
-#'  maxlai       \tab Maximum projected leaf area index - passed to \code{\link{makeSeasLAI}} Default: 5 \tab - \tab Plant                  \cr
+#'  maxlai       \tab Maximum projected leaf area index - passed to \code{\link{make_seasLAI}} Default: 5 \tab - \tab Plant                  \cr
 #'  radex        \tab Extinction coefficient for solar radiation and net radiation in the canopy. Default: 0.5\tab -                  \tab Potential Transpiration \cr
 #'  cvpd         \tab Vapour pressure deficit at which leaf conductance is halved. Default: 2\tab kPa               \tab Potential Transpiration\cr
 #'  glmax        \tab Maximum leaf vapour conductance when stomata are fully open. Default: 0.0053 \tab m s-1             \tab Potential Transpiration\cr
@@ -94,7 +94,7 @@
 #'  th           \tab Upper temperature threshold for stomata closure. Default: 40 \tab deg C             \tab Potential Transpiration\cr
 #'  tl           \tab Lower temperature threshold for stomata closure. Default: 0\tab deg C             \tab Potential Transpiration\cr
 #'  betaroot     \tab Shape parameter for rootlength density depth distribution. Default: 0.97 \tab -                 \tab Roots                  \cr
-#'  maxrootdepth \tab Maximum root depth (positive downward) - passed to makeRootden. Default: -1.5 \tab m                \tab Roots                  \cr
+#'  maxrootdepth \tab Maximum root depth (positive downward) - passed to make_rootden. Default: -1.5 \tab m                \tab Roots                  \cr
 #'  rootden_table \tab Data.frame of relative root density depth distribution with columns 'depth' and 'rootden' \tab                   \tab Roots\cr
 #'  rstemp       \tab base temperature for snow-rain transition. Default: -0.5 \tab deg C              \tab Snow                   \cr
 #'  ccfac        \tab cold content factor. Default: 0.3 \tab MJ m-2 d-1 K-1    \tab Snow                   \cr
@@ -122,11 +122,11 @@
 #'}
 #' @examples
 #' # Default parameter
-#' parms <- setparam_LWFB90()
+#' parms <- set_paramLWFB90()
 #' # Include specific parameters
-#' parms_maxlai <- setparam_LWFB90(maxlai = c(4,6,5), height =20)
+#' parms_maxlai <- set_paramLWFB90(maxlai = c(4,6,5), height =20)
 #' @export
-setparam_LWFB90 <- function(...) {
+set_paramLWFB90 <- function(...) {
 
   param <- list(
     maxlai = 5,
@@ -212,7 +212,7 @@ setparam_LWFB90 <- function(...) {
     maxlqf = 0.05,
     snoden = 0.3,
     obsheight = 0.025,
-    prec_corr_statexp = 'mg',
+    correct_prec_statexp = 'mg',
     rssa = 100,
     rssb = 1,
     soil_nodes = NULL,
@@ -240,7 +240,7 @@ setparam_LWFB90 <- function(...) {
     gwatini = 0,
     snowini = 0,
     psiini = -6.3
-)
+  )
 
   dots <- list(...)
 

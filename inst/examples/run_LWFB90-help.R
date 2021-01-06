@@ -1,6 +1,6 @@
 # Set up lists containing model control options and model parameters:
-param_b90 <- setparam_LWFB90()
-options_b90 <- setoptions_LWFB90()
+param_b90 <- set_paramLWFB90()
+options_b90 <- set_optionsLWFB90()
 
 # Set start and end Dates for the simulation
 options_b90$startdate <- as.Date("2003-06-01")
@@ -11,7 +11,7 @@ options_b90$enddate <- as.Date("2003-06-30")
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 # Run LWF-Brook90
-b90.result <- runLWFB90(options_b90 = options_b90,
+b90.result <- run_LWFB90(options_b90 = options_b90,
                         param_b90 = param_b90,
                         climate = slb1_meteo,
                         soil = soil)
@@ -26,7 +26,7 @@ agg_swat <- function(x, layer) {
   out[order(out$yr, out$doy),]}
 
 # run model, without returning the original output.
-b90.aggswat <- runLWFB90(options_b90 = options_b90,
+b90.aggswat <- run_LWFB90(options_b90 = options_b90,
                          param_b90 = param_b90,
                          climate = slb1_meteo,
                          soil = soil,

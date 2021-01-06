@@ -5,7 +5,7 @@
 
 Run the
 [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
-hydrological model in R.
+hydrologic model in R.
 
 ## Installation
 
@@ -37,7 +37,7 @@ remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes=TRUE)
 ```
 
 After installation, take a look at the vignette with
-`vignette("intro_LWFB90")`.
+`vignette("intro_lwfbrook90r")`.
 
 ## Basic usage
 
@@ -59,15 +59,15 @@ Set up lists containing default model control options and model
 parameters:
 
 ``` r
-opts <- setoptions_LWFB90()
-param <- setparam_LWFB90()
+options.b90 <- set_optionsLWFB90()
+param.b90 <- set_paramLWFB90()
 ```
 
 Set start and end dates in model control options:
 
 ``` r
-opts$startdate <- as.Date("2002-01-01")
-opts$enddate <- as.Date("2003-12-31")
+options.b90$startdate <- as.Date("2002-01-01")
+options.b90$enddate <- as.Date("2003-12-31")
 ```
 
 Derive soil hydraulic properties from soil physical properties using a
@@ -85,8 +85,9 @@ Run LWF-Brook90 with the created model input objects and capture results
 in `b90.results.slb1`:
 
 ``` r
-b90.results.slb1 <- runLWFB90(param_b90 = param,
-                              options_b90 = opts.b90,
+b90.results.slb1 <- run_LWFB90(project.dir = "example_run_b90/",
+                              param.b90 = param.b90,
+                              options.b90 = options.b90,
                               climate = slb1_meteo,
                               soil = soil)
 str(b90.results.slb1, max.level = 1)
@@ -102,7 +103,7 @@ are some points to be accomplish in the near future:
   - [x] enable use of Clapp-Hornberger hydraulic parameterization in
     addition to the default Mualem-van Genuchten
   - [x] Use of sub-day resolution precipitation interval data.
-  - [x] implement unit tests (functionality is currently tested through
+  - [ ] implement unit tests (functionality is currently tested through
     vignette and examples)
   - [ ] Run the `check` with Travis.
 

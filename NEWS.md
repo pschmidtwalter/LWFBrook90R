@@ -26,7 +26,7 @@ Changes:
   - Names of current `climate`, `soil` and `param.b90` objects are automatically 
    passed from  `msiterunLWFB90()` to `runLWFB90()` and thus become available to `output_fun`.  
 - renamed some of the pedotransfer-functions and reorganized the documentation for it. See `?ptfs`.
-- switched `msiterunLWFB90()` and `mrunLWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
+- switched `msiterunLWFB90()` and `run_multi_LWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 
 
 ## Version 0.3.4  (2020-08-28)

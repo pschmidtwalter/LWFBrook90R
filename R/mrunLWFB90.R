@@ -1,6 +1,6 @@
 #' Make a multirun simulation using a set of variable input parameters.
 #'
-#' Wrapper function for \code{\link{runLWFB90}} to make multiple simulations
+#' Wrapper function for \code{\link{run_LWFB90}} to make multiple simulations
 #' parallel, with varying input parameters.
 #'
 #' @param paramvar Data.frame of variable input parameters. For each row, a
@@ -15,13 +15,13 @@
 #' @param cores Number of CPUs to use for parallel processing. Default is 2.
 #' @param showProgress Logical: Show progress bar? Default is TRUE. See also
 #'   section \code{Progress bar} below.
-#' @param ... Additional arguments passed to \code{\link{runLWFB90}}: provide at
+#' @param ... Additional arguments passed to \code{\link{run_LWFB90}}: provide at
 #'   least the arguments that have no defaults such as \code{climate}). It might
 #'   be a good idea to also pass \code{verbose=FALSE} to suppress excessive
-#'   chatter of \code{runLWFB90}.
+#'   chatter of \code{run_LWFB90}.
 #'
 #' @return A named list with the results of the single runs as returned by
-#'   \code{\link{runLWFB90}}. Simulation or processing errors are passed on.
+#'   \code{\link{run_LWFB90}}. Simulation or processing errors are passed on.
 #'
 #' @section Parameter updating: The transfer of values from a row in
 #'   \code{paramvar} to \code{param_b90} before each single run simulation is
@@ -40,7 +40,7 @@
 #'   data. To not overload memory, it is advised to reduce the returned
 #'   simulation results to a minimum, by carefully selecting the output, and
 #'   make use of the option to pass a list of functions to
-#'   \code{\link{runLWFB90}} via argument \code{output_fun}. These functions
+#'   \code{\link{run_LWFB90}} via argument \code{output_fun}. These functions
 #'   perform directly on the output of a single run simulation, and can be used
 #'   for aggrating model output on-the-fly, or writing results to a file or
 #'   database.
@@ -55,20 +55,20 @@
 #'
 #' @export
 #'
-#' @example inst/examples/mrunLWFB90-help.R
+#' @example inst/examples/run_multi_LWFB90-help.R
 #'
-mrunLWFB90 <- function(paramvar,
-                       param_b90,
-                       paramvar_nms = names(paramvar),
-                       cores = 2,
-                       showProgress = TRUE,
-                       ...){
+run_multi_LWFB90 <- function(paramvar,
+                             param_b90,
+                             paramvar_nms = names(paramvar),
+                             cores = 2,
+                             showProgress = TRUE,
+                             ...){
   if(cores > future::availableCores())
     stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
                "available."))
 
   # to pass CRAN check Notes
-  `%do%` <- foreach::`%do%`
+  `%dopar%` <- foreach::`%dopar%`
   i <- NULL
 
   nRuns <- nrow(paramvar)
@@ -116,7 +116,7 @@ mrunLWFB90 <- function(paramvar,
       i = 1:nRuns,
       .final = function(x) stats::setNames(x, paste0("RunNo.", 1:nRuns)),
       .errorhandling = "pass",
-      .export = "param_b90") %do% {
+      .export = "param_b90") %dopar% {
 
         # replace single value parameters
         param_b90[match(singlepar_nms, names(param_b90))] <- paramvar[i, match(singlepar_nms, paramvar_nms, nomatch = 0)]
@@ -132,7 +132,7 @@ mrunLWFB90 <- function(paramvar,
         }
 
         # Run LWFBrook90
-        res <- runLWFB90(param_b90 = param_b90, ...)
+        res <- run_LWFB90(param_b90 = param_b90, ...)
 
         increment_progressbar()
 

@@ -31,27 +31,27 @@
 #' clim$month <- as.integer(format(clim$dates, "%m"))
 #'
 #' prec_meas <- clim$prec
-#' prec_corr_frei <- with(clim,
-#'                        prec_corr(month, tmean, prec, station.exposure = "frei"))
-#' prec_corr_lg <- with(clim,
-#'                      prec_corr(month, tmean, prec, station.exposure = "lg"))
-#' prec_corr_mg <- with(clim,
-#'                      prec_corr(month, tmean, prec, station.exposure = "mg"))
-#' prec_corr_sg <- with(clim,
-#'                      prec_corr(month, tmean, prec, station.exposure = "sg"))
+#' correct_prec_frei <- with(clim,
+#'                        correct_prec(month, tmean, prec, station.exposure = "frei"))
+#' correct_prec_lg <- with(clim,
+#'                      correct_prec(month, tmean, prec, station.exposure = "lg"))
+#' correct_prec_mg <- with(clim,
+#'                      correct_prec(month, tmean, prec, station.exposure = "mg"))
+#' correct_prec_sg <- with(clim,
+#'                      correct_prec(month, tmean, prec, station.exposure = "sg"))
 #'
-#' plot(clim$dates, cumsum(prec_corr_frei),
+#' plot(clim$dates, cumsum(correct_prec_frei),
 #' type = "l", col = "violet", xlab = "dates", ylab = "cum. precipitation (mm)")
-#' lines(clim$dates, cumsum(prec_corr_lg), col = "blue")
-#' lines(clim$dates, cumsum(prec_corr_mg), col = "green")
-#' lines(clim$dates, cumsum(prec_corr_sg), col = "red")
+#' lines(clim$dates, cumsum(correct_prec_lg), col = "blue")
+#' lines(clim$dates, cumsum(correct_prec_mg), col = "green")
+#' lines(clim$dates, cumsum(correct_prec_sg), col = "red")
 #' lines(clim$dates, cumsum(prec_meas))
 #' legend('bottomright', c('frei', "lg", "mg", "sg"),
 #'        col = c("violet", "blue", "green", "red", "black"),
 #'        lty = 1, pch = NULL )
-prec_corr <-  function(month,tavg,prec,
-                       station.exposure = "mg",
-                       full_output = FALSE
+correct_prec <-  function(month,tavg,prec,
+                          station.exposure = "mg",
+                          full_output = FALSE
 ){
 
   if (length(month) != length(tavg))
@@ -73,14 +73,14 @@ prec_corr <-  function(month,tavg,prec,
                    nrow = 4,
                    byrow = FALSE,
                    dimnames = list(c("N4So","N4Wi","N8","N7"),
-                                  c("frei","lg","mg","sg")))
+                                   c("frei","lg","mg","sg")))
 
   #precipitation types
   dat$prectype <- ifelse(tavg >= 3,
-                           ifelse(month %in% 5:10,  #liquid
-                                  "N4So", "N4Wi"), #summer/winter
-                           ifelse(tavg < 0.7, #not liquid
-                                  "N7", "N8")) #snow / sleet
+                         ifelse(month %in% 5:10,  #liquid
+                                "N4So", "N4Wi"), #summer/winter
+                         ifelse(tavg < 0.7, #not liquid
+                                "N7", "N8")) #snow / sleet
 
   # Niederschlag korrigieren
   dat$b <- bcoeff[dat$prectype, station.exposure]

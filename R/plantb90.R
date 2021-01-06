@@ -16,12 +16,12 @@
 #' @return A numeric vector of length \code{maxdoy}.
 #'
 #' @examples
-#' plot(plant.b90(minval = 0,maxval=1,
+#' plot(plant_b90(minval = 0,maxval=1,
 #' doy.incr = 121,incr.dur = 28,
 #' doy.decr = 280, decr.dur = 50,
 #' maxdoy = 365))
 #' @export
-plant.b90 <- function(minval, maxval,
+plant_b90 <- function(minval, maxval,
                       doy.incr,incr.dur,
                       doy.decr, decr.dur,
                       maxdoy) {

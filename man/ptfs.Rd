@@ -22,8 +22,8 @@ hydpar_ff_b90(n = 1)
 \arguments{
 \item{clay, silt, sand}{Numeric vectors of clay, silt, sand in mass \%.
 Particle size ranges for clay, silt and sand correspond to <2, 2-63, and
-63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle size
-limit between silt and sand should be 50 \eqn{\mu m}{\mum}.}
+63-2000 \eqn{\mu m}{\mum}. For \code{\link{hydpar_hypres}}, the particle
+size limit between silt and sand should be 50 \eqn{\mu m}{\mum}.}
 
 \item{bd}{Numeric vector of bulk density in g cm-3.}
 
@@ -37,8 +37,8 @@ Default: 1.72. Only for \code{hydpar_hypres_tab}.}
 
 \item{texture}{Character vector of soil texture classes. For
 \code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
-be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes according
-to FAO (1990) have to provided.}
+be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes
+according to FAO (1990) have to provided.}
 
 \item{n}{An integer value specifying the number of rows of the returned
 data.frame (i.e. the number of repetitions of the MvG-Parameter set, only

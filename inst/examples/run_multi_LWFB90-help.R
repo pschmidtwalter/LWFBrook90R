@@ -1,10 +1,10 @@
 data("slb1_meteo")
 data("slb1_soil")
 # Set up lists containing model control options and model parameters:
-parms <- setparam_LWFB90()
+parms <- set_paramLWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
 # with fixed budburst and leaf fall dates:
-opts <- setoptions_LWFB90(startdate = as.Date("2003-06-01"),
+opts <- set_optionsLWFB90(startdate = as.Date("2003-06-01"),
                                  enddate = as.Date("2003-06-30"),
                                  lai_method = 'Coupmodel',
                                  budburst_method = 'fixed',
@@ -27,10 +27,10 @@ vary_parms <- data.frame(shp_optdoy = runif(n,180,240),
 parms[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 
 # select outputs
-output <- setoutput_LWFB90()
+output <- set_outputLWFB90()
 
 # Make a Multirun-Simulation
-b90.multi <- mrunLWFB90(paramvar = vary_parms,
+b90.multi <- run_multi_LWFB90(paramvar = vary_parms,
                         param_b90 = parms,
                         options_b90 = opts,
                         climate = slb1_meteo,
