@@ -10,7 +10,7 @@ Authors@R: c(person("Paul", "Schmidt-Walter", , "paul.schmidt-walter@nw-fva.de",
 Description: Functions to simulate water fluxes, soil moisture and drought stress using the 
     LWF-Brook90 hydrologic model. Several functions provide for convenient simulation set-up 
     and model execution, as well as parallelisation of multi-run simulations.
-Depends: R (>= 4.0.0)
+Depends: R (>= 3.4.0)
 Imports:
     methods,
     data.table (>= 1.10.4),

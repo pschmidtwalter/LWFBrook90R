@@ -98,7 +98,7 @@
     IMODEL = INT( param( 69 ) )
 
     if ( (NLAYER .GT. ML) .OR. (ILAYER .GT. NLAYER) .OR. (QLAYER .GT. NLAYER)) then
-        if ( pr ) call labelpr('Failure of QLAYER and ILAYER .LE. NLAYER .LE. ML',-1)
+        if ( pr ) call intpr('Failure of QLAYER and ILAYER .LE. NLAYER .LE. ML',-1,1,0)
         go to 999
     end if
 
@@ -193,7 +193,7 @@
 
     DO 206 I=1,NLAYER
         tini(I) = 1.e+20
-        if( (I .GE. i1) .AND. (I .LE. i2) ) frelden(I) = MAX( frelden(I), 1.01e-6)
+        if( (I .GE. i1) .AND. (I .LE. i2) ) frelden(I) = MAX( frelden(I), 1.01e-6_8)
         if( (frelden(I) .GE. 1.e-6) .AND. (depmax-dep(I)) .LE. inirdep) then
             tini(I) = 0.0d0
         end if
