@@ -5,50 +5,50 @@
 
 Changes:
 
+- arguments and functions were renamed for consistency.
 - result datasets are now returned directly by the Fortran model code, without 
   the detour of writing .ASC output text files and reading them back into workspace.
-- arguments and functions were renamed for consistency.
 - run time output to the console was disabled, only messages are printed when `verbose = T` (the new default).  
-- `runLWFB90()`: 
+- `run_LWFB90()`: 
   - without specification of an output selection matrix via `output`, two tables 
   including all available output variables are returned: general daily outputs 
   and layer outputs. A proper description of model output variables was added to the help pages.
   - all column names of the .ASC output objects (as selected via `output`) are now in lower case.
   - it is now possible to provide a function as `climate`-argument, instead of a `data.frame`.
   - an execution time limit (elapsed time) can be set to prevent simulations from running too long. 
-- `msiterunLWFB90()`: 
-  - It is now possible to provide individual `param.b90` input parameter objects for
+- `run_multisite_LWFB90()`: 
+  - It is now possible to provide individual `param_b90` input parameter objects for
   individual climate/soil combinations (i.e. individual locations). The option to 
-  provide a list of `options.b90` input objects was disabled.
+  provide a list of `options_b90` input objects was disabled.
   - Instead of a list of `climate`-data.frames for a multisite-simulation, a function 
   can be provided for on-the-fly creation of `climate`-`data.frames`. Arguments 
-  for the function have to specified via the new `climate_args`-argument of `msiterunLWFB90`. 
+  for the function have to specified via the new `climate_args`-argument of `run_multisite_LWFB90()`. 
   - Names of current `climate`, `soil` and `param.b90` objects are automatically 
-   passed from  `msiterunLWFB90()` to `runLWFB90()` and thus become available to `output_fun`.  
-- renamed some of the pedotransfer-functions and reorganized the documentation for it. See `?ptfs`.
-- switched `msiterunLWFB90()` and `run_multi_LWFB90()` from superseded packages `snow` and `doSNOW` to `future`, `doFuture` and `progressr` for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
+   passed from  `run_multisite_LWFB90()` to `run_LWFB90()` and thus become available to `output_fun`.  
+- renamed some of the pedotransfer functions and reorganized the documentation for it. See `?ptfs`.
+- switched `run_multisite_LWFB90()` and `run_multi_LWFB90()` from superseded packages 'snow' and 'doSNOW' to 'future', 'doFuture' and 'progressr' for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 
 
 ## Version 0.3.4  (2020-08-28)
 
 Changes:
 
-- Adjusted 'table'-method in `makeRootden`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
-- Input changed for 'soilnodes'-argument of `makeRootden`. See `?makeRootden`.
+- Adjusted 'table'-method in `make_rootden()`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
+- Input changed for 'soilnodes'-argument of `make_rootden`. See `?make_rootden`.
 
 Bug fixes:
 
-- zero division error causing infinite relawat values in `MISCDAY.ASC`-output item.
-- 'betamodel'-method of `makeRootden` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
+- zero division error causing infinite `relawat` values in `MISCDAY.ASC`-output item.
+- 'betamodel'-method of `make_rootden` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
 
 
 ## Version 0.3.0 (2020-04-21)
 
 Changes:
 
-- new function msiterunLWFB90()
-- runLWFB90(): model input (param.b90, option.b90, standprop_daily) is appended
-	to the return value BEFORE evaluating the output_fun-argument. In this way,
+- new function `run_multisite_LWFB90()`
+- `run_LWFB90()`: model input (`param_b90`, `options_b90`, `standprop_daily`) is appended
+	to the return value BEFORE evaluating the `output_fun`-argument. In this way,
 	on-the-fly post-processing of model results including model-input is possible now.
 - minor bugs fixed
 
@@ -57,7 +57,7 @@ Changes:
 
 Changes:
 
-- 'output_fun' argument replaces 'gof_fun'-argument in runLWFB90() for more flexible output.
+- `output_fun` argument replaces `gof_fun`-argument in `run_LWFB90()` for more flexible output.
 - minor bugs fixed
 
 
