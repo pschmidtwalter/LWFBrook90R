@@ -18,7 +18,8 @@ hypres_tab4$topsoil <- as.logical(hypres_tab4$topsoil)
 hypres_tab4 <- rbind(hypres_tab4, hypres_tab4[hypres_tab4$tex.hypres=="Org",])
 hypres_tab4$topsoil[11] <- TRUE
 row.names(hypres_tab4) <- NULL
-#
+#output_function <- function(x, tolayer) {
+# aggregate SWAT
 # # teepe-table
 # teepe_tables123 <- read.csv("data-raw/TeepePTF.csv", stringsAsFactors=F)
 # str(teepe_tables123)
@@ -46,16 +47,25 @@ b90res <- run_LWFB90(options_b90 = options_b90,
 
 
 # mrun_res -------------
-# Agg-Function
 
-output_function <- function(x) {
+# Agg-Function
+output_function <- function(x, tolayer) {
   # aggregate SWAT
-  swat_tran <- x$SWATDAY.ASC[which(nl <= 14),
-                             list(swat100cm = sum(swati)),
-                             by  = list(dates = as.Date(paste(yr, mo, da, sep = "-")))]
+  swat_tran <- x$SWATDAY.ASC[which(nl <= tolayer),
+                             list(swat = sum(swati)),
+                             by  = list(yr, doy)]
   #add transpiration from EVAPDAY.ASC
   swat_tran$tran <- x$EVAPDAY.ASC$tran
-  return(swat_tran)
+
+  # get beginning and end of growing season from input parameters
+  vpstart <- x$model_input$param_b90$budburstdoy
+  vpend <- x$model_input$param_b90$leaffalldoy
+  swat_tran <- merge(swat_tran,
+                     data.frame(yr = unique(swat_tran$yr),
+                                vpstart, vpend), by = "yr")
+  # mean swat and tran sum
+  swat_tran[doy >= vpstart & doy <= vpend,
+            list(swat_vp_mean = mean(swat), tran_vp_sum = sum(tran)), by = yr]
 }
 
 N=50
@@ -64,14 +74,15 @@ paramvar <- data.frame(maxlai = runif(N, 4,7),
                        glmax = runif(N,0.003, 0.01))
 
 mrun_res <- run_multi_LWFB90(paramvar = paramvar,
-                       param_b90 = param_b90,
-                       cores = 5,
-                       options_b90 = options_b90, # arguments below are passed to run_LWFB90()
-                       climate = slb1_meteo,
-                       soil = soil,
-                       output = output,
-                       rtrn_input = F, rtrn_output = F,
-                       output_fun = output_function)
+                             param_b90 = set_paramLWFB90(),
+                             cores = 5, # arguments below are passed to run_LWFB90()
+                             options_b90 = set_optionsLWFB90(),
+                             climate = slb1_meteo,
+                             soil = soil,
+                             output = set_outputLWFB90(),
+                             rtrn_input = FALSE, rtrn_output = FALSE,
+                             output_fun = output_function,
+                             tolayer = 15)
 
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]),
                      idcol = "singlerun")
@@ -80,3 +91,4 @@ mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]),
 #speichert den Dataframe als internes Objekt, welches nicht exportiert wird. ANsprechen mit brook90r:::wess_mvg_tex
 usethis::use_data(mrun_dt, b90res, wessolek_mvg_tab10,hydpar_forestfloor, hypres_tab4, internal = T, overwrite =T)
 
+rm(list = ls())

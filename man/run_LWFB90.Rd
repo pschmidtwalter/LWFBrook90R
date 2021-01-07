@@ -79,20 +79,21 @@ Default is TRUE.}
 \code{climate}, if the latter is a function.}
 }
 \value{
-A list containing the selected model output, the model input if
-  desired (except for \code{climate}), and the return values of
-  \code{output_fun} if specified.
+A list containing the selected model output (if \code{rtrn_output ==
+  TRUE}), the model input (if \code{rtrn_input == TRUE}, except for
+  \code{climate}), and the return values of \code{output_fun} if specified.
 }
 \description{
 Sets up the input objects for the LWF-Brook90 hydrologic model, starts the
 model, and returns the selected results.
 }
 \section{Climate input data}{
- The \code{climate} data.frame must contain the
- following variables in columns named 'dates' (Date), 'tmax' (deg C), 'tmin'
- (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec' (mm) , 'vappres' (kPa),
- and either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h). When using
- \code{sunhours}, please set \code{options_b90$fornetrad = 'sunhours'}.
+ The \code{climate} data.frame (or function) must
+ contain (return) the following variables in columns named 'dates' (Date),
+ 'tmax' (deg C), 'tmin' (deg C), 'tmean' (deg C), 'windspeed' (m/s), 'prec'
+ (mm) , 'vappres' (kPa), and either 'globrad' ( MJ/(m²d) ) or 'sunhours' (h).
+ When using \code{sunhours}, please set \code{options_b90$fornetrad =
+ 'sunhours'}.
 }
 
 \section{Soil input parameters}{
@@ -104,7 +105,7 @@ model, and returns the selected results.
  and 'tort'.  With \code{options_b90$imodel = 'CH'}, the parameters are
  'thsat', 'thetaf', 'psif' (kPa), 'bexp', 'kf' (mm/d), and 'wetinf'. For both
  parameterizations, the volume fraction of stones has to be named 'gravel'.
- If the \code{soil} data.frame is not provided, list items \code{soil_nodes}
+ If the \code{soil} argument is not provided, list items \code{soil_nodes}
  and \code{soil_materials} of \code{param_b90} are used for the simulation.
  These have to be set up in advance, see \code{\link{soil_to_param}}.
 }
@@ -118,7 +119,7 @@ mo \tab month \tab - \cr
 da \tab day of month \tab - \cr
 doy \tab day of year \tab - \cr
 adef \tab available water deficit in root zone \tab mm \cr
-awat \tab total available soil water in layers with roots between -6.18 kPa and PSICR \tab mm \cr
+awat \tab total available soil water in layers with roots between -6.18 kPa and \code{param_b90$psicr} \tab mm \cr
 balerr \tab error in water balance \tab mm \cr
 byfl \tab total bypass flow \tab mm \cr
 dsfl \tab downslope flow \tab mm \cr
@@ -209,7 +210,7 @@ agg_swat <- function(x, layer) {
                    subset = nl <= layer)
   out[order(out$yr, out$doy),]}
 
-# run model, without returning the original output.
+# run model without returning the selected output.
 b90.aggswat <- run_LWFB90(options_b90 = options_b90,
                          param_b90 = param_b90,
                          climate = slb1_meteo,

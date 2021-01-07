@@ -11,7 +11,7 @@
 #'   \item{prec}{daily sum of precipitation, mm}
 #'   \item{relhum}{relative Humidity, \%}
 #'   \item{globrad}{daily sum of global radiation, MJ/m²}
-#'   \item{wind}{daily mean wind speed measured at 10 m above ground, m/s}
+#'   \item{windspeed}{daily mean wind speed measured at 10 m above ground, m/s}
 #'   \item{vappres}{daily vapour pressure, kPa}
 #' }
 "slb1_meteo"
@@ -20,7 +20,7 @@
 #'
 #' A dataset containing the soil horizons' physical properties
 #'
-#' @format A data.frame with 17 rows and 10 variables
+#' @format A data.frame with 21 rows and 10 variables
 #' \describe{
 #'   \item{horizon}{horizon symbol}
 #'   \item{upper}{upper layer boundary, m}

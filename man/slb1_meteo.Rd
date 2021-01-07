@@ -14,7 +14,7 @@ A data.frame with 19724 rows and 9 variables
   \item{prec}{daily sum of precipitation, mm}
   \item{relhum}{relative Humidity, \%}
   \item{globrad}{daily sum of global radiation, MJ/m²}
-  \item{wind}{daily mean wind speed measured at 10 m above ground, m/s}
+  \item{windspeed}{daily mean wind speed measured at 10 m above ground, m/s}
   \item{vappres}{daily vapour pressure, kPa}
 }
 }

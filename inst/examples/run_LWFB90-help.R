@@ -25,7 +25,7 @@ agg_swat <- function(x, layer) {
                    subset = nl <= layer)
   out[order(out$yr, out$doy),]}
 
-# run model, without returning the original output.
+# run model without returning the selected output.
 b90.aggswat <- run_LWFB90(options_b90 = options_b90,
                          param_b90 = param_b90,
                          climate = slb1_meteo,
