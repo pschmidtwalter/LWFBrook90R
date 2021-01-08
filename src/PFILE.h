@@ -98,7 +98,7 @@
     IMODEL = INT( param( 69 ) )
 
     if ( (NLAYER .GT. ML) .OR. (ILAYER .GT. NLAYER) .OR. (QLAYER .GT. NLAYER)) then
-        if ( pr ) call intpr('Failure of QLAYER and ILAYER .LE. NLAYER .LE. ML',-1,0,0)
+        if ( pr ) call intpr('Failure of QLAYER and ILAYER .LE. NLAYER .LE. ML',-1,(/ 0/),0)
         go to 999
     end if
 
