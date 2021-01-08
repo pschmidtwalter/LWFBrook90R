@@ -1,3 +1,4 @@
+\dontrun{
 data("slb1_meteo")
 data("slb1_soil")
 
@@ -24,8 +25,7 @@ climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
 res <- run_multisite_LWFB90(param_b90 = param_l,
                       options_b90 = opts,
                       soil = soils,
-                      climate = climates,
-                      run = FALSE)
+                      climate = climates)
 names(res)
 
 # set up and run individual parameter sets for individual locations
@@ -49,6 +49,6 @@ names(param_l) <- c("locpar1", "locpar2")
 res <- run_multisite_LWFB90(param_b90 = param_l,
                       options_b90 = opts,
                       soil = soils,
-                      climate = climates,
-                      run = FALSE)
+                      climate = climates)
 names(res)
+}

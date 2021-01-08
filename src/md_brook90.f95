@@ -186,8 +186,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             error = 3
             if (pr) then
               call intpr("STOP - inconsistent dates in climate - expected (year, month, day):", -1, &
-              (/YEAR, MONTH, DOM/),3)
-              call intpr("but got", -1, (/YY, MM, DD/),3)
+              (/ YEAR, MONTH, DOM/),3)
+              call intpr("but got", -1, (/ YY, MM, DD/),3)
               !print*, 'STOP - DFILE error, expected', YEAR, MONTH, DOM, ' but got:', YY, MM, DD
               !STOP
             end if
@@ -787,9 +787,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !     ***************   E N D    D A Y   L O O P    **************************
 999 if ( pr ) then
         if ( error.ne.0 ) then
-            call intpr("Finished with errors", -1,1,0)
+            call intpr("Finished with errors", -1,0,0)
         else
-            call intpr("THAT IS THE END", -1,1,0)
+            call intpr("THAT IS THE END", -1,0,0)
         end if
     end if
 end subroutine s_brook90_f
@@ -1996,7 +1996,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
         if (imodel .eq. 1) then
             Par(5,i)=FWETK(Par(3,i),Par(1,i),iModel, pr, timer)
             if ( Par(5,i) == -99999.d0 ) then
-                call intpr('Warning: FWETK failed to determine wetness at KF',-1,1,0)
+                call intpr('Warning: FWETK failed to determine wetness at KF',-1,0,0)
                 error = 2 !STOP: FWETK failed to determine wetness at KF
                 return
             end if
@@ -2619,7 +2619,7 @@ subroutine Temper(N,NMat,THICK,ZL,MUE,STEP,MatNum,TempO,TempN, &
     CALL TRIDIG(N,A,B,C,D,TempN,IFEHL)
 !
 !
-    if(ifehl .eq. 1)  call intpr("tridig failed", -1,1,0) !print*, 'tridig failed'
+    if(IFEHL .eq. 1)  call intpr("tridig failed", -1,0,0) !print*, 'tridig failed'
 
 !   DO 160 I=1,N
 !       write(10,*) i, TempN(i)
@@ -3118,7 +3118,7 @@ function FWETK (K, Par, iModel, pr, timer)
     FWETK = 0.0d0
 
     if(iModel .eq. 0) then
-        if ( pr ) call intpr("Function FWETK can not be called for iModel=0, stopping program", -1,1,0)
+        if ( pr ) call intpr("Function FWETK can not be called for iModel=0, stopping program", -1,0,0)
         !print*, 'Function FWETK can not be called for iModel=0, stopping program'
         FWETK = -99999.d0
         return
@@ -3149,10 +3149,10 @@ function FWETK (K, Par, iModel, pr, timer)
         end if
 
         if(Konver .gt. 1.0d0) then
-            if ( pr ) call intpr("FWETK: no convergence found, trying next iteration!", -1,1,0)
+            if ( pr ) call intpr("FWETK: no convergence found, trying next iteration!", -1,0,0)
             if ( timer ) call rchkusr()
 !            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in !original program
-!                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 1, 0)
+!                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 0, 0)
 !                FWETK = -99999.d0
 !                return
 !            end if
@@ -3170,7 +3170,7 @@ function FWETK (K, Par, iModel, pr, timer)
         if(dKdS1 .ne. 0.0d0) then
             WetNew=WetOld-KOld/dKdS1
         else
-            if ( pr ) call intpr("FWETK: slope is zero, stopping programm!", -1,1,0)
+            if ( pr ) call intpr("FWETK: slope is zero, stopping programm!", -1, 0, 0)
             FWETK = -99999.d0
             return
         end if
@@ -3180,7 +3180,7 @@ function FWETK (K, Par, iModel, pr, timer)
         It=It+1
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
         if(It .eq. ItMax) then
-            if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1,1,0)
+            if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1,0,0)
             if ( timer ) call rchkusr()
             K=K/2.0d0
             Goto 5

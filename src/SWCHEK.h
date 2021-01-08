@@ -4,8 +4,8 @@
         error = 6
         if ( pr ) then
           call intpr("STOP: negative soil water content in layer, year, month, day", -1, &
-            (/I, YEAR, MONTH, DOM/),4)
-          call intpr("Examine output and parameters to determine the cause!", -1,1,0)
+            (/ I, YEAR, MONTH, DOM/),4)
+          call intpr("Examine output and parameters to determine the cause!", -1,0,0)
         end if
         go to 999
       ELSEIF (SWATI(I) .GT. SWATMX(I)) THEN
@@ -13,8 +13,8 @@
         error = 7
           if ( pr ) then
             call intpr("STOP: soil water storage above capacity in layer, year, month, day", -1, &
-             (/I, YEAR, MONTH, DOM/),4)
-            call intpr("Examine output and parameters to determine the cause!", -1,1,0)
+             (/ I, YEAR, MONTH, DOM/),4)
+            call intpr("Examine output and parameters to determine the cause!", -1,0,0)
           end if
           go to 999 ! inserted by Paul Schmidt-Walter, Nov 26, 2020
         ELSE
