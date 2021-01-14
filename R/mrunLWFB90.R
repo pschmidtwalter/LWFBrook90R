@@ -13,7 +13,7 @@
 #' @param paramvar_nms Names of the parameters in \code{paramvar} to be replaced
 #'   in \code{param_b90}.
 #' @param cores Number of CPUs to use for parallel processing. Default is 2.
-#' @param showProgress Logical: Show progress bar? Default is TRUE. See also
+#' @param show_progress Logical: Show progress bar? Default is TRUE. See also
 #'   section \code{Progress bar} below.
 #' @param ... Additional arguments passed to \code{\link{run_LWFB90}}: provide at
 #'   least the arguments that have no defaults such as \code{climate}). It might
@@ -47,7 +47,7 @@
 #'
 #' @section Progress bar:
 #' This function provides a progress bar via the package \CRANpkg{progressr}
-#' if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+#' if \code{show_progress=TRUE}. The parallel computation is then wrapped with
 #' \code{progressr::with_progress()} to enable progress reporting from
 #' distributed calculations. The appearance of the progress bar (including
 #' audible notification) can be customized by the user for the entire session
@@ -61,7 +61,7 @@ run_multi_LWFB90 <- function(paramvar,
                              param_b90,
                              paramvar_nms = names(paramvar),
                              cores = 2,
-                             showProgress = TRUE,
+                             show_progress = TRUE,
                              ...){
   if(cores > future::availableCores())
     stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
@@ -141,7 +141,7 @@ run_multi_LWFB90 <- function(paramvar,
   }
 
   # with progressbar if wanted
-  if(isTRUE(showProgress)){
+  if(isTRUE(show_progress)){
     progressr::with_progress({
       increment_progressbar <- progressr::progressor(steps=nRuns)
       results <- foreach_loop()

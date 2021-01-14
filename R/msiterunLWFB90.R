@@ -23,7 +23,7 @@
 #'   Default is \code{FALSE}, running one object or the list of \code{param_b90}
 #'   objects for a series of climate/soil combinations.
 #' @param cores Number of cores to use for parallel processing.
-#' @param showProgress Logical: Show progress bar? Default is \code{TRUE}. See
+#' @param show_progress Logical: Show progress bar? Default is \code{TRUE}. See
 #'   also section \code{Progress bar} below.
 #' @param ... Further arguments passed to \code{\link{run_LWFB90}}.
 #'
@@ -56,7 +56,7 @@
 #'   climates will be simulated.
 #'
 #' @section Progress bar: This function provides a progress bar via the package
-#'   \CRANpkg{progressr} if \code{showProgress=TRUE}. The parallel computation
+#'   \CRANpkg{progressr} if \code{show_progress=TRUE}. The parallel computation
 #'   is then wrapped with \code{progressr::with_progress()} to enable progress
 #'   reporting from distributed calculations. The appearance of the progress bar
 #'   (including audible notification) can be customized by the user for the
@@ -74,7 +74,7 @@ run_multisite_LWFB90 <- function(param_b90,
                                  climate_args = NULL,
                                  all_combinations = FALSE,
                                  cores = 2,
-                                 showProgress = TRUE,
+                                 show_progress = TRUE,
                                  ...){
 
   if(cores > future::availableCores())
@@ -177,7 +177,7 @@ run_multisite_LWFB90 <- function(param_b90,
   }
 
   # with progress bar if desired
-  if(isTRUE(showProgress)){
+  if(isTRUE(show_progress)){
     progressr::with_progress({
       increment_progressbar <- progressr::progressor(steps=nRuns)
       results <- foreach_loop()
