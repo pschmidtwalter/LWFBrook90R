@@ -13,7 +13,7 @@ run_multisite_LWFB90(
   climate_args = NULL,
   all_combinations = FALSE,
   cores = 2,
-  showProgress = TRUE,
+  show_progress = TRUE,
   ...
 )
 }
@@ -42,7 +42,7 @@ objects for a series of climate/soil combinations.}
 
 \item{cores}{Number of cores to use for parallel processing.}
 
-\item{showProgress}{Logical: Show progress bar? Default is \code{TRUE}. See
+\item{show_progress}{Logical: Show progress bar? Default is \code{TRUE}. See
 also section \code{Progress bar} below.}
 
 \item{...}{Further arguments passed to \code{\link{run_LWFB90}}.}
@@ -86,7 +86,7 @@ climate/soil combinations.
 
 \section{Progress bar}{
  This function provides a progress bar via the package
-  \CRANpkg{progressr} if \code{showProgress=TRUE}. The parallel computation
+  \CRANpkg{progressr} if \code{show_progress=TRUE}. The parallel computation
   is then wrapped with \code{progressr::with_progress()} to enable progress
   reporting from distributed calculations. The appearance of the progress bar
   (including audible notification) can be customized by the user for the

@@ -8,3 +8,4 @@ examples_all.R
 ^\src\fbrook90_mod.mod
 ^dev$
 ^cran-comments\.md$
+^\.travis\.yml$

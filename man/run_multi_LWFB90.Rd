@@ -9,7 +9,7 @@ run_multi_LWFB90(
   param_b90,
   paramvar_nms = names(paramvar),
   cores = 2,
-  showProgress = TRUE,
+  show_progress = TRUE,
   ...
 )
 }
@@ -28,7 +28,7 @@ in \code{param_b90}.}
 
 \item{cores}{Number of CPUs to use for parallel processing. Default is 2.}
 
-\item{showProgress}{Logical: Show progress bar? Default is TRUE. See also
+\item{show_progress}{Logical: Show progress bar? Default is TRUE. See also
 section \code{Progress bar} below.}
 
 \item{...}{Additional arguments passed to \code{\link{run_LWFB90}}: provide at
@@ -73,7 +73,7 @@ parallel, with varying input parameters.
 \section{Progress bar}{
 
 This function provides a progress bar via the package \CRANpkg{progressr}
-if \code{showProgress=TRUE}. The parallel computation is then wrapped with
+if \code{show_progress=TRUE}. The parallel computation is then wrapped with
 \code{progressr::with_progress()} to enable progress reporting from
 distributed calculations. The appearance of the progress bar (including
 audible notification) can be customized by the user for the entire session
@@ -81,6 +81,7 @@ using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 }
 
 \examples{
+\dontrun{
 data("slb1_meteo")
 data("slb1_soil")
 # Set up lists containing model control options and model parameters:
@@ -137,5 +138,5 @@ for (i in 1:length(b90.multi)){
        lines(dates, cumsum(evap)))
 }
 
-
+}
 }

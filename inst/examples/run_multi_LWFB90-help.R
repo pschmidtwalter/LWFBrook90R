@@ -1,3 +1,4 @@
+\dontrun{
 data("slb1_meteo")
 data("slb1_soil")
 # Set up lists containing model control options and model parameters:
@@ -54,4 +55,4 @@ for (i in 1:length(b90.multi)){
        lines(dates, cumsum(evap)))
 }
 
-
+}

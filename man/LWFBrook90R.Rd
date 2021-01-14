@@ -3,10 +3,10 @@
 \docType{package}
 \name{LWFBrook90R}
 \alias{LWFBrook90R}
-\title{LWFBrook90R: A package for running the LWF-BROOK90 hydrologic model in
-R}
+\title{LWFBrook90R: A package for simulating water fluxes, soil moisture and drought
+stress using the SVAT Model LWF-Brook90.}
 \description{
-The central function \code{run_LWFB90()} creates model input  from model
+The central function \code{run_LWFB90()} creates model input from model
 control options, parameters, climate and soil data, executes the model code
 and returns the model results. The model control options thereby let the user
 select different methods for defining phenology and leaf area index
