@@ -233,9 +233,8 @@ run_LWFB90 <- function(options_b90,
 
   ## Calculate global radiation from sunshine duration ----
   if (options_b90$fornetrad == "sunhours") {
-    climate$globrad <- with(climate,
-                            calc_globrad( as.integer(format(dates, "%j")),
-                                          sunhours, param_b90$coords_y ))
+    climate$globrad <- calc_globrad(climate$dates, climate$sunhours,
+                                    param_b90$coords_y)
   }
 
   ## Make soilnodes & soil materials ----
@@ -494,7 +493,13 @@ chk_clim <- function() {
 
     # climate name checks
     names(climate) <- tolower(names(climate))
-    stopifnot(all(c("dates", "tmax", "tmin",options_b90$fornetrad, "vappres", "windspeed") %in% tolower(names(climate))))
+
+    if (!all(c("dates", "tmax", "tmin", options_b90$fornetrad, "vappres", "windspeed") %in% tolower(names(climate)))) {
+      if (is.null(precip)) {}
+      stop("Please check column names of 'climate'. Must contain: \n
+           'dates', 'tmax', 'tmin', 'vappres', 'windspeed', and 'globrad' (or 'sunhours') ")
+    }
+
     stopifnot(inherits(climate$dates, "Date"))
     if (min(climate$dates) > options_b90$startdate | max(climate$dates) < options_b90$enddate){
       stop("climate not covering requested simulation period completely.")
@@ -523,7 +528,6 @@ chk_clim <- function() {
     if (!any( names(climate) == "mesfl") ) {
       climate$mesfl <- 0
     }
-
 
     if (is.null(precip) ){
       stopifnot("prec" %in% names(climate))
