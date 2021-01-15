@@ -1,29 +1,29 @@
 # News for the LWFBrook90R-package
 
 
-## Version 0.4.0.9000  (???)
+## Version 0.4.0  (2021-01-15)
 
 Changes:
 
 - arguments and functions were renamed for consistency.
 - result datasets are now returned directly by the Fortran model code, without 
   the detour of writing .ASC output text files and reading them back into workspace.
-- run time output to the console was disabled, only messages are printed when `verbose = T` (the new default).  
-- `run_LWFB90()`: 
+- run time output to the console was disabled, only messages are printed when `verbose = T`.  
+- `run_LWFB90()` (before `runLWFB90()`: 
   - without specification of an output selection matrix via `output`, two tables 
   including all available output variables are returned: general daily outputs 
   and layer outputs. A proper description of model output variables was added to the help pages.
   - all column names of the .ASC output objects (as selected via `output`) are now in lower case.
   - it is now possible to provide a function as `climate`-argument, instead of a `data.frame`.
   - an execution time limit (elapsed time) can be set to prevent simulations from running too long. 
-- `run_multisite_LWFB90()`: 
-  - It is now possible to provide individual `param_b90` input parameter objects for
+- `run_multisite_LWFB90()` (before `msiterunLWFB90()`: 
+  - It is now possible to provide individual `param_b90` (before `param.b90`) input parameter objects for
   individual climate/soil combinations (i.e. individual locations). The option to 
-  provide a list of `options_b90` input objects was disabled.
+  provide a list of `options_b90` (nefore `options.b90`) input objects was disabled.
   - Instead of a list of `climate`-data.frames for a multisite-simulation, a function 
   can be provided for on-the-fly creation of `climate`-`data.frames`. Arguments 
   for the function have to specified via the new `climate_args`-argument of `run_multisite_LWFB90()`. 
-  - Names of current `climate`, `soil` and `param.b90` objects are automatically 
+  - Names of current `climate`, `soil` and `param_b90` objects are automatically 
    passed from  `run_multisite_LWFB90()` to `run_LWFB90()` and thus become available to `output_fun`.  
 - renamed some of the pedotransfer functions and reorganized the documentation for it. See `?ptfs`.
 - switched `run_multisite_LWFB90()` and `run_multi_LWFB90()` from superseded packages 'snow' and 'doSNOW' to 'future', 'doFuture' and 'progressr' for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
