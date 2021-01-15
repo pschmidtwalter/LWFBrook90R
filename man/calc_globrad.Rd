@@ -28,9 +28,9 @@ A sequence of global radiation in MJ/(m² d) with the length of dates,
   higher than the expected daylength at the specified latitude.
 }
 \description{
-Uses \code{\link[sirad]{extrat}} to determine daylength and extraterrestrial
-radiation, from which global radiation is calculated using the
-Angström-formula.
+Uses functions taken from the 'sirad' package to determine astronomical
+daylength and extraterrestrial radiation, from which global radiation is
+calculated using the Angström-formula.
 }
 \examples{
 dates <- seq.Date(as.Date("2002-01-01"), as.Date("2003-12-31"), by = 'day')

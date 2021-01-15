@@ -31,10 +31,9 @@ in \code{param_b90}.}
 \item{show_progress}{Logical: Show progress bar? Default is TRUE. See also
 section \code{Progress bar} below.}
 
-\item{...}{Additional arguments passed to \code{\link{run_LWFB90}}: provide at
-least the arguments that have no defaults such as \code{climate}). It might
-be a good idea to also pass \code{verbose=FALSE} to suppress excessive
-chatter of \code{run_LWFB90}.}
+\item{...}{Additional arguments passed to \code{\link{run_LWFB90}}: provide
+at least the arguments that have no defaults such as \code{options_b90} and
+\code{climate}).}
 }
 \value{
 A named list with the results of the single runs as returned by
@@ -45,35 +44,38 @@ Wrapper function for \code{\link{run_LWFB90}} to make multiple simulations
 parallel, with varying input parameters.
 }
 \section{Parameter updating}{
- The transfer of values from a row in
-  \code{paramvar} to \code{param_b90} before each single run simulation is
-  done by matching names from \code{paramvar} and \code{param_b90}. In order
-  to address data.frame or vector elements in \code{param_b90} by a column
-  name in \code{paramvar}, the respective column name has to be set up from
-  its name and index in \code{param_b90}. To replace, e.g., the 2nd value of
-  \code{ths} in the \code{soil_materials} data.frame, the respective column
-  name in \code{paramvar} has to be called 'soil_materials.ths2'. In order to
-  replace the 3rd value of \code{maxlai} vector in \code{param_b90}, the
-  column has to be named 'maxlai3'.
+
+The transfer of values from a row in \code{paramvar} to \code{param_b90}
+before each single run simulation is done by matching names from
+\code{paramvar} and \code{param_b90}. In order to address data.frame or
+vector elements in \code{param_b90} by a column name in \code{paramvar}, the
+respective column name has to be set up from its name and index in
+\code{param_b90}. To replace, e.g., the 2nd value of \code{ths} in the
+\code{soil_materials} data.frame, the respective column name in
+\code{paramvar} has to be called 'soil_materials.ths2'. In order to replace
+the 3rd value of \code{maxlai} vector in \code{param_b90}, the column has to
+be named 'maxlai3'.
 }
 
 \section{Data management}{
- The returned list of single run results can become
-  very large, if many simulations are done and the selected output contains
-  daily resolution datasets, and especially daily layer-wise soil moisture
-  data. To not overload memory, it is advised to reduce the returned
-  simulation results to a minimum, by carefully selecting the output, and
-  make use of the option to pass a list of functions to
-  \code{\link{run_LWFB90}} via argument \code{output_fun}. These functions
-  perform directly on the output of a single run simulation, and can be used
-  for aggrating model output on-the-fly, or writing results to a file or
-  database.
+
+The returned list of single run results can become very large, if many
+simulations are performed and the selected output contains daily resolution
+data sets, especially daily layer-wise soil moisture data. To not overload
+memory, it is advised to reduce the returned simulation results to a minimum,
+by carefully selecting the output, and make use of the option to pass a list
+of functions to \code{\link{run_LWFB90}} via argument \code{output_fun}.
+These functions perform directly on the output of a single run simulation,
+and can be used for aggregating model output on-the-fly, or for writing
+results to a file or database. The regular output of
+\code{\link{run_LWFB90}} can be suppressed by setting \code{rtrn.output =
+FALSE}, for exclusively returning the output of such functions.
 }
 
 \section{Progress bar}{
 
-This function provides a progress bar via the package \CRANpkg{progressr}
-if \code{show_progress=TRUE}. The parallel computation is then wrapped with
+This function provides a progress bar via the package \CRANpkg{progressr} if
+\code{show_progress=TRUE}. The parallel computation is then wrapped with
 \code{progressr::with_progress()} to enable progress reporting from
 distributed calculations. The appearance of the progress bar (including
 audible notification) can be customized by the user for the entire session

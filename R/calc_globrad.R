@@ -1,8 +1,8 @@
 #' Calculate global solar radiation from sunshine duration hours
 #'
-#' Uses \code{\link[sirad]{extrat}} to determine daylength and extraterrestrial
-#' radiation, from which global radiation is calculated using the
-#' Angström-formula.
+#' Uses functions taken from the 'sirad' package to determine astronomical
+#' daylength and extraterrestrial radiation, from which global radiation is
+#' calculated using the Angström-formula.
 #'
 #' @param dates Date vector
 #' @param sunhours Vector of sunshine duration hours, same length as dates.

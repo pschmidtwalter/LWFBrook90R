@@ -13,30 +13,64 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
 
 ## Introduction
 
-With 'LWFBrook90R', parallelized multi-run simulations can be performed conveniently, extending the basic single-run applications using the function `run_LWFB90()` described in the introductory vignette. Two different multi-run functions exist for two different problems:
+With 'LWFBrook90R', parallelized multi-run simulations can be performed
+conveniently, extending the basic single-run applications using the function
+`run_LWFB90()` described in the introductory vignette. Two different multi-run
+functions exist for two different problems:
 
 1. Perform Monte-Carlo simulations with single parameters set up for variation, and
 2. simulations over multiple locations, parameter sets, or climate scenarios.
 
-For the first case, the function `run_multi_LWFB90()` is available. The second problem can be tackled using the function `run_multisite_LWFB90()`.
+For the first case, the function `run_multi_LWFB90()` is available. The second
+problem can be tackled using the function `run_multisite_LWFB90()`. 
 
-```{r, warning = FALSE, message = FALSE}
+Both functions are wrapper functions for `run_LWFB90()` and allow for parallel
+processing of tasks, using a specified number of CPUs to speed up the execution
+of a multi-run simulation. They return large lists containing the individual
+single run simulation results, as they are returned by `run_LWFB90()`. These
+result-lists can become very large if many simulations are performed, and the
+selected output comprises daily data sets and especially the individual soil
+layers' daily soil moisture states. Huge amounts of data produced can overload
+the memory, I therefore start this vignette with a section on how to make best
+use of the `output_fun`-argument of `run_LWFB90()` for output data management.
+
+```{r, warning = FALSE, message = FALSE, eval = TRUE}
 library(LWFBrook90R)
 library(data.table)
 ```
 
 ## Data management (i): `output_fun`-argument
 
-The two multi-run functions are wrapper functions for `run_LWFB90()` and allow for parallel processing of tasks using a specified number of CPUs to speed up the execution of a multi-run simulation. The functions return lists of the individual single run simulation results, as they are returned by `run_LWFB90()`. These lists can become very large if many simulations are performed, and the selected output comprises daily data sets and especially soil moisture state variables of individual soil layers (`SWATDAY.ASC`). To minimize memory allocation, it is therefore recommended to reduce the selected output to a minimum and make use of the `output_fun`-argument of `run_LWFB90()`. With this argument, it is possible to pass custom functions to `run_LWFB90()`, which directly perform on the simulation output list object. With `rtrn_output = FALSE`, the original simulation output (as selected by `output`) can be discarded, and only the results from the `output_fun`-argument are returned. This can be very useful for model calibration or sensitivity analyses tasks comprising ten thousands of simulations in a Monte-Carlo setting. With this magnitude, memory allocation is critical, and only a relatively small output can be returned for each individual simulation (e.g., a measure of agreement between simulated and observed values). Similarly, it is possible to define functions to aggregate model output on-the-fly, or to redirect the simulation output to a file or database, as we will see later.
+To minimize memory allocation, it is recommended to reduce the selected output
+to a minimum and make use of the `output_fun`-argument of `run_LWFB90()`. With
+this argument, it is possible to pass custom functions to `run_LWFB90()`, which
+directly perform on the simulation output list object. With `rtrn_output =
+FALSE`, the original simulation output (as selected by `output`) then can be
+discarded, and only the results from the `output_fun`-argument are returned.
+This can be very useful for model calibration or sensitivity analyses tasks
+comprising ten thousands of simulations in a Monte-Carlo setting. With this
+magnitude, memory allocation is critical, and only a relatively small output can
+be returned for each individual simulation (e.g., a measure of agreement between
+simulated and observed values). Similarly, it is possible to define functions
+for custom output aggregation, to redirect the simulation output to a file or
+database, as we will see later.
 
-To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo simulation using the function `run_multi_LWFB90()`. To reduce the returned output, we define a function, that in a first step integrates depth-specific soil moisture to soil water storage down to specified soil layer (`tolayer`), and in a second step calculates mean soil water storage over the growing season, along with the sum of transpiration. The growing season thereby is defined by the input parameters `budburstdoy` and `leaffalldoy`, which are available to `output_fun`-functions.
+To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo
+simulation using the function `run_multi_LWFB90()`, and define a function that
+returns annual mean soil water storage and transpiration during the growing
+season. In a first step, the function integrates depth-specific soil moisture to
+soil water storage down to specified soil layer (`tolayer`), and in a second
+step calculates mean soil water storage over the growing season, along with the
+sum of transpiration. The growing season thereby is defined by the input
+parameters `budburstdoy` and `leaffalldoy`.
 
 ```{r}
 output_function <- function(x, tolayer) {
@@ -60,7 +94,7 @@ output_function <- function(x, tolayer) {
 ```
 
 
-```{r, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE}
 data("slb1_meteo")
 data("slb1_soil")
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
@@ -69,7 +103,7 @@ b90res <- LWFBrook90R:::b90res
 
 To test our custom output function we run a single-run simulation
 
-```{r, eval = FALSE}
+```{r}
 data("slb1_meteo")
 data("slb1_soil")
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
@@ -86,45 +120,62 @@ and apply the function to the return, to see that our custom output function wor
 output_function(b90res, tolayer = 15)
 ```
 
-## Multi-run simulations `run_multi_LWFB90()`
+## Multi-run simulations with `run_multi_LWFB90()`
 
-As mentioned, `run_multi_LWFB90()` is a wrapper for `run_LWFB90()` that takes a data.frame `paramvar` containing variable parameter values in columns and their realizations in rows. For each row in `paramvar`, the respective parameter values in `param_b90` are replaced by name, and `run_LWFB90()` is executed.
+As mentioned, `run_multi_LWFB90()` is a wrapper for `run_LWFB90()`.
+`run_multi_LWFB90()` takes a data.frame `paramvar` containing variable parameter
+values in columns and their realizations in rows. For each row in `paramvar`,
+the respective parameter values in `param_b90` are replaced by name, and
+`run_LWFB90()` is called. Further arguments to `run_LWFB90()` have to be
+specified and are passed on.
 
-For the multi-run simulation, we set up two parameters for variation, the maximum leaf area index (`maxlai`) and the maximum leaf conductance (`glmax`). We define a data.frame with two columns, containing 50 random uniform realizations of the two parameters:
+For the multi-run simulation, we set up two parameters for variation, the
+maximum leaf area index (`maxlai`) and the maximum leaf conductance (`glmax`).
+We define a data.frame with two columns, containing 50 random uniform
+realizations of the two parameters:
 
 ```{r}
+set.seed(2021)
 N=50
 paramvar <- data.frame(maxlai = runif(N, 4,7),
                        glmax = runif(N,0.003, 0.01))
 ```
 
-Now we can run the simulation. We suppress the selected simulation result objects and model input from being returned, and only return the values from our `output_fun` defined above. We pass `tolayer = 15` so that soil water storage is integrated down to the 15th soil layer, corresponding to 0-100 cm soil depth. Note that the `param_b90` object (and thus parameters `budburstdoy` and `leaffalldoy`) is available to our `output_fun`, although it is not included in the return (`rtrn_input = FALSE`).
+Now we can run the simulation. We suppress the selected simulation result
+objects and model input from being returned, and only return the values from our
+`output_fun` defined above. We pass `tolayer = 15` so that soil water storage is
+integrated down to the 15th soil layer, corresponding to 0-100 cm soil depth.
+Note that the `param_b90` object (and thus parameters `budburstdoy` and
+`leaffalldoy`) is available to our `output_fun`, although it is not included in
+the return (`rtrn_input = FALSE`).
 
-```{r, eval = FALSE}
+```{r}
 mrun_res <- run_multi_LWFB90(paramvar = paramvar,
                              param_b90 = set_paramLWFB90(),
-                             cores = 3, # arguments below are passed to run_LWFB90()
+                             cores = 5, # arguments below are passed to run_LWFB90()
                              options_b90 = set_optionsLWFB90(), 
                              climate = slb1_meteo,
                              soil = soil,
                              output = set_outputLWFB90(), 
                              rtrn_input = FALSE, rtrn_output = FALSE,
                              output_fun = output_function,
-                             tolayer = 15)
+                             tolayer = 15) # argument to output_fun
 ```
 
-The result is a list of the individual single-run results, from which we can easily extract the results of our output function and `rbindlist` them together in a data.table:
+The result is a list of the individual single-run results, from which we can
+easily extract the results of our output function and `rbindlist` them together
+in a data.table:
 
-```{r, eval = FALSE}
+```{r}
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]), 
                      idcol = "singlerun")
 ```
 
-```{r, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE}
 mrun_dt <- LWFBrook90R:::mrun_dt
 ```
 
-Now we can plot the results of the 50 simulations:
+Now we can display the results of the 50 simulations using boxplots:
 
 ```{r,results='hide', fig.height=5, fig.width=7, echo =FALSE, fig.cap = "Growing season soil water storage and transpiration of 50 simulations, with random variation of parameters 'maxlai' and 'glmax'"}
 
@@ -133,11 +184,18 @@ boxplot(swat_vp_mean~yr, data = mrun_dt, col = "blue")
 boxplot(tran_vp_sum~yr, data = mrun_dt, col = "green")
 ```
 
-We ran 50 simulations, all with the same climate, soil, and parameters except for `maxlai` and `glmax`. In the next section we will learn how to make use of multiple climate, soil, and parameter sets using the function `run_multisite_LWFB90()`. 
+We ran 50 simulations, all with the same climate, soil, and parameters except
+for `maxlai` and `glmax`, that where varied randomly. In the next section we
+will learn how to make use of multiple climate, soil, and parameter sets using
+the function `run_multisite_LWFB90()`.
 
 ## Multi-Site simulations using `run_multisite_LWFB90()`
 
-A basic multi-site simulation with the function `run_multisite_LWFB90()` runs through lists of `param_b90`, `climate`, and `soil`-objects, and evaluates the specified parameter sets for each of the soil/climate combinations. To demonstrate its usage, we define two parameter sets, that we want to run on three 'sites'. We include the two parameter sets in a list `parms_l`:
+A basic multi-site simulation with the function `run_multisite_LWFB90()` runs
+through lists of `param_b90`, `climate`, and `soil`-objects, and evaluates the
+specified parameter sets for each of the soil/climate combinations. To
+demonstrate its usage, we define two parameter sets, that we want to run on
+three 'sites'. We include the two parameter sets in a list `parms_l`:
 
 ```{r}
 parms_beech <- set_paramLWFB90(maxlai = 6)
@@ -145,7 +203,8 @@ parms_spruce <- set_paramLWFB90(maxlai = 4.5, winlaifrac = 0.8)
 parms_l <- list(beech = parms_beech, spruce = parms_spruce)
 ```
 
-We pretend that the three sites all have individual climates and soils, and set up lists:
+We pretend that the three sites all have individual climates and soils, and set
+up lists for soil and climate input:
 ```{r}
 soils_l <- list(soil1 = soil, soil2 = soil, soil3 = soil)
 climates_l <- list(clim1 = slb1_meteo, clim2 = slb1_meteo, clim3 = slb1_meteo)
@@ -159,15 +218,28 @@ msite_run1 <- run_multisite_LWFB90(
   param_b90 = parms_l,
   climate = climates_l,
   soil = soils_l,
-  cores = 2)
+  cores = 3)
 str(msite_run1, max.level = 1)
 ```
 
-The results are returned as a list of the single run objects, as returned by `run_LWFB90()`. The list entries are named according to the names of the list entries holding the individual `param_b90`, `climate`, and `soil` input objects.
+The results are returned as a list of single run objects, with their names being
+concatenated from the names of the input list entries holding the individual
+`param_b90`, `climate`, and `soil` input objects.
 
 ## Data management (ii): A function as `climate`-argument
 
-The function `run_multisite_LWFB90()` can easily be set up to run a few dozens of sites with individual climate data, however, simulating thousands of sites is not possible, because such a large list of `climate` data.frames might overload the memory of a usual desktop computer. Fortunately, it is possible to pass a function instead of a data.frame as `climate`-argument to `run_LWFB90()`. Such a function can be used to create the `climate`-data.frame from a file or database-connection within `run_LWFB90()` or `run_multisite_LWFB90()` on the fly. For `run_LWFB90()`, we can simply provide arguments to the function via the `...`-placeholder. For `run_multisite_LWFB90()`, however, we need to pass arguments to a `climate`-function (possibly with individual values for individual site, e.g. a file name) via the `climate_args`-argument.
+The function `run_multisite_LWFB90()` can easily be set up to run a few dozens
+of sites with individual climate data, however, simulating thousands of sites
+potentially is impossible, because such a large list of `climate` data.frames
+might overload the memory of a usual desktop computer. Fortunately, it is
+possible to pass a function instead of a data.frame as `climate`-argument to
+`run_LWFB90()`. Such a function can be used to create the `climate`-data.frame
+from a file or database-connection within `run_LWFB90()` or
+`run_multisite_LWFB90()` on the fly. For `run_LWFB90()`, we can simply provide
+arguments to the function via the `...`-placeholder. For
+`run_multisite_LWFB90()`, we need to pass arguments to a `climate`-function
+(possibly with individual values for individual site, e.g. a file name) via the
+`climate_args`-argument.
 
 To demonstrate this mechanism, we write three files with climatic data to a temporary location, from where we will read them back in later:
 
@@ -179,7 +251,10 @@ write.csv(slb1_meteo[year(slb1_meteo$dates) %in% c(2002,2003),], file = fnames[2
 write.csv(slb1_meteo[year(slb1_meteo$dates) %in% c(2002,2003),], file = fnames[3], row.names = FALSE)
 ```
 
-For testing, we perform a single run with `runLWFB90()` and use the `fread` function from the 'data.table'-package as `climate`-argument. The function reads 'csv'-files, and takes a `file` name as argument that we include in the call. It points to the first of our three climate files: 
+For testing, we perform a single run with `runLWFB90()` and use the `fread`
+function from the 'data.table'-package as `climate`-argument. The function reads
+'csv'-files, and takes a `file` name as argument that we include in the call. It
+points to the first of our three climate files:
 
 ```{r}
 srun <- run_LWFB90(
@@ -190,21 +265,22 @@ srun <- run_LWFB90(
   climate = fread,
   file = fnames[1],
   rtrn.input = FALSE)
-
-str(srun, max.level = 1)
 ```
 
-The same construct basically works with the function `run_multisite_LWFB90()`. The only difference to single-run simulation is that the arguments for the function have to be specified in a named list of lists, one sub-list for each site. We set it up as follows:
-
+The same construct basically works with the function `run_multisite_LWFB90()`.
+The only difference to single-run simulation is that the arguments for the
+function have to be specified in a named list of lists, one sub-list for each
+site. We set it up as follows:
 ```{r}
 clim_args <- list(climfromfile1 = list(file = fnames[1]),
                   climfromfile2 = list(file = fnames[2]),
                   climfromfile3 = list(file = fnames[3]))
 ```
 
-Now we call `run_multisite_LWFB90()`, and set as `climate`-object the function `fread`. Our list lists with individual arguments for `fread` is passed to the function via `climate_args`:
-
-```{r, eval = F}
+Now we call `run_multisite_LWFB90()`, and set as `climate`-object the function
+`fread`. Our list lists with individual arguments for `fread` is passed to the
+function via `climate_args`:
+```{r}
 msite_run2 <- run_multisite_LWFB90(
   options_b90 = set_optionsLWFB90(),
   param_b90 = parms_l,
@@ -212,12 +288,30 @@ msite_run2 <- run_multisite_LWFB90(
   climate = fread,
   climate_args = clim_args,
   cores = 3)
+
+str(msite_run2, max.level = 1)
 ``` 
-We simulated two parameter sets using three different climate/soil combinations. The names of the climate used in the result names are now coming from the names of our list `clim_args`, because we used a function as `climate`-argument. The function `fread` is evaluated directly within `msiterunLWFB90()`, and is not passed to `runLWFB90`, because otherwise it would have been evaluated for each single-run simulation. In this way, `fread` is evaluated only three times for in total six simulations which saves us some execution time, if we want to simulate multiple parameter sets using the same climatic data.
+
+We simulated two parameter sets using three different climate/soil combinations.
+The names of the climate used in the result names are now coming from the names
+of our list `clim_args`, because we used a function as `climate`-argument. The
+function `fread` is evaluated directly within `run_multisite_LWFB90()`, and is
+not passed to `run_LWFB90()`, because otherwise it would have been evaluated for
+each single-run simulation. In this way, `fread` is evaluated only three times
+for in total six simulations which saves us some execution time, if we want to
+simulate multiple parameter sets using the same climatic data.
 
 ## Multi-site simulation: Input from file, output to file
 
-Now that we learned how to use a function as climate input, we can combine this input facility with an `output_fun` that writes the simulation results to a file. To do so, we extend our output function from the first example so that it writes the results to a file in a specified directory. The file name is constructed from the names of the current soil, climate, and parameter object, which are passed automatically from `run_multisite_LWFB90()` to `run_LWFB90()` as objects `soil_nm`, `clim_nm`, and `param_nm`. In this way, the names of currently processed input objects are accessible to `output_fun`-functions within `run_LWFB90()`.
+Now that we learned how to use a function as climate input, we can combine this
+input facility with an `output_fun` that writes the simulation results to a
+file. To do so, we extend our output function from the first example so that it
+writes the results to a file in a specified directory. The file name is
+constructed from the names of the current soil, climate, and parameter object,
+which are passed automatically from `run_multisite_LWFB90()` to `run_LWFB90()`
+as character variable `soil_nm`, `clim_nm`, and `param_nm`. In this way, the names of
+currently processed input objects are accessible to `output_fun`-functions
+within `run_LWFB90()`.
 
 ```{r}
 output_function2 <- function(x, tolayer, basedir = getwd(),
@@ -248,7 +342,7 @@ output_function2 <- function(x, tolayer, basedir = getwd(),
 
 Now we can run the simulations, with climate data coming from files, and the results being written to our temporary directory `tdir`:  
 
-```{r, eval = F}
+```{r}
 msite_run3 <- run_multisite_LWFB90(
   options_b90 = set_optionsLWFB90(),
   param_b90 = parms_l,
@@ -261,11 +355,17 @@ msite_run3 <- run_multisite_LWFB90(
   tolayer = 15,
   basedir = tdir,
   cores = 3)
-````
-After the simulation has finished, we can list the files and see that our attempt was successfull:
+```
 
-```{r, eval = F}
+After the simulation has finished, we can list the files and see that our attempt was successful:
+
+```{r}
 list.files(tdir, pattern = "csv")
 ```
+
+```{r, echo = FALSE, results='hide'}
+file.remove(list.files(tdir, pattern = "csv", full.names = T))
+```
+
 
 

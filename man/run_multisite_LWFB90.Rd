@@ -6,8 +6,8 @@
 parameter input objects.}
 \usage{
 run_multisite_LWFB90(
-  param_b90,
   options_b90,
+  param_b90,
   soil = NULL,
   climate,
   climate_args = NULL,
@@ -18,11 +18,11 @@ run_multisite_LWFB90(
 )
 }
 \arguments{
-\item{param_b90}{Named list of parameters to be used in all simulations, or a
-list of multiple parameter sets.}
-
 \item{options_b90}{Named list of model control options to be used in all
 simulations}
+
+\item{param_b90}{Named list of parameters to be used in all simulations, or a
+list of multiple parameter sets.}
 
 \item{soil}{Data.frame with soil properties to be used in all simulations, or
 a list of data.frames with different soil profiles.}
@@ -62,36 +62,37 @@ individual climate and soil, or individual parameter sets for each
 climate/soil combinations.
 }
 \section{Data management}{
- The returned list of single run results can become
-  very large, if many simulations are performed and the selected output
-  contains daily resolution data sets, especially daily layer-wise soil
-  moisture data. To not overload memory, it is advised to reduce the returned
-  simulation results to a minimum, by carefully selecting the output, and
-  make use of the option to pass a list of functions to
-  \code{\link{run_LWFB90}} (argument \code{output_fun}). These functions
-  perform directly on the output of a single run simulation, and can be used
-  for aggregating model output on-the-fly, or save results to a file or
-  database. The regular output of \code{\link{run_LWFB90}} can be suppressed
-  by setting \code{rtrn.output = FALSE}, for exclusively returning the output
-  of such functions. To provide full flexibility, the names of the current
-  \code{soil}, \code{param_b90}, and \code{climate} are automatically passed
-  as additional arguments (\code{soil_nm}, \code{param_nm},\code{clim_nm}) to
-  \code{\link{run_LWFB90}} and in this way become available to functions
-  passed via \code{output_fun}. In order to not overload the memory with
-  simulation input data, it is advised to provide a function instead of a
-  list of \code{climate} data.frames, and specify its arguments for
-  individual sites in \code{climate_args}, in case many sites with individual
-  climates will be simulated.
+
+The returned list of single run results can become very large, if many
+simulations are performed and the selected output contains daily resolution
+data sets, especially daily layer-wise soil moisture data. To not overload
+memory, it is advised to reduce the returned simulation results to a minimum,
+by carefully selecting the output, and make use of the option to pass a list
+of functions to \code{\link{run_LWFB90}} via argument \code{output_fun}.
+These functions perform directly on the output of a single run simulation,
+and can be used for aggregating model output on-the-fly, or for writing
+results to a file or database. The regular output of
+\code{\link{run_LWFB90}} can be suppressed by setting \code{rtrn.output =
+FALSE}, for exclusively returning the output of such functions.
+To provide full flexibility, the names of the current \code{soil},
+\code{param_b90}, and \code{climate} are automatically passed as additional
+arguments (\code{soil_nm}, \code{param_nm},\code{clim_nm}) to
+\code{\link{run_LWFB90}} and in this way become available to functions passed
+via \code{output_fun}. In order to not overload the memory with climate input
+data, it is advised to provide a function instead of a list of \code{climate}
+data.frames, and specify its arguments for individual sites in
+\code{climate_args}, in case many sites with individual climates will be
+simulated.
 }
 
 \section{Progress bar}{
- This function provides a progress bar via the package
-  \CRANpkg{progressr} if \code{show_progress=TRUE}. The parallel computation
-  is then wrapped with \code{progressr::with_progress()} to enable progress
-  reporting from distributed calculations. The appearance of the progress bar
-  (including audible notification) can be customized by the user for the
-  entire session using \code{progressr::handlers()} (see
-  \code{vignette('progressr-intro')}).
+
+This function provides a progress bar via the package \CRANpkg{progressr} if
+\code{show_progress=TRUE}. The parallel computation is then wrapped with
+\code{progressr::with_progress()} to enable progress reporting from
+distributed calculations. The appearance of the progress bar (including
+audible notification) can be customized by the user for the entire session
+using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 }
 
 \examples{
