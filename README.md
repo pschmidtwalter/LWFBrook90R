@@ -1,7 +1,7 @@
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Travis build status](https://travis-ci.com/pschmidtwalter/LWFBrook90R.svg?branch=master)](https://travis-ci.com/pschmidtwalter/LWFBrook90R)
-  <!-- badges: end -->
+<!-- badges: end -->
   
 # LWFBrook90R
 

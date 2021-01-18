@@ -1,13 +1,13 @@
 Package: LWFBrook90R
 Title: Simulate Water Fluxes and Soil Moisture with the SVAT Model LWF-Brook90 
-Version: 0.4.0
+Version: 0.4.1.9000
 Authors@R: c(person("Paul", "Schmidt-Walter", , "paul.schmidt-walter@nw-fva.de", role = c("aut", "cre"),comment=c(ORCID="0000-0003-2699-0893")),
              person("Volodymyr", "Trotsiuk", , "vtrotsiuk@gmail.com", role = c("aut"),comment=c(ORCID="0000-0002-8363-656X")),
              person("Klaus", "Hammel", , ,role = c("aut")),
              person("Martin", "Kennel", , ,role = c("aut")),
              person("Anthony", "Federer", , , role = c("aut")),
              person("Robert", "Nuske", role=c("ctb"), comment=c(ORCID="0000-0001-9773-2061")))
-Description: Provides a flexible and easy-to use interface to the soil vegetation 
+Description: Provides a flexible and easy-to use interface for the soil vegetation 
     atmosphere transport (SVAT) model LWF-BROOK90 written in Fortran. A set of 
     high-level Functions provides for convenient simulation set-up and model execution, 
     and parallelisation of multi-run simulations.

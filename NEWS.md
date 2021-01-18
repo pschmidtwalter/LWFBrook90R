@@ -33,21 +33,21 @@ Changes:
 
 Changes:
 
-- Adjusted 'table'-method in `make_rootden()`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
-- Input changed for 'soilnodes'-argument of `make_rootden`. See `?make_rootden`.
+- Adjusted 'table'-method in `MakeRelRootDens()`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
+- Input changed for 'soilnodes'-argument of `MakeRelRootDens()`. See `?MakeRelRootDens`.
 
 Bug fixes:
 
 - zero division error causing infinite `relawat` values in `MISCDAY.ASC`-output item.
-- 'betamodel'-method of `make_rootden` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
+- 'betamodel'-method of `MakeRelRootDens()` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
 
 
 ## Version 0.3.0 (2020-04-21)
 
 Changes:
 
-- new function `run_multisite_LWFB90()`
-- `run_LWFB90()`: model input (`param_b90`, `options_b90`, `standprop_daily`) is appended
+- new function `msiterunLWFB90()`
+- `runLWFB90()`: model input (`param.b90`, `options.b90`, `standprop_daily`) is appended
 	to the return value BEFORE evaluating the `output_fun`-argument. In this way,
 	on-the-fly post-processing of model results including model-input is possible now.
 - minor bugs fixed
@@ -57,7 +57,7 @@ Changes:
 
 Changes:
 
-- `output_fun` argument replaces `gof_fun`-argument in `run_LWFB90()` for more flexible output.
+- `output_fun` argument replaces `gof_fun`-argument in `runLWFB90()` for more flexible output.
 - minor bugs fixed
 
 
