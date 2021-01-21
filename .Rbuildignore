@@ -9,3 +9,4 @@ examples_all.R
 ^dev$
 ^cran-comments\.md$
 ^\.travis\.yml$
+^README\.Rmd$

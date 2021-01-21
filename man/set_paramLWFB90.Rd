@@ -29,10 +29,10 @@ Create the list of model parameters
  nn           \tab Eddy diffusivity extinction coefficient within canopy. Default: 2.5\tab -                 \tab Canopy                 \cr
  rhotp        \tab Ratio of total leaf area to projected area. Default: 2\tab -                  \tab Canopy                 \cr
  zminh        \tab Reference height for weather data above the canopy top height. Default: 2\tab m \tab Canopy                 \cr
- dslope       \tab slope for downslope-flow. Default: 0 \tab deg               \tab Flow \cr
+ dslope       \tab Slope for downslope-flow. Default: 0 \tab deg               \tab Flow \cr
  bypar        \tab Switch to allow (1) or prevent (0) bypass flow in deeper layers. Default: 0 \tab -\tab Flow                   \cr
  drain        \tab Switch for lower boundary condition to be free drainage (1) or no flow (0). Default: 1  \tab -\tab Flow                   \cr
- slopelen     \tab slope length for downslope-flow. Default: 200   \tab m                 \tab Flow                   \cr
+ slopelen     \tab Slope length for downslope-flow. Default: 200   \tab m                 \tab Flow                   \cr
  gsc          \tab Rate constant for ground water discharge (remember that a first order groundwater reservoir is placed below the soil profile), for value 0 there is no discharge. Default: 0  \tab d-1               \tab Flow                   \cr
  gsp          \tab Seepage fraction of groundwater discharge. Default: \tab -  \tab Flow                   \cr
  ilayer       \tab Number of layers from top to which infiltration is distributed. Default: 0\tab -                  \tab Flow                   \cr
@@ -68,32 +68,32 @@ Create the list of model parameters
  coords_x     \tab Longitude value (decimal degrees) of the simulation location (has no effect on simulation results). Default: 9.91 \tab m                 \tab Meteo                  \cr
  coords_y     \tab Latitude value (decimal degrees) of the simulation location. Default: 51.54 \tab m                 \tab Meteo                  \cr
  zw           \tab Height at which wind speed was measured. Default: 2 \tab m                 \tab Meteo                  \cr
- eslope       \tab slope for evapotranspiration and snowmelt calculation. Default:  0\tab deg               \tab Meteo                  \cr
+ eslope       \tab Slope for evapotranspiration and snowmelt calculation. Default:  0\tab deg               \tab Meteo                  \cr
  aspect       \tab Mean exposition of soil surface at soil profile (north: 0, east: 90, south: 180, west: 270). Default: 0\tab deg               \tab Meteo                  \cr
  obsheight    \tab Mean height of obstacles on soil surface (grass, furrows etc.), used to calculate soil surface roughness. Default: 0.025 \tab m                 \tab Meteo                  \cr
- prec_corr_statexp \tab station exposure situation of prec measurements (passed to \code{\link{correct_prec}} Default: 'mg' \tab                  \tab Meteo                  \cr
- dpsimax      \tab maximum potential difference considered equal. Default: 5e-04 \tab kPa               \tab Numerical              \cr
- dswmax       \tab maximum change allowed in SWATI. Default: 0.05 \tab percent of SWATMX \tab Numerical              \cr
- dtimax       \tab maximum iteration time step. Default: 0.5 \tab d                 \tab Numerical              \cr
+ prec_corr_statexp \tab Station exposure situation of prec measurements (passed to \code{\link{correct_prec}} Default: 'mg' \tab                  \tab Meteo                  \cr
+ dpsimax      \tab Maximum potential difference considered equal. Default: 5e-04 \tab kPa               \tab Numerical              \cr
+ dswmax       \tab Maximum change allowed in SWATI. Default: 0.05 \tab percent of SWATMX \tab Numerical              \cr
+ dtimax       \tab Maximum iteration time step. Default: 0.5 \tab d                 \tab Numerical              \cr
  budburst_species \tab Name of tree species for estimating budburst doy using Menzel-model (passed to \code{\link[vegperiod]{vegperiod}}) Default: 'Fagus sylvatica' \tab -                  \tab Plant                  \cr
  budburstdoy  \tab Budburst day of year - passed to \code{\link{make_seasLAI}}. Default: 121\tab doy                  \tab Plant                  \cr
  emergedur    \tab Leaf growth duration until maxlai is reached.. Default: 28\tab d                 \tab Plant                  \cr
- height       \tab plant height. Default: 25 \tab m                 \tab Plant                  \cr
- height_ini   \tab initial plant height at the beginning of the simulaton. Used for interpolation , ignored if length(height) . Default: 25 \tab m                 \tab Plant                  \cr
- leaffalldoy  \tab number of days until maximum lai is reached - passed to \code{\link{make_seasLAI}} Default: 279\tab doy               \tab Plant                  \cr
- leaffalldur  \tab number of days until minimum lai is reached - passed to \code{\link{make_seasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
- sai          \tab steam area index. Default: 1 \tab -                 \tab Plant                  \cr
- sai_ini      \tab steam area index at the end of the simulation. Ignored if length(height) == 1, Default: 1 \tab -                 \tab Plant                  \cr
+ height       \tab Plant height. Default: 25 \tab m                 \tab Plant                  \cr
+ height_ini   \tab Initial plant height at the beginning of the simulation. Used when \code{options_b90$standprop_interp = 'linear'} (see \code{\link{approx_standprop}}). Default: 25 \tab m                 \tab Plant                  \cr
+ leaffalldoy  \tab Number of days until maximum lai is reached - passed to \code{\link{make_seasLAI}} Default: 279\tab doy               \tab Plant                  \cr
+ leaffalldur  \tab Number of days until minimum lai is reached - passed to \code{\link{make_seasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
+ sai          \tab Steam area index. Default: 1 \tab -                 \tab Plant                  \cr
+ sai_ini      \tab Initial stem area index at the beginning of the simulation. Used when \code{options_b90$standprop_interp = 'linear'} (see \code{\link{approx_standprop}}), Default: 1 \tab -                 \tab Plant                  \cr
  shp_leaffall  \tab Shape parameter for leaf fall phase - passed to \code{\link{make_seasLAI}} Default: 0.3\tab -                  \tab Plant                  \cr
- shp_budburst  \tab shape parameter for leaf growth phase - passed to \code{\link{make_seasLAI}} Default: 3\tab -                  \tab Plant                  \cr
- shp_optdoy \tab day of year when optimum value is reached - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
- lai_doy \tab day of year values for lai-interpolation - passed to \code{\link{make_seasLAI}} \tab doy               \tab Plant                  \cr
- lai_frac \tab fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+ shp_budburst  \tab Shape parameter for leaf growth phase - passed to \code{\link{make_seasLAI}} Default: 3\tab -                  \tab Plant                  \cr
+ shp_optdoy \tab Day of year when optimum value is reached - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+ lai_doy \tab Day of year values for lai-interpolation - passed to \code{\link{make_seasLAI}} \tab doy               \tab Plant                  \cr
+ lai_frac \tab Fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
  winlaifrac   \tab Minimum LAI as a fraction of maxlai. Default: 0 \tab -                  \tab Plant                  \cr
  standprop_table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
  cs           \tab Ratio of projected stem area index to canopy height. Default: 0.035 \tab m-1\tab Plant\cr
  densef       \tab Density factor for MaxLAI, CS, RtLen, RPlant, not <.001, 1 for typical stand. Default: 1\tab -                  \tab Plant                  \cr
- densef_ini   \tab density factor (see densef) at the end of the simulation. Ignored if length(densef) == 1. Default: 1\tab -                  \tab Plant\cr
+ densef_ini   \tab Initial density factor at the beginning of the simulation. Used when \code{options_b90$standprop_interp = 'linear'} (see \code{\link{approx_standprop}}). Default: 1 \tab -                  \tab Plant\cr
  maxlai       \tab Maximum projected leaf area index - passed to \code{\link{make_seasLAI}} Default: 5 \tab - \tab Plant                  \cr
  radex        \tab Extinction coefficient for solar radiation and net radiation in the canopy. Default: 0.5\tab -                  \tab Potential Transpiration \cr
  cvpd         \tab Vapour pressure deficit at which leaf conductance is halved. Default: 2\tab kPa               \tab Potential Transpiration\cr
@@ -108,19 +108,19 @@ Create the list of model parameters
  betaroot     \tab Shape parameter for rootlength density depth distribution. Default: 0.97 \tab -                 \tab Roots                  \cr
  maxrootdepth \tab Maximum root depth (positive downward) - passed to make_rootden. Default: -1.5 \tab m                \tab Roots                  \cr
  rootden_table \tab Data.frame of relative root density depth distribution with columns 'depth' and 'rootden' \tab                   \tab Roots\cr
- rstemp       \tab base temperature for snow-rain transition. Default: -0.5 \tab deg C              \tab Snow                   \cr
- ccfac        \tab cold content factor. Default: 0.3 \tab MJ m-2 d-1 K-1    \tab Snow                   \cr
- grdmlt       \tab rate of groundmelt of snowpack. Default: 0.35 \tab mm d-1            \tab Snow                   \cr
- laimlt       \tab parameter for snowmelt dependence on LAI. Default: 0.2 \tab -                 \tab Snow                   \cr
- maxlqf       \tab maximum liquid water fraction of Snow. Default: 0.05 \tab -                  \tab Snow                   \cr
- melfac       \tab degree day melt factor for open. Default: 1.5\tab MJ m-2 d-1 K-1    \tab Snow                   \cr
- saimlt       \tab parameter for snowmelt dependence on SAI. Default: 0.5 \tab -                  \tab Snow                   \cr
- snoden       \tab snow density. Default: 0.3 \tab mm mm-1           \tab Snow                   \cr
- rssa         \tab soil evaporation resistance at field capacity. Default: 100 \tab s m-1  \tab Soilevap               \cr
- rssb         \tab exponent in relation of RSS to water potential. Default: 1 \tab - \tab Soilevap               \cr
- soil_nodes   \tab a data.frame with soil nodes discretization passed to LWF-Brook90 \tab - \tab Soil               \cr
- soil_materials \tab a data.frame with soil materials (hydrualic parameters) passed to LWF-Brook90 \tab -  \tab Soil               \cr
- age_ini      \tab Age of stand (for root development). Default: 100\tab a                 \tab Water supply           \cr
+ rstemp       \tab Base temperature for snow-rain transition. Default: -0.5 \tab deg C              \tab Snow                   \cr
+ ccfac        \tab Cold content factor. Default: 0.3 \tab MJ m-2 d-1 K-1    \tab Snow                   \cr
+ grdmlt       \tab Rate of groundmelt of snowpack. Default: 0.35 \tab mm d-1            \tab Snow                   \cr
+ laimlt       \tab Parameter for snowmelt dependence on LAI. Default: 0.2 \tab -                 \tab Snow                   \cr
+ maxlqf       \tab Maximum liquid water fraction of Snow. Default: 0.05 \tab -                  \tab Snow                   \cr
+ melfac       \tab Degree day melt factor for open. Default: 1.5\tab MJ m-2 d-1 K-1    \tab Snow                   \cr
+ saimlt       \tab Parameter for snowmelt dependence on SAI. Default: 0.5 \tab -                  \tab Snow                   \cr
+ snoden       \tab Snow density. Default: 0.3 \tab mm mm-1           \tab Snow                   \cr
+ rssa         \tab Soil evaporation resistance at field capacity. Default: 100 \tab s m-1  \tab Soilevap               \cr
+ rssb         \tab Exponent in relation of RSS to water potential. Default: 1 \tab - \tab Soilevap               \cr
+ soil_nodes   \tab Data.frame with soil nodes discretization passed to LWF-Brook90 \tab - \tab Soil               \cr
+ soil_materials \tab Data.frame with soil materials (hydrualic parameters) passed to LWF-Brook90 \tab -  \tab Soil               \cr
+ age_ini      \tab Age of stand (for root development). Default: 100 \tab a                 \tab Water supply           \cr
  initrdep     \tab Initial root depth. Default: 0.25\tab m                 \tab Water supply           \cr
  initrlen     \tab Initial water-absorbing root length per unit area. Default: 12\tab m/m-2             \tab Water supply           \cr
  rgroper      \tab Period of net root growth. Default: 30 \tab a                  \tab Water supply           \cr
