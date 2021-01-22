@@ -9,13 +9,13 @@
 * win-builder (http://win-builder.r-project.org/): R-devel / 4.0.3. / 3.6.3
 * Linux Xenial (on travis-ci): R-devel / R-4.0.3 / R-3.6.3
 * R-Hub:
-  * Debian Linux, GCC ASAN/UBSAN: R-devel
-  * Debian Linux, GCC: R-4.0.3
-  * Windows Server 2008 R2 SP1, 32/64 bit: R-devel
-  * Fedora Linux, clang, gfortran: R-devel
-  * Ubuntu Linux 16.04 LTS, GCC: R-4.0.3
-  * macOS 10.13.6 High Sierra, CRAN's setup R-4.0.3
-
+  * Debian Linux, R-devel, GCC ASAN/UBSAN checkArgs=--use-valgrind
+  * Debian Linux, R-devel, GCC ASAN/UBSAN
+  * Fedora Linux, R-devel, clang, gfortran
+  * Ubuntu Linux 16.04 LTS, R-4.0.3, GCC
+  * macOS 10.13.6 High Sierra, R-4.0.3, CRAN's setup
+  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+  
 ## R CMD check
 
 0 errors | 0 warnings | 1 note
