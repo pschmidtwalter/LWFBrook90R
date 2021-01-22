@@ -9,17 +9,17 @@ Changes:
 - result datasets are now returned directly by the Fortran model code, without 
   the detour of writing .ASC output text files and reading them back into workspace.
 - run time output to the console was disabled, only messages are printed when `verbose = T`.  
-- `run_LWFB90()` (before `runLWFB90()`: 
+- `run_LWFB90()` (before `runLWFB90()`): 
   - without specification of an output selection matrix via `output`, two tables 
   including all available output variables are returned: general daily outputs 
   and layer outputs. A proper description of model output variables was added to the help pages.
   - all column names of the .ASC output objects (as selected via `output`) are now in lower case.
   - it is now possible to provide a function as `climate`-argument, instead of a `data.frame`.
   - an execution time limit (elapsed time) can be set to prevent simulations from running too long. 
-- `run_multisite_LWFB90()` (before `msiterunLWFB90()`: 
+- `run_multisite_LWFB90()` (before `msiterunLWFB90()`): 
   - It is now possible to provide individual `param_b90` (before `param.b90`) input parameter objects for
   individual climate/soil combinations (i.e. individual locations). The option to 
-  provide a list of `options_b90` (nefore `options.b90`) input objects was disabled.
+  provide a list of `options_b90` (before `options.b90`) input objects was disabled.
   - Instead of a list of `climate`-data.frames for a multisite-simulation, a function 
   can be provided for on-the-fly creation of `climate`-`data.frames`. Arguments 
   for the function have to specified via the new `climate_args`-argument of `run_multisite_LWFB90()`. 
