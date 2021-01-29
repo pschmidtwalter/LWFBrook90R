@@ -170,6 +170,7 @@ swat100cm <- b90res$SWATDAY.ASC[which(nl <= 15), list(swat100cm = sum(swati)),
 Now we can plot soil water storage along with transpiration:
 
 ```{r, fig.height=5, fig.width=7, echo =FALSE, fig.cap="Simulation results for sample data"}
+oldpar <- par()
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
 plot(b90res$EVAPDAY.ASC$dates, 
      b90res$EVAPDAY.ASC$tran, type ='l',
@@ -185,6 +186,7 @@ legend("bottom",inset = -0.25,
        legend = c("tran", "swat100cm"),
        col = c("green", "blue"),  lty = 1, 
        bty = "n", xpd = TRUE,  horiz = TRUE,  text.width = 100)
+par(oldpar)
 ```
 
 # Options and parameters {#options}
@@ -299,7 +301,7 @@ with(param_b90, text(
   y = c(winlaifrac*maxlai+0.4,maxlai+0.4), c("winlaifrac * maxlai", "maxlai")))
 
 legend("topleft",c("'b90'","'linear'", "'Coupmodel'"), pch = NULL, lwd =2, col = c("green", "red", "blue"), bty = "n")
-
+par(oldpar)
 ```
 
 ### Inter-annual variation of leaf area index 
@@ -336,6 +338,7 @@ arrows( x0 = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
         y0 = -1.0, y1 = -0.3, length = 0.15, code = 2, xpd =TRUE)
 text(x = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
      y = -1.3, paste("doy", param_b90$budburstdoy), xpd = TRUE)
+par(oldpar)
 ```
 
 Beside the obvious between-year variation of maximum leaf area index, we can
@@ -431,6 +434,7 @@ arrows( x0 = as.Date(paste(param_b90$leaffalldoy, years),format = "%j %Y"),
         y0 = param_b90$height-0.5, y1 = param_b90$height-0.1, length = 0.15, code = 2, xpd =TRUE)
 text(x = as.Date(paste(param_b90$leaffalldoy, years), format = "%j %Y"),
      y = param_b90$height-0.7, paste("doy", param_b90$leaffalldoy), xpd = TRUE)
+par(oldpar)
 ```
 
 Another option for incorporating between-year variation of plant properties is
@@ -491,6 +495,7 @@ mtext("height [m]", side = 4, line = 3)
 legend("bottom",horiz = TRUE, bty = "n",inset = -0.25, xpd =TRUE,
        legend = c("lai", "sai", "height"), 
        col  = c("green","brown", "blue"), lwd = 2, pch = NULL)
+par(oldpar)
 ```
 
 ## Root density depth distribution

@@ -1,6 +1,4 @@
 
-# dput zur ausgabe von objekten
-
 test_that("replacement in vectors works", {
   expect_equal(replace_vecelements(1:10, varnms=c("a1", "a3"), vals=0),
                c(0, 2, 0, 4, 5, 6, 7, 8, 9, 10))

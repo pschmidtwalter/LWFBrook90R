@@ -56,5 +56,6 @@ test_that("msiterun with climate_fun and multiple climate_args works",{
               "list")
 })
 
-rm(list = ls())
+detach("package:data.table", unload = TRUE)
+
 

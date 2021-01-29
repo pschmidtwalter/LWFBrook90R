@@ -1,3 +1,17 @@
+## Version 0.4.1
+
+* This is a resubmission.
+* CRAN's comments led to the following changes:
+
+  - > If there are references describing the methods in your package, please add these in the description field of your DESCRIPTION file
+  - The description field was adjusted, references were included.
+  - > Please unwrap the examples if they are executable in < 5 sec, or replace \dontrun{} with \donttest{}.
+  - `dontrun{}` was replaced by `donttest{}` in examples.
+  - > Please always make sure to reset to user's options(), working directory or par() after you changed it in examples and vignettes and demos.
+  - After manipulations, the mentioned objects were reset to the user's previous state in various places.
+  - > Please do not modify the user's global environment or the user's home filespace by deleting objects:
+  - The `rm(list = ls())` commands in the test files were removed. I thought it was necessary to clean up the workspace after testing.
+
 ## Version 0.4.0
 
 * This is a new (and the maintainer's first) submission
@@ -22,7 +36,7 @@ There were no ERRORs or WARNINGs
 Some test environments return 1 NOTE:
 
 * checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Paul Schmidt-Walter <paul.schmidt-walter@nw-fva.de>'
+Maintainer: 'Paul Schmidt-Walter <paulsw@posteo.de>'
 
 New submission 
 

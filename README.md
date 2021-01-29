@@ -20,7 +20,7 @@ transpiration, interception, soil and snow evaporation, streamflow and
 soil water fluxes through a soil profile covered with vegetation. A set
 of high-level functions for model set up, execution and parallelization
 provide easy access to plot-level SVAT simulations, as well as multi-run
-and large-scale applications
+and large-scale applications.
 
 ## Installation
 
@@ -76,6 +76,7 @@ Plot results
 ``` r
 dates <- with(lwfb90_res$daily_output, as.Date(paste(yr, mo, da, sep = "-")))
 
+oldpar <- par()
 plot(dates,lwfb90_res$daily_output$tran, 
      col = "green", type = 'l', 
      xlab = "", ylab = "Transpiration [mm]")
@@ -89,11 +90,20 @@ axis(4,pretty(c(200,500)))
 mtext("Soil water storage [mm]", side = 4, line =3)
 legend("left", legend = c("tran", "swat"),
        col = c("green", "blue"),  lty = 1, 
-       bty = "n"
-       )
+       bty = "n")
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
+``` r
+par(oldpar)
+#> Warning in par(oldpar): Grafikparameter "cin" kann nicht gesetzt werden
+#> Warning in par(oldpar): Grafikparameter "cra" kann nicht gesetzt werden
+#> Warning in par(oldpar): Grafikparameter "csi" kann nicht gesetzt werden
+#> Warning in par(oldpar): Grafikparameter "cxy" kann nicht gesetzt werden
+#> Warning in par(oldpar): Grafikparameter "din" kann nicht gesetzt werden
+#> Warning in par(oldpar): Grafikparameter "page" kann nicht gesetzt werden
+```
 
 ## Citation
 

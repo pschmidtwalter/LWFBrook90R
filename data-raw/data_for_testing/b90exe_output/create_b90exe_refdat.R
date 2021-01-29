@@ -4,8 +4,6 @@
 
 library(LWFBrook90R)
 library(data.table)
-olwd <- getwd()
-setwd("H:/R-Packages/LWFBrook90R/data-raw/data_for_testing/b90exe_output")
 
 source("writeparamin.R")
 source("writeclimatein.R")
@@ -64,7 +62,6 @@ lapply(exe_res, function(x) setnames(x, names(x), tolower(names(x))))
 
 
 save(pkg_input, exe_res, file = "exe_output.rda")
-setwd(olwd)
-rm(list = ls())
+
 
 

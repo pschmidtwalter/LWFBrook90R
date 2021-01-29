@@ -117,7 +117,6 @@ test_that("single output functions works", {
     "list")
 })
 
-rm(list = ls())
 
 
 

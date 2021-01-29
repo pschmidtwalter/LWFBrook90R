@@ -1,5 +1,6 @@
 # News for the LWFBrook90R-package
 
+## Version 0.4.1 ()
 
 ## Version 0.4.0  (2021-01-15)
 

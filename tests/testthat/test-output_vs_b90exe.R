@@ -158,8 +158,6 @@ test_that("values in BELOANN.ASC are equal", {
   expect_equal(belo_wide, exe_belo_wide, tolerance = 0.001)
 })
 
-# clean up
-rm(list = ls())
 
 
 

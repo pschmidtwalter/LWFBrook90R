@@ -6,6 +6,7 @@ data("slb1_meteo")
 opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-30"))
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 
+
 # manipulate climate
 clim_bad <- slb1_meteo[data.table::year(slb1_meteo$dates) == 2002,]
 clim_bad$dates[170] <- as.Date("2002-06-30")
@@ -16,10 +17,10 @@ expect_error(
           param_b90 = set_paramLWFB90(),
           climate = slb1_meteo,
           soil = soil,
-          rtrn.output = FALSE,
-          rtrn.input = FALSE,
+          rtrn_output = FALSE,
+          rtrn_input = FALSE,
           timelimit = 0.1)
-          )
+)
   })
 
 opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-30"))
@@ -41,5 +42,3 @@ test_that("errorhandling works",{
               rtrn_input = FALSE, rtrn_output = FALSE)
   )
 })
-
-rm(list = ls())

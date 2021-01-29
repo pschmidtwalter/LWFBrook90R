@@ -27,7 +27,7 @@ names(slb1_standprop)[which(names(slb1_standprop) == "density")] <- "densef"
 setDF(slb1_standprop)
 usethis::use_data(slb1_standprop, overwrite = T)
 
-rm(list = ls())
+
 
 # mpot_swc <- read.csv("data-raw/exported_data/slb1_swc_mpot.csv", stringsAsFactors = F)
 # setDT(mpot_swc)

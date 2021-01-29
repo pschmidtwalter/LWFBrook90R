@@ -1,4 +1,4 @@
-\dontrun{
+\donttest{
 data("slb1_meteo")
 data("slb1_soil")
 
@@ -21,7 +21,6 @@ soils <- list(soil1 = soil, soil2 = soil)
 climates <- list(clim1 = slb1_meteo, clim2 = slb1_meteo)
 
 # run two parameter sets on a series of climate and soil-objects
-# (run = FALSE: 'dry' run without actual simulation, only input returned)
 res <- run_multisite_LWFB90(param_b90 = param_l,
                       options_b90 = opts,
                       soil = soils,
