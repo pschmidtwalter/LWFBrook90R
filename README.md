@@ -140,14 +140,14 @@ assign GPL-3 to the Fortran code.
 
 ## References
 
-Federer C.A. (2002): BROOK 90: A simulation model output &lt;-
-set\_outputLWFB90() for evaporation, soil water, and streamflow.
+Federer C.A. (2002): BROOK 90: A simulation model output for
+evaporation, soil water, and streamflow.
 <http://www.ecoshift.net/brook/brook90.htm>
 
 Federer C.A., Vörösmarty, C., Fekete, B. (2003): Sensitivity of Annual
 Evaporation to Soil and Root Properties in Two Models of Contrasting
 Complexity. J. Hydrometeorol. 4, 1276–1290.
-<https://doi.org/10.1029/96WR00801>
+<https://doi.org/10.1175/1525-7541(2003)004>&lt;1276:SOAETS&gt;2.0.CO;2
 
 Hammel, K., Kennel, M. (2001): Charakterisierung und Analyse der
 Wasserverfügbarkeit und des Wasserhaushalts von Waldstandorten in Bayern
