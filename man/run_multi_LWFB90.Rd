@@ -83,7 +83,7 @@ using \code{progressr::handlers()} (see \code{vignette('progressr-intro')}).
 }
 
 \examples{
-\dontrun{
+\donttest{
 data("slb1_meteo")
 data("slb1_soil")
 # Set up lists containing model control options and model parameters:
@@ -100,7 +100,7 @@ opts <- set_optionsLWFB90(startdate = as.Date("2003-06-01"),
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(slb1_soil$texture))
 
 #set up data.frame with variable parameters
-n <- 2
+n <- 10
 set.seed(2021)
 vary_parms <- data.frame(shp_optdoy = runif(n,180,240),
                          shp_budburst = runif(n, 0.1,1),

@@ -170,7 +170,7 @@ swat100cm <- b90res$SWATDAY.ASC[which(nl <= 15), list(swat100cm = sum(swati)),
 Now we can plot soil water storage along with transpiration:
 
 ```{r, fig.height=5, fig.width=7, echo =FALSE, fig.cap="Simulation results for sample data"}
-oldpar <- par()
+oldpar <- par(no.readonly = T)
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
 plot(b90res$EVAPDAY.ASC$dates, 
      b90res$EVAPDAY.ASC$tran, type ='l',

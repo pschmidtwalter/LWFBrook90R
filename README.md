@@ -76,12 +76,11 @@ Plot results
 ``` r
 dates <- with(lwfb90_res$daily_output, as.Date(paste(yr, mo, da, sep = "-")))
 
-oldpar <- par()
+oldpar <- par(no.readonly = TRUE)
 plot(dates,lwfb90_res$daily_output$tran, 
-     col = "green", type = 'l', 
+     col = "green", type = 'l', ylim = c(0,5),
      xlab = "", ylab = "Transpiration [mm]")
-
-par(new = T)
+par(new=TRUE)
 plot(dates, lwfb90_res$daily_output$swat, type = "l", 
      col = "blue", ylim = c(200,500), 
      yaxt = "n", xaxt = "n", ylab = "", xlab = "")
@@ -97,12 +96,6 @@ legend("left", legend = c("tran", "swat"),
 
 ``` r
 par(oldpar)
-#> Warning in par(oldpar): Grafikparameter "cin" kann nicht gesetzt werden
-#> Warning in par(oldpar): Grafikparameter "cra" kann nicht gesetzt werden
-#> Warning in par(oldpar): Grafikparameter "csi" kann nicht gesetzt werden
-#> Warning in par(oldpar): Grafikparameter "cxy" kann nicht gesetzt werden
-#> Warning in par(oldpar): Grafikparameter "din" kann nicht gesetzt werden
-#> Warning in par(oldpar): Grafikparameter "page" kann nicht gesetzt werden
 ```
 
 ## Citation

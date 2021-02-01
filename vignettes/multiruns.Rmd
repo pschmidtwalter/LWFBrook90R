@@ -176,7 +176,7 @@ mrun_dt <- LWFBrook90R:::mrun_dt
 Now we can display the results of the 50 simulations using boxplots:
 
 ```{r,results='hide', fig.height=5, fig.width=7, echo =FALSE, fig.cap = "Growing season soil water storage and transpiration of 50 simulations, with random variation of parameters 'maxlai' and 'glmax'"}
-oldpar <- par()
+oldpar <- par(no.readonly = TRUE)
 par(mfrow = c(1,2))
 boxplot(swat_vp_mean~yr, data = mrun_dt, col = "blue")
 boxplot(tran_vp_sum~yr, data = mrun_dt, col = "green")
