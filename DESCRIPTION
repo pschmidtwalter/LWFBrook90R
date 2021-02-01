@@ -9,7 +9,7 @@ Authors@R: c(person("Paul", "Schmidt-Walter", , "paulsw@posteo.de", role = c("au
              person("Robert", "Nuske", role=c("ctb"), comment=c(ORCID="0000-0001-9773-2061")))
 Description: Provides a flexible and easy-to use interface for the soil vegetation 
     atmosphere transport (SVAT) model LWF-BROOK90 as described in Hammel & Kennel 
-    (2001, ISBN:978-3-933506-16-0) and Federer et al. (2003) <doi:10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2>. 
+    (2001, ISBN:978-3-933506-16-0) and Federer et al. (2003) <doi:10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2>. 
     A set of high-level functions for model set up, execution and parallelization 
     provide easy access to plot-level SVAT simulations, as well as multi-run and large-scale applications.
 License: GPL-3

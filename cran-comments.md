@@ -25,14 +25,31 @@ There were no errors or warnings.
 
 Some test environments return 1 NOTE:
 
-* Found the following (possibly) invalid DOIs:
-  DOI: 10.1175/1525-7541(2003)004<1276:SOAETS
+1. **NEW** Found the following (possibly) invalid DOIs:
+  DOI: 10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
     From: DESCRIPTION
-    Status: Not Found
-    Message: 404
+    Status: libcurl error code 35:
+    	schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
+    Message: Error
     
-  **Comment:** Reference in description field <doi:10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2> is fine when looked up at https://doi.org 
+  **Comment:** DOI reference used in description field is the result of `URLencode('doi:10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2')` The raw DOI is fine when looked up a https://doi.org/, but also gives a check NOTE.
 
+2. Possibly mis-spelled words in DESCRIPTION:
+    Federer (13:40)
+    Hammel (12:67)
+    LWF (3:9, 12:39)
+    SVAT (2:57, 12:27, 15:39)
+    al (13:51)
+    et (13:48)
+    parallelization (14:67)
+
+3. Found the following (possibly) invalid URLs:
+    URL: https://doi.org/10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
+    From: inst/doc/intro_LWFB90.html
+    Status: Error
+    Message: libcurl error code 35:
+      	schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
+  
 ## Version 0.4.0
 
 * This is a new (and the maintainer's first) submission
