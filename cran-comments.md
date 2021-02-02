@@ -32,7 +32,7 @@ Some test environments return 1 NOTE:
     	schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
     Message: Error
     
-  **Comment:** DOI reference used in description field is the result of `URLencode('doi:10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2')` The raw DOI is fine when looked up a https://doi.org/, but also gives a check NOTE.
+  **Comment:** DOI reference used in description field is the result of `URLencode('doi:10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2')` The raw DOI is fine when looked up at https://doi.org/, but also gives a check NOTE, when included as is in description.
 
 2. Possibly mis-spelled words in DESCRIPTION:
     Federer (13:40)
