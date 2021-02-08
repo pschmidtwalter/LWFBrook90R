@@ -6,7 +6,7 @@ Bug fixes:
 
 - `run_LWFB90()`: 
   - `options_b90$root_method = 'table'` gave an error in `make_rootden()` because of a wrong argument name.
-- Fixed bad URLs
+- Fixed bad URLs in documentation
 
 ## Version 0.4.1 (2021-01-02)
 
