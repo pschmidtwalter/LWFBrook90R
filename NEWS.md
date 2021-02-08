@@ -1,6 +1,16 @@
 # News for the LWFBrook90R-package
 
+## Version 0.4.2.9000 (???)
+
+Bug fixes:
+
+- `run_LWFB90()`: 
+  - `options_b90$root_method = 'table'` gave an error in `make_rootden()` because of a wrong argument name.
+- Fixed bad URLs
+
 ## Version 0.4.1 (2012-01-02)
+
+Changes:
 
 - Minor changes to fulfill CRAN publication requirements
 

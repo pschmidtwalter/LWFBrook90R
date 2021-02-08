@@ -1,3 +1,67 @@
+## Version 0.4.2
+
+* This is the 2nd resubmission. Apart from comments below, a bug was fixed and the description field in DESCRIPTION was extended.
+* Gregor Seyer's comments led to the following changes:
+
+  - > Found the following (possibly) invalid URLs: URL: https://doi.org/10.1175/1525-7541(2003)004
+    > From: README.md
+    > Status: 404
+    > Message: Not Found
+  - **Answer**: The URL should now be encoded properly using `URLencode()` and works fine. However, win-builder still raises a NOTE, and I don't know how to fix it. Can it ignored?
+
+  - > URL: https://doi.org/10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2
+    > From: inst/doc/intro_LWFB90.html
+    > Status: Error
+    > Message: libcurl error code 35:
+            schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
+  - **Answer**: The DOI (as a "service" to the reader) was removed from the vignette, because it was not encoded correctly when rendered from 'refs.bib' to an URL. 
+
+  - > Found the following (possibly) invalid DOIs:
+    > DOI: 10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
+    > From: DESCRIPTION
+    > Status: libcurl error code 35:
+          schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
+    > Message: Error
+  - **Answer**: The DOI is encoded correctly and works fine. I dont know how to fix this NOTE. Can it be ignored?
+
+### Test environments
+
+* Ubuntu Linux 20.04.1, R-4.0.3 [local]
+
+* win-builder (http://win-builder.r-project.org/): R-devel / 4.0.3. / 3.6.3
+* Linux Xenial (on travis-ci): R-devel / R-4.0.3 / R-3.6.3
+
+### R CMD check
+
+There were no errors or warnings.
+
+Some test environments return 1 NOTE:
+
+- Possibly mis-spelled words in DESCRIPTION:
+  Evapotranspiration (2:17)
+  Federer (13:40)
+  Hammel (12:67)
+  LWF (3:15, 12:39)
+  SVAT (2:63, 12:27, 17:39)
+  al (13:51)
+  et (13:48)
+  parallelization (16:67)
+  streamflow (15:5)
+
+- Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
+    From: README.md
+    Status: Error
+    Message: libcurl error code 35:
+      	schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
+
+- Found the following (possibly) invalid DOIs:
+  DOI: 10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
+    From: DESCRIPTION
+    Status: libcurl error code 35:
+    	schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
+    Message: Error
+
 ## Version 0.4.1
 
 * This is a resubmission.

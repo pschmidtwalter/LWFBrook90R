@@ -126,10 +126,9 @@ Kennel at Bavarian State Institute of Forestry (LWF) around the year
 upon request as a pre-compiled Fortran command line program together
 with an MS Access User Interface. In 2019, Volodymyr Trotsiuk converted
 the Fortran 77 code to Fortran 95 and implemented the connection to R.
-Paul Schmidt-Walter’s `brook90r`
-(<https://doi.org/10.5281/zenodo.1433677>) package for LWF-Brook90 input
-data generation, model execution and result processing was adapted and
-extended to control this interface function.
+Paul Schmidt-Walter’s `brook90r` (Schmidt-Walter, 2018) package for
+LWF-Brook90 input data generation, model execution and result processing
+was adapted and extended to control this interface function.
 
 ## License
 
@@ -147,9 +146,13 @@ evaporation, soil water, and streamflow.
 Federer C.A., Vörösmarty, C., Fekete, B. (2003): Sensitivity of Annual
 Evaporation to Soil and Root Properties in Two Models of Contrasting
 Complexity. J. Hydrometeorol. 4, 1276–1290.
-<https://doi.org/10.1175/1525-7541(2003)004>&lt;1276:SOAETS&gt;2.0.CO;2
+<https://doi.org/10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2>
 
 Hammel, K., Kennel, M. (2001): Charakterisierung und Analyse der
 Wasserverfügbarkeit und des Wasserhaushalts von Waldstandorten in Bayern
 mit dem Simulationsmodell BROOK90. Forstliche Forschungsberichte München
 185. ISBN 978-3-933506-16-0
+
+Schmidt-Walter, P. (2018). brook90r: Run the LWF-BROOK90 hydrological
+model from within R (Version v1.0.1). Zenodo.
+<http://doi.org/10.5281/zenodo.1433677>
