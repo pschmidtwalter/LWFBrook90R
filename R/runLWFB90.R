@@ -259,7 +259,7 @@ run_LWFB90 <- function(options_b90,
                                                  maxrootdepth = param_b90$maxrootdepth,
                                                  method = options_b90$root_method,
                                                  beta = param_b90$betaroot,
-                                                 rootdat = param_b90$rootden.tab)
+                                                 rootdat = param_b90$rootden_table)
   } else {
     if (!is.null(soil)) {
       param_b90$soil_nodes$rootden <- soil$rootden
@@ -410,7 +410,7 @@ chk_errors <- function(){
     if (simout$error_code != 0L) {
       if (simout$error_code == 1L) stop("Simulation terminated abnormally: 'initial matrix psi > 0'
                                         (rerun with verbose = TRUE to see more information)")
-      if (simout$error_code == 2L) stop("Simulation initialazation failed: 'FWETK failed to determine wetness at KF'
+      if (simout$error_code == 2L) stop("Simulation initialization failed: 'FWETK failed to determine wetness at KF'
                                            (rerun with verbose = TRUE  to see more information)")
       if (simout$error_code == 3L) stop("Simulation terminated abnormally: 'inconsistent dates in climate!'
                                         (rerun with verbose = TRUE  to see more information)")
