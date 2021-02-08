@@ -1,6 +1,6 @@
 # News for the LWFBrook90R-package
 
-## Version 0.4.2.9000 (???)
+## Version 0.4.2 (2021-02-08)
 
 Bug fixes:
 
@@ -8,7 +8,7 @@ Bug fixes:
   - `options_b90$root_method = 'table'` gave an error in `make_rootden()` because of a wrong argument name.
 - Fixed bad URLs
 
-## Version 0.4.1 (2012-01-02)
+## Version 0.4.1 (2021-01-02)
 
 Changes:
 
