@@ -1,20 +1,20 @@
 ## Version 0.4.2
 
-* This is the 2nd resubmission. Apart from comments below, a bug was fixed and the description field in DESCRIPTION was extended.
+* This is the 2nd resubmission. Apart from required changes induced by G. Seyers comments below, a bug was fixed and the description field in DESCRIPTION was extended for more information.
 * Gregor Seyer's comments led to the following changes:
 
   - > Found the following (possibly) invalid URLs: URL: https://doi.org/10.1175/1525-7541(2003)004
     > From: README.md
     > Status: 404
     > Message: Not Found
-  - **Answer**: The URL should now be encoded properly using `URLencode()` and works fine. However, win-builder still raises a NOTE, and I don't know how to fix it. Can it ignored?
+  - **Answer**: *The URL should now be encoded properly using `URLencode()` and works fine. However, win-builder still raises a NOTE (see R CMD check), and I don't know how to fix it. A web search revealed another R developer also had problems with a DOI linking to the another AMS Journal (https://stackoverflow.com/questions/66078248/invalid-url-in-cran-checks). Can it be ignored?*
 
   - > URL: https://doi.org/10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2
     > From: inst/doc/intro_LWFB90.html
     > Status: Error
     > Message: libcurl error code 35:
             schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
-  - **Answer**: The DOI (as a "service" to the reader) was removed from the vignette, because it was not encoded correctly when rendered from 'refs.bib' to an URL. 
+  - **Answer**: *The DOI (as a "service" to the reader) was removed from the vignette, because it was not encoded correctly when rendered from 'refs.bib' to an URL.*
 
   - > Found the following (possibly) invalid DOIs:
     > DOI: 10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
@@ -22,7 +22,7 @@
     > Status: libcurl error code 35:
           schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
     > Message: Error
-  - **Answer**: The DOI is encoded correctly and works fine. I dont know how to fix this NOTE. Can it be ignored?
+  - **Answer**: The DOI is encoded correctly and works fine. Can it be ignored (see above)?
 
 ### Test environments
 
