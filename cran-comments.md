@@ -1,13 +1,14 @@
 ## Version 0.4.2
 
-* This is the 2nd resubmission. Apart from required changes induced by G. Seyers comments below, a bug was fixed and the description field in DESCRIPTION was extended for more information.
-* Gregor Seyer's comments led to the following changes:
+* This is the 2nd resubmission. Apart from required changes induced by G. Seyers comments below, a bug was fixed, the title was slightly modified, the description field in DESCRIPTION was extended for more information, and the funding institutions were listed in Authors@R field, following advice of R. Nuske. 
+* Gregor Seyer's (CRAN) comments led to the following changes:
 
-  - > Found the following (possibly) invalid URLs: URL: https://doi.org/10.1175/1525-7541(2003)004
+  - > Found the following (possibly) invalid URLs: 
+    > URL: https://doi.org/10.1175/1525-7541(2003)004
     > From: README.md
     > Status: 404
     > Message: Not Found
-  - **Answer**: *The URL should now be encoded properly using `URLencode()` and works fine. However, win-builder still raises a NOTE (see R CMD check), and I don't know how to fix it. A web search revealed another R developer also had problems with a DOI linking to the another AMS Journal (https://stackoverflow.com/questions/66078248/invalid-url-in-cran-checks). Can it be ignored?*
+  - **Answer**: *The URL should now be encoded properly using `URLencode()` and works fine. However, win-builder still raises a NOTE (see R CMD check), and I don't know how to fix it. A web search revealed another R developer also had problems with a DOI linking to another AMS Journal (https://stackoverflow.com/questions/66078248/invalid-url-in-cran-checks), pointing to a server problem. Can it be ignored?*
 
   - > URL: https://doi.org/10.1175/1525-7541(2003)004<1276:SOAETS>2.0.CO;2
     > From: inst/doc/intro_LWFB90.html
