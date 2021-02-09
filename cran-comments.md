@@ -1,4 +1,4 @@
-## Version 0.4.2
+## Version 0.4.3
 
 * Third resubmission.
 * Uwe Ligge's (CRAN) comment:
