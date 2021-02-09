@@ -155,4 +155,4 @@ mit dem Simulationsmodell BROOK90. Forstliche Forschungsberichte München
 
 Schmidt-Walter, P. (2018). brook90r: Run the LWF-BROOK90 hydrological
 model from within R (Version v1.0.1). Zenodo.
-<http://doi.org/10.5281/zenodo.1433677>
+<https://doi.org/10.5281/zenodo.1433677>

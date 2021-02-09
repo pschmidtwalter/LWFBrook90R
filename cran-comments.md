@@ -1,5 +1,28 @@
 ## Version 0.4.2
 
+* Third resubmission.
+* Uwe Ligge's (CRAN) comment:
+
+ - > Found the following (possibly) invalid URLs:
+    URL: http://doi.org/10.5281/zenodo.1433677 (moved to https://doi.org/10.5281/zenodo.1433677)
+      From: README.md
+      Status: 200
+      Message: OK 
+ - **Answer**: I am wondering how this could happen! I fixed it. Thank you very much!
+
+### Test environments
+
+* Ubuntu Linux 20.04.1, R-4.0.3 [local]
+
+* win-builder (http://win-builder.r-project.org/): R-devel / 4.0.3. / 3.6.3
+* Linux Xenial (on travis-ci): R-devel / R-4.0.3 / R-3.6.3
+
+### R CMD check
+
+There were no errors or warnings.
+
+## Version 0.4.2
+
 * This is the 2nd resubmission. Apart from required changes induced by G. Seyers comments below, a bug was fixed, the title was slightly modified, the description field in DESCRIPTION was extended for more information, and the funding institutions were listed in Authors@R field, following advice of R. Nuske. 
 * Gregor Seyer's (CRAN) comments led to the following changes:
 

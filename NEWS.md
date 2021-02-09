@@ -1,5 +1,9 @@
 # News for the LWFBrook90R-package
 
+## Version 0.4.3 (2021-02-09)
+
+- Minor changes to fulfill CRAN publication requirements
+
 ## Version 0.4.2 (2021-02-08)
 
 Bug fixes:
