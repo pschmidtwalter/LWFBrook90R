@@ -10,6 +10,10 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Travis build
 status](https://travis-ci.com/pschmidtwalter/LWFBrook90R.svg?branch=master)](https://travis-ci.com/pschmidtwalter/LWFBrook90R)
+[![CRAN](https://www.r-pkg.org/badges/version/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <!-- badges: end -->
 
 `LWFBroo90R` provides an implementation of the Soil Vegetation
@@ -66,28 +70,25 @@ lwfb90_res <- run_LWFB90(options_b90 = opts,
                          param_b90 = parms,
                          climate = slb1_meteo,
                          soil = soil)
-
-# View structure of result list object
-str(lwfb90_res, max.level = 1)
 ```
 
 Plot results
 
 ``` r
-dates <- with(lwfb90_res$daily_output, as.Date(paste(yr, mo, da, sep = "-")))
-
 oldpar <- par(no.readonly = TRUE)
-plot(dates,lwfb90_res$daily_output$tran, 
-     col = "green", type = 'l', ylim = c(0,5),
-     xlab = "", ylab = "Transpiration [mm]")
+
+dates <- with(lwfb90_res$daily_output, as.Date(paste(yr, mo, da, sep = "-")))
+par(mar = c(2,4.1,1,4.1))
+plot(dates,lwfb90_res$daily_output$evap, 
+     col = "green", type = 'l', ylim = c(0,7),
+     xlab = "", ylab = "Evapotranspiration [mm]")
 par(new=TRUE)
 plot(dates, lwfb90_res$daily_output$swat, type = "l", 
      col = "blue", ylim = c(200,500), 
      yaxt = "n", xaxt = "n", ylab = "", xlab = "")
-
 axis(4,pretty(c(200,500)))
 mtext("Soil water storage [mm]", side = 4, line =3)
-legend("left", legend = c("tran", "swat"),
+legend("left", legend = c("ET", "Swat"),
        col = c("green", "blue"),  lty = 1, 
        bty = "n")
 ```
@@ -134,7 +135,7 @@ was adapted and extended to control this interface function.
 
 GPL-3 for all Fortran and R code. `brook90r` has GPL-3, while
 LWF-Brook90 was without license until recently. Lothar Zimmermann and
-Stephan Raspe (LWF), as well as all Fortran contributors agreed to
+Stephan Raspe (LWF), and all previous Fortran contributors agreed to
 assign GPL-3 to the Fortran code.
 
 ## References
