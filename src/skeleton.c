@@ -6,7 +6,7 @@
 
 void F77_NAME(s_brook90_f)(double *siteparam, double *climveg, double *param, double *pdur,
     double *soil_materials, double *soil_nodes, double *precdat,
-    int *pr, int *error, int *timer, double *output_day, double *output_layer);
+    int *pr, int *timer, int *error, double *output_day, double *output_layer);
 
 extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEXP soil_materials,
     SEXP soil_nodes, SEXP precdat, SEXP pr, SEXP timer, SEXP n_m, SEXP n_l){
