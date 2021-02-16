@@ -49,10 +49,10 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     real(kind=c_double), dimension( INT(param(1)*siteparam(6)),6), intent(in) :: precdat
 
     ! Printing
-    logical(kind=c_bool), intent(in) :: pr
+    integer(kind=c_int), intent(in) :: pr
 
     ! Check execution time
-    logical(kind=c_bool), intent(in) :: timer
+    integer(kind=c_int), intent(in) :: timer
 
     ! Error-code
     integer(kind=c_int), intent(inout) :: error
@@ -108,7 +108,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     if ( error .ne. 0 ) go to 999
 
     ! Check for timelimits set by R-user
-    if (timer) call rchkusr()
+    if (timer .EQ. 1) call rchkusr()
 
     ! more initial soil water variables
     CALL SOILVAR(NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
@@ -160,7 +160,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         END IF
 
         ! Check for timelimits set by R-user
-        if (timer) call rchkusr()
+        if (timer .EQ. 1) call rchkusr()
 
 !       * * I N P U T   W E A T H E R   L I N E   F R O M   D F I L E . D A T * *
 !       next line can be modified for different input formats
@@ -184,7 +184,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
         IF (YEAR .NE. YY .OR. MONTH .NE. MM .OR. DOM .NE. DD) THEN
             error = 3
-            if (pr) then
+            if (pr .EQ. 1) then
               call intpr("STOP - inconsistent dates in climate - expected (year, month, day):", -1, &
               (/ YEAR, MONTH, DOM/),3)
               call intpr("but got", -1, (/ YY, MM, DD/),3)
@@ -418,7 +418,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             !        *  *  *  *  *  *  B E G I N   I T E R A T I O N   *  *  *  *  *  *  *
 
             ! Check for timelimits set by R-user
-            if (timer) call rchkusr()
+            if (timer .EQ. 1) call rchkusr()
 
 101         CONTINUE
 !         write(10,*)'begin iteration'
@@ -785,7 +785,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !    end if
 
 !     ***************   E N D    D A Y   L O O P    **************************
-999 if ( pr ) then
+999 if (pr .EQ. 1) then
         if ( error.ne.0 ) then
             call intpr("Finished with errors", -1,(/ 0/),0)
         else
@@ -1347,7 +1347,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                            ! SWATMX(i)
     real(kind=8) :: DPSIMX    ! maximum potential difference considered
                            ! "equal", kPa
-    logical(kind=1) :: pr  ! print output to console?
+    integer :: pr  ! print output to console?
 
 !     output
     real(kind=8) :: DTINEW    ! second estimate of DTI
@@ -1393,7 +1393,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
 
-                    if (pr) then
+                    if (pr .EQ. 1) then
                         call realpr('xxx i=, th=, thr=, netflow=, thick=, K=, Psi=', -1, &
                             (/real(j,8),th,thr,NTFLI(j),Thick(j),K,PSI/), 7)
                     end if
@@ -1413,7 +1413,7 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
                     psi=FPSIM(Wetnes(j),Par(1,j),iModel)
                     K= FK(Wetnes(j),Par(1,j),iModel)
 
-                    if (pr) then
+                    if (pr .EQ. 1) then
                         call realpr('xxx i=, th=, netflow=, thick=, K=, Psi=', -1, &
                             (/real(j,8),th,NTFLI(j),Thick(j),K,PSI/),7)
                     end if
@@ -1928,8 +1928,8 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
     real(kind=8) :: PSICR     ! minimum plant leaf water potential, MPa
     integer :: iModel    ! parameterization of hydraulic functions
     real(kind=8) :: Par(MPar,ML)  ! parameter array
-    logical(kind=1) :: pr     ! print messages to console?
-    logical(kind=1) :: timer     ! check timelimits set by R-user?
+    integer :: pr     ! print messages to console?
+    integer :: timer     ! check timelimits set by R-user?
 !       output
     real(kind=8) :: PSIG(*)   ! gravity potential, kPa
     real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
@@ -1975,7 +1975,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             IF (PSIM(I) .GT. 0.0d0) THEN
                 !print*, 'matrix psi must be negative or zero'
                 error = 1
-                if ( pr ) call intpr("STOP: positive matrix potential occured in layer no.:", -1, (/ I/),1)
+                if ( pr .EQ. 1 ) call intpr("STOP: positive matrix potential occured in layer no.:", -1, (/ I/),1)
                 return
             ELSEIF (PSIM(I) .EQ. 0.0d0) THEN
                 WETNES(I) = 1.0d0
@@ -2009,7 +2009,7 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
             IF (PSIM(I) .GT. 0.) THEN
                 !print*, 'matrix psi must be negative or zero'
                 error = 1
-                if ( pr ) call intpr("STOP: positive matrix potential occured in layer no.:", -1,(/ I/), 1 )
+                if ( pr .EQ. 1 ) call intpr("STOP: positive matrix potential occured in layer no.:", -1,(/ I/), 1 )
                 return
             ELSE
                 WETNES(I) =FWETNES(PSIM(i),Par(1,i),iModel)
@@ -3085,8 +3085,8 @@ function FWETK (K, Par, iModel, pr, timer)
     IMPLICIT NONE
 !     input
     integer iModel   ! parameterization of hydraulic functions
-    logical(kind=1) :: pr ! print messages flag
-    logical(kind=1) :: timer ! Check-Flag for timelimits set by user
+    integer :: pr ! print messages flag
+    integer :: timer ! Check-Flag for timelimits set by user
     real(kind=8) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
 !     real(kind=8) :: THS      ! water content at saturation
@@ -3118,7 +3118,7 @@ function FWETK (K, Par, iModel, pr, timer)
     FWETK = 0.0d0
 
     if(iModel .eq. 0) then
-        if ( pr ) call intpr("Function FWETK can not be called for iModel=0, stopping program", -1,(/ 0/),0)
+        if (pr .EQ. 1) call intpr("Function FWETK can not be called for iModel=0, stopping program", -1,(/ 0/),0)
         !print*, 'Function FWETK can not be called for iModel=0, stopping program'
         FWETK = -99999.d0
         return
@@ -3149,8 +3149,8 @@ function FWETK (K, Par, iModel, pr, timer)
         end if
 
         if(Konver .gt. 1.0d0) then
-            if ( pr ) call intpr("FWETK: no convergence found, trying next iteration!", -1,(/ 0/),0)
-            if ( timer ) call rchkusr()
+            if (pr .EQ. 1) call intpr("FWETK: no convergence found, trying next iteration!", -1,(/ 0/),0)
+            if (timer .EQ. 1) call rchkusr()
 !            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in !original program
 !                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 0, 0)
 !                FWETK = -99999.d0
@@ -3170,7 +3170,7 @@ function FWETK (K, Par, iModel, pr, timer)
         if(dKdS1 .ne. 0.0d0) then
             WetNew=WetOld-KOld/dKdS1
         else
-            if ( pr ) call intpr("FWETK: slope is zero, stopping programm!", -1,(/ 0/), 0)
+            if ( pr .EQ. 1 ) call intpr("FWETK: slope is zero, stopping programm!", -1,(/ 0/), 0)
             FWETK = -99999.d0
             return
         end if
@@ -3180,8 +3180,8 @@ function FWETK (K, Par, iModel, pr, timer)
         It=It+1
 !            Write (*,'('' Konv: '',E10.5,'' WetOld: '',F10.7)')Konver,WetOld
         if(It .eq. ItMax) then
-            if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1,(/ 0/),0)
-            if ( timer ) call rchkusr()
+            if ( pr .EQ. 1 ) call intpr("FWETK: maximum number of iterations exceeded, adjusting K!", -1,(/ 0/),0)
+            if (timer .EQ. 1) call rchkusr()
             K=K/2.0d0
             Goto 5
 !              stop
