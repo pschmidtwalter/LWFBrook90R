@@ -14,7 +14,7 @@ status](https://travis-ci.com/pschmidtwalter/LWFBrook90R.svg?branch=master)](htt
 [![](https://cranlogs.r-pkg.org/badges/grand-total/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4529070.svg)](https://doi.org/10.5281/zenodo.4529070)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3760298.svg)](https://doi.org/10.5281/zenodo.3760298)
 <!-- badges: end -->
 
 `LWFBroo90R` provides an implementation of the Soil Vegetation
