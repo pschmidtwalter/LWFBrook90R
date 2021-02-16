@@ -14,7 +14,7 @@
 !     xxxxMflow for month, mm
 !     xxxxYflow for year, mm
 
-integer, parameter :: ML = 1000, MPar= 10, MMat=20, Reset=1
+integer, parameter :: ML = 100, MPar= 10, MMat=20, Reset=1
 real(kind=8) :: B0              !,B1,B2,B3,B4,B5     ! buffer
 !real(kind=8) :: A0,A1           !,A2,A3,A4,A5     ! buffer
 real(kind=8) :: AA              ! average available energy over daytime or nighttime, W/m2
