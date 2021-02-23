@@ -171,7 +171,7 @@ real(kind=8) :: NTFLI(ML)       ! net flow rate into layer, mm/d
 real(kind=8) :: NTFLPI(ML), NTFLDI(ML) !, NTFLMI(ML), NTFLYI(ML)
 ! integer :: OP(10,5)             ! * output file selections
 real(kind=8) :: ParMat(MPar,MMat) ! hydraulic parameters for material
-real(kind=8) :: Par(MPar,ML)    ! hydraulic parameters for layer
+real(kind=8), allocatable, dimension(:,:) :: Par    ! hydraulic parameters for layer
 real(kind=8) :: PINT            ! average potential interception for day, mm/d
 real(kind=8) :: PINTD           !, PINTM, PINTY, PINTVP ! potential interception, mm
 real(kind=8) :: PIR(2)          ! potential interception rate for daytime or night, mm/d

@@ -63,6 +63,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     ! Variables
     include 'VARDCL.h'
+
+    allocate( Par(MPar, ML) )
     DATA DAYMO / 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/
     error = 0._c_int
 
@@ -792,6 +794,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             call intpr("THAT IS THE END", -1,(/ 0/),0)
         end if
     end if
+
+    deallocate( PAR )
 end subroutine s_brook90_f
 
 
