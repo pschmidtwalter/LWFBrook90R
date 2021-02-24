@@ -757,7 +757,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         DOY = DOY + 1
         IDAY = IDAY + 1
 
-!        if( pr ) then
+!        if( pr .eq. 1) then
 !            if( MOD(IDAY,20) .eq. 2 ) then
 !        call intpr("date         store  inter  snow    rain  et   drain  lat   ep    tp   mbal error", &
 !                     -1, 0, 0)
@@ -780,7 +780,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
     end if
 
-!    if( pr ) then
+!    if( pr .eq. 1) then
 !        call intpr(" ", -1, 0, 0)
 !        call intpr("TOTAL:   inter     snow    rain    et      drain     lat", -1, 0, 0)
 !        call intpr(makeString(6, (/TINT,TSNOW,TPREC,TEVAP,TVRFL,TSFLD/), 21,'(5X,2F9.2,F9.1,3F8.1)'), -1, 0, 0)
@@ -3156,7 +3156,7 @@ function FWETK (K, Par, iModel, pr, timer)
             if (pr .EQ. 1) call intpr("FWETK: no convergence found, trying next iteration!", -1,(/ 0/),0)
             if (timer .EQ. 1) call rchkusr()
 !            if(Itk .eq. ItKonv) then ! VT 2019.11.29 To limit number of iteration for convergence. This was in !original program
-!                if ( pr ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 0, 0)
+!                if ( pr  .eq. 1 ) call intpr("FWETK: maximum number of iterations exceeded, stopping program!", -1, 0, 0)
 !                FWETK = -99999.d0
 !                return
 !            end if
