@@ -29,7 +29,7 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
     setAttrib( output_layer, R_DimSymbol, dims);
 
     F77_CALL(s_brook90_f)(REAL(siteparam), REAL(climveg), REAL(param), REAL(pdur), REAL(soil_materials),
-        REAL(soil_nodes), REAL(precdat), LOGICAL(pr), LOGICAL(timer), INTEGER(error), REAL(output_day), REAL(output_layer));
+        REAL(soil_nodes), REAL(precdat), INTEGER(pr), INTEGER(timer), INTEGER(error), REAL(output_day), REAL(output_layer));
 
     SEXP out_full = PROTECT( allocVector(VECSXP, 3) );
     SET_VECTOR_ELT(out_full, 0, error);
