@@ -46,6 +46,9 @@ make_rootden <- function(soilnodes,
 
   if (method == "betamodel") {
 
+    # limit root depth to soil depth
+    maxrootdepth <- max(min(soilnodes), maxrootdepth)
+
     # only positive d-values allowed in beta-model:
     maxrootdepth <- maxrootdepth * (-100)
     soilnodes <- soilnodes * (-100)

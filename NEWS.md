@@ -1,4 +1,10 @@
 # News for the LWFBrook90R-package
+# Version 0.4.5.9000 (???)
+
+Bug fixes:
+
+- fixed bug in `make_rootden()` for `method = 'betamodel'` leading to negative 
+root density of the top layer when supplied `maxrootdepth` was lower than soil depth.
 
 ## Version 0.4.4. (2021-02-24)
 

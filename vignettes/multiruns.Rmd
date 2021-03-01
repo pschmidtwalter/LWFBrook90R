@@ -33,13 +33,13 @@ problem can be tackled using the function `run_multisite_LWFB90()`.
 
 Both functions are wrapper functions for `run_LWFB90()` and allow for parallel
 processing of tasks, using a specified number of CPUs to speed up the execution
-of a multi-run simulation. They return large lists containing the individual
+of a multi-run simulation. They return lists containing the individual
 single run simulation results, as they are returned by `run_LWFB90()`. These
 result-lists can become very large if many simulations are performed, and the
 selected output comprises daily data sets and especially the individual soil
 layers' daily soil moisture states. Huge amounts of data produced can overload
-the memory, I therefore start this vignette with a section on how to make best
-use of the `output_fun`-argument of `run_LWFB90()` for output data management.
+the memory, this vignette therefore starts with a data management section on how to make best
+use of the `output_fun`-argument of `run_LWFB90()` to reduce the amount of data returned.
 
 ```{r, warning = FALSE, message = FALSE, eval = TRUE}
 library(LWFBrook90R)
