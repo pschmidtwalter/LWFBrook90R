@@ -41,7 +41,7 @@ and the development version can be installed from
 package `remotes`:
 
 ``` r
-remotes::install_github(repo="pschmidtwalter/LWFBrook90R") 
+remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes = TRUE) 
 ```
 
 ## Usage

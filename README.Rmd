@@ -44,7 +44,7 @@ install.packages("LWFBrook90R")
 and the development version can be installed from [Github](https://github.com/pschmidtwalter/LWFBrook90R) using the package `remotes`:
 
 ```{r, eval = FALSE}
-remotes::install_github(repo="pschmidtwalter/LWFBrook90R") 
+remotes::install_github(repo="pschmidtwalter/LWFBrook90R", build_vignettes = TRUE) 
 ```
 
 ## Usage

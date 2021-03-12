@@ -41,7 +41,7 @@
 #' @param run Logical: run LWF-Brook90 or only return model input objects?
 #'   Useful to inspect the effects of options and parameters on model input.
 #'   Default is TRUE.
-#' @param timelimit Integer to set elapsed time limits for running LWF-Brook90.
+#' @param timelimit Integer to set elapsed time limits (seconds) for running LWF-Brook90.
 #' @param verbose Logical: print messages to the console? Default is FALSE.
 #' @param ... Additional arguments passed to \code{output_fun} and/or
 #'   \code{climate}, if the latter is a function.
