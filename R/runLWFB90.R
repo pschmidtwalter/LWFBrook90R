@@ -224,10 +224,17 @@ run_LWFB90 <- function(options_b90,
   # constrain data to simulation period
   climate <- climate[which(climate$dates >= options_b90$startdate
                            & climate$dates <= options_b90$enddate),]
-
+  if (!is.null(precip)){
+    precip <- precip[which(precip$dates >= options_b90$startdate
+                           & precip$dates <= options_b90$enddate),]
+  }
+  
   ## Precipitation correction (Richter) ----
   if (options_b90$correct_prec == TRUE) {
-    climate$prec <- with(climate, correct_prec(month, tmean, prec,
+    if (!is.null(precip)) {
+      warning("Correction of precipitation not possible for sub-daily precipitation data! Doing nothing.")
+    }
+    climate$prec <- with(climate, correct_prec(mo, tmean, prec,
                                                station.exposure = param_b90$prec_corr_statexp))
   }
 
@@ -285,7 +292,7 @@ run_LWFB90 <- function(options_b90,
       climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
                                   "vappres","windspeed","prec","mesfl")],
                       standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
-      precdat = precip,
+      precdat = precip[,c("yr", "mo", "da","ii","prec", "mesfl")],
       param = param_to_rlwfbrook90(param_b90, options_b90$imodel),
       pdur = param_b90$pdur,
       soil_materials = param_b90$soil_materials,
@@ -520,9 +527,9 @@ chk_clim <- function() {
     # }
 
     if (any(!c("yr", "mo", "da") %in% names(climate))) {
-      climate$yr <- as.integer(format(climate$dates, "%Y"))
-      climate$mo <- as.integer(format(climate$dates, "%m"))
-      climate$da <- as.integer(format(climate$dates, "%d"))
+      climate$yr <- data.table::year(climate$dates)
+      climate$mo <- data.table::month(climate$dates)
+      climate$da <- data.table::mday(climate$dates)
     }
 
     if (!any( names(climate) == "mesfl") ) {
@@ -547,10 +554,9 @@ chk_clim <- function() {
           precip <- NULL
         } else {
           precip$ii <- rep(1:options_b90$prec_interval,nrow(climate))
-          precip$yr <- as.integer(format(precip$dates, "%Y"))
-          precip$mo <- as.integer(format(precip$dates, "%m"))
-          precip$da <- as.integer(format(precip$dates, "%d"))
-          precip <- precip[, c("yr","mo","da", "ii", "prec", "mesfl")]
+          precip$yr <- data.table::year(precip$dates)
+          precip$mo <- data.table::month(precip$dates)
+          precip$da <- data.table::mday(precip$dates)
           climate$prec <- -999
         }
       }
