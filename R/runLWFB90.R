@@ -76,7 +76,9 @@
 #' mo \tab month \tab - \cr
 #' da \tab day of month \tab - \cr
 #' doy \tab day of year \tab - \cr
+#' aa \tab average available energy above canopy \tab W/m2 \cr
 #' adef \tab available water deficit in root zone \tab mm \cr
+#' asubs \tab average available energy below canopy \tab W/m2 \cr
 #' awat \tab total available soil water in layers with roots between -6.18 kPa and \code{param_b90$psicr} \tab mm \cr
 #' balerr \tab error in water balance \tab mm \cr
 #' byfl \tab total bypass flow \tab mm \cr
@@ -89,6 +91,7 @@
 #' ints \tab intercepted snow at the end of the time interval \tab mm \cr
 #' irvp \tab evaporation of intercepted rain \tab mm \cr
 #' isvp \tab evaporation of intercepted snow \tab mm \cr
+#' lngnet \tab net longwave radiation \tab W/m2 \cr
 #' nits \tab total number of iterations in time interval \tab - \cr
 #' pint \tab potential interception for a canopy always wet \tab mm \cr
 #' pslvp \tab potential soil evaporation \tab mm \cr
@@ -105,6 +108,8 @@
 #' sint \tab snow interception \tab mm \cr
 #' slfl \tab input to soil surface \tab mm \cr
 #' slvp \tab evaporation rate from soil \tab mm \cr
+#' slrad \tab average solar radiation on slope over daytime \tab W/m2 \cr
+#' solnet \tab net solar radiation on slope over daytime \tab W/m2 \cr
 #' smlt \tab snowmelt \tab mm \cr
 #' snow \tab snowpack water equivalent \tab mm \cr
 #' snvp \tab evaporation from snowpack \tab mm \cr
@@ -228,7 +233,7 @@ run_LWFB90 <- function(options_b90,
     precip <- precip[which(precip$dates >= options_b90$startdate
                            & precip$dates <= options_b90$enddate),]
   }
-  
+
   ## Precipitation correction (Richter) ----
   if (options_b90$correct_prec == TRUE) {
     if (!is.null(precip)) {
@@ -321,7 +326,8 @@ run_LWFB90 <- function(options_b90,
                            'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
                            'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
                            'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
-                           'stres','adef','awat','relawat','nits','balerr'))
+                           'stres','adef','awat','relawat','nits','balerr', 'slrad',
+                           'solnet', 'lngnet', 'aa', 'asubs'))
 
     # layer outputs
     simout$layer_output <- data.table::rbindlist(lapply(seq(dim(simout$layer_output)[3]),

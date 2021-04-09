@@ -17,7 +17,7 @@
 integer, parameter :: ML = 1000, MPar= 10, MMat=20, Reset=1
 real(kind=8) :: B0              !,B1,B2,B3,B4,B5     ! buffer
 !real(kind=8) :: A0,A1           !,A2,A3,A4,A5     ! buffer
-real(kind=8) :: AA              ! average available energy over daytime or nighttime, W/m2
+real(kind=8) :: AA(2)           ! average available energy over daytime or nighttime, W/m2
 real(kind=8) :: ADEF            ! available water deficit in root zone, mm, output only
 real(kind=8) :: ALB             ! * albedo with no snow
 real(kind=8) :: ALBEDO          ! albedo
@@ -25,7 +25,7 @@ real(kind=8) :: ALBSN           ! * albedo with snow on the ground
 real(kind=8) :: ALPHA(ML)       ! modified Cowan alpha, MPa
 real(kind=8) :: age             ! * age of vegetation
 real(kind=8) :: ASPECT          ! * aspect, degrees through east from north
-real(kind=8) :: ASUBS           ! average avail. energy at ground over day or night, W/m2
+real(kind=8) :: ASUBS(2)        ! average avail. energy at ground over day or night, W/m2
 real(kind=8) :: ATR(2)          ! actual transpiration rate for daytime or night, mm/d
 real(kind=8) :: ATRANI(ML)      ! actual transp.rate from layer for daytime or night,mm/d
 real(kind=8) :: ATRI(2,ML)      ! actual transp.rate from layer for daytime and night,mm/d
@@ -144,6 +144,7 @@ real(kind=8) :: LAIMLT          ! * parameter for snowmelt dependence on LAI,dim
 real(kind=8) :: LAT             ! **** latitude, degrees
 real(kind=8) :: LENGTH          ! * slope length for DSFL, m
 real(kind=8) :: LPC             ! * minimum LAI defining a closed canopy
+real(kind=8) :: LNGNET(2)       ! Net Longwave radiation for day and night, W m-2
 real(kind=8) :: LWIDTH          ! * leaf width, m
 integer :: mat(ML)              ! * material index for layer
 real(kind=8) :: MAXLQF          ! * maximum liquid water fraction of SNOW, dimensionless

@@ -58,7 +58,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     integer(kind=c_int), intent(inout) :: error
 
     ! Output matrix
-    real(kind=c_double), dimension( INT(param(1)),41), intent(inout) :: output_day
+    real(kind=c_double), dimension( INT(param(1)), 46), intent(inout) :: output_day
     real(kind=c_double), dimension( INT(param(1)), 16, INT(param(65))), intent(inout) :: output_layer
 
     ! Variables
@@ -85,7 +85,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     GWAT = siteparam( 5 )
     NPINT = INT( siteparam( 6 ) )
 
-    LAT = LAT / 57.296
+    LAT = LAT / 57.296 ! convert to lat: 180/pi
 
     ! read PRFILE.DAT if requested
     ! Need to do
@@ -262,8 +262,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             END IF
 
             CALL AVAILEN(SLRAD, ALBEDO, C1, C2, C3, TAJ, EA, &
-                SOLRAD / I0HDAY, SHEAT, CR, LAI, SAI, AA, ASUBS)
-
+                SOLRAD / I0HDAY, SHEAT, CR, LAI, SAI, AA(J), ASUBS(J),LNGNET(J))
+            !AADTNT(J) = AA
 !           vapor pressure deficit
             CALL ESAT(TAJ, ES, DELTA)
 !                       ^^  ^^^^^
@@ -271,26 +271,25 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !        Shuttleworth-Wallace resistances
             CALL SWGRA(UAJ, ZA, HEIGHT, Z0, DISP, Z0C, DISPC, Z0GS, &
                 LWIDTH, RHOTP, NN, LAI, SAI, RAA, RAC, RAS)
-
-!                                        ^^^  ^^^  ^^^
+!                                            ^^^  ^^^  ^^^
             IF (J .EQ. 1) THEN
                 CALL SRSC(SLRAD, TA, VPD, LAI, SAI, GLMIN, GLMAX, R5, CVPD, &
                     RM, CR, TL, T1, T2, TH, RSC)
-!                                      ^^^
+!                                           ^^^
             ELSE
                 RSC = 1.0d0 / (GLMIN * LAI)
             END IF
 !           Shuttleworth-Wallace potential transpiration and ground evaporation
 !           rates
-            CALL SWPE(AA, ASUBS, VPD, RAA, RAC, RAS, RSC, RSS, DELTA, PTR(J), GER(J))
+            CALL SWPE(AA(J), ASUBS(J), VPD, RAA, RAC, RAS, RSC, RSS, DELTA, PTR(J), GER(J))
 
 !        Shuttleworth-Wallace potential interception and ground evap. rates
 !        (RSC=0)
-            CALL SWPE(AA, ASUBS, VPD, RAA, RAC, RAS, 0.0d0, RSS, DELTA, PIR(J), GIR(J))
+            CALL SWPE(AA(J), ASUBS(J), VPD, RAA, RAC, RAS, 0.0d0, RSS, DELTA, PIR(J), GIR(J))
 
 !        Shuttleworth-Wallace potential interception and ground evap. rates
 !        (RSS=0)
-            CALL SWPE(AA, ASUBS, VPD, RAA, RAC, RAS, RSC, 0.0d0, DELTA, B0, PGER(J))
+            CALL SWPE(AA(J), ASUBS(J), VPD, RAA, RAC, RAS, RSC, 0.0d0, DELTA, B0, PGER(J))
 
 !        actual transpiration and ground evaporation rates
             IF (PTR(J) .GT. .0010d0) THEN
@@ -302,7 +301,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 11              CONTINUE
                 IF (ATR(J) .LT. PTR(J)) THEN
 !              soil water limitation, new GER
-                    CALL SWGE(AA, ASUBS, VPD, RAA, RAS, RSS, DELTA, ATR(J), GER(J))
+                    CALL SWGE(AA(J), ASUBS(J), VPD, RAA, RAS, RSS, DELTA, ATR(J), GER(J))
                 END IF
             ELSE
 !           no transpiration, condensation ignored, new GER
@@ -311,7 +310,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                 DO 21 I = 1, NLAYER
                     ATRI(J, I) = 0.0d0
 21              CONTINUE
-                CALL SWGE(AA, ASUBS, VPD, RAA, RAS, RSS, DELTA, 0.0d0, GER(J))
+                CALL SWGE(AA(J), ASUBS(J), VPD, RAA, RAS, RSS, DELTA, 0.0d0, GER(J))
             END IF
 300     CONTINUE
 !     * * * * * * * * *  E N D   D A Y - N I G H T   L O O P  * * * * * * * * * * * * * *
@@ -601,7 +600,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                             UAJ = UANTM
                         END IF
                         CALL AVAILEN(SLRAD, ALBEDO, C1, C2, C3, TAJ, EA, &
-                            SOLRAD / I0HDAY, SHEAT, CR, LAI, SAI, AA, ASUBS)
+                            SOLRAD / I0HDAY, SHEAT, CR, LAI, SAI, AA(J), ASUBS(J),LNGNET(J))
 
 !         vapor pressure deficit
                         CALL ESAT(TAJ, ES, DELTA)
@@ -619,13 +618,13 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                         END IF
 !         Shuttleworth-Wallace potential transpiration and ground evaporation
 !         rates
-                        CALL SWPE(AA, ASUBS, VPD, RAA, RAC, RAS, RSC, RSS, DELTA, PTR(J), GER(J))
+                        CALL SWPE(AA(J), ASUBS(J), VPD, RAA, RAC, RAS, RSC, RSS, DELTA, PTR(J), GER(J))
 !         Shuttleworth-Wallace potential interception and ground evap. rates
 !         (RSC=0)
-                        CALL SWPE(AA, ASUBS, VPD, RAA, RAC, RAS, 0.0d0, RSS, DELTA, PIR(J), GIR(J))
+                        CALL SWPE(AA(J), ASUBS(J), VPD, RAA, RAC, RAS, 0.0d0, RSS, DELTA, PIR(J), GIR(J))
 !         Shuttleworth-Wallace potential interception and ground evap. rates
 !          (RSS=0)
-                        CALL SWPE(AA, ASUBS, VPD, RAA, RAC, RAS, RSC, 0.0d0, DELTA, B0, PGER(J))
+                        CALL SWPE(AA(J), ASUBS(J), VPD, RAA, RAC, RAS, RSC, 0.0d0, DELTA, B0, PGER(J))
 !         actual transpiration and ground evaporation rates
                         IF (PTR(J) .GT. .0010d0) THEN
                             CALL TBYLAYER(J, PTR(J), DISPC, ALPHA, KK, RROOTI, RXYLEM,&
@@ -635,7 +634,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 311                         CONTINUE
                             IF (ATR(J) .LT. PTR(J)) THEN
 !            soil water limitation, new GER
-                                CALL SWGE(AA, ASUBS, VPD, RAA, RAS, RSS, DELTA, ATR(J), GER(J))
+                                CALL SWGE(AA(J), ASUBS(J), VPD, RAA, RAS, RSS, DELTA, ATR(J), GER(J))
                             END IF
                         ELSE
 !          no transpiration, condensation ignored, new GER
@@ -644,7 +643,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                             DO 321 I = 1, NLAYER
                                 ATRI(J, I) = 0.0d0
 321                         CONTINUE
-                            CALL SWGE(AA, ASUBS, VPD, RAA, RAS, RSS, DELTA, 0.0d0, GER(J))
+                            CALL SWGE(AA(J), ASUBS(J), VPD, RAA, RAS, RSS, DELTA, 0.0d0, GER(J))
                         END IF
 301                 CONTINUE
 !      * * * * * * * * *  E N D   D A Y - N I G H T   L O O P  * * * * * * * * * *
@@ -842,7 +841,7 @@ subroutine ACCUMI (N, A1, A2, A3, A4, A5, B1, B2, B3, B4, B5)
 10  CONTINUE
 end subroutine ACCUMI
 
-subroutine AVAILEN (SLRAD, ALBEDO, C1, C2, C3, TA, EA, RATIO, SHEAT, CR, LAI, SAI, AA, ASUBS)
+subroutine AVAILEN (SLRAD, ALBEDO, C1, C2, C3, TA, EA, RATIO, SHEAT, CR, LAI, SAI, AAR, ASUBSR, LNGNETR)
 !     available energy at canopy and ground
 !     longwave equations and parameters from Brutsaert (1982)
 !     net radiation extinction from Shuttleworth and Wallace(1985)
@@ -864,31 +863,31 @@ subroutine AVAILEN (SLRAD, ALBEDO, C1, C2, C3, TA, EA, RATIO, SHEAT, CR, LAI, SA
     real(kind=8) :: LAI     ! leaf area index, m2/m2
     real(kind=8) :: SAI     ! stem area index, m2/m2
 !     output
-    real(kind=8) :: AA      ! available energy, W/m2
-    real(kind=8) :: ASUBS   ! availble energy at ground, W/m2
+    real(kind=8) :: AAR      ! available energy rate, W/m2
+    real(kind=8) :: ASUBSR   ! availble energy rate at ground, W/m2
+    real(kind=8) :: LNGNETR  ! net longwave radiation, W/m2
 !     local
     real(kind=8) :: SOLNET  ! net solar radiation, W/m2
     real(kind=8) :: EFFEM   ! effective emissivity from clear sky
     real(kind=8) :: NOVERN  ! sunshine duration fraction of daylength
     real(kind=8) :: CLDCOR  ! cloud cover correction to net longwave under clear
                          ! sky
-    real(kind=8) :: LNGNET  ! net longwave radiation, W/m2
+
     real(kind=8) :: RN      ! net radiation, W/m2
-!     intrinsic
-!        EXP
+
 
     SOLNET = (1.0d0 - ALBEDO) * SLRAD
 !     Brutsaert equation for effective clear sky emissivity
     EFFEM = 1.240d0 * (EA * 10.0d0 / (TA + 273.150d0)) ** (1.0d0 / 7.0d0)
     NOVERN = (RATIO - C1) / C2
-    IF (NOVERN .GT. 1.0d0) NOVERN = 1
-    IF (NOVERN .LT. 0.0d0) NOVERN = 0
+    IF (NOVERN .GT. 1.0d0) NOVERN = 1.0d0
+    IF (NOVERN .LT. 0.0d0) NOVERN = 0.0d0
     CLDCOR = C3 + (1.0d0 - C3) * NOVERN
 !     emissivity of the surface taken as 1.0 to also account for reflected
-    LNGNET = (EFFEM - 1.0d0) * CLDCOR * SIGMA * (TA + 273.150d0) ** 4.0d0
-    RN = SOLNET + LNGNET
-    AA = RN - SHEAT
-    ASUBS = RN * EXP(-CR * (LAI + SAI)) - SHEAT
+    LNGNETR = (EFFEM - 1.0d0) * CLDCOR * SIGMA * (TA + 273.150d0) ** 4.0d0
+    RN = SOLNET + LNGNETR
+    AAR = RN - SHEAT
+    ASUBSR = RN * EXP(-CR * (LAI + SAI)) - SHEAT
 
 end subroutine AVAILEN
 

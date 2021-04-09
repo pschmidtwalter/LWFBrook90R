@@ -5,6 +5,10 @@ Bug fixes:
 
 - fixed bug in `make_rootden()` for `method = 'betamodel'` leading to negative 
 root density of the top layer when supplied `maxrootdepth` was lower than soil depth.
+- fixed bug when using sub-daily precipitation input
+
+Changes: 
+- new daily output variables: daily solar (`slrad`), net solar (`solnet`), net longwave (`lngnet`) and net radiation above (`aa`) and below canopy (`asubs`).
 
 ## Version 0.4.4. (2021-02-24)
 
