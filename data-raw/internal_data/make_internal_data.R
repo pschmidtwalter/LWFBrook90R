@@ -75,7 +75,7 @@ paramvar <- data.frame(maxlai = runif(N, 4,7),
 
 mrun_res <- run_multi_LWFB90(paramvar = paramvar,
                              param_b90 = set_paramLWFB90(),
-                             cores = 5, # arguments below are passed to run_LWFB90()
+                             cores = 3, # arguments below are passed to run_LWFB90()
                              options_b90 = set_optionsLWFB90(),
                              climate = slb1_meteo,
                              soil = soil,
@@ -91,4 +91,4 @@ mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]),
 #speichert den Dataframe als internes Objekt, welches nicht exportiert wird. ANsprechen mit brook90r:::wess_mvg_tex
 usethis::use_data(mrun_dt, b90res, wessolek_mvg_tab10,hydpar_forestfloor, hypres_tab4, internal = T, overwrite =T)
 
-rm(list = ls())
+#rm(list = ls())

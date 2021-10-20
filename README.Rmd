@@ -138,7 +138,7 @@ Fortran code.
 
 ## References
 
-Federer C.A. (2002): BROOK 90: A simulation model output for evaporation, soil water, and streamflow.
+Federer C.A. (2002): BROOK 90: A simulation model for evaporation, soil water, and streamflow.
 http://www.ecoshift.net/brook/brook90.htm
 
 Federer C.A., Vörösmarty, C., Fekete, B. (2003): Sensitivity of Annual
