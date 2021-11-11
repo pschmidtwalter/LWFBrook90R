@@ -8,8 +8,7 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Travis build
-status](https://travis-ci.com/pschmidtwalter/LWFBrook90R.svg?branch=master)](https://travis-ci.com/pschmidtwalter/LWFBrook90R)
+[![R-CMD-check](https://github.com/pschmidtwalter/LWFBrook90R/workflows/R-CMD-check/badge.svg)](https://github.com/pschmidtwalter/LWFBrook90R/actions)
 [![CRAN](https://www.r-pkg.org/badges/version/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
 [![License: GPL
@@ -121,7 +120,7 @@ Tony Federer.
 
 Tony Federer’s original
 [Brook90](http://www.ecoshift.net/brook/b90doc.html) Fortran 77 code
-(Brook90\_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin
+(Brook90_v3.1F, License: CC0) was enhanced by Klaus Hammel and Martin
 Kennel at Bavarian State Institute of Forestry (LWF) around the year
 2000. Since then, LWF-BROOK90 is distributed by
 [LWF](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
@@ -141,9 +140,8 @@ assign GPL-3 to the Fortran code.
 
 ## References
 
-Federer C.A. (2002): BROOK 90: A simulation model output for
-evaporation, soil water, and streamflow.
-<http://www.ecoshift.net/brook/brook90.htm>
+Federer C.A. (2002): BROOK 90: A simulation model for evaporation, soil
+water, and streamflow. <http://www.ecoshift.net/brook/brook90.htm>
 
 Federer C.A., Vörösmarty, C., Fekete, B. (2003): Sensitivity of Annual
 Evaporation to Soil and Root Properties in Two Models of Contrasting

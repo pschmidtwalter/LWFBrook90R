@@ -17,12 +17,11 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Travis build status](https://travis-ci.com/pschmidtwalter/LWFBrook90R.svg?branch=master)](https://travis-ci.com/pschmidtwalter/LWFBrook90R)
+[![R-CMD-check](https://github.com/pschmidtwalter/LWFBrook90R/workflows/R-CMD-check/badge.svg)](https://github.com/pschmidtwalter/LWFBrook90R/actions)
 [![CRAN](https://www.r-pkg.org/badges/version/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/LWFBrook90R)](https://cran.r-project.org/package=LWFBrook90R)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3760298.svg)](https://doi.org/10.5281/zenodo.3760298)
-[![Codecov test coverage](https://codecov.io/gh/pschmidtwalter/LWFBrook90R/branch/master/graph/badge.svg)](https://codecov.io/gh/pschmidtwalter/LWFBrook90R?branch=master)
 <!-- badges: end -->
 
 `LWFBroo90R` provides an implementation of the Soil Vegetation Atmosphere

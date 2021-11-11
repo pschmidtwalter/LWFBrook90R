@@ -37,8 +37,7 @@ Suggests:
     knitr,
     rmarkdown,
     roxygen2,
-    testthat,
-    covr
+    testthat
 LazyData: true
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr
