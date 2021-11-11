@@ -36,7 +36,7 @@ test_that("inputs are equal", {
 
 tolerance_mm <- 0.001
 
-# ----- ABOV-tests-----------------------------------------------------------
+# ----- ABOV-tests--------------------------------------------------------------
 
 # columns to test
 nms <- names(b90res$ABOVDAY.ASC) #[-which(names(b90res$BUDGDAY.ASC) %in% c("evap"))]

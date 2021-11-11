@@ -10,3 +10,4 @@ examples_all.R
 ^cran-comments\.md$
 ^\.travis\.yml$
 ^README\.Rmd$
+^codecov\.yml$
