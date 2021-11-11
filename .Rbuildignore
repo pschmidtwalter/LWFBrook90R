@@ -11,3 +11,4 @@ examples_all.R
 ^\.travis\.yml$
 ^README\.Rmd$
 ^codecov\.yml$
+^\.github$
