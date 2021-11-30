@@ -51,4 +51,13 @@
 #' }
 "slb1_standprop"
 
+#' Hourly precipitation data from Solling Beech experimental site 'SLB1' for year 2013
+#'
+#' @format A data.frame with 8760 rows and 2 variables
+#' \describe{
+#'   \item{dates}{date}
+#'   \item{prec}{hourly sum of precipitation, mm}
+#' }
+"slb1_prec2013_hh"
+
 

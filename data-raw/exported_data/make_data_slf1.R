@@ -14,6 +14,11 @@ str(meteo_slb1)
 setDF(slb1_meteo)
 usethis::use_data(slb1_meteo, overwrite = T)
 
+slb1_prec2013_hh <- fread("data-raw/exported_data/prec_hh_2013.csv")
+slb1_prec2013_hh[,dates:= as.Date(dates)]
+setDF(slb1_prec2013_hh)
+usethis::use_data(slb1_prec2013_hh, overwrite = T)
+
 slb1_soil <- read.csv("data-raw/exported_data/soil_slb1.csv", stringsAsFactors = F)
 names(slb1_soil)[c(2,3)] <- c("upper", "lower")
 setDT(slb1_soil)
