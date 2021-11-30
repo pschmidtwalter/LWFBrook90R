@@ -602,25 +602,47 @@ chk_soil <- function(){
       names(param_b90$soil_materials) <- tolower(names(param_b90$soil_materials))
 
       stopifnot(all(c( "upper", "lower", "mat") %in% names(param_b90$soil_nodes)))
+      if (anyNA(param_b90$soil_nodes[,c( "upper", "lower", "mat")])) {
+        stop("No NAs allowed in param_b90$soil_nodes")
+      }
+
       if (options_b90$imodel == "MvG" ) {
         stopifnot(all(c("mat","ths","thr","alpha","npar","ksat","tort","gravel") %in% names(param_b90$soil_materials)))
+        if (anyNA(param_b90$soil_materials[,c("mat","ths","thr","alpha","npar","ksat","tort","gravel")])) {
+          stop("No NAs allowed in param_b90$soil_materials!")
+        }
+
       } else {
         stopifnot(all(c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(param_b90$soil_materials)))
+        if (anyNA(param_b90$soil_materials[,c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel")])) {
+          stop("No NAs allowed in param_b90$soil_materials!")
+          }
       }
+
       if (options_b90$root_method == "soilvar" & is.null(param_b90$soil_nodes$rootden)) {
         stop("Please provide column 'rootden' in param_b90$soil_nodes when using options_b90$root_method = 'soilvar'.")
       }
+
+
     } else {
       names(soil) <- tolower(names(soil))
       if (options_b90$imodel == "MvG") {
         stopifnot(all(c("upper","lower", "ths","thr","alpha","npar","ksat","tort","gravel") %in% names(soil)))
+        if (anyNA(soil[,c("upper","lower","ths","thr","alpha","npar","ksat","tort","gravel")])) {
+          stop("No NAs allowed in 'soil'!")
+        }
       } else {
         stopifnot(all(c("upper","lower", "thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(soil)))
+        if (anyNA(soil[,c("upper","lower","thsat","thetaf","psif","bexp","kf","wetinf","gravel")])) {
+          stop("No NAs allowed in 'soil'!")
+        }
       }
 
       if (options_b90$root_method == "soilvar" & is.null(soil$rootden)) {
         stop("Please provide column 'rootden' in 'soil'-data.frame when using options_b90$root_method = 'soilvar'.")
       }
+
+
     }
   }))
 
