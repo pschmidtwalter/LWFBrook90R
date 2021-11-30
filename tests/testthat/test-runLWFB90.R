@@ -1,5 +1,5 @@
 library(LWFBrook90R)
-
+library(data.table)
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
@@ -116,6 +116,45 @@ test_that("single output functions works", {
               rtrn_output = F)$output_fun,
     "list")
 })
+
+
+meteo <- data.table(slb1_meteo[,c("dates", "tmin", "tmax", "prec", "tmean","vappres", "windspeed", "globrad" )])
+meteo <- meteo[year(dates)==2013,]
+prec <- meteo[,list(dates, prec = prec*1.1)]
+prec_hh_2013 <- readRDS("prec_hh_2013.rds")
+
+test_that("precipitation input works",{
+
+  # input from precip-argument
+  res <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-05-14"),
+                                             enddate = as.Date("2013-07-28")),
+             param_b90 = parms,
+             climate = meteo,
+             soil = soil,
+             precip = prec)
+
+  expect_equal(sum(prec$prec[prec$dates %in% seq.Date(as.Date("2013-05-14"),
+                                                      as.Date("2013-07-28"), by = "day")]),
+               sum(res$daily_output$rfal+res$daily_output$sfal)
+               )
+
+  expect_true(sum(meteo$prec[meteo$dates %in% seq.Date(as.Date("2013-05-14"),
+                                                      as.Date("2013-07-28"), by = "day")]) <
+                sum(res$daily_output$rfal+res$daily_output$sfal)
+              )
+
+  # hourly input
+  res <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-05-14"),
+                                                    enddate = as.Date("2013-07-28"),
+                                                    prec_interval = 24),
+                    param_b90 = parms,
+                    climate = meteo,
+                    soil = soil,
+                    precip = prec_hh_2013)
+  expect_equal(prec_hh_2013[between(dates, as.Date("2013-05-14"),as.Date("2013-07-28")), sum(prec)],
+               sum(res$daily_output$rfal+res$daily_output$sfal))
+
+  })
 
 
 
