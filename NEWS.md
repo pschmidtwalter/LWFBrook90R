@@ -1,11 +1,11 @@
 # News for the LWFBrook90R-package
-# Version 0.4.5.9000 (???)
+# Version 0.4.5 (2021-12-01)
 
 Bug fixes:
 
 - `make_rootden()` with `method = 'betamodel'` led to negative 
-root density of the top layer when supplied `maxrootdepth` was lower than soil depth.
-- errors when using sub-daily precipitation input
+root density of the top layer when specified `maxrootdepth` was lower than soil depth.
+- no more errors when using sub-daily precipitation input
 - typo in `hydpar_wessolek_tab()` caused NAs in return for `texture = 'fSms'`
 - `soil_to_param()`: some unique soil materials were omitted in the return, if they had multiple occurences in the input `soil`-data.frame.
 
