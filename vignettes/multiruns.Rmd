@@ -59,7 +59,7 @@ comprising ten thousands of simulations in a Monte-Carlo setting. With this
 magnitude, memory allocation is critical, and only a relatively small output can
 be returned for each individual simulation (e.g., a measure of agreement between
 simulated and observed values). Similarly, it is possible to define functions
-for custom output aggregation, to redirect the simulation output to a file or
+for custom output aggregation, or to redirect the simulation output to a file or
 database, as we will see later.
 
 To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo
@@ -150,7 +150,7 @@ the return (`rtrn_input = FALSE`).
 ```{r}
 mrun_res <- run_multi_LWFB90(paramvar = paramvar,
                              param_b90 = set_paramLWFB90(),
-                             cores = 5, # arguments below are passed to run_LWFB90()
+                             cores = 2, # arguments below are passed to run_LWFB90()
                              options_b90 = set_optionsLWFB90(), 
                              climate = slb1_meteo,
                              soil = soil,
@@ -219,7 +219,7 @@ msite_run1 <- run_multisite_LWFB90(
   param_b90 = parms_l,
   climate = climates_l,
   soil = soils_l,
-  cores = 3)
+  cores = 2)
 str(msite_run1, max.level = 1)
 ```
 
@@ -256,7 +256,7 @@ write.csv(slb1_meteo[year(slb1_meteo$dates) %in% c(2002,2003),],
           file = fnames[3], row.names = FALSE)
 ```
 
-For testing, we perform a single run with `runLWFB90()` and use the `fread`
+For testing, we perform a single run with `run_LWFB90()` and use the `fread`
 function from the 'data.table'-package as `climate`-argument. The function reads
 'csv'-files, and takes a `file` name as argument that we include in the call. It
 points to the first of our three climate files:
@@ -284,7 +284,7 @@ clim_args <- list(climfromfile1 = list(file = fnames[1]),
 ```
 
 Now we call `run_multisite_LWFB90()`, and set up the function `fread` as
-`climate`-object. Our list of lists with individual arguments for `fread` is
+`climate`-parameter. Our list of lists with individual arguments for `fread` is
 passed to the function via `climate_args`:
 
 ```{r}
@@ -294,7 +294,7 @@ msite_run2 <- run_multisite_LWFB90(
   soil = soils_l,
   climate = fread,
   climate_args = clim_args,
-  cores = 3)
+  cores = 2)
 
 str(msite_run2, max.level = 1)
 ```
@@ -363,7 +363,7 @@ msite_run3 <- run_multisite_LWFB90(
   output_fun = output_function2,
   tolayer = 15,
   basedir = tdir,
-  cores = 3)
+  cores = 2)
 ```
 
 After the simulation has finished, we can list the files and see that our
@@ -373,7 +373,7 @@ attempt was successful:
 list.files(tdir, pattern = "csv")
 ```
 
-Note that we can also use database connections objects instead of files to read
+Note that we can also use database connection objects instead of files to read
 climate data and save simulation results. For the input of climate data,
 connection objects can be defined in advance, and passed directly to the
 `climate`-function. However, this does not work for `output_fun` in a parallel
