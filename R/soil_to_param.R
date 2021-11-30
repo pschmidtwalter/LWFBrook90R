@@ -17,33 +17,31 @@
 #'
 #' soil_layers_materials <- soil_to_param(soil)
 #' soil_layers_materials
-
 soil_to_param <- function(soil, imodel="MvG") {
 
-  if (imodel == "MvG") {
-    dubl <- duplicated(soil[,c("ths","thr","alpha","npar","ksat","tort","gravel")])
-    materials <- soil[!dubl,c("ths","thr","alpha","npar","ksat","tort","gravel")]
+  ths<- NULL; thr<- NULL; alpha<- NULL; npar<- NULL; ksat<- NULL; tort<- NULL; gravel <- NULL;
+  thsat<- NULL; thetaf<- NULL; psif<- NULL; bexp<- NULL; kf<- NULL; wetinf<- NULL; mat <- NULL;
+
+  if (inherits(soil, 'data.table')) {
+    soil_dt <- data.table::copy(soil)
   } else {
-    dubl <- duplicated(soil[,c("thsat","thetaf","psif","bexp","kf","wetinf","gravel")])
-    materials <- soil[!dubl,c("thsat","thetaf","psif","bexp","kf","wetinf","gravel")]
-  }
-  materials$mat <- 1:nrow(materials)
-  #add material-identifier to soil
-  seqalong <- 2:length(dubl)
-  soil$mat[1] <- 1
-  m = 1
-  for (i in seqalong) {
-    if (dubl[i] == FALSE) {
-      m = m + 1
-      soil$mat[i] <- m
-    } else soil$mat[i] <- m
+    soil_dt <- data.table::data.table(soil)
   }
 
-  soil$thick <- soil$upper - soil$lower
-  soil$midpoint <- soil$lower + soil$thick/2
-  soil$thick <- round(soil$thick * 1000) # mm
-  soil$layer <- 1:nrow(soil)
+  if (imodel == "MvG") {
+    stopifnot(all(c("ths","thr","alpha","npar","ksat","tort","gravel") %in% names(soil_dt)))
+    soil_dt[, mat := .GRP, by = list(ths, thr, alpha, npar, ksat, tort, gravel)]
+    materials <- unique(soil_dt[,c("mat", "ths","thr","alpha","npar","ksat","tort","gravel")])
+  } else {
+    stopifnot(all(c("thsat","thetaf","psif","bexp","kf","wetinf","gravel") %in% names(soil_dt)))
+    soil_dt[, mat := .GRP, by = list(thsat,thetaf,psif,bexp,kf,wetinf,gravel)]
+    materials <- unique(soil_dt[,c("mat","thsat","thetaf","psif","bexp","kf","wetinf","gravel")])
+  }
+  soil_dt$thick <- soil_dt$upper - soil_dt$lower
+  soil_dt$midpoint <- soil_dt$lower + soil_dt$thick/2
+  soil_dt$thick <- round(soil_dt$thick * 1000) # mm
+  soil_dt$layer <- 1:nrow(soil_dt)
 
-  return(list(soil_nodes = soil[,c("layer", "upper","lower","thick", "midpoint", "mat")],
+  return(list(soil_nodes = soil_dt[,c("layer", "upper","lower","thick", "midpoint", "mat")],
               soil_materials = materials))
 }
