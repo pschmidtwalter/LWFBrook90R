@@ -3,9 +3,11 @@
 
 Bug fixes:
 
-- fixed bug in `make_rootden()` for `method = 'betamodel'` leading to negative 
+- `make_rootden()` with `method = 'betamodel'` led to negative 
 root density of the top layer when supplied `maxrootdepth` was lower than soil depth.
-- fixed bug when using sub-daily precipitation input
+- errors when using sub-daily precipitation input
+- typo in `hydpar_wessolek_tab()` caused NAs in return for `texture = 'fSms'`
+- `soil_to_param()`: some unique soil materials were omitted in the return, if they had multiple occurences in the input `soil`-data.frame.
 
 Changes: 
 - new daily output variables: daily solar (`slrad`), net solar (`solnet`), net longwave (`lngnet`) and net radiation above (`aa`) and below canopy (`asubs`).

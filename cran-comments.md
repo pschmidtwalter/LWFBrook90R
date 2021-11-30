@@ -1,13 +1,10 @@
-## Version 0.4.4
+## Version 0.4.5
 
-* Prof. Brian Ripley's comments to previous v0.4.3: [Additional **LTO** issues](https://www.stats.ox.ac.uk/pub/bdr/LTO/LWFBrook90R.out)
+* Prof. Brian Ripley's comment to previous v0.4.4: 
 
-  - > Warning: Array ‘par’ at (1) is larger than limit set by ‘-fmax-stack-var-size=’, moved from stack to static storage. This makes the procedure unsafe when called recursively, or concurrently from multiple threads. Consider using ‘-frecursive’, or increase the ‘-fmax-stack-var-size=’ limit, or change the code to use an ALLOCATABLE array.
-- **Answer**: The array was made allocatable.
- 
-  - > skeleton.c:7:6: warning: type of ‘s_brook90_f_’ does not match original declaration [-Wlto-type-mismatch]
-  - > md_brook90.f95:33:22: note: ‘s_brook90_f’ was previously declared here 33 | subroutine s_brook90_f( siteparam, climveg, param,...
-- **Answer**: Fixed.
+ - > A recent check run with setenv MC_CORES 2 shows "Error when sourcing 'multiruns.R':  Can not run on 5 cores! Only 2 available."
+
+- **Answer**: The number of CPUs deployed in 'multiruns.R' was reduced to 2.
 
 ### Test environments
 * Local check using image [rhub/debian-gcc-devel-lto](https://hub.docker.com/repository/docker/rhub/debian-gcc-devel-lto)

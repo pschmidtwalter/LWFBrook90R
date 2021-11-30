@@ -68,7 +68,7 @@
 #'  emergedur    \tab Leaf growth duration until maxlai is reached.. Default: 28\tab d                 \tab Plant                  \cr
 #'  height       \tab Plant height. Default: 25 \tab m                 \tab Plant                  \cr
 #'  height_ini   \tab Initial plant height at the beginning of the simulation. Used when \code{options_b90$standprop_interp = 'linear'} (see \code{\link{approx_standprop}}). Default: 25 \tab m                 \tab Plant                  \cr
-#'  leaffalldoy  \tab Number of days until maximum lai is reached - passed to \code{\link{make_seasLAI}} Default: 279\tab doy               \tab Plant                  \cr
+#'  leaffalldoy  \tab Day of year when leaf fall begins - passed to \code{\link{make_seasLAI}} Default: 279\tab doy               \tab Plant                  \cr
 #'  leaffalldur  \tab Number of days until minimum lai is reached - passed to \code{\link{make_seasLAI}} Default: 58 \tab d                 \tab Plant                  \cr
 #'  sai          \tab Steam area index. Default: 1 \tab -                 \tab Plant                  \cr
 #'  sai_ini      \tab Initial stem area index at the beginning of the simulation. Used when \code{options_b90$standprop_interp = 'linear'} (see \code{\link{approx_standprop}}), Default: 1 \tab -                 \tab Plant                  \cr
