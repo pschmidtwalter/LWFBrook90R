@@ -6,6 +6,10 @@ Bug fixes:
 
 - Installation error on single core machines because of a failed test with `run_multisite_LWFB90()` (Thanks to Henrik Bengtsson)
 
+Changes:
+
+- new daily output variable `sthr`
+
 # Version 0.4.5 (2021-11-30)
 
 Bug fixes:
