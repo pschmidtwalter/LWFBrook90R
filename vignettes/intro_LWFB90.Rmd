@@ -278,9 +278,9 @@ par(xpd = TRUE, mar = c(5.1,4.1,2.1,2.1), oma = c(1,1,1,1))
 plot(LAI_b90, type = "n", xlab = "doy", ylab = "lai [m²/m²]", ylim = c(0,6))
 with(param_b90, abline(v = c(budburstdoy,budburstdoy+emergedur,
                              leaffalldoy, leaffalldoy+leaffalldur), lty = 2, xpd = FALSE))
-lines(LAI_b90, col ="green",lwd = 2,)
-lines(LAI_linear, col ="red",lwd = 2)
-lines(LAI_coupmodel, col ="blue",lwd = 2)
+lines(LAI_b90, col ="green", lwd = 2)
+lines(LAI_linear, col ="red", lwd = 2)
+lines(LAI_coupmodel, col ="blue", lwd = 2)
 
 with(param_b90, arrows(x0 = c(budburstdoy,leaffalldoy,shp_optdoy,budburstdoy,leaffalldoy),
                        x1 = c(budburstdoy,leaffalldoy, shp_optdoy,

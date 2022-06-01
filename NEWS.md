@@ -1,5 +1,11 @@
 # News for the LWFBrook90R-package
 
+# Version 0.4.6.9000 (2022-06-01)
+
+Bug fixes:
+
+- Installation error on single core machines because of a failed test with `run_multisite_LWFB90()` (Thanks to Henrik Bengtsson)
+
 # Version 0.4.5 (2021-11-30)
 
 Bug fixes:
