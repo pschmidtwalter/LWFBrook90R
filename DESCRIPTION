@@ -31,6 +31,7 @@ Imports:
     iterators (>= 1.0.12),
     doFuture (>= 0.10.0),
     future (>= 1.19.0),
+    parallelly (>= 1.30.0),
     progressr (>= 0.6.0)
 Suggests:
     sirad,
