@@ -6,7 +6,7 @@ opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("
 parms <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 
-if (future::availableCores() > 1) {
+if (parallelly::availableCores() > 1) {
   cores <- 2
 } else {
   cores <- 1

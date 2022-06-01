@@ -66,8 +66,8 @@ run_multi_LWFB90 <- function(paramvar,
                              show_progress = TRUE,
                              ...){
 
-  if(cores > future::availableCores())
-    stop(paste("Can not run on", cores, "cores! Only", future::availableCores(),
+  if(cores > parallelly::availableCores())
+    stop(paste("Can not run on", cores, "cores! Only", parallelly::availableCores(),
                "available."))
 
   # to pass CRAN check Notes
