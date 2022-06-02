@@ -9,21 +9,22 @@ void F77_NAME(s_brook90_f)(double *siteparam, double *climveg, double *param, do
     int *pr, int *timer, int *error, double *output_day, double *output_layer);
 
 extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEXP soil_materials,
-    SEXP soil_nodes, SEXP precdat, SEXP pr, SEXP timer, SEXP n_m, SEXP n_l){
+    SEXP soil_nodes, SEXP precdat, SEXP pr, SEXP timer, SEXP n_days, SEXP n_lays, SEXP n_pint){
 
     int n;
 
-    const int n_m_c = INTEGER(n_m)[0];
-    const int n_l_c = INTEGER(n_l)[0];
+    const int n_d_c = INTEGER(n_days)[0];
+    const int n_l_c = INTEGER(n_lays)[0];
+    const int n_p_c = INTEGER(n_pint)[0];
 
     SEXP error = PROTECT( allocVector(INTSXP, 1) );
-    SEXP output_day = PROTECT( allocMatrix(REALSXP, n_m_c, 47) );
+    SEXP output_day = PROTECT( allocMatrix(REALSXP, n_d_c * n_p_c, 47) );
 
-    n = n_m_c * 16 * n_l_c;
+    n = n_d_c * 16 * n_l_c * n_p_c;
     SEXP output_layer = PROTECT( allocVector(REALSXP, n) );
     SEXP dims = PROTECT( allocVector(INTSXP, 3) );
 
-    INTEGER(dims)[0] = n_m_c;
+    INTEGER(dims)[0] = n_d_c * n_p_c;
     INTEGER(dims)[1] = 16;
     INTEGER(dims)[2] = n_l_c;
     setAttrib( output_layer, R_DimSymbol, dims);
@@ -42,7 +43,7 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
 }
 
 static const R_CallMethodDef CallEntries[] = {
-  {"s_brook90_c",   (DL_FUNC) &s_brook90_c,   11},
+  {"s_brook90_c",   (DL_FUNC) &s_brook90_c,   12},
   {NULL,         NULL,                0}
 };
 

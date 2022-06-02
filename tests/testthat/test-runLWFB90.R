@@ -3,7 +3,7 @@ library(data.table)
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
-opts <- set_optionsLWFB90(startdate = as.Date("2002-01-01"), enddate = as.Date("2003-12-31"))
+opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-02"))
 parms <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 output <- set_outputLWFB90()

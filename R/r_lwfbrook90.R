@@ -65,8 +65,9 @@ r_lwfbrook90 <- function(
     precdat = as.matrix(precdat, ncol = 6),
     pr = as.integer(output_log),
     timer = as.integer(!is.infinite(timelimit)),
-    n_m = as.integer(param[1]),
-    n_l = as.integer(param[65])
+    n_days = as.integer(param[1]),
+    n_lays = as.integer(param[65]),
+    n_pint = as.integer(siteparam[1,6])
   )
 
   return( list(error_code = out[[1]], daily_output = out[[2]], layer_output = out[[3]]) )

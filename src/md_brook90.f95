@@ -17,6 +17,14 @@
 !   - removed ZMONTH, ZYEAR, MSUM, YSUM, MACCUM, YACCUM
 !   - removing unussed variables from DECLARATION
 
+! 2022-06 adjustements made by P Schmidt-Walter [paul.schmidt-walter@dwd.de]
+!   - basic output now at the precipitation interval - level.
+
+
+! Reshape inout-arrays to hold values on precipitation interval level
+! Output values at the prec int level to
+
+
 
 
 module fbrook_mod
@@ -58,8 +66,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     integer(kind=c_int), intent(inout) :: error
 
     ! Output matrix
-    real(kind=c_double), dimension( INT(param(1)), 47), intent(inout) :: output_day
-    real(kind=c_double), dimension( INT(param(1)), 16, INT(param(65))), intent(inout) :: output_layer
+    real(kind=c_double), dimension( INT(param(1) * siteparam(6)), 47), intent(inout) :: output_day
+    real(kind=c_double), dimension( INT(param(1) * siteparam(6)), 16, INT(param(65))), intent(inout) :: output_layer
 
     ! Variables
     include 'VARDCL.h'
@@ -88,7 +96,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     LAT = LAT / 57.296 ! convert to lat: 180/pi
 
     ! read PRFILE.DAT if requested
-    ! Need to do
+    
     if (NPINT .GT. 1) then
         DTP = DT / real( NPINT, kind=8)
 !         OPEN (UNIT = 10, FILE = 'in/PRFILE.DAT')
@@ -711,6 +719,10 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 !           flows for precip interval summed from components
            INCLUDE 'PSUM.h'
+!           precipitation interval output
+           INCLUDE 'output_pint.h'
+           INCLUDE 'output_layer_pint.h'
+           
 !           flows accumulated over day
            INCLUDE 'DACCUM.h'
 !           accumulate iterations
@@ -729,8 +741,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
         STORD = INTR + INTS + SNOW + SWAT + GWAT
 
         !     daily output
-        INCLUDE 'output_day.h'
-        INCLUDE 'output_layer.h'
+        ! INCLUDE 'output_day.h'
+        ! INCLUDE 'output_layer.h'
 
         IF (DOM .EQ. DAYMO(MONTH)) THEN
 !        set up for next month
