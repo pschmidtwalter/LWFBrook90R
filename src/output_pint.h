@@ -42,7 +42,7 @@ output_day( (1+NPINT*(IDAY-1)+(N-1)), 35) = VRFLPI(NLAYER) / DTP
 
 
 IF (SRFLP + SLFLP .GT. 0.d0) THEN
-    SAFRAC = SRFLD / (SRFLD + SLFLD)
+    SAFRAC = SRFLP / (SRFLP + SLFLP)
 ELSE
     SAFRAC = 0
 END IF
