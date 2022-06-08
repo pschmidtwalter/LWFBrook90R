@@ -30,7 +30,7 @@ output_day( (1+NPINT*(IDAY-1)+(N-1)), 23) = SLVP
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 24) = SNVP
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 25) = PINT
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 26) = PTRAN
-output_day( (1+NPINT*(IDAY-1)+(N-1)), 27) = PSLVP / DTP
+output_day( (1+NPINT*(IDAY-1)+(N-1)), 27) = PSLVP ! / DTP (already mm/day)
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 28) = FLOWP / DTP
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 29) = SEEPP / DTP
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 30) = SRFLP / DTP
@@ -47,13 +47,6 @@ ELSE
     SAFRAC = 0
 END IF
 
-!stress factor - ratio of actual to potential transpiration
-IF (PTRAN .GT. 0.001d0) THEN
-    STRES = TRANP / PTRAN ! hier vielleicht TRANP/DTP / NPINT?
-ELSE
-    STRES = 1
-END IF
-IF (STRES .GT. 1.d0) STRES = 1.d0
 
 ! root zone soil water and deficit
 ! here air content of root zone is calculated and given out instead of ADEF
@@ -99,12 +92,13 @@ END IF
 RELAWAT = AWAT / AWATFK
 
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 36) = SAFRAC
-output_day( (1+NPINT*(IDAY-1)+(N-1)), 37) = STRES
+output_day( (1+NPINT*(IDAY-1)+(N-1)), 37) = -999.0d0 !STRES, based on daily values, output later
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 38) = Eta
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 39) = AWAT
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 40) = RELAWAT
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 41) = NITS
-output_day( (1+NPINT*(IDAY-1)+(N-1)), 42) = BALERD
+
+output_day( (1+NPINT*(IDAY-1)+(N-1)), 42) = -999.0d0 ! BALERD, based on daily values, output later
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 43) = SLFDAY * SOLRAD
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 44) = SLFDAY * SOLRAD * (1-ALBEDO)
 output_day( (1+NPINT*(IDAY-1)+(N-1)), 45) = (LNGNET(1) * DAYLEN + LNGNET(2) * (1.0d0 - DAYLEN)) / DT

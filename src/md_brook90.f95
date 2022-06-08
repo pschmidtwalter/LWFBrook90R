@@ -716,12 +716,14 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 !           flows for precip interval summed from components
            INCLUDE 'PSUM.h'
+
 !           precipitation interval output
            INCLUDE 'output_pint.h'
            INCLUDE 'output_layer_pint.h'
            
-!           flows accumulated over day
+!           flows accumulated over day 
            INCLUDE 'DACCUM.h'
+
 !           accumulate iterations
             NITSD = NITSD + NITS
             NITSM = NITSM + NITS
@@ -733,13 +735,23 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !     flows for day summed from components
         INCLUDE 'DSUM.h'
 
-!     check for water balance error
+
+    ! daily outputs: STRES & BALERD
+    ! stress factor - ratio of actual to potential transpiration
+    ! separate, based on daily values.
+        if (PTRAND .GT. 0.001d0) THEN
+            STRES = TRAND / PTRAND 
+        else
+            STRES = 1.0d0
+        end if
+        if (STRES .GT. 1.d0) STRES = 1.d0
+        output_day(NPINT*IDAY, 37) = STRES !STRES     
+        
+!   calc for daily water balance error 
         BALERD = STORD - (INTR + INTS + SNOW + SWAT + GWAT) + PRECD - EVAPD - FLOWD - SEEPD
         STORD = INTR + INTS + SNOW + SWAT + GWAT
-
-        !     daily output
-        ! INCLUDE 'output_day.h'
-        ! INCLUDE 'output_layer.h'
+        
+        output_day(NPINT*IDAY, 42) = BALERD !STRES 
 
         IF (DOM .EQ. DAYMO(MONTH)) THEN
 !        set up for next month
