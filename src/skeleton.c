@@ -20,12 +20,12 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
     SEXP error = PROTECT( allocVector(INTSXP, 1) );
     SEXP output_day = PROTECT( allocMatrix(REALSXP, n_d_c * n_p_c, 47) );
 
-    n = n_d_c * 16 * n_l_c * n_p_c;
+    n = n_d_c * 15 * n_l_c * n_p_c;
     SEXP output_layer = PROTECT( allocVector(REALSXP, n) );
     SEXP dims = PROTECT( allocVector(INTSXP, 3) );
 
     INTEGER(dims)[0] = n_d_c * n_p_c;
-    INTEGER(dims)[1] = 16;
+    INTEGER(dims)[1] = 15;
     INTEGER(dims)[2] = n_l_c;
     setAttrib( output_layer, R_DimSymbol, dims);
 

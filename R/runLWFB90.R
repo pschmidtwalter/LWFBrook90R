@@ -334,9 +334,9 @@ run_LWFB90 <- function(options_b90,
     simout$layer_output <- data.table::rbindlist(lapply(seq(dim(simout$layer_output)[3]),
                                                         function(x) data.frame(simout$layer_output[ , , x])),
                                                  idcol = "nl")
-    data.table::setnames(simout$layer_output, paste0("X", 1:16),
+    data.table::setnames(simout$layer_output, paste0("X", 1:15),
                          c('yr','mo','da','doy','swati','theta','wetnes','psimi','psiti','infl',
-                           'byfl','tran','slvp','vrfl','dsfl','ntfl'))
+                           'byfl','tran','vrfl','dsfl','ntfl'))
 
     simout$layer_output <- simout$layer_output[order(simout$layer_output$yr,
                                                      simout$layer_output$doy,
