@@ -321,8 +321,8 @@ run_LWFB90 <- function(options_b90,
     # precipitation interval outputs (to come)
 
     # daily outputs
-    simout$daily_output <- data.table::data.table(simout$daily_output)
-    data.table::setnames(simout$daily_output, names(simout$daily_output),
+    simout$output <- data.table::data.table(simout$output)
+    data.table::setnames(simout$output, names(simout$output),
                          c('yr','mo','da','doy','rfal','rint','sfal','sint','rthr','sthr','rsno',
                            'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
                            'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
@@ -334,8 +334,8 @@ run_LWFB90 <- function(options_b90,
     simout$layer_output <- data.table::rbindlist(lapply(seq(dim(simout$layer_output)[3]),
                                                         function(x) data.frame(simout$layer_output[ , , x])),
                                                  idcol = "nl")
-    data.table::setnames(simout$layer_output, paste0("X", 1:15),
-                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','psiti','infl',
+    data.table::setnames(simout$layer_output, paste0("X", 1:14),
+                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','infl',
                            'byfl','tran','vrfl','dsfl','ntfl'))
 
     simout$layer_output <- simout$layer_output[order(simout$layer_output$yr,
@@ -396,7 +396,7 @@ run_LWFB90 <- function(options_b90,
       if (is.matrix(output) & all(dim(output) == c(7,5))) {
         simres <- simres[-which(grepl(".ASC", names(simres), fixed = TRUE))]
       } else {
-        simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
+        simres <- simres[-which(names(simres) %in% c("output", "layer_output"))]
       }
     }
 
@@ -660,19 +660,19 @@ process_outputs <- function(simout, output) {
   selection <- rownames(output)[which(rowSums(output) > 0)]
 
   if (any(selection == "Budg")) {
-    Budg <- simout$daily_output[,c("yr","mo","da","doy","rfal","sfal","flow", "evap", "seep","snow","swat","gwat","intr","ints")]}
+    Budg <- simout$output[,c("yr","mo","da","doy","rfal","sfal","flow", "evap", "seep","snow","swat","gwat","intr","ints")]}
   if (any(selection == "Flow")){
-    Flow <- simout$daily_output[,c("yr","mo","da","doy","flow","seep","srfl","slfl","byfl","dsfl","gwfl","vrfln")]}
+    Flow <- simout$output[,c("yr","mo","da","doy","flow","seep","srfl","slfl","byfl","dsfl","gwfl","vrfln")]}
   if (any(selection == "Evap")){
-    Evap <- simout$daily_output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
+    Evap <- simout$output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
   if (any(selection == "Abov")){
-    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rthr","sthr","rsno","rnet","smlt","slfl","srfl")]}
+    Abov <- simout$output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rthr","sthr","rsno","rnet","smlt","slfl","srfl")]}
   if (any(selection == "Belo")){
-    Belo <- simout$layer_output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
+    Belo <- simout$output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
   if (any(selection == "Swat")){
-    Swat <- simout$layer_output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
+    Swat <- simout$output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
   if (any(selection == "Misc")){
-    Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
+    Misc <- simout$output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
 
   moutputs <- list() # results collection
 

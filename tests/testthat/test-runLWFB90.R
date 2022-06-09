@@ -3,14 +3,14 @@ library(data.table)
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
-opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-02"))
+opts <- set_optionsLWFB90(startdate = as.Date("2002-01-01"), enddate = as.Date("2003-12-31"))
 parms <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 output <- set_outputLWFB90()
 output[,] <- 1L
 
 # return value (outputs) ----
-test_default <- run_LWFB90(options_b90 = opts,
+test_new <- run_LWFB90(options_b90 = opts,
           param_b90 = parms,
           climate = slb1_meteo,
           soil = soil)
@@ -36,7 +36,7 @@ test_nooutput <- run_LWFB90(options_b90 = opts,
 test_that("input/output complete",{
 
   # default
-  expect_type(test_default$daily_output, "list")
+  expect_type(test_default$output, "list")
   expect_type(test_default$layer_output, "list")
   expect_type(test_default$model_input, "list")
   expect_type(test_default$model_input$param_b90, "list")
@@ -44,12 +44,12 @@ test_that("input/output complete",{
   expect_type(test_default$model_input$standprop_daily, "list")
 
   # no input
-  expect_type(test_noinput$daily_output, "list")
+  expect_type(test_noinput$output, "list")
   expect_type(test_noinput$layer_output, "list")
   expect_null(test_noinput$model_input)
 
   # no output
-  expect_null(test_nooutput$daily_output)
+  expect_null(test_nooutput$output)
   expect_null(test_nooutput$layer_output)
 
   # asc output objects
@@ -84,12 +84,12 @@ test_that("climate input from function works", {
 outfun1 <- function(x) {
   vpstart <- x$model_input$param_b90$budburstdoy
   vpend <- x$model_input$param_b90$leaffalldoy
-  x$daily_output[doy >= vpstart & doy <= vpend, list(tranvp = sum(tran)) ]
+  x$output[doy >= vpstart & doy <= vpend, list(tranvp = sum(tran)) ]
 }
 outfun2 <- function(x) {
   vpstart <- x$model_input$param_b90$budburstdoy
   vpend <- x$model_input$param_b90$leaffalldoy
-  x$daily_output[doy >= vpstart & doy <= vpend, list(ptranvp = sum(ptran)) ]
+  x$output[doy >= vpstart & doy <= vpend, list(ptranvp = sum(ptran)) ]
 }
 
 test_that("single output functions works", {
@@ -127,8 +127,8 @@ setDT(slb1_prec2013_hh)
 test_that("precipitation input works",{
 
   # input from precip-argument
-  res <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-05-14"),
-                                             enddate = as.Date("2013-07-28")),
+  res_new24 <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-01-01"),
+                                             enddate = as.Date("2013-12-31")),
              param_b90 = parms,
              climate = meteo,
              soil = soil,
@@ -136,12 +136,12 @@ test_that("precipitation input works",{
 
   expect_equal(sum(prec$prec[prec$dates %in% seq.Date(as.Date("2013-05-14"),
                                                       as.Date("2013-07-28"), by = "day")]),
-               sum(res$daily_output$rfal+res$daily_output$sfal)
+               sum(res$output$rfal+res$output$sfal)
                )
 
   expect_true(sum(meteo$prec[meteo$dates %in% seq.Date(as.Date("2013-05-14"),
                                                       as.Date("2013-07-28"), by = "day")]) <
-                sum(res$daily_output$rfal+res$daily_output$sfal)
+                sum(res$output$rfal+res$output$sfal)
               )
 
   # hourly input

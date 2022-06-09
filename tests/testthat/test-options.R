@@ -15,12 +15,12 @@ test_that("Precipitation correction works", {
   withcorr <- run_LWFB90(options_b90 = opts,
                              param_b90 = parms,
                              climate = slb1_meteo,
-                             soil = soil)$daily_output$rfal
+                             soil = soil)$output$rfal
   opts$correct_prec = FALSE
   withoutcorr <- run_LWFB90(options_b90 = opts,
                     param_b90 = parms,
                     climate = slb1_meteo,
-                    soil = soil)$daily_output$rfal
+                    soil = soil)$output$rfal
 
   expect_identical(sum(slb1_meteo$prec[year(slb1_meteo$dates)== 2002 & month(slb1_meteo$dates)==6]),
                    sum(withoutcorr))

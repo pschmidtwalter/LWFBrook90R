@@ -78,7 +78,7 @@ run_multisite_LWFB90 <- function(options_b90,
                                  show_progress = TRUE,
                                  ...){
 
-  if(cores > parallelly::availableCores())
+  if (cores > parallelly::availableCores())
     stop(paste("Can not run on", cores, "cores! Only", parallelly::availableCores(),
                "available."))
 

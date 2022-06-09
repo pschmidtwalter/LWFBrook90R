@@ -70,7 +70,7 @@ r_lwfbrook90 <- function(
     n_pint = as.integer(siteparam[1,6])
   )
 
-  return( list(error_code = out[[1]], daily_output = out[[2]], layer_output = out[[3]]) )
+  return( list(error_code = out[[1]], output = out[[2]], layer_output = out[[3]]) )
 }
 
 .onUnload <- function(libpath) {

@@ -82,13 +82,13 @@ Plot results
 ```{r, fig.height=4, fig.width=7}
 oldpar <- par(no.readonly = TRUE)
 
-dates <- with(lwfb90_res$daily_output, as.Date(paste(yr, mo, da, sep = "-")))
+dates <- with(lwfb90_res$output, as.Date(paste(yr, mo, da, sep = "-")))
 par(mar = c(2,4.1,1,4.1))
-plot(dates,lwfb90_res$daily_output$evap, 
+plot(dates,lwfb90_res$output$evap, 
      col = "green", type = 'l', ylim = c(0,7),
      xlab = "", ylab = "Evapotranspiration [mm]")
 par(new=TRUE)
-plot(dates, lwfb90_res$daily_output$swat, type = "l", 
+plot(dates, lwfb90_res$output$swat, type = "l", 
      col = "blue", ylim = c(200,500), 
      yaxt = "n", xaxt = "n", ylab = "", xlab = "")
 axis(4,pretty(c(200,500)))
