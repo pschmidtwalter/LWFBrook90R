@@ -10,7 +10,6 @@ run_LWFB90(
   climate,
   precip = NULL,
   soil = NULL,
-  output = NULL,
   output_fun = NULL,
   rtrn_input = TRUE,
   rtrn_output = TRUE,
@@ -41,11 +40,6 @@ the number of values per day defined in \code{options_b90$prec_interval}.}
 
 \item{soil}{Data.frame containing the hydraulic properties of the soil
 layers. See section 'Soil parameters'}
-
-\item{output}{A [7,5]-matrix flagging the desired model output datasets at
-different time intervals. Use \code{\link{set_outputLWFB90}} to generate
-and edit a default output selection matrix. Alternatively, use -1 (the
-default) to return the raw daily and soil layer outputs.}
 
 \item{output_fun}{A function or a list of functions of the form
 \code{f(x,...)}, where \code{x} is the object regularly returned by
@@ -177,11 +171,9 @@ swati \tab soil water volume in layer \tab mm \cr
 theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
 wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
 psimi \tab matric soil water potential for soil layer \tab kPa \cr
-psiti \tab total soil water potential for a soil layer \tab kPa \cr
 infl \tab infiltration to soil water in soil layer \tab mm \cr
 byfl \tab bypass flow from soil layer \tab mm \cr
 tran \tab transpiration from soil layer \tab mm \cr
-slvp \tab soil evaporation from a soil layer \tab mm \cr
 vrfl \tab vertical matrix drainage from soil layer \tab mm \cr
 dsfl \tab downslope drainage from layer \tab mm \cr
 ntfl \tab net flow into soil layer \tab mm \cr

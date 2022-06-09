@@ -6,8 +6,8 @@ data("slb1_meteo")
 opts <- set_optionsLWFB90(startdate = as.Date("2002-01-01"), enddate = as.Date("2003-12-31"))
 parms <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
-output <- set_outputLWFB90()
-output[,] <- 1L
+outmat <- set_outputLWFB90()
+outmat[,] <- 1L
 
 # return value (outputs) ----
 test_new <- run_LWFB90(options_b90 = opts,
@@ -18,8 +18,9 @@ test_new <- run_LWFB90(options_b90 = opts,
 test_asc <- run_LWFB90(options_b90 = opts,
                       param_b90 = parms,
                       climate = slb1_meteo,
-                      soil = soil,
-                      output = output)
+                      soil = soil)
+test_asc <- c(test_asc, process_outputs_LWFB90(test_asc, outmat))
+
 
 test_noinput <- run_LWFB90(options_b90 = opts,
                           param_b90 = parms,
@@ -54,10 +55,12 @@ test_that("input/output complete",{
 
   # asc output objects
   expect_identical(names(test_asc)[grepl("ASC", names(test_asc))],
-                   c("BUDGDAY.ASC","BUDGMON.ASC","BUDGANN.ASC","FLOWDAY.ASC","FLOWMON.ASC",
-                     "FLOWANN.ASC","EVAPDAY.ASC","EVAPMON.ASC","EVAPANN.ASC","ABOVDAY.ASC",
-                     "ABOVMON.ASC","ABOVANN.ASC","BELODAY.ASC","BELOMON.ASC","BELOANN.ASC",
-                     "SWATDAY.ASC","SWATMON.ASC","SWATANN.ASC","MISCDAY.ASC","MISCMON.ASC","MISCANN.ASC")
+                   c("BUDGPRE.ASC", "BUDGDAY.ASC", "BUDGMON.ASC", "BUDGANN.ASC",
+                     "FLOWPRE.ASC", "FLOWDAY.ASC", "FLOWMON.ASC", "FLOWANN.ASC", "EVAPPRE.ASC",
+                     "EVAPDAY.ASC", "EVAPMON.ASC", "EVAPANN.ASC", "ABOVPRE.ASC", "ABOVDAY.ASC",
+                     "ABOVMON.ASC", "ABOVANN.ASC", "BELOPRE.ASC", "BELODAY.ASC", "BELOMON.ASC",
+                     "BELOANN.ASC", "SWATPRE.ASC", "SWATDAY.ASC", "SWATMON.ASC", "SWATANN.ASC",
+                     "MISCPRE.ASC", "MISCDAY.ASC", "MISCMON.ASC")
   )
 })
 

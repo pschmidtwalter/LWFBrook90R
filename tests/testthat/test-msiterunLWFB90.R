@@ -17,7 +17,6 @@ test_that("basic runs using run_multisite_LWFB90 works",{
                  param_b90 = parms,
                  climate = slb1_meteo,
                  soil = list(soil1 = soil, soil2 = soil),
-                 output = -1,
                  rtrn_output = FALSE,
                  rtrn_input = FALSE,
                  cores = cores),
@@ -26,7 +25,6 @@ test_that("basic runs using run_multisite_LWFB90 works",{
                  param_b90 = parms,
                  climate = list(clim1=slb1_meteo, clim2= slb1_meteo),
                  soil = list(soil1 = soil, soil2 = soil, soil3 = soil),
-                 output = -1,
                  rtrn_output = F,
                  rtrn_input = F,
                  cores = cores))

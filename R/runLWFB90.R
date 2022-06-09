@@ -18,10 +18,6 @@
 #'   the number of values per day defined in \code{options_b90$prec_interval}.
 #' @param soil Data.frame containing the hydraulic properties of the soil
 #'   layers. See section 'Soil parameters'
-#' @param output A [7,5]-matrix flagging the desired model output datasets at
-#'   different time intervals. Use \code{\link{set_outputLWFB90}} to generate
-#'   and edit a default output selection matrix. Alternatively, use -1 (the
-#'   default) to return the raw daily and soil layer outputs.
 #' @param output_fun A function or a list of functions of the form
 #'   \code{f(x,...)}, where \code{x} is the object regularly returned by
 #'   \code{run_LWFB90}. During function evaluation, \code{x} contains model
@@ -133,11 +129,9 @@
 #' theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
 #' wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
 #' psimi \tab matric soil water potential for soil layer \tab kPa \cr
-#' psiti \tab total soil water potential for a soil layer \tab kPa \cr
 #' infl \tab infiltration to soil water in soil layer \tab mm \cr
 #' byfl \tab bypass flow from soil layer \tab mm \cr
 #' tran \tab transpiration from soil layer \tab mm \cr
-#' slvp \tab soil evaporation from a soil layer \tab mm \cr
 #' vrfl \tab vertical matrix drainage from soil layer \tab mm \cr
 #' dsfl \tab downslope drainage from layer \tab mm \cr
 #' ntfl \tab net flow into soil layer \tab mm \cr
@@ -150,7 +144,6 @@ run_LWFB90 <- function(options_b90,
                        climate,
                        precip = NULL,
                        soil = NULL,
-                       output = NULL,
                        output_fun = NULL,
                        rtrn_input = TRUE,
                        rtrn_output = TRUE,
@@ -354,12 +347,8 @@ run_LWFB90 <- function(options_b90,
 
 
     ## append simulation results  ----
-    # either raw output or only data set selections
-    if (is.matrix(output) & all(dim(output) == c(7,5))) {
-      simres <- c(simres, process_outputs(simout, output))
-    } else {
-      simres[names(simout)[-1]] <- simout[-1] # append without error-code
-    }
+    simres[names(simout)[-1]] <- simout[-1] # append without error-code
+
 
     ## apply functions on simulation output ----
     if (!is.null(output_fun)) {
@@ -380,7 +369,7 @@ run_LWFB90 <- function(options_b90,
         argsnms = names(outfunargs))
 
       # TODO: simres is copied for use in each output_fun.
-      # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
+      # Better to name -object directly in the call to output_fun,
       # instead of addressing the whole list x.
       simres$output_fun <- tryCatch( {
 
@@ -393,11 +382,7 @@ run_LWFB90 <- function(options_b90,
 
     ## remove the basic results again if they are not required ----
     if (!rtrn_output) {
-      if (is.matrix(output) & all(dim(output) == c(7,5))) {
-        simres <- simres[-which(grepl(".ASC", names(simres), fixed = TRUE))]
-      } else {
-        simres <- simres[-which(names(simres) %in% c("output", "layer_output"))]
-      }
+      simres <- simres[-which(names(simres) %in% c("output", "layer_output"))]
     }
 
     ## remove the model_input if not required ----
@@ -647,172 +632,4 @@ chk_soil <- function(){
     }
   }))
 
-}
-
-# output processing ------------------------------------------------------------
-process_outputs <- function(simout, output) {
-
-  # to pass CRAN check notes
-  adef<-NULL;awat<-NULL;balerr<-NULL;da<-NULL;doy<-NULL;evap<-NULL;flow<-NULL;gwat<-NULL;
-  intr<-NULL;ints<-NULL;mo<-NULL;nits<-NULL;nl<-NULL;relawat<-NULL;rfal<-NULL;safrac<-NULL;
-  seep<-NULL;sfal<-NULL;snow<-NULL;stres<-NULL;swat<-NULL;vrfln<-NULL;yr<-NULL;
-
-  selection <- rownames(output)[which(rowSums(output) > 0)]
-
-  if (any(selection == "Budg")) {
-    Budg <- simout$output[,c("yr","mo","da","doy","rfal","sfal","flow", "evap", "seep","snow","swat","gwat","intr","ints")]}
-  if (any(selection == "Flow")){
-    Flow <- simout$output[,c("yr","mo","da","doy","flow","seep","srfl","slfl","byfl","dsfl","gwfl","vrfln")]}
-  if (any(selection == "Evap")){
-    Evap <- simout$output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
-  if (any(selection == "Abov")){
-    Abov <- simout$output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rthr","sthr","rsno","rnet","smlt","slfl","srfl")]}
-  if (any(selection == "Belo")){
-    Belo <- simout$output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
-  if (any(selection == "Swat")){
-    Swat <- simout$output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
-  if (any(selection == "Misc")){
-    Misc <- simout$output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
-
-  moutputs <- list() # results collection
-
-  for (sel in selection) {
-    X <- get(sel)
-    if (sel  %in% c("Flow", "Evap", "Abov")) {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round, 1), by = list(yr, mo, da, doy)]
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("da","doy"), by = list(yr, mo)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("mo","da","doy"),by = yr]
-        }
-      }
-    }
-
-    if (sel  == "Swat") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round ,3), by = list(yr, mo, da, doy, nl)]
-
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(mean(x),3)}),
-                                                          .SDcols = -c("da","doy"), by = list(yr, mo, nl)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(mean(x),3)}),
-                                                          .SDcols = -c("mo","da","doy"),by = list(yr, nl)]
-        }
-      }
-    }
-    if (sel  == "Belo") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round, 1), by = list(yr, mo, da, doy, nl)]
-
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("da","doy"),by = list(yr, mo, nl)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("mo","da","doy"), by = list(yr, nl)]
-        }
-      }
-    }
-    if (sel  == "Budg") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(# for fluxes: sum up over period
-            prec = round(sum(rfal+sfal),1),
-            flow = round(sum(flow),1),
-            evap = round(sum(evap),1),
-            seep = round(sum(seep),1),
-            # for state variables: take last entry in period
-            snow = round(snow[which.max(doy)],1),
-            swat = round(swat[which.max(doy)],1),
-            gwat = round(gwat[which.max(doy)],1),
-            intr = round(intr[which.max(doy)],1),
-            ints = round(ints[which.max(doy)],1)),
-            by = list(yr, mo, da, doy)]
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(# for fluxes: sum up over period
-            prec = round(sum(rfal+sfal),1),
-            flow = round(sum(flow),1),
-            evap = round(sum(evap),1),
-            seep = round(sum(seep),1),
-            # for state variables: take last entry in period
-            snow = round(snow[which.max(doy)],1),
-            swat = round(swat[which.max(doy)],1),
-            gwat = round(gwat[which.max(doy)],1),
-            intr = round(intr[which.max(doy)],1),
-            ints = round(ints[which.max(doy)],1)),
-            by = list(yr, mo)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(# for fluxes: sum up over period
-            prec = round(sum(rfal+sfal),1),
-            flow = round(sum(flow),1),
-            evap = round(sum(evap),1),
-            seep = round(sum(seep),1),
-            # for state variables: take last entry in period
-            snow = round(snow[which.max(doy)],1),
-            swat = round(swat[which.max(doy)],1),
-            gwat = round(gwat[which.max(doy)],1),
-            intr = round(intr[which.max(doy)],1),
-            ints = round(ints[which.max(doy)],1)),
-            by = list(yr)]
-        }
-      }
-    }
-    if (sel  == "Misc") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(
-            vrfln   = round(vrfln,1),
-            safrac  = round(safrac,1),
-            stres   = round(stres,3),
-            adef    = round(adef,3),
-            awat    = round(awat,1),
-            relawat = round(relawat,3),
-            nits,
-            balerr  = round(balerr, 3)),
-            by = list(yr, mo, da, doy)]
-
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1),
-                                                                 safrac  = round(sum(safrac),1),
-                                                                 stres   = round(mean(stres),3),
-                                                                 adef    = round(mean(adef),3),
-                                                                 awat    = round(mean(awat),1),
-                                                                 relawat = round(mean(relawat),3),
-                                                                 nits    = sum(nits),
-                                                                 balerr  = round(sum(balerr), 3)),
-                                                          by = list(yr, mo)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1),
-                                                                 safrac  = round(sum(safrac),1),
-                                                                 stres   = round(mean(stres),3),
-                                                                 adef    = round(mean(adef),3),
-                                                                 awat    = round(mean(awat),1),
-                                                                 relawat = round(mean(relawat),3),
-                                                                 nits    = sum(nits),
-                                                                 balerr  = round(sum(balerr), 3)),
-                                                          by = list(yr)]
-        }
-      }
-    }
-  }
-
-
-  return(moutputs)
 }
