@@ -98,20 +98,6 @@ data:
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 ```
 
-The next step is to select output variables and their temporal resolution. Sets
-of output variables in different temporal resolution can be selected in a
-`[7,5]`-matrix, and passed as `output` argument to `run_LWFB90()`. To create a
-default selection matrix, use the function `set_outputLWFB90()`. You can modify
-the default output selection by flagging groups of variables with `0` and `1`.
-The default selection comprises annual, monthly and daily evapotranspiration
-('Evap') datasets, and layer by layer daily soil moisture state variables
-('Swat'):
-
-```{r}
-output <- set_outputLWFB90()
-output
-```
-
 ## Single-run simulation
 
 Now we are ready to perform a single-run simulation using the function `run_LWFB90()`:
@@ -119,8 +105,7 @@ Now we are ready to perform a single-run simulation using the function `run_LWFB
 b90res <- run_LWFB90(options_b90 = options_b90,
                      param_b90 = param_b90,
                      climate = slb1_meteo,
-                     soil = soil,
-                     output = output)
+                     soil = soil)
 ```
 
 ```{r, echo = FALSE}
@@ -130,41 +115,35 @@ b90res <- LWFBrook90R:::b90res
 `run_LWFB90()` thereby derives the daily stand properties (`lai`, `sai`,
 `height`, `densef`, `age`) and root distribution from parameters, and passes
 climate, vegetation properties and parameters to the Fortran dynamic library.
-After the simulation has finished, a list containing the selected model output
-(as specified by the `output`-argument) is returned, along with the model input
-(`options_b90`, `param_b90` and derived daily vegetation properties
-`standprop_daily`):
+After the simulation has finished, a list with model output is returned, along
+with the model input (`options_b90`, `param_b90` and derived daily vegetation
+properties `standprop_daily`):
 
 ```{r}
 str(b90res, max.level = 1)
 ```
 
-The list entry `EVAPDAY.ASC` contains date variables ('yr', 'mo', 'da', 'doy'),
+The list entry `output` contains date variables ('yr', 'mo', 'da', 'doy'),
 daily actual evaporation fluxes ('evap', 'tran', 'irvp', 'isvp', 'slvp',
-'snvp'), potential evaporation fluxes ('pint', 'ptran', 'pslvp') and total
-runoff ('flow'). For a detailed description of all output variables refer to the
+'snvp'), potential evaporation fluxes ('pint', 'ptran', 'pslvp'), soil water fluxes ('flow', 'vrfln') and state variables ('swat', 'awat', 'relawat'). For a detailed description of all output variables refer to the
 help pages (`?run_LWFB90`).
 
 To plot the data, it is convenient to derive a `Date` object from the date
 variables. We use data.table syntax here:
 
 ```{r}
-b90res$EVAPDAY.ASC[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
+b90res$output[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
 ```
 
-Another result set that is returned by default are daily soil moisture state
-variables. The respective output object in the result list is named
-'SWATDAY.ASC' and contains the values of the individual layers organized in
+Another second result set (list item `layer_output`) contains daily soil moisture state
+variables and belowground water fluxes of the individual soil layers, organized in
 rows. We want to plot absolute soil water storage ('swati') down to a soil depth
-of 100 cm, so we need to integrate `b90res$SWATDAY.ASC$swati` over the  15
-uppermost soil layers. Again, we use data.table syntax for convenient
-aggregation:
-
+of 100 cm, so we need to integrate `b90res$layer_output$swati` over the 15
+uppermost soil layers. 
 ```{r}
-b90res$SWATDAY.ASC[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
-swat100cm <- b90res$SWATDAY.ASC[which(nl <= 15), list(swat100cm = sum(swati)),
+b90res$layer_output[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
+swat100cm <- b90res$layer_output[which(nl <= 15), list(swat100cm = sum(swati)),
                                 by  = dates]
-
 ```
 
 Now we can plot soil water storage along with transpiration:
@@ -172,8 +151,8 @@ Now we can plot soil water storage along with transpiration:
 ```{r, fig.height=5, fig.width=7, echo =FALSE, fig.cap="Simulation results for sample data"}
 oldpar <- par(no.readonly = T)
 par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-plot(b90res$EVAPDAY.ASC$dates, 
-     b90res$EVAPDAY.ASC$tran, type ='l',
+plot(b90res$output$dates, 
+     b90res$output$tran, type ='l',
      col = "green", ylab = "tran [mm]", xlab = "")
 par(new =TRUE)
 plot(swat100cm$dates,

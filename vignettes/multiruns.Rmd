@@ -52,7 +52,7 @@ To minimize memory allocation, it is recommended to reduce the selected output
 to a minimum and make use of the `output_fun`-argument of `run_LWFB90()`. With
 this argument, it is possible to pass custom functions to `run_LWFB90()`, which
 directly perform on the simulation output list object. With `rtrn_output =
-FALSE`, the original simulation output (as selected by `output`) then can be
+FALSE`, the original simulation output (`output`, `layer_output`) then can be
 discarded, and only the results from the `output_fun`-argument are returned.
 This can be very useful for model calibration or sensitivity analyses tasks
 comprising ten thousands of simulations in a Monte-Carlo setting. With this
@@ -66,20 +66,20 @@ To demonstrate the usage of the `output_fun`-argument, we perform a Monte-Carlo
 simulation using the function `run_multi_LWFB90()`, and define a function that
 returns annual mean soil water storage and transpiration during the growing
 season. In a first step, the function integrates depth-specific soil moisture to
-soil water storage down to specified soil layer (`tolayer`), and in a second
-step calculates mean soil water storage over the growing season, along with the
-sum of transpiration. The growing season thereby is defined by the input
-parameters `budburstdoy` and `leaffalldoy`.
+soil water storage down to specified soil layer (`tolayer`, passed via `...` to
+`output_fun`), and in a second step calculates mean soil water storage over the
+growing season, along with the sum of transpiration. The growing season thereby
+is defined by the input parameters `budburstdoy` and `leaffalldoy`.
 
 ```{r}
 output_function <- function(x, tolayer) {
   # aggregate SWAT
-  swat_tran <- x$SWATDAY.ASC[which(nl <= tolayer), 
-                             list(swat = sum(swati)),
-                             by  = list(yr, doy)]
+  swat_tran <- x$layer_output[which(nl <= tolayer),
+                              list(swat = sum(swati)),
+                              by  = list(yr, doy)]
   #add transpiration from EVAPDAY.ASC
-  swat_tran$tran <- x$EVAPDAY.ASC$tran
-  
+  swat_tran$tran <- x$output$tran
+
   # get beginning and end of growing season from input parameters
   vpstart <- x$model_input$param_b90$budburstdoy
   vpend <- x$model_input$param_b90$leaffalldoy
@@ -87,7 +87,7 @@ output_function <- function(x, tolayer) {
                      data.frame(yr = unique(swat_tran$yr),
                                 vpstart, vpend), by = "yr")
   # mean swat and tran sum
-  swat_tran[doy >= vpstart & doy <= vpend, 
+  swat_tran[doy >= vpstart & doy <= vpend,
             list(swat_vp_mean = mean(swat), tran_vp_sum = sum(tran)), by = yr]
 }
 ```
@@ -101,15 +101,14 @@ b90res <- LWFBrook90R:::b90res
 
 To test our custom output function we run a single-run simulation
 
-```{r}
+```{r, eval = FALSE}
 data("slb1_meteo")
 data("slb1_soil")
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 b90res <- run_LWFB90(options_b90 = set_optionsLWFB90(),
                      param_b90 = set_paramLWFB90(),
                      climate = slb1_meteo,
-                     soil = soil,
-                     output = set_outputLWFB90())
+                     soil = soil)
 ```
 
 and apply the function to the return, to see that our custom output function works:
@@ -147,24 +146,23 @@ Note that the `param_b90` object (and thus parameters `budburstdoy` and
 `leaffalldoy`) is available to our `output_fun`, although it is not included in
 the return (`rtrn_input = FALSE`).
 
-```{r}
+```{r,eval = FALSE}
 mrun_res <- run_multi_LWFB90(paramvar = paramvar,
                              param_b90 = set_paramLWFB90(),
                              cores = 2, # arguments below are passed to run_LWFB90()
                              options_b90 = set_optionsLWFB90(), 
                              climate = slb1_meteo,
-                             soil = soil,
-                             output = set_outputLWFB90(), 
+                             soil = soil, 
                              rtrn_input = FALSE, rtrn_output = FALSE,
                              output_fun = output_function,
                              tolayer = 15) # argument to output_fun
 ```
 
 The result is a list of the individual single-run results, from which we can
-easily extract the results of our output function and `rbindlist` them together
+easily extract the results of our output function and `rbindlist()` them together
 in a data.table:
 
-```{r}
+```{r, eval = FALSE}
 mrun_dt <- rbindlist(lapply(mrun_res, function(x) x$output_fun[[1]]), 
                      idcol = "singlerun")
 ```
@@ -186,7 +184,7 @@ par(oldpar)
 We ran 50 simulations, all with the same climate, soil, and parameters except
 for `maxlai` and `glmax`, that where varied randomly. In the next section we
 will learn how to make use of multiple climate, soil, and parameter sets using
-the function `run_multisite_LWFB90()`.
+the function `run_multisite_LWFB90()`, to simulate a set of different sites.
 
 ## Multi-Site simulations using `run_multisite_LWFB90()`
 
@@ -213,9 +211,10 @@ climates_l <- list(clim1 = slb1_meteo, clim2 = slb1_meteo, clim3 = slb1_meteo)
 Now we can run a small example:
 
 ```{r}
+startdate <- as.Date("2002-06-01")
+enddate <- as.Date("2002-06-30")
 msite_run1 <- run_multisite_LWFB90(
-  options_b90 = set_optionsLWFB90(startdate = as.Date("2002-06-01"), 
-                                  enddate = as.Date("2002-06-30")),
+  options_b90 = set_optionsLWFB90(startdate = startdate, enddate = enddate),
   param_b90 = parms_l,
   climate = climates_l,
   soil = soils_l,
@@ -231,7 +230,7 @@ concatenated from the names of the input list entries holding the individual
 
 The function `run_multisite_LWFB90()` can easily be set up to run a few dozens
 of sites with individual climate data. However, simulating thousands of sites
-potentially is impossible, because such a large list of `climate` data.frames
+can easily cause errors, because such a large list of `climate` data.frames
 might overload the memory of a usual desktop computer. Fortunately, it is
 possible to pass a function instead of a data.frame as `climate`-argument to
 `run_LWFB90()`. Such a function can be used to create the `climate`-data.frame
@@ -248,11 +247,11 @@ temporary location, from where we will read them back in later:
 ```{r}
 tdir <- tempdir()
 fnames <- paste0(tdir, "/clim", 1:3, ".csv")
-write.csv(slb1_meteo[year(slb1_meteo$dates) %in% c(2002,2003),], 
+write.csv(slb1_meteo[year(slb1_meteo$dates) == 2002,], 
           file = fnames[1], row.names = FALSE)
-write.csv(slb1_meteo[year(slb1_meteo$dates) %in% c(2002,2003),], 
+write.csv(slb1_meteo[year(slb1_meteo$dates) == 2002,], 
           file = fnames[2], row.names = FALSE)
-write.csv(slb1_meteo[year(slb1_meteo$dates) %in% c(2002,2003),], 
+write.csv(slb1_meteo[year(slb1_meteo$dates) == 2002,], 
           file = fnames[3], row.names = FALSE)
 ```
 
@@ -263,10 +262,9 @@ points to the first of our three climate files:
 
 ```{r}
 srun <- run_LWFB90(
-  options_b90 = set_optionsLWFB90(),
+  options_b90 = set_optionsLWFB90(startdate = startdate, enddate = enddate),
   param_b90 = set_paramLWFB90(),
   soil = soil,
-  output = set_outputLWFB90(),
   climate = fread,
   file = fnames[1],
   rtrn.input = FALSE)
@@ -289,7 +287,7 @@ passed to the function via `climate_args`:
 
 ```{r}
 msite_run2 <- run_multisite_LWFB90(
-  options_b90 = set_optionsLWFB90(),
+  options_b90 = set_optionsLWFB90(startdate = startdate, enddate = enddate),
   param_b90 = parms_l,
   soil = soils_l,
   climate = fread,
@@ -306,7 +304,7 @@ top-level names of our list `clim_args`, because we used a function as
 `run_multisite_LWFB90()`, and is not passed to `run_LWFB90()`, because otherwise
 it would have been evaluated for each single-run simulation. In this way,
 `fread` is evaluated only three times for in total six simulations which saves
-us some execution time, if we want to simulate multiple parameter sets using the
+us some execution time, in case we want to simulate multiple parameter sets using the
 same climatic data.
 
 ## Multi-site simulation: Input from file, output to file
@@ -328,11 +326,11 @@ output_function2 <- function(x, tolayer, basedir = getwd(),
   filenm = file.path(basedir, paste(soil_nm, clim_nm, param_nm, sep = "_"))
   
   # aggregate SWAT
-  swat_tran <- x$SWATDAY.ASC[which(nl <= tolayer), 
+  swat_tran <- x$layer_output[which(nl <= tolayer), 
                              list(swat = sum(swati)),
                              by  = list(yr, doy)]
   #add transpiration from EVAPDAY.ASC
-  swat_tran$tran <- x$EVAPDAY.ASC$tran
+  swat_tran$tran <- x$output$tran
   
   # get beginning and end of growing season from input parameters
   vpstart <- x$model_input$param_b90$budburstdoy
@@ -353,12 +351,11 @@ results being written to file our temporary directory `tdir`:
 
 ```{r}
 msite_run3 <- run_multisite_LWFB90(
-  options_b90 = set_optionsLWFB90(),
+  options_b90 = set_optionsLWFB90(startdate = startdate, enddate = enddate),
   param_b90 = parms_l,
   soil = soils_l,
   climate = fread,
   climate_args = clim_args,
-  output = set_outputLWFB90(),
   rtrn_input = FALSE, rtrn_output = FALSE,
   output_fun = output_function2,
   tolayer = 15,

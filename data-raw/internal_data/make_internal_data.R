@@ -1,4 +1,3 @@
-options(stringsAsFactors = F)
 
 #Wessolek-MVG
 wessolek_mvg_tab10 <- read.csv("data-raw/internal_data/wessolek_MVG_tab10.csv")
@@ -43,8 +42,6 @@ b90res <- run_LWFB90(options_b90 = options_b90,
                     param_b90 = param_b90,
                     climate = slb1_meteo,
                     soil = soil)
-b90res <- c(b90res, process_outputs_B90(b90res, output))
-
 
 # mrun_res -------------
 
