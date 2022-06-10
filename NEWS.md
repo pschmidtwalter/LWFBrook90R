@@ -1,22 +1,29 @@
 # News for the LWFBrook90R-package
 
-## Version 0.5.0.9000 (???)
+## Version 0.5.0 (???)
 
 **Bug fixes**:
 
 - Installation error on single core machines because of a failed test with `run_multisite_LWFB90()` (Thanks to Henrik Bengtsson)
 
+**Documentation**:
+
+- Vignettes split up into smaller articles
+
 **Changes (potentially breaking)**:
 
-- Basic **output** is now at the **precipitation interval** level:
-  - Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`)
+Basic **output** is now at the **precipitation interval** level, mostly associated with `run_LWFB90()`:
+
+  - Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`).
   - With `prec_interval` > 1, the output contains one row for each day 
   and precipitation interval of the simulation.
-  - Irrespective of the precipitation interval the unit of water and vapour fluxes is mm/d.
-- the list item `daily_output` of the return was renamed to `output`
-- New variable added to `output`: `sthr`
-- Removed redundant variable `slvp` from `layer_output` (soil evaporation).
-- Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the matrix potentential and the gravity potential at the soil layer midpoint.
+  - Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.
+  - With respect to precipitation interval output, the list item `daily_output` of the return was renamed to `output`.
+  - Removed `output`-argument and exported the function `process_outputs_LWFB90()` that does the job.
+  - New variable added to `output`: `sthr`
+  - Removed redundant variable `slvp` from `layer_output` (soil evaporation)
+  - Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the layers' matrix potentential (`psimi`) and the gravity potential at the soil layers' midpoints.
+
 
 ## Version 0.4.5 (2021-11-30)
 

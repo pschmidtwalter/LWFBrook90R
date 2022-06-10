@@ -1,12 +1,11 @@
 ---
-title: "Introduction to LWFBrook90R"
+title: "Model control options and parameters"
 output: 
   rmarkdown::html_vignette:
-    number_sections: true
     toc: true
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Introduction to LWFBrook90R}
+  %\VignetteIndexEntry{Model control options and parameters}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,157 +17,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction
+## Introduction
 
-LWF-BROOK90 [@hammel_charakterisierung_2001] is a soil vegetation atmosphere
-transport (SVAT) model to calculate daily evaporation (transpiration,
-interception, and soil evaporation) and soil water fluxes, along with soil water
-contents and soil water tension of a soil profile covered with vegetation. It is
-an upgraded version of the original BROOK90 model
-[@federer_sensitivity_2003; @federer_brook_2002], featuring additional
-parameterizations of the soil water retention and conductivity functions
-[@mualem_new_1976; @van_genuchten_closed-form_1980], and the option to take
-interannual variation of aboveground vegetation characteristics into account.
-
-The package core function `run_LWFB90()` runs the LWF-Brook90
-by:
-
-* creating model input objects from climate driving data, model control options
-and parameters, 
-* executing the model code, 
-* returning the model output.
-
-The model control options thereby let you select different functions for
-defining aboveground stand dynamics, phenology, and root length density depth
-distributions. Additionally, a set of pedotransfer functions is provided to
-derive hydraulic parameters from soil physical properties.
-
-In this vignette, we will use meteorological and soil data from the longterm
-monitoring beech forest site SLB1 in the Solling mountains, Germany, which are
-available after loading the package.
-
-To reproduce the examples, load 'LWFBrook90R' and the 'data.table' package:
-
-```{r, warning = FALSE, message = FALSE}
-library(LWFBrook90R)
-library(data.table)
-```
-
-# Basic usage
-
-## Input Objects
-
-As a first step, we need to set up the input objects for the central function
-`runLWFB90()`. Aside from meteorological and soil data, we need to define the
-model control options and model parameter objects. The model options contain
-basic information about the simulation and which sub-models to use (e.g. the
-start and end dates of the simulation, the precipitation interval, the phenology
-model, root length density depth distribution function, etc). The model
-parameter object contains about 100 parameters, of which most are required to
-run the model, but some only take effect if certain model control options are
-selected (see section [Model control options](#options)). Two functions are
-available that can be used to generate default lists of model options and
-parameters:
-
-```{r}
-options_b90 <- set_optionsLWFB90()
-param_b90 <- set_paramLWFB90()
-```
-
-The created objects can be easily manipulated by reference, or simply by
-assigning values to the option and parameter names directly in the function
-calls. To look up the meanings of the various options and parameters see
-`?set_optionsLWFB90` and `?set_paramLWFB90`. The meaning and context of most
-input parameters (and output variables) can also be looked up in the
-documentation of the original BROOK90 model version on [Tony Federer's
-webpages](http://www.ecoshift.net/brook/b90doc.html), which is always a
-recommended source of information when working with any BROOK90 version.
-
-To run LWF-BROOK90 for the Solling beech site, we need to prepare the soil data
-for the model. The data.frame `slb1_soil` contains soil physical data of the
-soil horizons, but not yet the hydraulic parameters that LWF-BROOK90 requires.
-Fortunately, 'LWFBrook90R' comes with a set of pedotransfer functions to derive
-the Mualem/van Genuchten (MvG) parameters of the soil water retention and
-hydraulic conductivity functions. Here we use texture tabulated values from
-Wessolek, Renger & Kaupenjohann [-@wessolek_bodenphysikalische_2009] and create
-a data.frame containing the required MvG-parameters along with the soil physical
-data:
-
-```{r}
-soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
-```
-
-## Single-run simulation
-
-Now we are ready to perform a single-run simulation using the function `run_LWFB90()`:
-```{r, eval = FALSE}
-b90res <- run_LWFB90(options_b90 = options_b90,
-                     param_b90 = param_b90,
-                     climate = slb1_meteo,
-                     soil = soil)
-```
-
-```{r, echo = FALSE}
-b90res <- LWFBrook90R:::b90res
-```
-
-`run_LWFB90()` thereby derives the daily stand properties (`lai`, `sai`,
-`height`, `densef`, `age`) and root distribution from parameters, and passes
-climate, vegetation properties and parameters to the Fortran dynamic library.
-After the simulation has finished, a list with model output is returned, along
-with the model input (`options_b90`, `param_b90` and derived daily vegetation
-properties `standprop_daily`):
-
-```{r}
-str(b90res, max.level = 1)
-```
-
-The list entry `output` contains date variables ('yr', 'mo', 'da', 'doy'),
-daily actual evaporation fluxes ('evap', 'tran', 'irvp', 'isvp', 'slvp',
-'snvp'), potential evaporation fluxes ('pint', 'ptran', 'pslvp'), soil water fluxes ('flow', 'vrfln') and state variables ('swat', 'awat', 'relawat'). For a detailed description of all output variables refer to the
-help pages (`?run_LWFB90`).
-
-To plot the data, it is convenient to derive a `Date` object from the date
-variables. We use data.table syntax here:
-
-```{r}
-b90res$output[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
-```
-
-Another second result set (list item `layer_output`) contains daily soil moisture state
-variables and belowground water fluxes of the individual soil layers, organized in
-rows. We want to plot absolute soil water storage ('swati') down to a soil depth
-of 100 cm, so we need to integrate `b90res$layer_output$swati` over the 15
-uppermost soil layers. 
-```{r}
-b90res$layer_output[, dates := as.Date(paste(yr, mo, da, sep = "-"))]
-swat100cm <- b90res$layer_output[which(nl <= 15), list(swat100cm = sum(swati)),
-                                by  = dates]
-```
-
-Now we can plot soil water storage along with transpiration:
-
-```{r, fig.height=5, fig.width=7, echo =FALSE, fig.cap="Simulation results for sample data"}
-oldpar <- par(no.readonly = T)
-par(mar=c(4.1,4.1,1.1,4.1), oma = c(1,1,1,1))
-plot(b90res$output$dates, 
-     b90res$output$tran, type ='l',
-     col = "green", ylab = "tran [mm]", xlab = "")
-par(new =TRUE)
-plot(swat100cm$dates,
-     swat100cm$swat100cm, 
-     ylim=c(100, 350), type ='l', col = "blue",
-     xaxt = "n", yaxt ="n", xlab= "", ylab = "")
-axis(4,pretty(c(100,350)))
-mtext("swat_100cm [mm]", side = 4, line =3)
-legend("bottom",inset = -0.25,
-       legend = c("tran", "swat100cm"),
-       col = c("green", "blue"),  lty = 1, 
-       bty = "n", xpd = TRUE,  horiz = TRUE,  text.width = 100)
-par(oldpar)
-```
-
-# Options and parameters {#options}
+This vignette demonstrates the use of different model control option setting (`options_90`-argument of `runLWFB90()`) and parameters (`param_b90`-argument). 
 
 Aside from the basic technical information of the simulation (`startdate`,
 `enddate`, `fornetrad`, `prec_interval` and `correct_prec`), the model control
@@ -182,12 +33,24 @@ options and parameters are passed from the `options_b90` and `param_b90`
 arguments to the individual functions that are called from within
 `run_LWFB90()`.
 
+For this purpose, we create basic lists of model control options and parameters,
+as well as soil and climate objects.
+
+```{r, warning = FALSE, message = FALSE}
+library(LWFBrook90R)
+library(data.table)
+
+options_b90 <- set_optionsLWFB90()
+param_b90 <- set_paramLWFB90()
+```
+
+
 ## Aboveground vegetation characteristics
 
 ### Intra-annual variation of leaf area index
 
-In the simulation above, we used the default parameter set (created with
-`set_paramLWFB90()`) representing a deciduous forest stand, without leafs in
+The default parameter set (created with
+`set_paramLWFB90()`) represents a deciduous forest stand, without leafs in
 winter and maximum leaf area index in summer. The maximum leaf area index is
 defined by the parameter `param_b90$maxlai`, the minimum value in winter is
 internally calculated as a fraction (`param_b90$winlaifrac`) of
@@ -233,7 +96,7 @@ A third shape-option for the intra-annual variation of leaf area index is called
 'Coupmodel' and uses the interpolation method as implemented in the 'Coupmodel'
 [@jansson_coupled_2004]. With `lai_method ='Coupmodel`, form parameters for leaf
 unfolding and leaf fall (`shp_budburst`, `shp_leaffall`), and the date when leaf
-area is at its maximum (`shp_optdoy`) come into action.
+area is at its maximum (`shp_optdoy`) are required, in addition to the parameters required `by lai_method = 'b90'`.
 ```{r}
 options_b90$lai_method <- "Coupmodel"
 param_b90$shp_budburst <- 0.5
@@ -252,6 +115,7 @@ LAI_coupmodel <-  make_seasLAI(method = options_b90$lai_method,
 A plot of all three methods shows the roles of the different parameters:
 
 ```{r, echo = FALSE, fig.height=5, fig.width=7, fig.cap = "Methods featured by make_seasLAI()" }
+oldpar <- par(no.readonly = T)
 par(xpd = TRUE, mar = c(5.1,4.1,2.1,2.1), oma = c(1,1,1,1))
 
 plot(LAI_b90, type = "n", xlab = "doy", ylab = "lai [m²/m²]", ylim = c(0,6))
@@ -337,8 +201,8 @@ after the simulation.
 ### Other plant properties (`height`, `sai`, `densef`)
 
 Like the leaf area index parameters and budburst/leaffall-dates, it is also
-possible to provide vectors of values for stand height, stem area index, and
-stand density to generate between-year variation of stand characteristics. From
+possible to provide vectors of values for stand height (`height`), stem area index (`sai`), and
+stand density (`densef`) to generate between-year variation of stand characteristics. From
 the yearly values, daily values are interpolated using the function
 `approx_standprop()`. The `approx.method`- argument of the function defines how
 to interpolate the yearly values passed by `y`. Within `run_LWFB90()`, the
@@ -418,7 +282,7 @@ par(oldpar)
 
 Another option for incorporating between-year variation of plant properties is
 to provide a data.frame with yearly values of `height`, `maxlai`, `sai`,
-`densef` and `age` as parameter `standprop_table` in `param_b90`. To take
+`densef` and `age` as list item `standprop_table` in `param_b90`. To take
 effect, the option `options_b90$standprop_input` has to be set to `'table'`. In
 this case, the values passed via parameters `height`, `sai`, `densef` and
 `age_ini` are ignored. As `maxlai` is also provided via the table, the `maxlai`
@@ -436,6 +300,9 @@ but only return the model input.
 #Extend simulation period
 options_b90$startdate <- as.Date("1980-01-01")
 options_b90$enddate <- as.Date("1999-12-31")
+
+soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
+
 
 #set up options for table input 
 options_b90$standprop_input <- 'table'
@@ -582,4 +449,3 @@ legend("bottomright", c("'betamodel'","'table'","'linear'", "'constant'"),seg.le
 ```
 
 # References
-

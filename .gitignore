@@ -15,3 +15,6 @@ dev/
 src-i386
 src-x64
 Meta
+inst/doc
+/doc/
+/Meta/

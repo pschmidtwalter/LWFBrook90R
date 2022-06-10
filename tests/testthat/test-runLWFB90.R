@@ -19,7 +19,7 @@ test_asc <- run_LWFB90(options_b90 = opts,
                        param_b90 = parms,
                        climate = slb1_meteo,
                        soil = soil)
-test_asc <- c(test_asc, process_outputs_B90(test_asc, outmat))
+test_asc <- c(test_asc, process_outputs_LWFB90(test_asc, outmat))
 
 
 test_noinput <- run_LWFB90(options_b90 = opts,

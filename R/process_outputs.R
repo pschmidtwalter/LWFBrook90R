@@ -30,11 +30,11 @@
 #'            climate = slb1_meteo,
 #'            soil = soil)
 #'
-#' process_outputs_B90(res, selection = outsel)
+#' process_outputs_LWFB90(res, selection = outsel)
 
-process_outputs_B90 <- function(x,
-                            selection = set_outputLWFB90(),
-                            prec_interval = 1)
+process_outputs_LWFB90 <- function(x,
+                                   selection = set_outputLWFB90(),
+                                   prec_interval = 1)
 {
 
   # to pass CRAN check notes
