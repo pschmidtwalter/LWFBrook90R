@@ -23,10 +23,10 @@ test_that("basic runs using run_multisite_LWFB90 works",{
               "list")
   expect_error(run_multisite_LWFB90(options_b90 = opts,
                  param_b90 = parms,
-                 climate = list(clim1=slb1_meteo, clim2= slb1_meteo),
+                 climate = list(clim1 = slb1_meteo, clim2 = slb1_meteo),
                  soil = list(soil1 = soil, soil2 = soil, soil3 = soil),
-                 rtrn_output = F,
-                 rtrn_input = F,
+                 rtrn_output = FALSE,
+                 rtrn_input = FALSE,
                  cores = cores))
 })
 
@@ -40,26 +40,25 @@ climfun <- function(met) {
 }
 
 varargs <- list(clim1 = list(met = clim),
-                clim2 = list(met=clim))
+                clim2 = list(met = clim))
 
 test_that("msiterun with climate_fun and multiple climate_args works",{
   expect_type(run_multisite_LWFB90(options_b90 = opts,
                              param_b90 = parms,
                              climate = climfun,
                              soil = soil,
-                             climate_args= varargs,
-                             rtrn_output = F,
-                             rtrn_input = F,
+                             climate_args = varargs,
+                             rtrn_output = FALSE,
+                             rtrn_input = FALSE,
                              cores = cores),
               "list")
   expect_type(run_multisite_LWFB90(options_b90 = opts,
                  param_b90 = parms,
                  climate = climfun,
                  soil = list(soil1 = soil, soil2 = soil),
-                 climate_args= varargs,
-                 all_combinations = T,
-                 output = -1,
-                 rtrn_input = F,
+                 climate_args = varargs,
+                 all_combinations = TRUE,
+                 rtrn_input = FALSE,
                  cores = cores),
               "list")
 })

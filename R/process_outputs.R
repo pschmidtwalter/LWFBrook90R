@@ -42,7 +42,7 @@ process_outputs_B90 <- function(x,
   intr<-NULL;ints<-NULL;mo<-NULL;nits<-NULL;nl<-NULL;relawat<-NULL;rfal<-NULL;safrac<-NULL;
   seep<-NULL;sfal<-NULL;snow<-NULL;stres<-NULL;swat<-NULL;vrfln<-NULL;yr<-NULL;
 
-  select <- rownames(selection)[which(rowSums(output) > 0)]
+  select <- rownames(selection)[which(rowSums(selection) > 0)]
 
   if (any(select == "Budg")) {
     Budg <- x$output[,c("yr","mo","da","doy","rfal","sfal","flow", "evap", "seep","snow","swat","gwat","intr","ints")]}

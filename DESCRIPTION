@@ -29,11 +29,11 @@ Imports:
     vegperiod (>= 0.3.0),
     foreach (>= 1.5.0),
     iterators (>= 1.0.12),
+    parallelly,
     doFuture (>= 0.10.0),
     future (>= 1.19.0),
     progressr (>= 0.6.0)
 Suggests:
-    sirad,
     knitr,
     rmarkdown,
     roxygen2,

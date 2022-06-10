@@ -3,36 +3,36 @@ library(data.table)
 # Set up the input data
 data("slb1_soil")
 data("slb1_meteo")
-opts <- set_optionsLWFB90(startdate = as.Date("2002-01-01"), enddate = as.Date("2003-12-31"))
+opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-02"))
 parms <- set_paramLWFB90()
 soil <- cbind(slb1_soil, hydpar_wessolek_tab(texture = slb1_soil$texture))
 outmat <- set_outputLWFB90()
 outmat[,] <- 1L
 
 # return value (outputs) ----
-test_new <- run_LWFB90(options_b90 = opts,
-          param_b90 = parms,
-          climate = slb1_meteo,
-          soil = soil)
+test_default <- run_LWFB90(options_b90 = opts,
+                           param_b90 = parms,
+                           climate = slb1_meteo,
+                           soil = soil)
 
 test_asc <- run_LWFB90(options_b90 = opts,
-                      param_b90 = parms,
-                      climate = slb1_meteo,
-                      soil = soil)
-test_asc <- c(test_asc, process_outputs_LWFB90(test_asc, outmat))
+                       param_b90 = parms,
+                       climate = slb1_meteo,
+                       soil = soil)
+test_asc <- c(test_asc, process_outputs_B90(test_asc, outmat))
 
 
 test_noinput <- run_LWFB90(options_b90 = opts,
-                          param_b90 = parms,
-                          climate = slb1_meteo,
-                          soil = soil,
-                          rtrn_input = F)
+                           param_b90 = parms,
+                           climate = slb1_meteo,
+                           soil = soil,
+                           rtrn_input = F)
 
 test_nooutput <- run_LWFB90(options_b90 = opts,
-                          param_b90 = parms,
-                          climate = slb1_meteo,
-                          soil = soil,
-                          rtrn_output = F)
+                            param_b90 = parms,
+                            climate = slb1_meteo,
+                            soil = soil,
+                            rtrn_output = F)
 
 test_that("input/output complete",{
 
@@ -76,10 +76,10 @@ climfun <- function(met) {
 
 test_that("climate input from function works", {
   expect_type(run_LWFB90(options_b90 = opts,
-                        param_b90 = parms,
-                        soil = soil,
-                        climate = climfun,
-                        met = clim),"list")
+                         param_b90 = parms,
+                         soil = soil,
+                         climate = climfun,
+                         met = clim),"list")
 })
 
 # output function ----
@@ -98,25 +98,25 @@ outfun2 <- function(x) {
 test_that("single output functions works", {
   expect_type(
     run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-01-01"),
-                                              enddate = as.Date("2002-12-31")),
-              param_b90 = parms,
-              soil = soil,
-              climate = climfun,
-              met = clim,
-              output_fun = outfun1,
-              rtrn_input =F,
-              rtrn_output = F)$output_fun,
-              "list")
+                                               enddate = as.Date("2002-12-31")),
+               param_b90 = parms,
+               soil = soil,
+               climate = climfun,
+               met = clim,
+               output_fun = outfun1,
+               rtrn_input = FALSE,
+               rtrn_output = FALSE)$output_fun,
+    "list")
   expect_type(
     run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-01-01"),
-                                              enddate = as.Date("2002-12-31")),
-              param_b90 = parms,
-              soil = soil,
-              climate = climfun,
-              met = clim,
-              output_fun = list(out1 = outfun1, out2 = outfun2),
-              rtrn_input =F,
-              rtrn_output = F)$output_fun,
+                                               enddate = as.Date("2002-12-31")),
+               param_b90 = parms,
+               soil = soil,
+               climate = climfun,
+               met = clim,
+               output_fun = list(out1 = outfun1, out2 = outfun2),
+               rtrn_input = FALSE,
+               rtrn_output = FALSE)$output_fun,
     "list")
 })
 
@@ -130,22 +130,22 @@ setDT(slb1_prec2013_hh)
 test_that("precipitation input works",{
 
   # input from precip-argument
-  res_new24 <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-01-01"),
-                                             enddate = as.Date("2013-12-31")),
-             param_b90 = parms,
-             climate = meteo,
-             soil = soil,
-             precip = prec)
+  res <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-05-14"),
+                                                          enddate = as.Date("2013-07-28")),
+                          param_b90 = parms,
+                          climate = meteo,
+                          soil = soil,
+                          precip = prec)
 
   expect_equal(sum(prec$prec[prec$dates %in% seq.Date(as.Date("2013-05-14"),
                                                       as.Date("2013-07-28"), by = "day")]),
                sum(res$output$rfal+res$output$sfal)
-               )
+  )
 
   expect_true(sum(meteo$prec[meteo$dates %in% seq.Date(as.Date("2013-05-14"),
-                                                      as.Date("2013-07-28"), by = "day")]) <
+                                                       as.Date("2013-07-28"), by = "day")]) <
                 sum(res$output$rfal+res$output$sfal)
-              )
+  )
 
   # hourly input
   res <- run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-05-14"),
@@ -158,9 +158,9 @@ test_that("precipitation input works",{
   expect_equal(slb1_prec2013_hh[between(dates, as.Date("2013-05-14"),
                                         as.Date("2013-07-28")),
                                 sum(prec)],
-               sum(res$daily_output$rfal+res$daily_output$sfal))
+               sum(res$output$rfal+res$output$sfal) / 24)
 
-  })
+})
 
 
 
