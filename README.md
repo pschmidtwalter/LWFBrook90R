@@ -74,30 +74,7 @@ lwfb90_res <- run_LWFB90(options_b90 = opts,
 
 Plot results
 
-``` r
-oldpar <- par(no.readonly = TRUE)
-
-dates <- with(lwfb90_res$output, as.Date(paste(yr, mo, da, sep = "-")))
-par(mar = c(2,4.1,1,4.1))
-plot(dates,lwfb90_res$output$evap, 
-     col = "green", type = 'l', ylim = c(0,7),
-     xlab = "", ylab = "Evapotranspiration [mm]")
-par(new=TRUE)
-plot(dates, lwfb90_res$output$swat, type = "l", 
-     col = "blue", ylim = c(200,500), 
-     yaxt = "n", xaxt = "n", ylab = "", xlab = "")
-axis(4,pretty(c(200,500)))
-mtext("Soil water storage [mm]", side = 4, line =3)
-legend("left", legend = c("ET", "Swat"),
-       col = c("green", "blue"),  lty = 1, 
-       bty = "n")
-```
-
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
-
-``` r
-par(oldpar)
-```
 
 ## Citation
 

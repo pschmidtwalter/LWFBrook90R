@@ -79,7 +79,7 @@ lwfb90_res <- run_LWFB90(options_b90 = opts,
 
 Plot results
 
-```{r, fig.height=4, fig.width=7}
+```{r,echo = FALSE, fig.height=4, fig.width=7}
 oldpar <- par(no.readonly = TRUE)
 
 dates <- with(lwfb90_res$output, as.Date(paste(yr, mo, da, sep = "-")))

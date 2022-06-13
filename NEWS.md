@@ -12,17 +12,17 @@
 
 **Changes (potentially breaking)**:
 
-Basic **output** is now at the **precipitation interval** level, mostly associated with `run_LWFB90()`:
+Basic **output** is now at the **precipitation interval** level:
 
-  - Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`).
-  - With `prec_interval` > 1, the output contains one row for each day 
-  and precipitation interval of the simulation.
-  - Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.
-  - With respect to precipitation interval output, the list item `daily_output` of the return was renamed to `output`.
-  - Removed `output`-argument and exported the function `process_outputs_LWFB90()` that does the job.
-  - New variable added to `output`: `sthr`
-  - Removed redundant variable `slvp` from `layer_output` (soil evaporation)
-  - Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the layers' matrix potentential (`psimi`) and the gravity potential at the soil layers' midpoints.
+- With `options_b90$prec_interval` > 1, the output of `run_LWFB90()` now contains one row for each day 
+and precipitation interval of the simulation.
+- Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`).
+- Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.
+- With respect to precipitation interval output, the list item `daily_output` of the return was renamed to `output`.
+- Removed `output`-argument and exported the function `process_outputs_LWFB90()` that does the job.
+- New variable added to `output`: `sthr`.
+- Removed redundant variable `slvp` from `layer_output` (soil evaporation).
+- Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the layers' matrix potententials (`psimi`) and the gravity potentials at the soil layers' midpoints.
 
 
 ## Version 0.4.5 (2021-11-30)
