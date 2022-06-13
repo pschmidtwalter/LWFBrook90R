@@ -2,20 +2,3 @@
 .Rhistory
 .RData
 .Ruserdata
-src/*.o
-src/*.so
-src/*.dll
-src/*.mod
-vignettes/*.R
-vignettes/*.html
-*.Rproj
-dev/
-# Mac?
-*.DS_Store
-src-i386
-src-x64
-Meta
-inst/doc
-/doc/
-/Meta/
-docs
