@@ -97,22 +97,32 @@ model, and returns the selected results.</p>
 <dd><p>Named list of model control options. Use
 <code><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></code> to generate a list with default model
 control options.</p></dd>
+
+
 <dt>param_b90</dt>
 <dd><p>Named list of model input parameters. Use
 <code><a href="set_paramLWFB90.html">set_paramLWFB90</a></code> to generate a list with default model
 parameters.</p></dd>
+
+
 <dt>climate</dt>
 <dd><p>Data.frame with daily climatic data, or a function that
 returns a suitable data.frame. See details for the required variables.</p></dd>
+
+
 <dt>precip</dt>
 <dd><p>Data.frame with columns 'dates' and 'prec' to supply
 precipitation data separately from climate data. Can be used to provide
 sub-day resolution precipitation data to LWFBrook90. For each day in dates,
 1 (daily resolution) to 240 values of precipitation can be provided, with
 the number of values per day defined in <code>options_b90$prec_interval</code>.</p></dd>
+
+
 <dt>soil</dt>
 <dd><p>Data.frame containing the hydraulic properties of the soil
 layers. See section 'Soil parameters'</p></dd>
+
+
 <dt>output_fun</dt>
 <dd><p>A function or a list of functions of the form
 <code>f(x,...)</code>, where <code>x</code> is the object regularly returned by
@@ -122,34 +132,52 @@ input and selected output objects, irrespective of <code>rtrn_input</code> and
 especially useful if the function is evaluated within a large multi-run
 application, for which the output might overload the memory. (see
 <code><a href="run_multi_LWFB90.html">run_multi_LWFB90</a></code> and <code><a href="run_multisite_LWFB90.html">run_multisite_LWFB90</a></code>).</p></dd>
+
+
 <dt>rtrn_input</dt>
 <dd><p>Logical: append <code>param_b90</code>, <code>options_b90</code>, and
 daily plant properties (<code>standprop_daily</code>, as derived from parameters)
 to the result?</p></dd>
+
+
 <dt>rtrn_output</dt>
 <dd><p>Logical: return the simulation results select via
 <code>output</code>?</p></dd>
+
+
 <dt>chk_input</dt>
 <dd><p>Logical wether to check <code>param_b90</code>,
 <code>options_b90</code>, <code>climate</code>, <code>precip</code>, and <code>soil</code> for
 completeness and consistency.</p></dd>
+
+
 <dt>run</dt>
 <dd><p>Logical: run LWF-Brook90 or only return model input objects?
 Useful to inspect the effects of options and parameters on model input.
 Default is TRUE.</p></dd>
+
+
 <dt>timelimit</dt>
 <dd><p>Integer to set elapsed time limits (seconds) for running LWF-Brook90.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Logical: print messages to the console? Default is FALSE.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments passed to <code>output_fun</code> and/or
 <code>climate</code>, if the latter is a function.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list containing the selected model output (if <code>rtrn_output ==
-  TRUE</code>), the model input (if <code>rtrn_input == TRUE</code>, except for
-<code>climate</code>), and the return values of <code>output_fun</code> if specified.</p>
+    
+
+<p>A list containing the selected model output (if <code>rtrn_output ==
+  TRUE</code>), the model input (if <code>rtrn_input == TRUE</code>, except for</p>
+<p></p>
+<p><code>climate</code>), and the return values of <code>output_fun</code> if specified.</p>
     </div>
     <div id="climate-input-data">
     <h2>Climate input data</h2>
@@ -238,7 +266,7 @@ Default is TRUE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

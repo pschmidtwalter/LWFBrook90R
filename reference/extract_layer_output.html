@@ -84,20 +84,29 @@ data.table's <code>dcast</code>-function.</p>
     <dl><dt>dat</dt>
 <dd><p>Data.frame with layer data organized in rows and identified by a
 layer number column <code>nl</code>.</p></dd>
+
+
 <dt>layers</dt>
 <dd><p>Integer vector addressing the layer numbers (nl) to be
 extracted from dat. If not supplied, values from all layers will be
 returned.</p></dd>
+
+
 <dt>value_vars</dt>
 <dd><p>Character vector containing names of value-variables to be
 extracted from dat. If not supplied, <code>value_vars</code> will be guessed.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>Separation character for constructig names from variable name and
 layer index.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table with the layers' values of the variables organized in
+    
+
+<p>A data.table with the layers' values of the variables organized in
   columns (wide format) with the names being made up of the variable name and
   layer number.</p>
     </div>
@@ -235,32 +244,32 @@ layer index.</p></dd>
 <span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo         var1        var2         var3        var4        var5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.913901179 -0.25373737 -0.751530027 -0.41462052 -0.49210719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.720907563 -0.21667610 -0.269724905 -0.02952195 -0.22639328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.512565416 -0.96468602 -0.155682014 -0.14861563 -0.64357107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.005373652 -0.14022265 -0.228237594 -0.57616403 -0.29621195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.363567965 -0.17585145 -0.705417418 -0.90550720 -0.72776164</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.302781584 -0.78673720 -0.550126317 -0.53078134 -0.39541476</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.653606292 -0.66464816 -0.111801561 -0.09446409 -0.69677896</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.446186471 -0.21343255 -0.772734583 -0.84033410 -0.46043708</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.042654745 -0.09477074 -0.527405295 -0.04210799 -0.60113837</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.796196142 -0.97585543 -0.347116683 -0.48127517 -0.39786852</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.012899099 -0.92810898 -0.010186991 -0.20374992 -0.01214628</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.703926966 -0.58542699 -0.972570712 -0.28748413 -0.56183228</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2003  1 -0.795394553 -0.92537870 -0.550501984 -0.53561432 -0.92750386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2003  2 -0.273712795 -0.62927773 -0.033054444 -0.28465850 -0.55766399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2003  3 -0.296493914 -0.71208385 -0.808002063 -0.11108694 -0.80944435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2003  4 -0.987096082 -0.28943235 -0.879799565 -0.61721491 -0.45059885</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2003  5 -0.138837438 -0.90524109 -0.115473514 -0.95783673 -0.98925679</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2003  6 -0.028267038 -0.77186885 -0.480009071 -0.25681064 -0.41451923</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2003  7 -0.685070493 -0.69904555 -0.788692027 -0.79982379 -0.48743016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2003  8 -0.806977815 -0.32225098 -0.826934459 -0.40040893 -0.92943897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2003  9 -0.361387828 -0.70233857 -0.475773742 -0.86658860 -0.91780603</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2003 10 -0.263818174 -0.87944885 -0.005045217 -0.66390004 -0.43347132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2003 11 -0.509523719 -0.64567717 -0.346969666 -0.68313461 -0.10287057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2003 12 -0.899489063 -0.20923293 -0.103538865 -0.54753267 -0.39522965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo         var1        var2         var3        var4        var5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo        var1        var2        var3        var4         var5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.44897764 -0.37660492 -0.15059931 -0.47860229 -0.240493204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.49805025 -0.46477743 -0.72737334 -0.80620419 -0.051950375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.16395649 -0.92551266 -0.32130314 -0.21548629 -0.972615028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.33419862 -0.26607822 -0.72590009 -0.12301313 -0.611996501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.19836734 -0.32519549 -0.24476217 -0.92945426 -0.757763445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.73550828 -0.75331754 -0.89710200 -0.36523010 -0.999407202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.09993743 -0.12211472 -0.59386298 -0.15306825 -0.007681782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.22080250 -0.54723296 -0.37016166 -0.87046827 -0.877646178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.81607281 -0.08360678 -0.60813686 -0.43680121 -0.996466602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.73306003 -0.98305769 -0.82613195 -0.11453207 -0.390263633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.97737311 -0.09472926 -0.22609836 -0.40437297 -0.106339972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.54014201 -0.89796110 -0.02516413 -0.54247037 -0.736312124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2003  1 -0.72521717 -0.98570913 -0.18677290 -0.63825237 -0.201394848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2003  2 -0.52072571 -0.65992657 -0.27459977 -0.03082109 -0.989667955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2003  3 -0.93268371 -0.41166762 -0.67947340 -0.58560174 -0.874985086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2003  4 -0.79246676 -0.89504792 -0.76603756 -0.82023703 -0.487240401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2003  5 -0.56540324 -0.98695331 -0.40238465 -0.91194117 -0.225987845</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2003  6 -0.20289190 -0.25814977 -0.70639727 -0.32212123 -0.651421033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2003  7 -0.22678705 -0.18383787 -0.32563352 -0.24332606 -0.638411850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2003  8 -0.98293401 -0.37808670 -0.55369279 -0.22287674 -0.567659975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2003  9 -0.60804640 -0.85290106 -0.92654153 -0.37370999 -0.039667384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2003 10 -0.59108243 -0.06530153 -0.67271105 -0.94586976 -0.454802746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2003 11 -0.36411976 -0.22236727 -0.09470145 -0.89719658 -0.916498876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2003 12 -0.79934986 -0.88990176 -0.69110354 -0.71384199 -0.765406125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo        var1        var2        var3        var4         var5</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># add more variables</span></span>
 <span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">var1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span></span>
@@ -268,86 +277,86 @@ layer index.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># extract specific layers</span></span>
 <span class="r-in"><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span>,layers <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo       var_2        var_3       var_4   var1_2   var1_3   var1_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.25373737 -0.751530027 -0.41462052 1.350438 1.981349 1.936024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.21667610 -0.269724905 -0.02952195 1.492739 1.350970 1.159983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.96468602 -0.155682014 -0.14861563 1.298846 1.104672 1.167104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.14022265 -0.228237594 -0.57616403 1.411519 1.046192 1.412485</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.17585145 -0.705417418 -0.90550720 1.388897 1.267265 1.897805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.78673720 -0.550126317 -0.53078134 1.297350 1.444676 1.197344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.66464816 -0.111801561 -0.09446409 1.923844 1.683948 1.411640</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.21343255 -0.772734583 -0.84033410 1.422102 1.593385 1.464799</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.09477074 -0.527405295 -0.04210799 1.754983 1.536324 1.429917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.97585543 -0.347116683 -0.48127517 1.680927 1.448215 1.421773</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.92810898 -0.010186991 -0.20374992 1.083070 1.579589 1.619588</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.58542699 -0.972570712 -0.28748413 1.829618 1.034556 1.192925</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2003  1 -0.92537870 -0.550501984 -0.53561432 1.436897 1.696474 1.930282</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2003  2 -0.62927773 -0.033054444 -0.28465850 1.487851 1.080738 1.358886</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2003  3 -0.71208385 -0.808002063 -0.11108694 1.322812 1.084785 1.821004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2003  4 -0.28943235 -0.879799565 -0.61721491 1.796348 1.597510 1.169244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2003  5 -0.90524109 -0.115473514 -0.95783673 1.570869 1.098589 1.092345</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2003  6 -0.77186885 -0.480009071 -0.25681064 1.740975 1.302164 1.368859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2003  7 -0.69904555 -0.788692027 -0.79982379 1.025381 1.561611 1.674633</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2003  8 -0.32225098 -0.826934459 -0.40040893 1.486325 1.094717 1.243843</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2003  9 -0.70233857 -0.475773742 -0.86658860 1.020346 1.618679 1.104560</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2003 10 -0.87944885 -0.005045217 -0.66390004 1.833020 1.257450 1.439095</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2003 11 -0.64567717 -0.346969666 -0.68313461 1.117858 1.200279 1.524534</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2003 12 -0.20923293 -0.103538865 -0.54753267 1.419126 1.663722 1.927500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo       var_2        var_3       var_4   var1_2   var1_3   var1_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo       var_2       var_3       var_4   var1_2   var1_3   var1_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.37660492 -0.15059931 -0.47860229 1.460419 1.951952 1.205009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.46477743 -0.72737334 -0.80620419 1.049093 1.339700 1.978322</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.92551266 -0.32130314 -0.21548629 1.438752 1.020200 1.564335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.26607822 -0.72590009 -0.12301313 1.529807 1.947752 1.348426</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.32519549 -0.24476217 -0.92945426 1.734701 1.764511 1.065803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.75331754 -0.89710200 -0.36523010 1.203046 1.288093 1.603894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.12211472 -0.59386298 -0.15306825 1.251501 1.312689 1.781779</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.54723296 -0.37016166 -0.87046827 1.567538 1.576153 1.518320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.08360678 -0.60813686 -0.43680121 1.726439 1.800127 1.674904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.98305769 -0.82613195 -0.11453207 1.824526 1.533261 1.522553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.09472926 -0.22609836 -0.40437297 1.818358 1.818158 1.198743</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.89796110 -0.02516413 -0.54247037 1.799381 1.861885 1.486897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2003  1 -0.98570913 -0.18677290 -0.63825237 1.116154 1.658850 1.667812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2003  2 -0.65992657 -0.27459977 -0.03082109 1.070284 1.288228 1.804887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2003  3 -0.41166762 -0.67947340 -0.58560174 1.584835 1.547354 1.454023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2003  4 -0.89504792 -0.76603756 -0.82023703 1.742896 1.470827 1.438879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2003  5 -0.98695331 -0.40238465 -0.91194117 1.345381 1.319908 1.244588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2003  6 -0.25814977 -0.70639727 -0.32212123 1.675979 1.768841 1.086384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2003  7 -0.18383787 -0.32563352 -0.24332606 1.514907 1.670790 1.643173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2003  8 -0.37808670 -0.55369279 -0.22287674 1.815440 1.886363 1.733040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2003  9 -0.85290106 -0.92654153 -0.37370999 1.371817 1.603669 1.428188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2003 10 -0.06530153 -0.67271105 -0.94586976 1.978406 1.479205 1.954005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2003 11 -0.22236727 -0.09470145 -0.89719658 1.590885 1.345602 1.078431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2003 12 -0.88990176 -0.69110354 -0.71384199 1.040340 1.821849 1.606933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo       var_2       var_3       var_4   var1_2   var1_3   var1_4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       var2_2   var2_3   var2_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2.472342 2.730792 2.341587</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2.160918 2.563985 2.570305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2.031401 2.105766 2.091140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2.892888 2.217825 2.966465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2.103678 2.979370 2.067494</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2.719355 2.754350 2.708119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2.459561 2.729910 2.861077</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2.717262 2.445831 2.779517</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2.964570 2.279131 2.082704</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2.114089 2.629657 2.246851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2.914536 2.055513 2.259677</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2.368455 2.042550 2.266656</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2.563363 2.506427 2.540248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2.392411 2.729039 2.554449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2.785615 2.897548 2.820803</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2.435137 2.936072 2.462264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2.887732 2.658381 2.537434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2.467002 2.180027 2.559081</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2.243486 2.636274 2.125802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2.557867 2.353654 2.612203</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2.822640 2.285103 2.099415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2.849808 2.458766 2.638727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2.211180 2.485202 2.635466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2.670068 2.166714 2.256195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2.933139 2.108315 2.093244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2.520152 2.978344 2.647001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2.483773 2.051730 2.290884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2.051866 2.232924 2.506146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2.294030 2.682963 2.698343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2.494412 2.986545 2.648124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2.000695 2.609230 2.201867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2.021513 2.610980 2.874459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2.719019 2.170964 2.172880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2.852650 2.648910 2.565032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2.914770 2.626348 2.781766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2.782673 2.810622 2.871206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2.102921 2.654548 2.640650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2.826115 2.854982 2.558962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2.844983 2.682363 2.946904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2.521965 2.100712 2.678434</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2.462532 2.825689 2.179763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2.340779 2.788034 2.418476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2.900365 2.281242 2.930939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2.866463 2.927567 2.111690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2.208998 2.863447 2.717604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2.878576 2.900239 2.219654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2.811926 2.186555 2.916642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2.083980 2.889451 2.111464</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       var2_2   var2_3   var2_4</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">#extract specific variables</span></span>
 <span class="r-in"><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span>, layers <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, value_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var1"</span>, <span class="st">"var2"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo   var1_2   var1_3   var1_4   var2_2   var2_3   var2_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 1.350438 1.981349 1.936024 2.472342 2.730792 2.341587</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 1.492739 1.350970 1.159983 2.160918 2.563985 2.570305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 1.298846 1.104672 1.167104 2.031401 2.105766 2.091140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 1.411519 1.046192 1.412485 2.892888 2.217825 2.966465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 1.388897 1.267265 1.897805 2.103678 2.979370 2.067494</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 1.297350 1.444676 1.197344 2.719355 2.754350 2.708119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 1.923844 1.683948 1.411640 2.459561 2.729910 2.861077</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 1.422102 1.593385 1.464799 2.717262 2.445831 2.779517</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 1.754983 1.536324 1.429917 2.964570 2.279131 2.082704</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 1.680927 1.448215 1.421773 2.114089 2.629657 2.246851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 1.083070 1.579589 1.619588 2.914536 2.055513 2.259677</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 1.829618 1.034556 1.192925 2.368455 2.042550 2.266656</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2003  1 1.436897 1.696474 1.930282 2.563363 2.506427 2.540248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2003  2 1.487851 1.080738 1.358886 2.392411 2.729039 2.554449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2003  3 1.322812 1.084785 1.821004 2.785615 2.897548 2.820803</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2003  4 1.796348 1.597510 1.169244 2.435137 2.936072 2.462264</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2003  5 1.570869 1.098589 1.092345 2.887732 2.658381 2.537434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2003  6 1.740975 1.302164 1.368859 2.467002 2.180027 2.559081</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2003  7 1.025381 1.561611 1.674633 2.243486 2.636274 2.125802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2003  8 1.486325 1.094717 1.243843 2.557867 2.353654 2.612203</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2003  9 1.020346 1.618679 1.104560 2.822640 2.285103 2.099415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2003 10 1.833020 1.257450 1.439095 2.849808 2.458766 2.638727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2003 11 1.117858 1.200279 1.524534 2.211180 2.485202 2.635466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2003 12 1.419126 1.663722 1.927500 2.670068 2.166714 2.256195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 1.460419 1.951952 1.205009 2.933139 2.108315 2.093244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 1.049093 1.339700 1.978322 2.520152 2.978344 2.647001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 1.438752 1.020200 1.564335 2.483773 2.051730 2.290884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 1.529807 1.947752 1.348426 2.051866 2.232924 2.506146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 1.734701 1.764511 1.065803 2.294030 2.682963 2.698343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 1.203046 1.288093 1.603894 2.494412 2.986545 2.648124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 1.251501 1.312689 1.781779 2.000695 2.609230 2.201867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 1.567538 1.576153 1.518320 2.021513 2.610980 2.874459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 1.726439 1.800127 1.674904 2.719019 2.170964 2.172880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 1.824526 1.533261 1.522553 2.852650 2.648910 2.565032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 1.818358 1.818158 1.198743 2.914770 2.626348 2.781766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 1.799381 1.861885 1.486897 2.782673 2.810622 2.871206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13: 2003  1 1.116154 1.658850 1.667812 2.102921 2.654548 2.640650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14: 2003  2 1.070284 1.288228 1.804887 2.826115 2.854982 2.558962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15: 2003  3 1.584835 1.547354 1.454023 2.844983 2.682363 2.946904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16: 2003  4 1.742896 1.470827 1.438879 2.521965 2.100712 2.678434</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17: 2003  5 1.345381 1.319908 1.244588 2.462532 2.825689 2.179763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18: 2003  6 1.675979 1.768841 1.086384 2.340779 2.788034 2.418476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19: 2003  7 1.514907 1.670790 1.643173 2.900365 2.281242 2.930939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: 2003  8 1.815440 1.886363 1.733040 2.866463 2.927567 2.111690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21: 2003  9 1.371817 1.603669 1.428188 2.208998 2.863447 2.717604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22: 2003 10 1.978406 1.479205 1.954005 2.878576 2.900239 2.219654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23: 2003 11 1.590885 1.345602 1.078431 2.811926 2.186555 2.916642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24: 2003 12 1.040340 1.821849 1.606933 2.083980 2.889451 2.111464</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo   var1_2   var1_3   var1_4   var2_2   var2_3   var2_4</span>
 </code></pre></div>
     </div>
@@ -363,7 +372,7 @@ layer index.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

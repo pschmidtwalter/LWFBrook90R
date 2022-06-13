@@ -94,37 +94,56 @@ height, densef, age) and interpolates them to a daily sequence.</p>
     <h2>Arguments</h2>
     <dl><dt>x_yrs</dt>
 <dd><p>A sequence of years or a single year.</p></dd>
+
+
 <dt>y</dt>
 <dd><p>Vector of the same length as <code>x_yrs</code>. If <code>approx.method = 'linear'</code>,
 the values are interpreted to be valid at the end of the respective year in
 <code>x_yrs</code></p></dd>
+
+
 <dt>y_ini</dt>
 <dd><p>Initial value used as a starting point for linear interpolation.
 Interpreted to be valid at the 1st of January of the first year in <code>x_yrs</code>.
 Ignored if <code>approx.method = 'constant'</code>.</p></dd>
+
+
 <dt>xout_yrs</dt>
 <dd><p>Vector of years for which output is generated. May be
 longer or shorter than <code>x_yrs</code>. For years outside <code>x_yrs</code>, the value of the
 closest data extrem is returned.</p></dd>
+
+
 <dt>use_growthperiod</dt>
 <dd><p>Logical: Use startdoy and enddoy for linear
 interpolation? If TRUE, yearly changes take place between startdoy and
 enddoy, othe wise from end of year to end of the year after.</p></dd>
+
+
 <dt>startdoy</dt>
 <dd><p>A single value or vector of the same length as <code>x_yrs</code>, with
 the day of year when growth begins.</p></dd>
+
+
 <dt>enddoy</dt>
 <dd><p>A single value or vector of the same length as <code>x_yrs</code>, with
 the day of year when growth cessates.</p></dd>
+
+
 <dt>approx.method</dt>
 <dd><p>Name of interpolation method ('constant' or 'linear').</p></dd>
+
+
 <dt>return_xout</dt>
 <dd><p>Logical: If true, daily values of <code>y</code> and a date vector are
 returned in a data.frame.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of interpolated daily values</p>
+    
+
+<p>A vector of interpolated daily values</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -194,7 +213,7 @@ returned in a data.frame.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

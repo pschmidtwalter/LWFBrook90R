@@ -90,35 +90,55 @@
 <dd><p>name of model for estimating budburst day of year.
 Either 'fixed' or one of the values accepted by the 'start.method'-argument
 of the function <code><a href="https://rdrr.io/pkg/vegperiod/man/vegperiod.html" class="external-link">vegperiod</a></code>.</p></dd>
+
+
 <dt>leaffall_method</dt>
 <dd><p>name of model for estimating day of year when leaffall
 begin. Either 'fixed' or one of the values accepted by the
 'end.method'-argument of the function <code><a href="https://rdrr.io/pkg/vegperiod/man/vegperiod.html" class="external-link">vegperiod</a></code>.</p></dd>
+
+
 <dt>dates</dt>
 <dd><p>date vector passed to <code><a href="https://rdrr.io/pkg/vegperiod/man/vegperiod.html" class="external-link">vegperiod</a></code>,
 ignored if both leaffall_method and budburst_method = 'fixed'</p></dd>
+
+
 <dt>tavg</dt>
 <dd><p>vector of daily mean air temperature (deg C) passed to
 <code><a href="https://rdrr.io/pkg/vegperiod/man/vegperiod.html" class="external-link">vegperiod</a></code>, ignored if <code>leaffall_method =
 'fixed'</code> and <code>budburst_method = 'fixed'</code>.</p></dd>
+
+
 <dt>out_yrs</dt>
 <dd><p>integer vector of the years to be returned. If not
 specified, values for the years in <code>dates</code> will be returned.</p></dd>
+
+
 <dt>budburstdoy.fixed</dt>
 <dd><p>vector of values to be returned if
 <code>budburst_method = 'fixed'</code>.</p></dd>
+
+
 <dt>leaffalldoy.fixed</dt>
 <dd><p>vector of values to be returned if
 <code>leaffall_method = 'fixed'</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional argument passed to <code><a href="https://rdrr.io/pkg/vegperiod/man/vegperiod.html" class="external-link">vegperiod</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame with columns <code>year</code>, <code>start</code>, <code>end</code>. If
-<code>budburst_method = 'fixed'</code> or <code>leaffall_method = 'fixed'</code>,
-<code>start</code> and <code>end</code> contain the values specified in
-<code>budburstdoy.fixed</code> and <code>leaffalldoy.fixed</code> respectively.</p>
+    
+
+<p>a data.frame with columns <code>year</code>, <code>start</code>, <code>end</code>. If</p>
+<p></p>
+<p><code>budburst_method = 'fixed'</code> or <code>leaffall_method = 'fixed'</code>,</p>
+<p></p>
+<p><code>start</code> and <code>end</code> contain the values specified in</p>
+<p></p>
+<p><code>budburstdoy.fixed</code> and <code>leaffalldoy.fixed</code> respectively.</p>
     </div>
 
     <div id="ref-examples">
@@ -130,16 +150,16 @@ specified, values for the years in <code>dates</code> will be returned.</p></dd>
 <span class="r-in">               budburstdoy.fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">120</span>,<span class="fl">130</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">               leaffalldoy.fixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">260</span>,<span class="fl">280</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    year start end</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2001   125 260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2002   125 278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2003   122 260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2004   121 278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2005   125 260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2006   125 278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2007   126 260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2008   122 278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2009   129 260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2010   127 278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2001   124 279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2002   120 262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2003   126 279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2004   127 262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2005   129 279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2006   129 262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2007   124 279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2008   122 262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2009   125 279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2010   123 262</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># dynamic budburst and leaffall using air temperature</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">)</span></span>
@@ -282,7 +302,7 @@ specified, values for the years in <code>dates</code> will be returned.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

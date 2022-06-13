@@ -94,29 +94,44 @@ texture, bulk density and carbon content.</p>
 Particle size ranges for clay, silt and sand correspond to &lt;2, 2-63, and
 63-2000 \(\mu m\). For <code>hydpar_hypres</code>, the particle
 size limit between silt and sand should be 50 \(\mu m\).</p></dd>
+
+
 <dt>bd</dt>
 <dd><p>Numeric vector of bulk density in g cm-3.</p></dd>
+
+
 <dt>oc.pct</dt>
 <dd><p>Numeric vector of organic carbon content in mass %.</p></dd>
+
+
 <dt>topsoil</dt>
 <dd><p>Logical: Is the sample from the topsoil? Used in
 <code>hydpar_hypres_tab</code>.</p></dd>
+
+
 <dt>humconv</dt>
 <dd><p>Conversion factor from oc.pct to organic matter percent.
 Default: 1.72. Only for <code>hydpar_hypres_tab</code>.</p></dd>
+
+
 <dt>texture</dt>
 <dd><p>Character vector of soil texture classes. For
 <code>hydpar_wessolek_tab</code> classes according to KA5 (AG Boden 2005) have to
 be provided. When using <code>hydpar_hypres_tab</code>, texture classes
 according to FAO (1990) have to provided.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>An integer value specifying the number of rows of the returned
 data.frame (i.e. the number of repetitions of the MvG-Parameter set, only
 for <code>hydpar_ff_hamken</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.frame with the following variables:</p><dl><dt>ths</dt>
+    
+
+<p>A data.frame with the following variables:</p><dl><dt>ths</dt>
 <dd><p>Saturation water content fraction</p></dd>
  <dt>thr</dt>
 <dd><p>Residual water
@@ -221,7 +236,7 @@ Development and use of a database of hydraulic properties of European soils.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

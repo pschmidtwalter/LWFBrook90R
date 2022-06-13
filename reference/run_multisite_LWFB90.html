@@ -99,40 +99,61 @@ climate/soil combinations.</p>
     <dl><dt>options_b90</dt>
 <dd><p>Named list of model control options to be used in all
 simulations</p></dd>
+
+
 <dt>param_b90</dt>
 <dd><p>Named list of parameters to be used in all simulations, or a
 list of multiple parameter sets.</p></dd>
+
+
 <dt>soil</dt>
 <dd><p>Data.frame with soil properties to be used in all simulations, or
 a list of data.frames with different soil profiles.</p></dd>
+
+
 <dt>climate</dt>
 <dd><p>Data.frame with climate data, or a list of climate
 data.frames. Alternatively, a function can be supplied that returns a
 data.frame. Arguments to the function can be passed via
 <code>climate_args</code>.</p></dd>
+
+
 <dt>climate_args</dt>
 <dd><p>List of named lists of arguments passed to
 <code>climate</code>, if this is a function.</p></dd>
+
+
 <dt>all_combinations</dt>
 <dd><p>Logical: Set up and run all possible combinations of
 individual <code>param_b90</code>, <code>climate</code> and <code>soil</code> objects?
 Default is <code>FALSE</code>, running one object or the list of <code>param_b90</code>
 objects for a series of climate/soil combinations.</p></dd>
+
+
 <dt>cores</dt>
 <dd><p>Number of cores to use for parallel processing.</p></dd>
+
+
 <dt>show_progress</dt>
 <dd><p>Logical: Show progress bar? Default is <code>TRUE</code>. See
 also section <code>Progress bar</code> below.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to <code><a href="run_LWFB90.html">run_LWFB90</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A named list with the results of the single runs as returned by
-<code><a href="run_LWFB90.html">run_LWFB90</a></code>. Simulation or processing errors are passed on. The
+    
+
+<p>A named list with the results of the single runs as returned by</p>
+<p></p>
+<p><code><a href="run_LWFB90.html">run_LWFB90</a></code>. Simulation or processing errors are passed on. The
   names of the returned list entries are concatenated from the names of the
-  input list entries in the following form: &lt;climate&gt; &lt;soil&gt; &lt;param_b90&gt;. If
-<code>climate</code> is a function, the names for &lt;climate&gt; are taken from the
+  input list entries in the following form: &lt;climate&gt; &lt;soil&gt; &lt;param_b90&gt;. If</p>
+<p></p>
+<p><code>climate</code> is a function, the names for &lt;climate&gt; are taken from the
   names of <code>climate_args</code>.</p>
     </div>
     <div id="data-management">
@@ -243,7 +264,7 @@ using <code><a href="https://progressr.futureverse.org/reference/handlers.html" 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

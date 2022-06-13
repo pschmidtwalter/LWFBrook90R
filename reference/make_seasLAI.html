@@ -96,42 +96,69 @@ values, dates and shape parameters using different methods.</p>
     <dl><dt>method</dt>
 <dd><p>Name of method for generating the sequence. Must be one of
 "b90", "linear", "Coupmodel".</p></dd>
+
+
 <dt>year</dt>
 <dd><p>Vector of years to be returned.</p></dd>
+
+
 <dt>maxlai</dt>
 <dd><p>Maximum leaf are index.</p></dd>
+
+
 <dt>winlaifrac</dt>
 <dd><p>Fraction of <code>maxlai</code> during winter (ignored when
 <code>method = 'linear'</code>).</p></dd>
+
+
 <dt>budburst_doy</dt>
 <dd><p>Budburst day of year (ignored when <code>method =
 'linear'</code>).</p></dd>
+
+
 <dt>leaffall_doy</dt>
 <dd><p>Day of year when leaf fall begins (ignored when
 <code>method = 'linear'</code>).</p></dd>
+
+
 <dt>emerge_dur</dt>
 <dd><p>Number of days from budburst until maximum leaf area index
 is reached.</p></dd>
+
+
 <dt>leaffall_dur</dt>
 <dd><p>Number of days until minimum leaf are index is reached.</p></dd>
+
+
 <dt>shp_optdoy</dt>
 <dd><p>Day of year when optimum value is reached (required when
 <code>method = "Coupmodel"</code>).</p></dd>
+
+
 <dt>shp_budburst</dt>
 <dd><p>Shape parameter for the growth phase (required when
 <code>method = "Coupmodel"</code>).</p></dd>
+
+
 <dt>shp_leaffall</dt>
 <dd><p>Shape parameter growth cessation (required when
 <code>method = "Coupmodel"</code>).</p></dd>
+
+
 <dt>lai_doy</dt>
 <dd><p>Integer vector of days of years.</p></dd>
+
+
 <dt>lai_frac</dt>
 <dd><p>Vector of values of fractional leaf area index corresponding
 to lai_doy (required when <code>method = "linear"</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of daily lai values covering the years specified.</p>
+    
+
+<p>A vector of daily lai values covering the years specified.</p>
     </div>
 
     <div id="ref-examples">
@@ -199,7 +226,7 @@ to lai_doy (required when <code>method = "linear"</code>).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

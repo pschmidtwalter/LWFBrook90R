@@ -92,26 +92,40 @@ simulation is performed, with the elements in <code>param_b90</code> being
 replaced by the respective column of <code>paramvar</code>. All parameter names
 (column names) in <code>paramvar</code> must be found in <code>param_b90</code>. See
 section <code>Parameter updating</code>.</p></dd>
+
+
 <dt>param_b90</dt>
 <dd><p>Named list of parameters, in which the parameters defined in
 <code>paramvar</code> will be replaced.</p></dd>
+
+
 <dt>paramvar_nms</dt>
 <dd><p>Names of the parameters in <code>paramvar</code> to be replaced
 in <code>param_b90</code>.</p></dd>
+
+
 <dt>cores</dt>
 <dd><p>Number of CPUs to use for parallel processing. Default is 2.</p></dd>
+
+
 <dt>show_progress</dt>
 <dd><p>Logical: Show progress bar? Default is TRUE. See also
 section <code>Progress bar</code> below.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments passed to <code><a href="run_LWFB90.html">run_LWFB90</a></code>: provide
 at least the arguments that have no defaults such as <code>options_b90</code> and
 <code>climate</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A named list with the results of the single runs as returned by
-<code><a href="run_LWFB90.html">run_LWFB90</a></code>. Simulation or processing errors are passed on.</p>
+    
+
+<p>A named list with the results of the single runs as returned by</p>
+<p></p>
+<p><code><a href="run_LWFB90.html">run_LWFB90</a></code>. Simulation or processing errors are passed on.</p>
     </div>
     <div id="parameter-updating">
     <h2>Parameter updating</h2>
@@ -231,7 +245,7 @@ using <code><a href="https://progressr.futureverse.org/reference/handlers.html" 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -87,24 +87,35 @@
 <dd><p>Vector of soil layer depth limits (including the top and the
 bottom of the profile) for which the relative root distribution will be
 calculated (m, negative downwards).</p></dd>
+
+
 <dt>maxrootdepth</dt>
 <dd><p>The maximum rooting depth (m, negative downwards) below
 which relative root length density will be set to zero (not applying when
 <code>method = 'table'</code>).</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Method name for the root depth distribution. Possible values
 are 'betamodel', 'table', 'linear', 'constant'. See details.</p></dd>
+
+
 <dt>beta</dt>
 <dd><p>Parameter of the root distribution function.</p></dd>
+
+
 <dt>rootdat</dt>
 <dd><p>data.frame with a given root depth density distribution.
 Columns are depth limits ('upper' and 'lower' in m, negative downwards) and
 relative root densities of fine or absorbing roots ('rootden') per unit
 stonefree volume. Only used when <code>method = 'table'</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Vector of relative root length densities for the soil layers framed
+    
+
+<p>Vector of relative root length densities for the soil layers framed
   by <code>soilnodes</code>. Length is one less than <code>length(soilnodes)</code>.</p>
     </div>
     <div id="details">
@@ -181,7 +192,7 @@ species in relation to successional status."
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

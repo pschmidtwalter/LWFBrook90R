@@ -84,23 +84,34 @@ Richter (1995)</p>
     <h2>Arguments</h2>
     <dl><dt>month</dt>
 <dd><p>Vector of months.</p></dd>
+
+
 <dt>tavg</dt>
 <dd><p>Vector of air temperature values (deg C). Same length as
 <code>month</code>.</p></dd>
+
+
 <dt>prec</dt>
 <dd><p>Vector of measured rainfall vales (mm). Same length as
 <code>month</code>.</p></dd>
+
+
 <dt>station.exposure</dt>
 <dd><p>Situation of the weather station where prec was
 measured: one of 'frei', 'lg', 'mg', 'sg' (corresponding to full exposure,
 low protected, moderate protected, strong protected situation).</p></dd>
+
+
 <dt>full_output</dt>
 <dd><p>Logical wether to return the full data set additionally
 including input data, correction coefficients.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of corrected rainfall data, or (if <code>full_output ==
+    
+
+<p>A vector of corrected rainfall data, or (if <code>full_output ==
   TRUE</code>) a data.table containing the input objects, the month, the
   precipitation type ('N4So': liquid rain, summer; 'N4Wi' liquid rain,
   winter; 'N8' = sleet, 'N7' = snow), correction coefficients epsilon and b,
@@ -154,7 +165,7 @@ Germany</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
