@@ -1,4 +1,4 @@
 url: https://pschmidtwalter.github.io/LWFBrook90R/
 template:
-  bootstrap: 5
+  bootswatch: cerulean
 
