@@ -1,16 +1,6 @@
-# News for the LWFBrook90R-package
+# LWFBrook90R 0.5.0 (???)
 
-## Version 0.5.0 (???)
-
-**Bug fixes**:
-
-- Installation error on single core machines because of a failed test with `run_multisite_LWFB90()` (Thanks to Henrik Bengtsson)
-
-**Documentation**:
-
-- Vignettes split up into smaller articles
-
-**Changes (potentially breaking)**:
+## Changes (potentially breaking)
 
 Basic **output** is now at the **precipitation interval** level:
 
@@ -24,10 +14,21 @@ and precipitation interval of the simulation.
 - Removed redundant variable `slvp` from `layer_output` (soil evaporation).
 - Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the layers' matrix potententials (`psimi`) and the gravity potentials at the soil layers' midpoints.
 
+## Documentation
 
-## Version 0.4.5 (2021-11-30)
+- Vignettes split up into smaller articles
 
-**Bug fixes**:
+## Bug fixes
+
+- Installation error on single core machines because of a failed test with `run_multisite_LWFB90()` (Thanks to Henrik Bengtsson)
+
+# LWFBrook90R 0.4.5 (2021-11-30)
+
+## Changes
+
+- new daily output variables: daily solar (`slrad`), net solar (`solnet`), net longwave (`lngnet`) and net radiation above (`aa`) and below canopy (`asubs`).
+
+## Bug fixes
 
 - `make_rootden()` with `method = 'betamodel'` led to negative 
 root density of the top layer when specified `maxrootdepth` was lower than soil depth.
@@ -35,35 +36,31 @@ root density of the top layer when specified `maxrootdepth` was lower than soil 
 - typo in `hydpar_wessolek_tab()` caused NAs in return for `texture = 'fSms'`
 - `soil_to_param()`: some unique soil materials were omitted in the return, if they had multiple occurences in the input `soil`-data.frame.
 
-**Changes (potentially brealing)**:
-
-- new daily output variables: daily solar (`slrad`), net solar (`solnet`), net longwave (`lngnet`) and net radiation above (`aa`) and below canopy (`asubs`).
-
-## Version 0.4.4. (2021-02-24)
+# LWFBrook90R 0.4.4. (2021-02-24)
 
 - Fixed LTO installation warning on Fedora Linux
 
-## Version 0.4.3 (2021-02-09)
+# LWFBrook90R 0.4.3 (2021-02-09)
 
 - Minor changes to fulfill CRAN publication requirements
 
-## Version 0.4.2 (2021-02-08)
+# LWFBrook90R 0.4.2 (2021-02-08)
 
-**Bug fixes**:
+## Bug fixes
 
 - `run_LWFB90()`: 
   - `options_b90$root_method = 'table'` gave an error in `make_rootden()` because of a wrong argument name.
 - Fixed bad URLs in documentation
 
-## Version 0.4.1 (2021-01-02)
+# LWFBrook90R 0.4.1 (2021-01-02)
 
-**Changes**:
+## Changes
 
 - Minor changes to fulfill CRAN publication requirements
 
-## Version 0.4.0  (2021-01-15)
+# LWFBrook90R 0.4.0  (2021-01-15)
 
-**Changes (potentially breaking)**:
+## Changes (potentially breaking)
 
 - arguments and functions were renamed for consistency.
 - result datasets are now returned directly by the Fortran model code, without 
@@ -89,22 +86,22 @@ root density of the top layer when specified `maxrootdepth` was lower than soil 
 - switched `run_multisite_LWFB90()` and `run_multi_LWFB90()` from superseded packages 'snow' and 'doSNOW' to 'future', 'doFuture' and 'progressr' for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks @rnuske).
 
 
-## Version 0.3.4  (2020-08-28)
+# LWFBrook90R 0.3.4  (2020-08-28)
 
-**Changes**:
+## Changes
 
 - Adjusted 'table'-method in `MakeRelRootDens()`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
 - Input changed for 'soilnodes'-argument of `MakeRelRootDens()`. See `?MakeRelRootDens`.
 
-**Bug fixes**:
+## Bug fixes
 
 - zero division error causing infinite `relawat` values in `MISCDAY.ASC`-output item.
 - 'betamodel'-method of `MakeRelRootDens()` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
 
 
-## Version 0.3.0 (2020-04-21)
+# LWFBrook90R 0.3.0 (2020-04-21)
 
-**Changes**:
+## Changes
 
 - new function `msiterunLWFB90()`
 - `runLWFB90()`: model input (`param.b90`, `options.b90`, `standprop_daily`) is appended
@@ -113,14 +110,14 @@ root density of the top layer when specified `maxrootdepth` was lower than soil 
 - minor bugs fixed
 
 
-## Version 0.2.0  (2019-06-18)
+# LWFBrook90R 0.2.0  (2019-06-18)
 
-**Changes**:
+## Changes
 
 - `output_fun` argument replaces `gof_fun`-argument in `runLWFB90()` for more flexible output.
 - minor bugs fixed
 
 
-## Version 0.1.0  (2019-05-13)
+# LWFBrook90R 0.1.0  (2019-05-13)
 
 - First beta release: most functionality was taken from [brook90r](https://doi.org/10.5281/zenodo.1433677). However, functions and arguments were renamed, and a lot of functionality was added.
