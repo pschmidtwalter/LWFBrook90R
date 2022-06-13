@@ -16,7 +16,7 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3760298.svg)](https://doi.org/10.5281/zenodo.3760298)
 <!-- badges: end -->
 
-`LWFBroo90R` provides an implementation of the Soil Vegetation
+`LWFBrook90R` provides an implementation of the Soil Vegetation
 Atmosphere Transport (SVAT) model
 [LWF-BROOK90](https://www.lwf.bayern.de/boden-klima/wasserhaushalt/index.php)
 (Hammel & Kennel, 2001) written in Fortran. The model simulates daily
