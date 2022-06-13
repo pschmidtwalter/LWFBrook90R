@@ -66,6 +66,123 @@
       <small>Source: <a href="https://github.com/pschmidtwalter/LWFBrook90R/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.5.0" id="lwfbrook90r-050-">LWFBrook90R 0.5.0 (???)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-050-"></a></h2>
+<div class="section level3">
+<h3 id="changes-potentially-breaking-0-5-0">Changes (potentially breaking)<a class="anchor" aria-label="anchor" href="#changes-potentially-breaking-0-5-0"></a></h3>
+<p>Basic <strong>output</strong> is now at the <strong>precipitation interval</strong> level:</p>
+<ul><li>With <code>options_b90$prec_interval</code> &gt; 1, the output of <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> now contains one row for each day and precipitation interval of the simulation.</li>
+<li>Nothing changes with daily precipitation input (<code>options_b90$prec_interval = 1</code>).</li>
+<li>Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.</li>
+<li>With respect to precipitation interval output, the list item <code>daily_output</code> of the return was renamed to <code>output</code>.</li>
+<li>Removed <code>output</code>-argument and exported the function <code><a href="../reference/process_outputs_LWFB90.html">process_outputs_LWFB90()</a></code> that does the job.</li>
+<li>New variable added to <code>output</code>: <code>sthr</code>.</li>
+<li>Removed redundant variable <code>slvp</code> from <code>layer_output</code> (soil evaporation).</li>
+<li>Removed variable <code>psiti</code> from <code>layer_output</code> (total potential of soil layer): can be calculated by summing the layers’ matrix potententials (<code>psimi</code>) and the gravity potentials at the soil layers’ midpoints.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-5-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-5-0"></a></h3>
+<ul><li>Vignettes split up into smaller articles</li></ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-5-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-0"></a></h3>
+<ul><li>Installation error on single core machines because of a failed test with <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> (Thanks to Henrik Bengtsson)</li></ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.5" id="lwfbrook90r-045-2021-11-30">LWFBrook90R 0.4.5 (2021-11-30)<small>2021-11-30</small><a class="anchor" aria-label="anchor" href="#lwfbrook90r-045-2021-11-30"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-4-5">Changes<a class="anchor" aria-label="anchor" href="#changes-0-4-5"></a></h3>
+<ul><li>new daily output variables: daily solar (<code>slrad</code>), net solar (<code>solnet</code>), net longwave (<code>lngnet</code>) and net radiation above (<code>aa</code>) and below canopy (<code>asubs</code>).</li></ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-4-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-5"></a></h3>
+<ul><li>
+<code><a href="../reference/make_rootden.html">make_rootden()</a></code> with <code>method = 'betamodel'</code> led to negative root density of the top layer when specified <code>maxrootdepth</code> was lower than soil depth.</li>
+<li>no more errors when using sub-daily precipitation input</li>
+<li>typo in <code><a href="../reference/ptfs.html">hydpar_wessolek_tab()</a></code> caused NAs in return for <code>texture = 'fSms'</code>
+</li>
+<li>
+<code><a href="../reference/soil_to_param.html">soil_to_param()</a></code>: some unique soil materials were omitted in the return, if they had multiple occurences in the input <code>soil</code>-data.frame.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.4" id="lwfbrook90r-044-2021-02-24">LWFBrook90R 0.4.4. (2021-02-24)<small>2021-02-24</small><a class="anchor" aria-label="anchor" href="#lwfbrook90r-044-2021-02-24"></a></h2>
+<ul><li>Fixed LTO installation warning on Fedora Linux</li></ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.3" id="lwfbrook90r-043-2021-02-09">LWFBrook90R 0.4.3 (2021-02-09)<small>2021-02-09</small><a class="anchor" aria-label="anchor" href="#lwfbrook90r-043-2021-02-09"></a></h2>
+<ul><li>Minor changes to fulfill CRAN publication requirements</li></ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.2" id="lwfbrook90r-042-2021-02-08">LWFBrook90R 0.4.2 (2021-02-08)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-042-2021-02-08"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-4-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-2"></a></h3>
+<ul><li>
+<code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>:<ul><li>
+<code>options_b90$root_method = 'table'</code> gave an error in <code><a href="../reference/make_rootden.html">make_rootden()</a></code> because of a wrong argument name.</li></ul></li>
+<li>Fixed bad URLs in documentation</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.1" id="lwfbrook90r-041-2021-01-02">LWFBrook90R 0.4.1 (2021-01-02)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-041-2021-01-02"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-4-1">Changes<a class="anchor" aria-label="anchor" href="#changes-0-4-1"></a></h3>
+<ul><li>Minor changes to fulfill CRAN publication requirements</li></ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.4.0" id="lwfbrook90r-040-2021-01-15">LWFBrook90R 0.4.0 (2021-01-15)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-040-2021-01-15"></a></h2>
+<div class="section level3">
+<h3 id="changes-potentially-breaking-0-4-0">Changes (potentially breaking)<a class="anchor" aria-label="anchor" href="#changes-potentially-breaking-0-4-0"></a></h3>
+<ul><li>arguments and functions were renamed for consistency.</li>
+<li>result datasets are now returned directly by the Fortran model code, without the detour of writing .ASC output text files and reading them back into workspace.</li>
+<li>run time output to the console was disabled, only messages are printed when <code>verbose = T</code>.<br></li>
+<li>
+<code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> (before <code>runLWFB90()</code>):<ul><li>without specification of an output selection matrix via <code>output</code>, two tables including all available output variables are returned: general daily outputs and layer outputs. A proper description of model output variables was added to the help pages.</li>
+<li>all column names of the .ASC output objects (as selected via <code>output</code>) are now in lower case.</li>
+<li>it is now possible to provide a function as <code>climate</code>-argument, instead of a <code>data.frame</code>.</li>
+<li>an execution time limit (elapsed time) can be set to prevent simulations from running too long.</li>
+</ul></li>
+<li>
+<code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> (before <code>msiterunLWFB90()</code>):<ul><li>It is now possible to provide individual <code>param_b90</code> (before <code>param.b90</code>) input parameter objects for individual climate/soil combinations (i.e. individual locations). The option to provide a list of <code>options_b90</code> (before <code>options.b90</code>) input objects was disabled.</li>
+<li>Instead of a list of <code>climate</code>-data.frames for a multisite-simulation, a function can be provided for on-the-fly creation of <code>climate</code>-<code>data.frames</code>. Arguments for the function have to specified via the new <code>climate_args</code>-argument of <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>.</li>
+<li>Names of current <code>climate</code>, <code>soil</code> and <code>param_b90</code> objects are automatically passed from <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> to <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> and thus become available to <code>output_fun</code>.<br></li>
+</ul></li>
+<li>renamed some of the pedotransfer functions and reorganized the documentation for it. See <code><a href="../reference/ptfs.html">?ptfs</a></code>.</li>
+<li>switched <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> and <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> from superseded packages ‘snow’ and ‘doSNOW’ to ‘future’, ‘doFuture’ and ‘progressr’ for parallel computation and progress reporting thereof. Pacifies a check note and is more future-proof (thanks <a href="https://github.com/rnuske" class="external-link">@rnuske</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.4" id="lwfbrook90r-034-2020-08-28">LWFBrook90R 0.3.4 (2020-08-28)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-034-2020-08-28"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-3-4">Changes<a class="anchor" aria-label="anchor" href="#changes-0-3-4"></a></h3>
+<ul><li>Adjusted ‘table’-method in <code>MakeRelRootDens()</code>: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.</li>
+<li>Input changed for ‘soilnodes’-argument of <code>MakeRelRootDens()</code>. See <code>?MakeRelRootDens</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-3-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-4"></a></h3>
+<ul><li>zero division error causing infinite <code>relawat</code> values in <code>MISCDAY.ASC</code>-output item.</li>
+<li>‘betamodel’-method of <code>MakeRelRootDens()</code> returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.0" id="lwfbrook90r-030-2020-04-21">LWFBrook90R 0.3.0 (2020-04-21)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-030-2020-04-21"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-3-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-3-0"></a></h3>
+<ul><li>new function <code>msiterunLWFB90()</code>
+</li>
+<li>
+<code>runLWFB90()</code>: model input (<code>param.b90</code>, <code>options.b90</code>, <code>standprop_daily</code>) is appended to the return value <em>before</em> evaluating the <code>output_fun</code>-argument. In this way, on-the-fly post-processing of model results including model-input is possible now.</li>
+<li>minor bugs fixed</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.0" id="lwfbrook90r-020-2019-06-18">LWFBrook90R 0.2.0 (2019-06-18)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-020-2019-06-18"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-2-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-2-0"></a></h3>
+<ul><li>
+<code>output_fun</code> argument replaces <code>gof_fun</code>-argument in <code>runLWFB90()</code> for more flexible output.</li>
+<li>minor bugs fixed</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.0" id="lwfbrook90r-010-2019-05-13">LWFBrook90R 0.1.0 (2019-05-13)<a class="anchor" aria-label="anchor" href="#lwfbrook90r-010-2019-05-13"></a></h2>
+<ul><li>First beta release: most functionality was taken from <a href="https://doi.org/10.5281/zenodo.1433677" class="external-link">brook90r</a>. However, functions and arguments were renamed, and a lot of functionality was added.</li></ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
