@@ -1,6 +1,7 @@
 \donttest{
 data("slb1_meteo")
 data("slb1_soil")
+
 # Set up lists containing model control options and model parameters:
 parms <- set_paramLWFB90()
 # choose the 'Coupmodel' shape option for the annual lai dynamic,
@@ -27,21 +28,18 @@ vary_parms <- data.frame(shp_optdoy = runif(n,180,240),
 # add the soil as soil_nodes and soil materials to param_b90, so ths3 can be looked up
 parms[c("soil_nodes", "soil_materials")] <- soil_to_param(soil)
 
-# select outputs
-output <- set_outputLWFB90()
-
 # Make a Multirun-Simulation
 b90.multi <- run_multi_LWFB90(paramvar = vary_parms,
                         param_b90 = parms,
                         options_b90 = opts,
-                        climate = slb1_meteo,
-                        output = output)
+                        climate = slb1_meteo)
 names(b90.multi)
 
-# extract results: EVAPDAY.ASC
-evapday <- data.frame(data.table::rbindlist(lapply(b90.multi,
-                                                   FUN = function(x) {x[["EVAPDAY.ASC"]]}),
-                                            idcol = "srun"))
+# extract results
+evapday <- data.table::rbindlist(
+  lapply(b90.multi, FUN = function(x) { x$output[,c("yr", "doy", "evap")] }),
+  idcol = "srun")
+
 evapday$dates <- as.Date(paste(evapday$yr, evapday$doy),"%Y %j")
 
 srun_nms <- unique(evapday$srun)

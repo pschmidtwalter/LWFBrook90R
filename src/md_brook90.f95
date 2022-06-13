@@ -17,6 +17,14 @@
 !   - removed ZMONTH, ZYEAR, MSUM, YSUM, MACCUM, YACCUM
 !   - removing unussed variables from DECLARATION
 
+! 2022-06 adjustements made by P Schmidt-Walter [paul.schmidt-walter@dwd.de]
+!   - basic output now at the precipitation interval - level.
+
+
+! Reshape inout-arrays to hold values on precipitation interval level
+! Output values at the prec int level to
+
+
 
 
 module fbrook_mod
@@ -58,8 +66,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     integer(kind=c_int), intent(inout) :: error
 
     ! Output matrix
-    real(kind=c_double), dimension( INT(param(1)), 46), intent(inout) :: output_day
-    real(kind=c_double), dimension( INT(param(1)), 16, INT(param(65))), intent(inout) :: output_layer
+    real(kind=c_double), dimension( INT(param(1) * siteparam(6)), 47), intent(inout) :: output_day
+    real(kind=c_double), dimension( INT(param(1) * siteparam(6)), 14, INT(param(65))), intent(inout) :: output_layer
 
     ! Variables
     include 'VARDCL.h'
@@ -88,7 +96,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     LAT = LAT / 57.296 ! convert to lat: 180/pi
 
     ! read PRFILE.DAT if requested
-    ! Need to do
+    
     if (NPINT .GT. 1) then
         DTP = DT / real( NPINT, kind=8)
 !         OPEN (UNIT = 10, FILE = 'in/PRFILE.DAT')
@@ -475,21 +483,16 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !               end if
 51          CONTINUE
 !           end of layer loop
-!            write(10,*)'end layer loop'
 
-            !           first approximation for iteration time step,time remaining or DTIMAX
+
+!           first approximation for iteration time step,time remaining or DTIMAX
             DTI = MIN(DTRI, DTIMAX)
 !           net inflow to each layer including E and T withdrawal adjusted
 !           for interception
             CALL INFLOW(NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, &
                 TRANI, SLVP, SWATMX, SWATI, VV, INFLI, BYFLI, NTFLI)
-!            DO 611 I = 1, NLAYER
-!             if(MM.eq.1.and.dd.eq.15.and.imodel.eq.0) then
-!               write(10,*) 'NTFLI 0 ',i,NTFLI(i),infli(i),vv(i),
-!     *         trani(i),slvp
-!             end if
-!S611         CONTINUE
-            !           second approximation to iteration time step
+
+!           second approximation to iteration time step
             DO 61 I = 1, NLAYER
                 DPSIDW(I) = FDPSIDW(WETNES(I),Par(1,i),iModel)
 61          CONTINUE
@@ -504,22 +507,22 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                     SWATMX, SWATI, VV, INFLI, BYFLI, NTFLI)
             END IF
 
-            !           VV is the new VRFLI
+!           VV is the new VRFLI
             DO 71 I = 1, NLAYER
                 VRFLI(I) = VV(I)
 71          CONTINUE
 
-            !           groundwater flow and seepage loss
+!           groundwater flow and seepage loss
             CALL GWATER(GWAT, GSC, GSP, DT, VRFLI(NLAYER), GWFL, SEEP)
+!           end of rate calculations
 
-            !           end of rate calculations
 !           integrate below ground storages over iteration interval
             DO 81 I = 1, NLAYER
                 SWATI(I) = SWATI(I) + NTFLI(I) * DTI
 81          CONTINUE
             GWAT = GWAT + (VRFLI(NLAYER) - GWFL - SEEP) * DTI
 
-            !           new soil water variables and test for errors
+!           new soil water variables and test for errors
             DO 91 I = 1, NLAYER
                 INCLUDE 'SWCHEK.h'
                 if(iModel.eq.0) then
@@ -569,7 +572,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             END IF
 
 !           flows accumulated over precip interval
-           INCLUDE 'PACCUM.h'
+            INCLUDE 'PACCUM.h'
+           
 !           time remaining in precipitation time-step
             DTRI = DTRI - DTI
 
@@ -677,7 +681,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                             CINTRL, CINTRS, DURATN(MONTH), INTR, RINT, IRVP)
                     END IF
 
-                    !        throughfall
+!        throughfall
                     RTHR = RFAL - RINT
                     STHR = SFAL - SINT
 !        reduce transpiration for fraction of precip interval that canopy is wet
@@ -704,6 +708,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                 GO TO 101
             end if
 
+
 !        *  *  *  *   E N D   I T E R A T I O N    L O O P  *  *  *  *  *  *  *  *  *  *  *
 !           integrate interception storages over precip interval
             INTS = INTS + (SINT - ISVP) * DTP
@@ -711,8 +716,14 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 !           flows for precip interval summed from components
            INCLUDE 'PSUM.h'
-!           flows accumulated over day
+
+!           precipitation interval output
+           INCLUDE 'output_pint.h'
+           INCLUDE 'output_layer_pint.h'
+           
+!           flows accumulated over day 
            INCLUDE 'DACCUM.h'
+
 !           accumulate iterations
             NITSD = NITSD + NITS
             NITSM = NITSM + NITS
@@ -721,16 +732,26 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 ! * * * * *  E N D   P R E C I P   I N T E R V A L   L O O P  * * * * * * * *
 
-        !     flows for day summed from components
+!     flows for day summed from components
         INCLUDE 'DSUM.h'
 
-        !     check for water balance error
+
+    ! daily outputs: STRES & BALERD
+    ! stress factor - ratio of actual to potential transpiration
+    ! separate, based on daily values.
+        if (PTRAND .GT. 0.001d0) THEN
+            STRES = TRAND / PTRAND 
+        else
+            STRES = 1.0d0
+        end if
+        if (STRES .GT. 1.d0) STRES = 1.d0
+        output_day(NPINT*IDAY, 37) = STRES !STRES     
+        
+!   calc for daily water balance error 
         BALERD = STORD - (INTR + INTS + SNOW + SWAT + GWAT) + PRECD - EVAPD - FLOWD - SEEPD
         STORD = INTR + INTS + SNOW + SWAT + GWAT
-
-        !     daily output
-        INCLUDE 'output_day.h'
-        INCLUDE 'output_layer.h'
+        
+        output_day(NPINT*IDAY, 42) = BALERD !STRES 
 
         IF (DOM .EQ. DAYMO(MONTH)) THEN
 !        set up for next month

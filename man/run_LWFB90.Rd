@@ -10,7 +10,6 @@ run_LWFB90(
   climate,
   precip = NULL,
   soil = NULL,
-  output = NULL,
   output_fun = NULL,
   rtrn_input = TRUE,
   rtrn_output = TRUE,
@@ -41,11 +40,6 @@ the number of values per day defined in \code{options_b90$prec_interval}.}
 
 \item{soil}{Data.frame containing the hydraulic properties of the soil
 layers. See section 'Soil parameters'}
-
-\item{output}{A [7,5]-matrix flagging the desired model output datasets at
-different time intervals. Use \code{\link{set_outputLWFB90}} to generate
-and edit a default output selection matrix. Alternatively, use -1 (the
-default) to return the raw daily and soil layer outputs.}
 
 \item{output_fun}{A function or a list of functions of the form
 \code{f(x,...)}, where \code{x} is the object regularly returned by
@@ -110,7 +104,7 @@ model, and returns the selected results.
  These have to be set up in advance, see \code{\link{soil_to_param}}.
 }
 
-\section{Daily outputs}{
+\section{Outputs}{
 
 \tabular{llcl}{
 \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
@@ -122,44 +116,45 @@ aa \tab average available energy above canopy \tab W/m2 \cr
 adef \tab available water deficit in root zone \tab mm \cr
 asubs \tab average available energy below canopy \tab W/m2 \cr
 awat \tab total available soil water in layers with roots between -6.18 kPa and \code{param_b90$psicr} \tab mm \cr
-balerr \tab error in water balance \tab mm \cr
-byfl \tab total bypass flow \tab mm \cr
-dsfl \tab downslope flow \tab mm \cr
-evap \tab evapotranspiration \tab mm \cr
-flow \tab total streamflow \tab mm \cr
-gwat \tab groundwater storage below soil layers at the end of the time interval \tab mm \cr
-gwfl \tab groundwater flow \tab mm \cr
-intr \tab intercepted rain at the end of the time interval \tab mm \cr
-ints \tab intercepted snow at the end of the time interval \tab mm \cr
-irvp \tab evaporation of intercepted rain \tab mm \cr
-isvp \tab evaporation of intercepted snow \tab mm \cr
+balerr \tab error in water balance (daily value, output at the day's last precipitation interval) \tab mm \cr
+byfl \tab total bypass flow \tab mm/d \cr
+dsfl \tab downslope flow \tab mm/d \cr
+evap \tab evapotranspiration \tab mm/d \cr
+flow \tab total streamflow \tab mm/d \cr
+gwat \tab groundwater storage below soil layers \tab mm \cr
+gwfl \tab groundwater flow \tab mm/d \cr
+intr \tab intercepted rain \tab mm \cr
+ints \tab intercepted snow \tab mm \cr
+irvp \tab evaporation of intercepted rain \tab mm/d \cr
+isvp \tab evaporation of intercepted snow \tab mm/d \cr
 lngnet \tab net longwave radiation \tab W/m2 \cr
-nits \tab total number of iterations in time interval \tab - \cr
-pint \tab potential interception for a canopy always wet \tab mm \cr
-pslvp \tab potential soil evaporation \tab mm \cr
-ptran \tab potential transpiration \tab mm \cr
+nits \tab total number of iterations \tab - \cr
+pint \tab potential interception for a canopy always wet \tab mm/d \cr
+pslvp \tab potential soil evaporation \tab mm/d \cr
+ptran \tab potential transpiration \tab mm/d \cr
 relawat \tab relative available soil water in layers with roots \tab - \cr
-rfal \tab rainfall \tab mm \cr
-rint \tab rain interception \tab mm \cr
-rnet \tab rainfall to soil surface \tab mm \cr
-rsno \tab rain on snow \tab mm \cr
-rthr \tab rain throughfall rate \tab mm \cr
+rfal \tab rainfall \tab mm/d \cr
+rint \tab rain interception catch rate \tab mm/d \cr
+rnet \tab rainfall to soil surface \tab mm/d \cr
+rsno \tab rain on snow \tab mm/d \cr
+rthr \tab rain throughfall rate \tab mm/d \cr
+sthr \tab snow throughfall rate \tab mm/d \cr
 safrac \tab source area fraction \tab - \cr
-seep \tab seepage loss \tab mm \cr
-sfal \tab snowfall \tab mm \cr
-sint \tab snow interception \tab mm \cr
-slfl \tab input to soil surface \tab mm \cr
-slvp \tab evaporation rate from soil \tab mm \cr
+seep \tab seepage loss \tab mm/d \cr
+sfal \tab snowfall \tab mm/d \cr
+sint \tab snow interception catch rate \tab mm/d \cr
+slfl \tab input to soil surface \tab mm/d \cr
+slvp \tab evaporation rate from soil \tab mm/d \cr
 slrad \tab average solar radiation on slope over daytime \tab W/m2 \cr
 solnet \tab net solar radiation on slope over daytime \tab W/m2 \cr
-smlt \tab snowmelt \tab mm \cr
+smlt \tab snowmelt \tab mm/d \cr
 snow \tab snowpack water equivalent \tab mm \cr
-snvp \tab evaporation from snowpack \tab mm \cr
-srfl \tab source area flow \tab mm \cr
-stres \tab TRAN / PTRAN for time period \tab - \cr
-swat \tab total soil water in all layers at the end of the time interval \tab mm \cr
-tran \tab transpiration \tab mm \cr
-vrfln \tab vertical matrix drainage from lowest layer \tab mm \cr
+snvp \tab evaporation from snowpack \tab mm/d \cr
+srfl \tab source area flow \tab mm/d \cr
+stres \tab tran / ptran (daily value, output at the day's last precipitation interval) \tab - \cr
+swat \tab total soil water in all layers\tab mm \cr
+tran \tab transpiration \tab mm/d \cr
+vrfln \tab vertical matrix drainage from lowest layer \tab mm/d \cr
 }
 }
 
@@ -176,14 +171,12 @@ swati \tab soil water volume in layer \tab mm \cr
 theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
 wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
 psimi \tab matric soil water potential for soil layer \tab kPa \cr
-psiti \tab total soil water potential for a soil layer \tab kPa \cr
-infl \tab infiltration to soil water in soil layer \tab mm \cr
-byfl \tab bypass flow from soil layer \tab mm \cr
-tran \tab transpiration from soil layer \tab mm \cr
-slvp \tab soil evaporation from a soil layer \tab mm \cr
-vrfl \tab vertical matrix drainage from soil layer \tab mm \cr
-dsfl \tab downslope drainage from layer \tab mm \cr
-ntfl \tab net flow into soil layer \tab mm \cr
+infl \tab infiltration to soil water in soil layer \tab mm/d \cr
+byfl \tab bypass flow from soil layer \tab mm/d \cr
+tran \tab transpiration from soil layer \tab mm/d \cr
+vrfl \tab vertical matrix drainage from soil layer \tab mm/d \cr
+dsfl \tab downslope drainage from layer \tab mm/d \cr
+ntfl \tab net flow into soil layer \tab mm/d \cr
 }
 }
 

@@ -18,10 +18,6 @@
 #'   the number of values per day defined in \code{options_b90$prec_interval}.
 #' @param soil Data.frame containing the hydraulic properties of the soil
 #'   layers. See section 'Soil parameters'
-#' @param output A [7,5]-matrix flagging the desired model output datasets at
-#'   different time intervals. Use \code{\link{set_outputLWFB90}} to generate
-#'   and edit a default output selection matrix. Alternatively, use -1 (the
-#'   default) to return the raw daily and soil layer outputs.
 #' @param output_fun A function or a list of functions of the form
 #'   \code{f(x,...)}, where \code{x} is the object regularly returned by
 #'   \code{run_LWFB90}. During function evaluation, \code{x} contains model
@@ -69,7 +65,7 @@
 #'  and \code{soil_materials} of \code{param_b90} are used for the simulation.
 #'  These have to be set up in advance, see \code{\link{soil_to_param}}.
 #'
-#' @section Daily outputs:
+#' @section Outputs:
 #' \tabular{llcl}{
 #' \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
 #' yr \tab year \tab - \cr
@@ -80,44 +76,45 @@
 #' adef \tab available water deficit in root zone \tab mm \cr
 #' asubs \tab average available energy below canopy \tab W/m2 \cr
 #' awat \tab total available soil water in layers with roots between -6.18 kPa and \code{param_b90$psicr} \tab mm \cr
-#' balerr \tab error in water balance \tab mm \cr
-#' byfl \tab total bypass flow \tab mm \cr
-#' dsfl \tab downslope flow \tab mm \cr
-#' evap \tab evapotranspiration \tab mm \cr
-#' flow \tab total streamflow \tab mm \cr
-#' gwat \tab groundwater storage below soil layers at the end of the time interval \tab mm \cr
-#' gwfl \tab groundwater flow \tab mm \cr
-#' intr \tab intercepted rain at the end of the time interval \tab mm \cr
-#' ints \tab intercepted snow at the end of the time interval \tab mm \cr
-#' irvp \tab evaporation of intercepted rain \tab mm \cr
-#' isvp \tab evaporation of intercepted snow \tab mm \cr
+#' balerr \tab error in water balance (daily value, output at the day's last precipitation interval) \tab mm \cr
+#' byfl \tab total bypass flow \tab mm/d \cr
+#' dsfl \tab downslope flow \tab mm/d \cr
+#' evap \tab evapotranspiration \tab mm/d \cr
+#' flow \tab total streamflow \tab mm/d \cr
+#' gwat \tab groundwater storage below soil layers \tab mm \cr
+#' gwfl \tab groundwater flow \tab mm/d \cr
+#' intr \tab intercepted rain \tab mm \cr
+#' ints \tab intercepted snow \tab mm \cr
+#' irvp \tab evaporation of intercepted rain \tab mm/d \cr
+#' isvp \tab evaporation of intercepted snow \tab mm/d \cr
 #' lngnet \tab net longwave radiation \tab W/m2 \cr
-#' nits \tab total number of iterations in time interval \tab - \cr
-#' pint \tab potential interception for a canopy always wet \tab mm \cr
-#' pslvp \tab potential soil evaporation \tab mm \cr
-#' ptran \tab potential transpiration \tab mm \cr
+#' nits \tab total number of iterations \tab - \cr
+#' pint \tab potential interception for a canopy always wet \tab mm/d \cr
+#' pslvp \tab potential soil evaporation \tab mm/d \cr
+#' ptran \tab potential transpiration \tab mm/d \cr
 #' relawat \tab relative available soil water in layers with roots \tab - \cr
-#' rfal \tab rainfall \tab mm \cr
-#' rint \tab rain interception \tab mm \cr
-#' rnet \tab rainfall to soil surface \tab mm \cr
-#' rsno \tab rain on snow \tab mm \cr
-#' rthr \tab rain throughfall rate \tab mm \cr
+#' rfal \tab rainfall \tab mm/d \cr
+#' rint \tab rain interception catch rate \tab mm/d \cr
+#' rnet \tab rainfall to soil surface \tab mm/d \cr
+#' rsno \tab rain on snow \tab mm/d \cr
+#' rthr \tab rain throughfall rate \tab mm/d \cr
+#' sthr \tab snow throughfall rate \tab mm/d \cr
 #' safrac \tab source area fraction \tab - \cr
-#' seep \tab seepage loss \tab mm \cr
-#' sfal \tab snowfall \tab mm \cr
-#' sint \tab snow interception \tab mm \cr
-#' slfl \tab input to soil surface \tab mm \cr
-#' slvp \tab evaporation rate from soil \tab mm \cr
+#' seep \tab seepage loss \tab mm/d \cr
+#' sfal \tab snowfall \tab mm/d \cr
+#' sint \tab snow interception catch rate \tab mm/d \cr
+#' slfl \tab input to soil surface \tab mm/d \cr
+#' slvp \tab evaporation rate from soil \tab mm/d \cr
 #' slrad \tab average solar radiation on slope over daytime \tab W/m2 \cr
 #' solnet \tab net solar radiation on slope over daytime \tab W/m2 \cr
-#' smlt \tab snowmelt \tab mm \cr
+#' smlt \tab snowmelt \tab mm/d \cr
 #' snow \tab snowpack water equivalent \tab mm \cr
-#' snvp \tab evaporation from snowpack \tab mm \cr
-#' srfl \tab source area flow \tab mm \cr
-#' stres \tab TRAN / PTRAN for time period \tab - \cr
-#' swat \tab total soil water in all layers at the end of the time interval \tab mm \cr
-#' tran \tab transpiration \tab mm \cr
-#' vrfln \tab vertical matrix drainage from lowest layer \tab mm \cr
+#' snvp \tab evaporation from snowpack \tab mm/d \cr
+#' srfl \tab source area flow \tab mm/d \cr
+#' stres \tab tran / ptran (daily value, output at the day's last precipitation interval) \tab - \cr
+#' swat \tab total soil water in all layers\tab mm \cr
+#' tran \tab transpiration \tab mm/d \cr
+#' vrfln \tab vertical matrix drainage from lowest layer \tab mm/d \cr
 #'}
 #'
 #' @section Layer outputs:
@@ -132,14 +129,12 @@
 #' theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
 #' wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
 #' psimi \tab matric soil water potential for soil layer \tab kPa \cr
-#' psiti \tab total soil water potential for a soil layer \tab kPa \cr
-#' infl \tab infiltration to soil water in soil layer \tab mm \cr
-#' byfl \tab bypass flow from soil layer \tab mm \cr
-#' tran \tab transpiration from soil layer \tab mm \cr
-#' slvp \tab soil evaporation from a soil layer \tab mm \cr
-#' vrfl \tab vertical matrix drainage from soil layer \tab mm \cr
-#' dsfl \tab downslope drainage from layer \tab mm \cr
-#' ntfl \tab net flow into soil layer \tab mm \cr
+#' infl \tab infiltration to soil water in soil layer \tab mm/d \cr
+#' byfl \tab bypass flow from soil layer \tab mm/d \cr
+#' tran \tab transpiration from soil layer \tab mm/d \cr
+#' vrfl \tab vertical matrix drainage from soil layer \tab mm/d \cr
+#' dsfl \tab downslope drainage from layer \tab mm/d \cr
+#' ntfl \tab net flow into soil layer \tab mm/d \cr
 #'}
 #'
 #' @export
@@ -149,7 +144,6 @@ run_LWFB90 <- function(options_b90,
                        climate,
                        precip = NULL,
                        soil = NULL,
-                       output = NULL,
                        output_fun = NULL,
                        rtrn_input = TRUE,
                        rtrn_output = TRUE,
@@ -320,9 +314,9 @@ run_LWFB90 <- function(options_b90,
     # precipitation interval outputs (to come)
 
     # daily outputs
-    simout$daily_output <- data.table::data.table(simout$daily_output)
-    data.table::setnames(simout$daily_output, names(simout$daily_output),
-                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rthr','rsno',
+    simout$output <- data.table::data.table(simout$output)
+    data.table::setnames(simout$output, names(simout$output),
+                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rthr','sthr','rsno',
                            'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
                            'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
                            'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
@@ -333,9 +327,9 @@ run_LWFB90 <- function(options_b90,
     simout$layer_output <- data.table::rbindlist(lapply(seq(dim(simout$layer_output)[3]),
                                                         function(x) data.frame(simout$layer_output[ , , x])),
                                                  idcol = "nl")
-    data.table::setnames(simout$layer_output, paste0("X", 1:16),
-                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','psiti','infl',
-                           'byfl','tran','slvp','vrfl','dsfl','ntfl'))
+    data.table::setnames(simout$layer_output, paste0("X", 1:14),
+                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','infl',
+                           'byfl','tran','vrfl','dsfl','ntfl'))
 
     simout$layer_output <- simout$layer_output[order(simout$layer_output$yr,
                                                      simout$layer_output$doy,
@@ -353,12 +347,8 @@ run_LWFB90 <- function(options_b90,
 
 
     ## append simulation results  ----
-    # either raw output or only data set selections
-    if (is.matrix(output) & all(dim(output) == c(7,5))) {
-      simres <- c(simres, process_outputs(simout, output))
-    } else {
-      simres[names(simout)[-1]] <- simout[-1] # append without error-code
-    }
+    simres[names(simout)[-1]] <- simout[-1] # append without error-code
+
 
     ## apply functions on simulation output ----
     if (!is.null(output_fun)) {
@@ -379,7 +369,7 @@ run_LWFB90 <- function(options_b90,
         argsnms = names(outfunargs))
 
       # TODO: simres is copied for use in each output_fun.
-      # Better to name output-object (e.g. SWATDAY.ASC) directly in the call to output_fun,
+      # Better to name -object directly in the call to output_fun,
       # instead of addressing the whole list x.
       simres$output_fun <- tryCatch( {
 
@@ -392,11 +382,7 @@ run_LWFB90 <- function(options_b90,
 
     ## remove the basic results again if they are not required ----
     if (!rtrn_output) {
-      if (is.matrix(output) & all(dim(output) == c(7,5))) {
-        simres <- simres[-which(grepl(".ASC", names(simres), fixed = TRUE))]
-      } else {
-        simres <- simres[-which(names(simres) %in% c("daily_output", "layer_output"))]
-      }
+      simres <- simres[-which(names(simres) %in% c("output", "layer_output"))]
     }
 
     ## remove the model_input if not required ----
@@ -646,172 +632,4 @@ chk_soil <- function(){
     }
   }))
 
-}
-
-# output processing ------------------------------------------------------------
-process_outputs <- function(simout, output) {
-
-  # to pass CRAN check notes
-  adef<-NULL;awat<-NULL;balerr<-NULL;da<-NULL;doy<-NULL;evap<-NULL;flow<-NULL;gwat<-NULL;
-  intr<-NULL;ints<-NULL;mo<-NULL;nits<-NULL;nl<-NULL;relawat<-NULL;rfal<-NULL;safrac<-NULL;
-  seep<-NULL;sfal<-NULL;snow<-NULL;stres<-NULL;swat<-NULL;vrfln<-NULL;yr<-NULL;
-
-  selection <- rownames(output)[which(rowSums(output) > 0)]
-
-  if (any(selection == "Budg")) {
-    Budg <- simout$daily_output[,c("yr","mo","da","doy","rfal","sfal","flow", "evap", "seep","snow","swat","gwat","intr","ints")]}
-  if (any(selection == "Flow")){
-    Flow <- simout$daily_output[,c("yr","mo","da","doy","flow","seep","srfl","slfl","byfl","dsfl","gwfl","vrfln")]}
-  if (any(selection == "Evap")){
-    Evap <- simout$daily_output[,c("yr","mo","da","doy","flow","evap","tran","irvp","isvp","slvp","snvp","pint","ptran","pslvp")]}
-  if (any(selection == "Abov")){
-    Abov <- simout$daily_output[,c("yr","mo","da","doy","rfal","rint","sfal","sint","rthr","rsno","rnet","smlt","slfl","srfl")]}
-  if (any(selection == "Belo")){
-    Belo <- simout$layer_output[,c("yr","mo","da","doy","nl","infl","byfl","tran","slvp","vrfl","dsfl","ntfl")]}
-  if (any(selection == "Swat")){
-    Swat <- simout$layer_output[,c("yr","mo","da","doy","nl","swati","theta","wetnes","psimi","psiti")]}
-  if (any(selection == "Misc")){
-    Misc <- simout$daily_output[,c("yr","mo","da","doy","vrfln","safrac","stres","adef","awat","relawat","nits","balerr")]}
-
-  moutputs <- list() # results collection
-
-  for (sel in selection) {
-    X <- get(sel)
-    if (sel  %in% c("Flow", "Evap", "Abov")) {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round, 1), by = list(yr, mo, da, doy)]
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("da","doy"), by = list(yr, mo)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("mo","da","doy"),by = yr]
-        }
-      }
-    }
-
-    if (sel  == "Swat") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round ,3), by = list(yr, mo, da, doy, nl)]
-
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(mean(x),3)}),
-                                                          .SDcols = -c("da","doy"), by = list(yr, mo, nl)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(mean(x),3)}),
-                                                          .SDcols = -c("mo","da","doy"),by = list(yr, nl)]
-        }
-      }
-    }
-    if (sel  == "Belo") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,lapply(.SD, round, 1), by = list(yr, mo, da, doy, nl)]
-
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("da","doy"),by = list(yr, mo, nl)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[,lapply(.SD, function(x) {round(sum(x),1)}),
-                                                          .SDcols = -c("mo","da","doy"), by = list(yr, nl)]
-        }
-      }
-    }
-    if (sel  == "Budg") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[,list(# for fluxes: sum up over period
-            prec = round(sum(rfal+sfal),1),
-            flow = round(sum(flow),1),
-            evap = round(sum(evap),1),
-            seep = round(sum(seep),1),
-            # for state variables: take last entry in period
-            snow = round(snow[which.max(doy)],1),
-            swat = round(swat[which.max(doy)],1),
-            gwat = round(gwat[which.max(doy)],1),
-            intr = round(intr[which.max(doy)],1),
-            ints = round(ints[which.max(doy)],1)),
-            by = list(yr, mo, da, doy)]
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(# for fluxes: sum up over period
-            prec = round(sum(rfal+sfal),1),
-            flow = round(sum(flow),1),
-            evap = round(sum(evap),1),
-            seep = round(sum(seep),1),
-            # for state variables: take last entry in period
-            snow = round(snow[which.max(doy)],1),
-            swat = round(swat[which.max(doy)],1),
-            gwat = round(gwat[which.max(doy)],1),
-            intr = round(intr[which.max(doy)],1),
-            ints = round(ints[which.max(doy)],1)),
-            by = list(yr, mo)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(# for fluxes: sum up over period
-            prec = round(sum(rfal+sfal),1),
-            flow = round(sum(flow),1),
-            evap = round(sum(evap),1),
-            seep = round(sum(seep),1),
-            # for state variables: take last entry in period
-            snow = round(snow[which.max(doy)],1),
-            swat = round(swat[which.max(doy)],1),
-            gwat = round(gwat[which.max(doy)],1),
-            intr = round(intr[which.max(doy)],1),
-            ints = round(ints[which.max(doy)],1)),
-            by = list(yr)]
-        }
-      }
-    }
-    if (sel  == "Misc") {
-      for (per in rev(colnames(output)[which(output[sel,] == 1)])) {
-        if (per == "Day") {
-          moutputs[[paste0(toupper(sel),"DAY.ASC")]] <- X[, list(
-            vrfln   = round(vrfln,1),
-            safrac  = round(safrac,1),
-            stres   = round(stres,3),
-            adef    = round(adef,3),
-            awat    = round(awat,1),
-            relawat = round(relawat,3),
-            nits,
-            balerr  = round(balerr, 3)),
-            by = list(yr, mo, da, doy)]
-
-        }
-        if (per == "Mon") {
-          moutputs[[paste0(toupper(sel),"MON.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1),
-                                                                 safrac  = round(sum(safrac),1),
-                                                                 stres   = round(mean(stres),3),
-                                                                 adef    = round(mean(adef),3),
-                                                                 awat    = round(mean(awat),1),
-                                                                 relawat = round(mean(relawat),3),
-                                                                 nits    = sum(nits),
-                                                                 balerr  = round(sum(balerr), 3)),
-                                                          by = list(yr, mo)]
-        }
-        if (per == "Ann") {
-          moutputs[[paste0(toupper(sel),"ANN.ASC")]] <- X[, list(vrfln   = round(sum(vrfln),1),
-                                                                 safrac  = round(sum(safrac),1),
-                                                                 stres   = round(mean(stres),3),
-                                                                 adef    = round(mean(adef),3),
-                                                                 awat    = round(mean(awat),1),
-                                                                 relawat = round(mean(relawat),3),
-                                                                 nits    = sum(nits),
-                                                                 balerr  = round(sum(balerr), 3)),
-                                                          by = list(yr)]
-        }
-      }
-    }
-  }
-
-
-  return(moutputs)
 }

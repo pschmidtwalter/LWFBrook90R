@@ -1,14 +1,33 @@
 # News for the LWFBrook90R-package
 
-# Version 0.4.6.9000 (2022-06-01)
+## Version 0.5.0 (???)
 
-Bug fixes:
+**Bug fixes**:
 
 - Installation error on single core machines because of a failed test with `run_multisite_LWFB90()` (Thanks to Henrik Bengtsson)
 
-# Version 0.4.5 (2021-11-30)
+**Documentation**:
 
-Bug fixes:
+- Vignettes split up into smaller articles
+
+**Changes (potentially breaking)**:
+
+Basic **output** is now at the **precipitation interval** level, mostly associated with `run_LWFB90()`:
+
+  - Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`).
+  - With `prec_interval` > 1, the output contains one row for each day 
+  and precipitation interval of the simulation.
+  - Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.
+  - With respect to precipitation interval output, the list item `daily_output` of the return was renamed to `output`.
+  - Removed `output`-argument and exported the function `process_outputs_LWFB90()` that does the job.
+  - New variable added to `output`: `sthr`
+  - Removed redundant variable `slvp` from `layer_output` (soil evaporation)
+  - Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the layers' matrix potentential (`psimi`) and the gravity potential at the soil layers' midpoints.
+
+
+## Version 0.4.5 (2021-11-30)
+
+**Bug fixes**:
 
 - `make_rootden()` with `method = 'betamodel'` led to negative 
 root density of the top layer when specified `maxrootdepth` was lower than soil depth.
@@ -16,7 +35,8 @@ root density of the top layer when specified `maxrootdepth` was lower than soil 
 - typo in `hydpar_wessolek_tab()` caused NAs in return for `texture = 'fSms'`
 - `soil_to_param()`: some unique soil materials were omitted in the return, if they had multiple occurences in the input `soil`-data.frame.
 
-Changes: 
+**Changes (potentially brealing)**:
+
 - new daily output variables: daily solar (`slrad`), net solar (`solnet`), net longwave (`lngnet`) and net radiation above (`aa`) and below canopy (`asubs`).
 
 ## Version 0.4.4. (2021-02-24)
@@ -29,7 +49,7 @@ Changes:
 
 ## Version 0.4.2 (2021-02-08)
 
-Bug fixes:
+**Bug fixes**:
 
 - `run_LWFB90()`: 
   - `options_b90$root_method = 'table'` gave an error in `make_rootden()` because of a wrong argument name.
@@ -37,13 +57,13 @@ Bug fixes:
 
 ## Version 0.4.1 (2021-01-02)
 
-Changes:
+**Changes**:
 
 - Minor changes to fulfill CRAN publication requirements
 
 ## Version 0.4.0  (2021-01-15)
 
-Changes:
+**Changes (potentially breaking)**:
 
 - arguments and functions were renamed for consistency.
 - result datasets are now returned directly by the Fortran model code, without 
@@ -71,12 +91,12 @@ Changes:
 
 ## Version 0.3.4  (2020-08-28)
 
-Changes:
+**Changes**:
 
 - Adjusted 'table'-method in `MakeRelRootDens()`: The root depth distribution provided in a table is now redistributed to the soil nodes under preservation of the total root mass.
 - Input changed for 'soilnodes'-argument of `MakeRelRootDens()`. See `?MakeRelRootDens`.
 
-Bug fixes:
+**Bug fixes**:
 
 - zero division error causing infinite `relawat` values in `MISCDAY.ASC`-output item.
 - 'betamodel'-method of `MakeRelRootDens()` returned the increment of the cumulative root proportion at the soil nodes, instead of the relative root density, which actually is the former value divided by the layer thickness.
@@ -84,18 +104,18 @@ Bug fixes:
 
 ## Version 0.3.0 (2020-04-21)
 
-Changes:
+**Changes**:
 
 - new function `msiterunLWFB90()`
 - `runLWFB90()`: model input (`param.b90`, `options.b90`, `standprop_daily`) is appended
-	to the return value BEFORE evaluating the `output_fun`-argument. In this way,
+	to the return value *before* evaluating the `output_fun`-argument. In this way,
 	on-the-fly post-processing of model results including model-input is possible now.
 - minor bugs fixed
 
 
 ## Version 0.2.0  (2019-06-18)
 
-Changes:
+**Changes**:
 
 - `output_fun` argument replaces `gof_fun`-argument in `runLWFB90()` for more flexible output.
 - minor bugs fixed

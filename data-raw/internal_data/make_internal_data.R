@@ -1,4 +1,3 @@
-options(stringsAsFactors = F)
 
 #Wessolek-MVG
 wessolek_mvg_tab10 <- read.csv("data-raw/internal_data/wessolek_MVG_tab10.csv")
@@ -42,20 +41,18 @@ output <- set_outputLWFB90()
 b90res <- run_LWFB90(options_b90 = options_b90,
                     param_b90 = param_b90,
                     climate = slb1_meteo,
-                    soil = soil,
-                    output = output)
-
+                    soil = soil)
 
 # mrun_res -------------
 
 # Agg-Function
 output_function <- function(x, tolayer) {
   # aggregate SWAT
-  swat_tran <- x$SWATDAY.ASC[which(nl <= tolayer),
-                             list(swat = sum(swati)),
-                             by  = list(yr, doy)]
+  swat_tran <- x$layer_output[which(nl <= tolayer),
+                              list(swat = sum(swati)),
+                              by  = list(yr, doy)]
   #add transpiration from EVAPDAY.ASC
-  swat_tran$tran <- x$EVAPDAY.ASC$tran
+  swat_tran$tran <- x$output$tran
 
   # get beginning and end of growing season from input parameters
   vpstart <- x$model_input$param_b90$budburstdoy
@@ -75,11 +72,10 @@ paramvar <- data.frame(maxlai = runif(N, 4,7),
 
 mrun_res <- run_multi_LWFB90(paramvar = paramvar,
                              param_b90 = set_paramLWFB90(),
-                             cores = 3, # arguments below are passed to run_LWFB90()
+                             cores = parallelly::availableCores()-1, # arguments below are passed to run_LWFB90()
                              options_b90 = set_optionsLWFB90(),
                              climate = slb1_meteo,
                              soil = soil,
-                             output = set_outputLWFB90(),
                              rtrn_input = FALSE, rtrn_output = FALSE,
                              output_fun = output_function,
                              tolayer = 15)
