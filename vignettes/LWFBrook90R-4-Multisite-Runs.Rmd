@@ -118,7 +118,7 @@ srun <- run_LWFB90(
 
 The same construct basically works with the function `run_multisite_LWFB90()`.
 The only difference to single-run simulations is that the arguments for the
-function have to be specified in a named list of lists, one sub-list for each
+function have to be specified in a named list of lists with function arguments, one sub-list for each
 site. We set it up as follows:
 
 ```{r}

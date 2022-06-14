@@ -66,9 +66,11 @@ run_multi_LWFB90 <- function(paramvar,
                              show_progress = TRUE,
                              ...){
 
-  if(cores > parallelly::availableCores())
-    stop(paste("Can not run on", cores, "cores! Only", parallelly::availableCores(),
-               "available."))
+  if(cores > parallelly::availableCores()) {
+    warning(paste("Can not run on", cores, "cores. Will use only", parallelly::availableCores(),
+               "available core(s)." ))
+    cores <- parallelly::availableCores()
+  }
 
   # to pass CRAN check Notes
   `%dopar%` <- foreach::`%dopar%`

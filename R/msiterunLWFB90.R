@@ -78,9 +78,11 @@ run_multisite_LWFB90 <- function(options_b90,
                                  show_progress = TRUE,
                                  ...){
 
-  if (cores > parallelly::availableCores())
-    stop(paste("Can not run on", cores, "cores! Only", parallelly::availableCores(),
-               "available."))
+  if (cores > parallelly::availableCores()) {
+    warning(paste("Can not run on", cores, "cores. Will use only", parallelly::availableCores(),
+                  "available core(s)." ))
+    cores <- parallelly::availableCores()
+  }
 
   # to pass CRAN check notes
   clim_nms <- NULL; soil_nms <- NULL; param_nms <- NULL; clim_no <- NULL;
