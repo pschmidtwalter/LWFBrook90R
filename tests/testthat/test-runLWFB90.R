@@ -97,8 +97,8 @@ outfun2 <- function(x) {
 
 test_that("single output functions works", {
   expect_type(
-    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-01-01"),
-                                               enddate = as.Date("2002-12-31")),
+    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-06-01"),
+                                               enddate = as.Date("2002-06-30")),
                param_b90 = parms,
                soil = soil,
                climate = climfun,
@@ -108,8 +108,8 @@ test_that("single output functions works", {
                rtrn_output = FALSE)$output_fun,
     "list")
   expect_type(
-    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-01-01"),
-                                               enddate = as.Date("2002-12-31")),
+    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2002-06-01"),
+                                               enddate = as.Date("2002-06-30")),
                param_b90 = parms,
                soil = soil,
                climate = climfun,

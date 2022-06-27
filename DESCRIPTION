@@ -19,7 +19,7 @@ Description: Provides a flexible and easy-to use interface for the soil vegetati
     simulations, as well as multi-run and large-scale applications. 
 License: GPL-3
 Encoding: UTF-8
-URL: pschmidtwalter.github.io/lwfbrook90r/, https://github.com/pschmidtwalter/LWFBrook90R
+URL: https://pschmidtwalter.github.io/LWFBrook90R/, https://github.com/pschmidtwalter/LWFBrook90R
 BugReports: https://github.com/pschmidtwalter/LWFBrook90R/issues
 NeedsCompilation: yes
 Depends: R (>= 3.4.0)

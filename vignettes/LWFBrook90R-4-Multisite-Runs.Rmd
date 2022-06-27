@@ -91,7 +91,7 @@ file name) via the `climate_args`-argument.
 To demonstrate this mechanism, we write three files with climatic data to a
 temporary location, from where we will read them back in later:
 
-```{r, result='hide'}
+```{r, results='hide'}
 tdir <- tempdir()
 fnames <- paste0(tdir, "/clim", 1:3, ".csv")
 lapply(fnames, function(x) {

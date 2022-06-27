@@ -1,4 +1,11 @@
-# LWFBrook90R 0.5.0 (???)
+# LWFBrook90R 0.5.1
+
+## Bug fixes
+
+ - Installation error on single core machines because of a failed vignette build
+
+
+# LWFBrook90R 0.5.0 (2022-06-13)
 
 ## Changes (potentially breaking)
 
