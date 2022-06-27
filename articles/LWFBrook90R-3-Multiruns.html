@@ -108,7 +108,7 @@
 <p>For the first case, the function <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> is available. The second problem can be tackled using the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, which is described in detail in the vignette <a href="LWFBrook90R-4-Multisite-Runs.html">‘Multi-Site simulations’</a>.</p>
 <p>Both functions are wrapper functions for <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> and allow for parallel processing of tasks, using a specified number of CPUs to speed up the execution of a multi-run simulation. They return lists containing the individual single run simulation results, as they are returned by <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. These result-lists can become very large if many simulations are performed, and the selected output comprises daily data sets and especially the individual soil layers’ daily soil moisture states. Huge amounts of data produced can overload the memory, this vignette therefore starts with a data management section on how to make best use of the <code>output_fun</code>-argument of <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> to reduce the amount of data returned.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pschmidtwalter/LWFBrook90R" class="external-link">LWFBrook90R</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pschmidtwalter.github.io/LWFBrook90R/">LWFBrook90R</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
@@ -203,7 +203,7 @@ Growing season soil water storage and transpiration of 50 simulations, with rand
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

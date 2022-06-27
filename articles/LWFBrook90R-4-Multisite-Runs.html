@@ -103,7 +103,7 @@
 </h2>
 <p>In the previous vignette <a href="LWFBrook90R-3-Multiruns.html">‘Multi-run simulations in LWFBrook90R’</a>, we learned how to make multiple simulations using a set of variable model parameters using the function <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code>. To simulate a set of different sites with different soil, climate and vegetation input, we can use the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> that is the subject of this vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pschmidtwalter/LWFBrook90R" class="external-link">LWFBrook90R</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pschmidtwalter.github.io/LWFBrook90R/">LWFBrook90R</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span>
@@ -155,15 +155,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fnames</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">[</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/IDateTime.html" class="external-link">year</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2002</span>,<span class="op">]</span>, 
             file <span class="op">=</span> <span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>For testing, we perform a single run with <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> and use the <code>fread</code> function from the ‘data.table’-package as <code>climate</code>-argument. The function reads text-files, and takes a <code>file</code> name as argument that we include in the call. It points to the first of our three climate files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">srun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_LWFB90.html">run_LWFB90</a></span><span class="op">(</span>
@@ -270,7 +262,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>
