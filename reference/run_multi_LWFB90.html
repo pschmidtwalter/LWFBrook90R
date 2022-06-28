@@ -74,14 +74,14 @@ parallel, with varying input parameters.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_multi_LWFB90</span><span class="op">(</span>
-  <span class="va">paramvar</span>,
-  <span class="va">param_b90</span>,
-  paramvar_nms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paramvar</span><span class="op">)</span>,
-  cores <span class="op">=</span> <span class="fl">2</span>,
-  show_progress <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_multi_LWFB90</span><span class="op">(</span></span>
+<span>  <span class="va">paramvar</span>,</span>
+<span>  <span class="va">param_b90</span>,</span>
+<span>  paramvar_nms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paramvar</span><span class="op">)</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  show_progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -172,65 +172,65 @@ using <code><a href="https://progressr.futureverse.org/reference/handlers.html" 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Set up lists containing model control options and model parameters:</span></span>
-<span class="r-in"><span class="va">parms</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># choose the 'Coupmodel' shape option for the annual lai dynamic,</span></span>
-<span class="r-in"><span class="co"># with fixed budburst and leaf fall dates:</span></span>
-<span class="r-in"><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-01"</span><span class="op">)</span>,</span>
-<span class="r-in">                                 enddate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-30"</span><span class="op">)</span>,</span>
-<span class="r-in">                                 lai_method <span class="op">=</span> <span class="st">'Coupmodel'</span>,</span>
-<span class="r-in">                                 budburst_method <span class="op">=</span> <span class="st">'fixed'</span>,</span>
-<span class="r-in">                                 leaffall_method <span class="op">=</span> <span class="st">'fixed'</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Derive soil hydraulic properties from soil physical properties using pedotransfer functions</span></span>
-<span class="r-in"><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#set up data.frame with variable parameters</span></span>
-<span class="r-in"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">vary_parms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>shp_optdoy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">180</span>,<span class="fl">240</span><span class="op">)</span>,</span>
-<span class="r-in">                         shp_budburst <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0.1</span>,<span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">                         winlaifrac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span>,</span>
-<span class="r-in">                         budburstdoy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">100</span>,<span class="fl">150</span><span class="op">)</span>,</span>
-<span class="r-in">                         soil_materials.ths3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0.3</span>,<span class="fl">0.5</span><span class="op">)</span>, <span class="co"># ths of material 3</span></span>
-<span class="r-in">                         maxlai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">2</span>,<span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># add the soil as soil_nodes and soil materials to param_b90, so ths3 can be looked up</span></span>
-<span class="r-in"><span class="va">parms</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"soil_nodes"</span>, <span class="st">"soil_materials"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="soil_to_param.html">soil_to_param</a></span><span class="op">(</span><span class="va">soil</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Make a Multirun-Simulation</span></span>
-<span class="r-in"><span class="va">b90.multi</span> <span class="op">&lt;-</span> <span class="fu">run_multi_LWFB90</span><span class="op">(</span>paramvar <span class="op">=</span> <span class="va">vary_parms</span>,</span>
-<span class="r-in">                        param_b90 <span class="op">=</span> <span class="va">parms</span>,</span>
-<span class="r-in">                        options_b90 <span class="op">=</span> <span class="va">opts</span>,</span>
-<span class="r-in">                        climate <span class="op">=</span> <span class="va">slb1_meteo</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">b90.multi</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set up lists containing model control options and model parameters:</span></span></span>
+<span class="r-in"><span><span class="va">parms</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># choose the 'Coupmodel' shape option for the annual lai dynamic,</span></span></span>
+<span class="r-in"><span><span class="co"># with fixed budburst and leaf fall dates:</span></span></span>
+<span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-01"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                 enddate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-30"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                 lai_method <span class="op">=</span> <span class="st">'Coupmodel'</span>,</span></span>
+<span class="r-in"><span>                                 budburst_method <span class="op">=</span> <span class="st">'fixed'</span>,</span></span>
+<span class="r-in"><span>                                 leaffall_method <span class="op">=</span> <span class="st">'fixed'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Derive soil hydraulic properties from soil physical properties using pedotransfer functions</span></span></span>
+<span class="r-in"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#set up data.frame with variable parameters</span></span></span>
+<span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">vary_parms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>shp_optdoy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">180</span>,<span class="fl">240</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         shp_budburst <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0.1</span>,<span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         winlaifrac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         budburstdoy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">100</span>,<span class="fl">150</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         soil_materials.ths3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0.3</span>,<span class="fl">0.5</span><span class="op">)</span>, <span class="co"># ths of material 3</span></span></span>
+<span class="r-in"><span>                         maxlai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>,<span class="fl">2</span>,<span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add the soil as soil_nodes and soil materials to param_b90, so ths3 can be looked up</span></span></span>
+<span class="r-in"><span><span class="va">parms</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"soil_nodes"</span>, <span class="st">"soil_materials"</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="soil_to_param.html">soil_to_param</a></span><span class="op">(</span><span class="va">soil</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Make a Multirun-Simulation</span></span></span>
+<span class="r-in"><span><span class="va">b90.multi</span> <span class="op">&lt;-</span> <span class="fu">run_multi_LWFB90</span><span class="op">(</span>paramvar <span class="op">=</span> <span class="va">vary_parms</span>,</span></span>
+<span class="r-in"><span>                        param_b90 <span class="op">=</span> <span class="va">parms</span>,</span></span>
+<span class="r-in"><span>                        options_b90 <span class="op">=</span> <span class="va">opts</span>,</span></span>
+<span class="r-in"><span>                        climate <span class="op">=</span> <span class="va">slb1_meteo</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">b90.multi</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "RunNo.1"  "RunNo.2"  "RunNo.3"  "RunNo.4"  "RunNo.5"  "RunNo.6" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "RunNo.7"  "RunNo.8"  "RunNo.9"  "RunNo.10"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extract results</span></span>
-<span class="r-in"><span class="va">evapday</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">b90.multi</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="va">x</span><span class="op">$</span><span class="va">output</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"yr"</span>, <span class="st">"doy"</span>, <span class="st">"evap"</span><span class="op">)</span><span class="op">]</span> <span class="op">}</span><span class="op">)</span>,</span>
-<span class="r-in">  idcol <span class="op">=</span> <span class="st">"srun"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">evapday</span><span class="op">$</span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">$</span><span class="va">yr</span>, <span class="va">evapday</span><span class="op">$</span><span class="va">doy</span><span class="op">)</span>,<span class="st">"%Y %j"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">srun_nms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">$</span><span class="va">srun</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">[</span><span class="va">evapday</span><span class="op">$</span><span class="va">srun</span> <span class="op">==</span> <span class="va">srun_nms</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="op">]</span>,</span>
-<span class="r-in">     <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dates</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">evap</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span class="r-in">          ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">b90.multi</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">[</span><span class="va">evapday</span><span class="op">$</span><span class="va">srun</span> <span class="op">==</span> <span class="va">srun_nms</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span>,</span>
-<span class="r-in">       <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">dates</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">evap</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extract results</span></span></span>
+<span class="r-in"><span><span class="va">evapday</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">b90.multi</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="va">x</span><span class="op">$</span><span class="va">output</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"yr"</span>, <span class="st">"doy"</span>, <span class="st">"evap"</span><span class="op">)</span><span class="op">]</span> <span class="op">}</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  idcol <span class="op">=</span> <span class="st">"srun"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">evapday</span><span class="op">$</span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">$</span><span class="va">yr</span>, <span class="va">evapday</span><span class="op">$</span><span class="va">doy</span><span class="op">)</span>,<span class="st">"%Y %j"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">srun_nms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">$</span><span class="va">srun</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">[</span><span class="va">evapday</span><span class="op">$</span><span class="va">srun</span> <span class="op">==</span> <span class="va">srun_nms</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dates</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">evap</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span>,</span></span>
+<span class="r-in"><span>          ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">b90.multi</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">evapday</span><span class="op">[</span><span class="va">evapday</span><span class="op">$</span><span class="va">srun</span> <span class="op">==</span> <span class="va">srun_nms</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">dates</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">evap</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="run_multi_LWFB90-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>

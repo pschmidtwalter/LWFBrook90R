@@ -72,7 +72,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">soil_to_param</span><span class="op">(</span><span class="va">soil</span>, imodel <span class="op">=</span> <span class="st">"MvG"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">soil_to_param</span><span class="op">(</span><span class="va">soil</span>, imodel <span class="op">=</span> <span class="st">"MvG"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -97,10 +97,10 @@ thsat , 'thetaf','psif', 'bexp','kf', 'wetinf', 'gravel'.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">soil</span> <span class="op">&lt;-</span> <span class="va">slb1_soil</span></span>
-<span class="r-in"><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">soil</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="va">slb1_soil</span></span></span>
+<span class="r-in"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">soil</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	21 obs. of  17 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ horizon: chr  "I Ah" "I Aeh" "I Aeh" "I Aeh" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ upper  : num  0 -0.01 -0.03 -0.05 -0.08 -0.12 -0.16 -0.22 -0.28 -0.36 ...</span>
@@ -119,9 +119,9 @@ thsat , 'thetaf','psif', 'bexp','kf', 'wetinf', 'gravel'.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mpar   : num  0.171 0.171 0.171 0.171 0.171 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ksat   : num  277 277 277 277 277 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ tort   : num  -1.2 -1.2 -1.2 -1.2 -1.2 ...</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">soil_layers_materials</span> <span class="op">&lt;-</span> <span class="fu">soil_to_param</span><span class="op">(</span><span class="va">soil</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">soil_layers_materials</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">soil_layers_materials</span> <span class="op">&lt;-</span> <span class="fu">soil_to_param</span><span class="op">(</span><span class="va">soil</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">soil_layers_materials</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $soil_nodes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     layer upper lower thick midpoint mat</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1:     1  0.00 -0.01    10   -0.005   1</span>

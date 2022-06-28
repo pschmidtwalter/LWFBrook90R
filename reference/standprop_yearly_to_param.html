@@ -74,7 +74,7 @@ sai, densef, and age for the years in <code>out_yrs</code>, and updates the prov
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">standprop_yearly_to_param</span><span class="op">(</span><span class="va">standprop_yearly</span>, <span class="va">param_b90</span>, <span class="va">out_yrs</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">standprop_yearly_to_param</span><span class="op">(</span><span class="va">standprop_yearly</span>, <span class="va">param_b90</span>, <span class="va">out_yrs</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -101,17 +101,17 @@ sai, sai_ini, densef, densef_ini, age, age_ini.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">param_b90</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">slb1_standprop</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">years</span> <span class="op">&lt;-</span> <span class="fl">2002</span><span class="op">:</span><span class="fl">2005</span></span>
-<span class="r-in"><span class="va">param.new</span> <span class="op">&lt;-</span> <span class="fu">standprop_yearly_to_param</span><span class="op">(</span><span class="va">dat</span>,</span>
-<span class="r-in">                                       <span class="va">param_b90</span>,</span>
-<span class="r-in">                                       <span class="va">years</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">param.new</span><span class="op">$</span><span class="va">maxlai</span>, <span class="va">dat</span><span class="op">$</span><span class="va">maxlai</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">years</span><span class="op">]</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">param_b90</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">slb1_standprop</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">years</span> <span class="op">&lt;-</span> <span class="fl">2002</span><span class="op">:</span><span class="fl">2005</span></span></span>
+<span class="r-in"><span><span class="va">param.new</span> <span class="op">&lt;-</span> <span class="fu">standprop_yearly_to_param</span><span class="op">(</span><span class="va">dat</span>,</span></span>
+<span class="r-in"><span>                                       <span class="va">param_b90</span>,</span></span>
+<span class="r-in"><span>                                       <span class="va">years</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">param.new</span><span class="op">$</span><span class="va">maxlai</span>, <span class="va">dat</span><span class="op">$</span><span class="va">maxlai</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">years</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">param.new</span><span class="op">$</span><span class="va">height</span>, <span class="va">dat</span><span class="op">$</span><span class="va">height</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">years</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">param.new</span><span class="op">$</span><span class="va">height</span>, <span class="va">dat</span><span class="op">$</span><span class="va">height</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">years</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 </code></pre></div>
     </div>

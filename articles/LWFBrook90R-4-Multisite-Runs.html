@@ -103,45 +103,45 @@
 </h2>
 <p>In the previous vignette <a href="LWFBrook90R-3-Multiruns.html">‘Multi-run simulations in LWFBrook90R’</a>, we learned how to make multiple simulations using a set of variable model parameters using the function <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code>. To simulate a set of different sites with different soil, climate and vegetation input, we can use the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> that is the subject of this vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pschmidtwalter.github.io/LWFBrook90R/">LWFBrook90R</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span>
-<span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="../reference/ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span>texture <span class="op">=</span> <span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pschmidtwalter.github.io/LWFBrook90R/">LWFBrook90R</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span></span>
+<span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="../reference/ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span>texture <span class="op">=</span> <span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="list-input-for-soil-climate-and-param_b90">List input for <code>soil</code>, <code>climate</code> and <code>param_b90</code><a class="anchor" aria-label="anchor" href="#list-input-for-soil-climate-and-param_b90"></a>
 </h2>
 <p>The function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> runs through lists of <code>param_b90</code>, <code>climate</code>, and <code>soil</code>-objects, and evaluates the specified parameter sets for each of the soil/climate combinations. To demonstrate its usage, we define two parameter sets, that we want to run on three different sites (i.e. unique combinations of climate and soil). We include the two parameter sets in a list <code>parms_l</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">parms_beech</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
-<span class="va">parms_spruce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">4.5</span>, winlaifrac <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
-<span class="va">parms_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>beech <span class="op">=</span> <span class="va">parms_beech</span>, spruce <span class="op">=</span> <span class="va">parms_spruce</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">parms_beech</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="va">parms_spruce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">4.5</span>, winlaifrac <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">parms_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>beech <span class="op">=</span> <span class="va">parms_beech</span>, spruce <span class="op">=</span> <span class="va">parms_spruce</span><span class="op">)</span></span></code></pre></div>
 <p>We pretend that the three sites all have individual climates and soils, and set up lists for soil and climate input:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">soils_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>soil1 <span class="op">=</span> <span class="va">soil</span>, soil2 <span class="op">=</span> <span class="va">soil</span>, soil3 <span class="op">=</span> <span class="va">soil</span><span class="op">)</span>
-<span class="va">climates_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>clim1 <span class="op">=</span> <span class="va">slb1_meteo</span>, clim2 <span class="op">=</span> <span class="va">slb1_meteo</span>, clim3 <span class="op">=</span> <span class="va">slb1_meteo</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">soils_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>soil1 <span class="op">=</span> <span class="va">soil</span>, soil2 <span class="op">=</span> <span class="va">soil</span>, soil3 <span class="op">=</span> <span class="va">soil</span><span class="op">)</span></span>
+<span><span class="va">climates_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>clim1 <span class="op">=</span> <span class="va">slb1_meteo</span>, clim2 <span class="op">=</span> <span class="va">slb1_meteo</span>, clim3 <span class="op">=</span> <span class="va">slb1_meteo</span><span class="op">)</span></span></code></pre></div>
 <p>Now we can run a small example:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">startdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-06-01"</span><span class="op">)</span>
-<span class="va">enddate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-06-30"</span><span class="op">)</span>
-
-<span class="va">msite_run1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90</a></span><span class="op">(</span>
-  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,
-  param_b90 <span class="op">=</span> <span class="va">parms_l</span>,
-  climate <span class="op">=</span> <span class="va">climates_l</span>,
-  soil <span class="op">=</span> <span class="va">soils_l</span>,
-  cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">startdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-06-01"</span><span class="op">)</span></span>
+<span><span class="va">enddate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-06-30"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">msite_run1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90</a></span><span class="op">(</span></span>
+<span>  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,</span>
+<span>  param_b90 <span class="op">=</span> <span class="va">parms_l</span>,</span>
+<span>  climate <span class="op">=</span> <span class="va">climates_l</span>,</span>
+<span>  soil <span class="op">=</span> <span class="va">soils_l</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>The results are returned as a named list of single run objects, with their names being concatenated from the names of the input list entries holding the individual <code>param_b90</code>, <code>climate</code>, and <code>soil</code> input objects:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">msite_run1</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; List of 6</span>
-<span class="co">#&gt;  $ clim1 soil1 beech :List of 5</span>
-<span class="co">#&gt;  $ clim1 soil1 spruce:List of 5</span>
-<span class="co">#&gt;  $ clim2 soil2 beech :List of 5</span>
-<span class="co">#&gt;  $ clim2 soil2 spruce:List of 5</span>
-<span class="co">#&gt;  $ clim3 soil3 beech :List of 5</span>
-<span class="co">#&gt;  $ clim3 soil3 spruce:List of 5</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">msite_run1</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 6</span></span>
+<span><span class="co">#&gt;  $ clim1 soil1 beech :List of 5</span></span>
+<span><span class="co">#&gt;  $ clim1 soil1 spruce:List of 5</span></span>
+<span><span class="co">#&gt;  $ clim2 soil2 beech :List of 5</span></span>
+<span><span class="co">#&gt;  $ clim2 soil2 spruce:List of 5</span></span>
+<span><span class="co">#&gt;  $ clim3 soil3 beech :List of 5</span></span>
+<span><span class="co">#&gt;  $ clim3 soil3 spruce:List of 5</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="data-management-ii-a-function-as-climate-argument">Data management (ii): A function as <code>climate</code>-argument<a class="anchor" aria-label="anchor" href="#data-management-ii-a-function-as-climate-argument"></a>
@@ -150,45 +150,45 @@
 <p>For <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>, we can simply provide arguments to the function via the <code>...</code>-placeholder. For <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, we need to pass arguments to a <code>climate</code>-function (possibly with individual values for individual site, e.g. a file name) via the <code>climate_args</code>-argument.</p>
 <p>To demonstrate this mechanism, we write three files with climatic data to a temporary location, from where we will read them back in later:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">fnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">tdir</span>, <span class="st">"/clim"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">".csv"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fnames</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">[</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/IDateTime.html" class="external-link">year</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2002</span>,<span class="op">]</span>, 
-            file <span class="op">=</span> <span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">fnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">tdir</span>, <span class="st">"/clim"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">".csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fnames</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">[</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/IDateTime.html" class="external-link">year</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2002</span>,<span class="op">]</span>, </span>
+<span>            file <span class="op">=</span> <span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>For testing, we perform a single run with <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> and use the <code>fread</code> function from the ‘data.table’-package as <code>climate</code>-argument. The function reads text-files, and takes a <code>file</code> name as argument that we include in the call. It points to the first of our three climate files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">srun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_LWFB90.html">run_LWFB90</a></span><span class="op">(</span>
-  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,
-  param_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span>,
-  soil <span class="op">=</span> <span class="va">soil</span>,
-  climate <span class="op">=</span> <span class="va">fread</span>,
-  file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-  rtrn.input <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">srun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_LWFB90.html">run_LWFB90</a></span><span class="op">(</span></span>
+<span>  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,</span>
+<span>  param_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  soil <span class="op">=</span> <span class="va">soil</span>,</span>
+<span>  climate <span class="op">=</span> <span class="va">fread</span>,</span>
+<span>  file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  rtrn.input <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>The same construct basically works with the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>. The only difference to single-run simulations is that the arguments for the function have to be specified in a named list of lists with function arguments, one sub-list for each site. We set it up as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">clim_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>climfromfile1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,
-                  climfromfile2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>,
-                  climfromfile3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">clim_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>climfromfile1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                  climfromfile2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                  climfromfile3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">fnames</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now we call <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, and set up the function <code>fread</code> as <code>climate</code>-parameter. Our list of lists with individual arguments for <code>fread</code> is passed to the function via <code>climate_args</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">msite_run2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90</a></span><span class="op">(</span>
-  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,
-  param_b90 <span class="op">=</span> <span class="va">parms_l</span>,
-  soil <span class="op">=</span> <span class="va">soils_l</span>,
-  climate <span class="op">=</span> <span class="va">fread</span>,
-  climate_args <span class="op">=</span> <span class="va">clim_args</span>,
-  cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">msite_run2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90</a></span><span class="op">(</span></span>
+<span>  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,</span>
+<span>  param_b90 <span class="op">=</span> <span class="va">parms_l</span>,</span>
+<span>  soil <span class="op">=</span> <span class="va">soils_l</span>,</span>
+<span>  climate <span class="op">=</span> <span class="va">fread</span>,</span>
+<span>  climate_args <span class="op">=</span> <span class="va">clim_args</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>We simulated two parameter sets using three different climate/soil combinations:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">msite_run2</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="co">#&gt; List of 6</span>
-<span class="co">#&gt;  $ climfromfile1 soil1 beech :List of 5</span>
-<span class="co">#&gt;  $ climfromfile1 soil1 spruce:List of 5</span>
-<span class="co">#&gt;  $ climfromfile2 soil2 beech :List of 5</span>
-<span class="co">#&gt;  $ climfromfile2 soil2 spruce:List of 5</span>
-<span class="co">#&gt;  $ climfromfile3 soil3 beech :List of 5</span>
-<span class="co">#&gt;  $ climfromfile3 soil3 spruce:List of 5</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">msite_run2</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 6</span></span>
+<span><span class="co">#&gt;  $ climfromfile1 soil1 beech :List of 5</span></span>
+<span><span class="co">#&gt;  $ climfromfile1 soil1 spruce:List of 5</span></span>
+<span><span class="co">#&gt;  $ climfromfile2 soil2 beech :List of 5</span></span>
+<span><span class="co">#&gt;  $ climfromfile2 soil2 spruce:List of 5</span></span>
+<span><span class="co">#&gt;  $ climfromfile3 soil3 beech :List of 5</span></span>
+<span><span class="co">#&gt;  $ climfromfile3 soil3 spruce:List of 5</span></span></code></pre></div>
 <p>The names of the climate used in the result names are now coming from the top-level names of our list <code>clim_args</code>, because we used a function as <code>climate</code>-argument. The function <code>fread</code> is evaluated directly within <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, and is not passed to <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>, because otherwise it would have been evaluated for each single-run simulation. In this way, <code>fread</code> is evaluated only three times for in total six simulations which saves us some execution time, in case we want to simulate multiple parameter sets using the same climatic data.</p>
 </div>
 <div class="section level2">
@@ -196,51 +196,51 @@
 </h2>
 <p>Now that we learned how to use a function as climate input, we can combine this input facility with an <code>output_fun</code> that writes the simulation results to a file. To do so, we extend our output function from the previous vignette <a href="LWFBrook90R-3-Multiruns.html">‘Multi-run simulations in LWFBrook90R’</a> so that it writes the aggregated results to a file in a specified directory. The file name is constructed from the names of the current soil, climate, and parameter object, which are passed automatically from <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> to <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> as character variables <code>soil_nm</code>, <code>clim_nm</code>, and <code>param_nm</code>. In this way, the names of currently processed input objects are accessible to <code>output_fun</code>-functions within <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">output_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">tolayer</span>, <span class="va">basedir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,
-                            <span class="va">soil_nm</span>, <span class="va">clim_nm</span>, <span class="va">param_nm</span> <span class="op">)</span> <span class="op">{</span>
-  <span class="co"># file-name</span>
-  <span class="va">filenm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">basedir</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">soil_nm</span>, <span class="va">clim_nm</span>, <span class="va">param_nm</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span>
-  
-  <span class="co"># aggregate SWAT</span>
-  <span class="va">swat_tran</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">layer_output</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">nl</span> <span class="op">&lt;=</span> <span class="va">tolayer</span><span class="op">)</span>, 
-                             <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>swat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">swati</span><span class="op">)</span><span class="op">)</span>,
-                             by  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">yr</span>, <span class="va">doy</span><span class="op">)</span><span class="op">]</span>
-  <span class="co">#add transpiration from EVAPDAY.ASC</span>
-  <span class="va">swat_tran</span><span class="op">$</span><span class="va">tran</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">tran</span>
-  
-  <span class="co"># get beginning and end of growing season from input parameters</span>
-  <span class="va">vpstart</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">model_input</span><span class="op">$</span><span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span>
-  <span class="va">vpend</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">model_input</span><span class="op">$</span><span class="va">param_b90</span><span class="op">$</span><span class="va">leaffalldoy</span>
-  <span class="va">swat_tran</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">swat_tran</span>,
-                     <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>yr <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/duplicated.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">swat_tran</span><span class="op">$</span><span class="va">yr</span><span class="op">)</span>,
-                                <span class="va">vpstart</span>, <span class="va">vpend</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"yr"</span><span class="op">)</span>
-  <span class="co"># mean swat and tran sum</span>
-  <span class="va">swattran_vp</span> <span class="op">&lt;-</span> <span class="va">swat_tran</span><span class="op">[</span><span class="va">doy</span> <span class="op">&gt;=</span> <span class="va">vpstart</span> <span class="op">&amp;</span> <span class="va">doy</span> <span class="op">&lt;=</span> <span class="va">vpend</span>, 
-            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>swat_vp_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">swat</span><span class="op">)</span>, tran_vp_sum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tran</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">yr</span><span class="op">]</span>
-  
-  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">swattran_vp</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">filenm</span>, <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">output_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">tolayer</span>, <span class="va">basedir</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                            <span class="va">soil_nm</span>, <span class="va">clim_nm</span>, <span class="va">param_nm</span> <span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># file-name</span></span>
+<span>  <span class="va">filenm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">basedir</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">soil_nm</span>, <span class="va">clim_nm</span>, <span class="va">param_nm</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># aggregate SWAT</span></span>
+<span>  <span class="va">swat_tran</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">layer_output</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">nl</span> <span class="op">&lt;=</span> <span class="va">tolayer</span><span class="op">)</span>, </span>
+<span>                             <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>swat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">swati</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                             by  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">yr</span>, <span class="va">doy</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="co">#add transpiration from EVAPDAY.ASC</span></span>
+<span>  <span class="va">swat_tran</span><span class="op">$</span><span class="va">tran</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">tran</span></span>
+<span>  </span>
+<span>  <span class="co"># get beginning and end of growing season from input parameters</span></span>
+<span>  <span class="va">vpstart</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">model_input</span><span class="op">$</span><span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span></span>
+<span>  <span class="va">vpend</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">model_input</span><span class="op">$</span><span class="va">param_b90</span><span class="op">$</span><span class="va">leaffalldoy</span></span>
+<span>  <span class="va">swat_tran</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">swat_tran</span>,</span>
+<span>                     <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>yr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">swat_tran</span><span class="op">$</span><span class="va">yr</span><span class="op">)</span>,</span>
+<span>                                <span class="va">vpstart</span>, <span class="va">vpend</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"yr"</span><span class="op">)</span></span>
+<span>  <span class="co"># mean swat and tran sum</span></span>
+<span>  <span class="va">swattran_vp</span> <span class="op">&lt;-</span> <span class="va">swat_tran</span><span class="op">[</span><span class="va">doy</span> <span class="op">&gt;=</span> <span class="va">vpstart</span> <span class="op">&amp;</span> <span class="va">doy</span> <span class="op">&lt;=</span> <span class="va">vpend</span>, </span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>swat_vp_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">swat</span><span class="op">)</span>, tran_vp_sum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">tran</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">yr</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">swattran_vp</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">filenm</span>, <span class="st">".csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Now we can run the simulations, with climate data coming from files, and the results being written to file our temporary directory <code>tdir</code>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">msite_run3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90</a></span><span class="op">(</span>
-  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,
-  param_b90 <span class="op">=</span> <span class="va">parms_l</span>,
-  soil <span class="op">=</span> <span class="va">soils_l</span>,
-  climate <span class="op">=</span> <span class="va">fread</span>,
-  climate_args <span class="op">=</span> <span class="va">clim_args</span>,
-  rtrn_input <span class="op">=</span> <span class="cn">FALSE</span>, rtrn_output <span class="op">=</span> <span class="cn">FALSE</span>,
-  output_fun <span class="op">=</span> <span class="va">output_function</span>,
-  tolayer <span class="op">=</span> <span class="fl">15</span>,
-  basedir <span class="op">=</span> <span class="va">tdir</span>,
-  cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">msite_run3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90</a></span><span class="op">(</span></span>
+<span>  options_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>startdate <span class="op">=</span> <span class="va">startdate</span>, enddate <span class="op">=</span> <span class="va">enddate</span><span class="op">)</span>,</span>
+<span>  param_b90 <span class="op">=</span> <span class="va">parms_l</span>,</span>
+<span>  soil <span class="op">=</span> <span class="va">soils_l</span>,</span>
+<span>  climate <span class="op">=</span> <span class="va">fread</span>,</span>
+<span>  climate_args <span class="op">=</span> <span class="va">clim_args</span>,</span>
+<span>  rtrn_input <span class="op">=</span> <span class="cn">FALSE</span>, rtrn_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  output_fun <span class="op">=</span> <span class="va">output_function</span>,</span>
+<span>  tolayer <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  basedir <span class="op">=</span> <span class="va">tdir</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>After the simulation has finished, we can list the files and see that our attempt was successful:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">tdir</span>, pattern <span class="op">=</span> <span class="st">"csv"</span><span class="op">)</span>
-<span class="co">#&gt; [1] "clim1.csv"                      "clim2.csv"                     </span>
-<span class="co">#&gt; [3] "clim3.csv"                      "soil1_climfromfile1_beech.csv" </span>
-<span class="co">#&gt; [5] "soil1_climfromfile1_spruce.csv" "soil2_climfromfile2_beech.csv" </span>
-<span class="co">#&gt; [7] "soil2_climfromfile2_spruce.csv" "soil3_climfromfile3_beech.csv" </span>
-<span class="co">#&gt; [9] "soil3_climfromfile3_spruce.csv"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">tdir</span>, pattern <span class="op">=</span> <span class="st">"csv"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "clim1.csv"                      "clim2.csv"                     </span></span>
+<span><span class="co">#&gt; [3] "clim3.csv"                      "soil1_climfromfile1_beech.csv" </span></span>
+<span><span class="co">#&gt; [5] "soil1_climfromfile1_spruce.csv" "soil2_climfromfile2_beech.csv" </span></span>
+<span><span class="co">#&gt; [7] "soil2_climfromfile2_spruce.csv" "soil3_climfromfile3_beech.csv" </span></span>
+<span><span class="co">#&gt; [9] "soil3_climfromfile3_spruce.csv"</span></span></code></pre></div>
 <p>We can also use database connection objects instead of files to read climate data and save simulation results. For the input of climate data, connection objects can be defined in advance, and passed directly to the <code>climate</code>-function. However, this does not work for <code>output_fun</code> in a parallel setting like in <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code> or <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code>, because file or database connections in R are not exported to parallel workers. Connections therefore have to be set up (and closed again) within an <code>output_fun</code>-function.</p>
 </div>
   </div>

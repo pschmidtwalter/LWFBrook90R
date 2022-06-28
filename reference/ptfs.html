@@ -76,15 +76,15 @@ texture, bulk density and carbon content.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">hydpar_puh2</span><span class="op">(</span><span class="va">clay</span>, <span class="va">silt</span>, <span class="va">sand</span>, <span class="va">bd</span>, oc.pct <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-
-<span class="fu">hydpar_hypres</span><span class="op">(</span><span class="va">clay</span>, <span class="va">silt</span>, <span class="va">bd</span>, oc.pct <span class="op">=</span> <span class="fl">0.1</span>, topsoil <span class="op">=</span> <span class="cn">TRUE</span>, humconv <span class="op">=</span> <span class="fl">1.72</span><span class="op">)</span>
-
-<span class="fu">hydpar_hypres_tab</span><span class="op">(</span><span class="va">texture</span>, <span class="va">topsoil</span><span class="op">)</span>
-
-<span class="fu">hydpar_wessolek_tab</span><span class="op">(</span><span class="va">texture</span><span class="op">)</span>
-
-<span class="fu">hydpar_ff_b90</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hydpar_puh2</span><span class="op">(</span><span class="va">clay</span>, <span class="va">silt</span>, <span class="va">sand</span>, <span class="va">bd</span>, oc.pct <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hydpar_hypres</span><span class="op">(</span><span class="va">clay</span>, <span class="va">silt</span>, <span class="va">bd</span>, oc.pct <span class="op">=</span> <span class="fl">0.1</span>, topsoil <span class="op">=</span> <span class="cn">TRUE</span>, humconv <span class="op">=</span> <span class="fl">1.72</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hydpar_hypres_tab</span><span class="op">(</span><span class="va">texture</span>, <span class="va">topsoil</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hydpar_wessolek_tab</span><span class="op">(</span><span class="va">texture</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hydpar_ff_b90</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -194,28 +194,28 @@ Development and use of a database of hydraulic properties of European soils.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">hydpar_puh2</span><span class="op">(</span>clay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">20</span><span class="op">)</span>, silt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">20</span><span class="op">)</span>, sand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>,<span class="fl">60</span><span class="op">)</span>, bd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.6</span>, <span class="fl">1.4</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">hydpar_puh2</span><span class="op">(</span>clay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">20</span><span class="op">)</span>, silt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">20</span><span class="op">)</span>, sand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>,<span class="fl">60</span><span class="op">)</span>, bd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.6</span>, <span class="fl">1.4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ths   thr    alpha     npar      mpar      ksat       tort</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3700561 0.069 2.063483 1.245316 0.1969907  35.34026 -0.1221964</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.3992240 0.069 8.156158 1.278638 0.2179176 108.53398 -1.4644501</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">hydpar_hypres</span><span class="op">(</span><span class="fl">20</span>,<span class="fl">20</span>,<span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">hydpar_hypres</span><span class="op">(</span><span class="fl">20</span>,<span class="fl">20</span>,<span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        ths thr    alpha     npar      mpar     ksat     tort</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.394632   0 5.462451 1.181339 0.1535029 364.6788 -3.61904</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">hydpar_hypres_tab</span><span class="op">(</span>texture <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C"</span>,<span class="st">"MF"</span><span class="op">)</span>, topsoil <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">hydpar_hypres_tab</span><span class="op">(</span>texture <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C"</span>,<span class="st">"MF"</span><span class="op">)</span>, topsoil <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ths   thr alpha  npar  mpar ksat tort</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.403 0.025  3.83 1.377 0.274  600 1.25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.412 0.010  0.82 1.218 0.179   40 0.50</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">hydpar_wessolek_tab</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Us"</span>, <span class="st">"Ls2"</span>, <span class="st">"mSfS"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">hydpar_wessolek_tab</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Us"</span>, <span class="st">"Ls2"</span>, <span class="st">"mSfS"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ths    thr alpha    npar      mpar   ksat   tort</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.3946 0.0000 2.747 1.22393 0.1829598 355.26 -2.728</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.4148 0.1406 4.052 1.32416 0.2448043 384.30 -2.067</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     NA     NA    NA      NA        NA     NA     NA</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">hydpar_ff_b90</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">hydpar_ff_b90</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       ths thr alpha  npar      mpar  ksat tort</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.848   0    98 1.191 0.1603694 98000  0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.1 0.848   0    98 1.191 0.1603694 98000  0.5</span>

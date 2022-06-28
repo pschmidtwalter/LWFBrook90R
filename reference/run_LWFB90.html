@@ -74,21 +74,21 @@ model, and returns the selected results.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_LWFB90</span><span class="op">(</span>
-  <span class="va">options_b90</span>,
-  <span class="va">param_b90</span>,
-  <span class="va">climate</span>,
-  precip <span class="op">=</span> <span class="cn">NULL</span>,
-  soil <span class="op">=</span> <span class="cn">NULL</span>,
-  output_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  rtrn_input <span class="op">=</span> <span class="cn">TRUE</span>,
-  rtrn_output <span class="op">=</span> <span class="cn">TRUE</span>,
-  chk_input <span class="op">=</span> <span class="cn">TRUE</span>,
-  run <span class="op">=</span> <span class="cn">TRUE</span>,
-  timelimit <span class="op">=</span> <span class="cn">Inf</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_LWFB90</span><span class="op">(</span></span>
+<span>  <span class="va">options_b90</span>,</span>
+<span>  <span class="va">param_b90</span>,</span>
+<span>  <span class="va">climate</span>,</span>
+<span>  precip <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  soil <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rtrn_input <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rtrn_output <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  chk_input <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  run <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  timelimit <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -215,42 +215,42 @@ Default is TRUE.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Set up lists containing model control options and model parameters:</span></span>
-<span class="r-in"><span class="va">param_b90</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">options_b90</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Set start and end Dates for the simulation</span></span>
-<span class="r-in"><span class="va">options_b90</span><span class="op">$</span><span class="va">startdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-01"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">options_b90</span><span class="op">$</span><span class="va">enddate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-30"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Derive soil hydraulic properties from soil physical properties</span></span>
-<span class="r-in"><span class="co"># using pedotransfer functions</span></span>
-<span class="r-in"><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Run LWF-Brook90</span></span>
-<span class="r-in"><span class="va">b90.result</span> <span class="op">&lt;-</span> <span class="fu">run_LWFB90</span><span class="op">(</span>options_b90 <span class="op">=</span> <span class="va">options_b90</span>,</span>
-<span class="r-in">                        param_b90 <span class="op">=</span> <span class="va">param_b90</span>,</span>
-<span class="r-in">                        climate <span class="op">=</span> <span class="va">slb1_meteo</span>,</span>
-<span class="r-in">                        soil <span class="op">=</span> <span class="va">soil</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># use a function to be performed on the output:</span></span>
-<span class="r-in"><span class="co"># aggregate soil water storage down to a specific layer</span></span>
-<span class="r-in"><span class="va">agg_swat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">layer</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">swati</span><span class="op">~</span><span class="va">yr</span><span class="op">+</span><span class="va">doy</span>,</span>
-<span class="r-in">                   <span class="va">x</span><span class="op">$</span><span class="va">SWATDAY.ASC</span>,</span>
-<span class="r-in">                   FUN <span class="op">=</span> <span class="va">sum</span>,</span>
-<span class="r-in">                   subset <span class="op">=</span> <span class="va">nl</span> <span class="op">&lt;=</span> <span class="va">layer</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">out</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">yr</span>, <span class="va">out</span><span class="op">$</span><span class="va">doy</span><span class="op">)</span>,<span class="op">]</span><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># run model without returning the selected output.</span></span>
-<span class="r-in"><span class="va">b90.aggswat</span> <span class="op">&lt;-</span> <span class="fu">run_LWFB90</span><span class="op">(</span>options_b90 <span class="op">=</span> <span class="va">options_b90</span>,</span>
-<span class="r-in">                         param_b90 <span class="op">=</span> <span class="va">param_b90</span>,</span>
-<span class="r-in">                         climate <span class="op">=</span> <span class="va">slb1_meteo</span>,</span>
-<span class="r-in">                         soil <span class="op">=</span> <span class="va">soil</span>,</span>
-<span class="r-in">                         output_fun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>swat <span class="op">=</span> <span class="va">agg_swat</span><span class="op">)</span>,</span>
-<span class="r-in">                         rtrn_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">                         layer <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>  <span class="co"># passed to output_fun</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">b90.aggswat</span><span class="op">$</span><span class="va">output_fun</span><span class="op">$</span><span class="va">swat</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Set up lists containing model control options and model parameters:</span></span></span>
+<span class="r-in"><span><span class="va">param_b90</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">options_b90</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Set start and end Dates for the simulation</span></span></span>
+<span class="r-in"><span><span class="va">options_b90</span><span class="op">$</span><span class="va">startdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-01"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">options_b90</span><span class="op">$</span><span class="va">enddate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-06-30"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Derive soil hydraulic properties from soil physical properties</span></span></span>
+<span class="r-in"><span><span class="co"># using pedotransfer functions</span></span></span>
+<span class="r-in"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Run LWF-Brook90</span></span></span>
+<span class="r-in"><span><span class="va">b90.result</span> <span class="op">&lt;-</span> <span class="fu">run_LWFB90</span><span class="op">(</span>options_b90 <span class="op">=</span> <span class="va">options_b90</span>,</span></span>
+<span class="r-in"><span>                        param_b90 <span class="op">=</span> <span class="va">param_b90</span>,</span></span>
+<span class="r-in"><span>                        climate <span class="op">=</span> <span class="va">slb1_meteo</span>,</span></span>
+<span class="r-in"><span>                        soil <span class="op">=</span> <span class="va">soil</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># use a function to be performed on the output:</span></span></span>
+<span class="r-in"><span><span class="co"># aggregate soil water storage down to a specific layer</span></span></span>
+<span class="r-in"><span><span class="va">agg_swat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">layer</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">swati</span><span class="op">~</span><span class="va">yr</span><span class="op">+</span><span class="va">doy</span>,</span></span>
+<span class="r-in"><span>                   <span class="va">x</span><span class="op">$</span><span class="va">SWATDAY.ASC</span>,</span></span>
+<span class="r-in"><span>                   FUN <span class="op">=</span> <span class="va">sum</span>,</span></span>
+<span class="r-in"><span>                   subset <span class="op">=</span> <span class="va">nl</span> <span class="op">&lt;=</span> <span class="va">layer</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">out</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">yr</span>, <span class="va">out</span><span class="op">$</span><span class="va">doy</span><span class="op">)</span>,<span class="op">]</span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># run model without returning the selected output.</span></span></span>
+<span class="r-in"><span><span class="va">b90.aggswat</span> <span class="op">&lt;-</span> <span class="fu">run_LWFB90</span><span class="op">(</span>options_b90 <span class="op">=</span> <span class="va">options_b90</span>,</span></span>
+<span class="r-in"><span>                         param_b90 <span class="op">=</span> <span class="va">param_b90</span>,</span></span>
+<span class="r-in"><span>                         climate <span class="op">=</span> <span class="va">slb1_meteo</span>,</span></span>
+<span class="r-in"><span>                         soil <span class="op">=</span> <span class="va">soil</span>,</span></span>
+<span class="r-in"><span>                         output_fun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>swat <span class="op">=</span> <span class="va">agg_swat</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         rtrn_output <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                         layer <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>  <span class="co"># passed to output_fun</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">b90.aggswat</span><span class="op">$</span><span class="va">output_fun</span><span class="op">$</span><span class="va">swat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  NULL</span>
 </code></pre></div>
     </div>

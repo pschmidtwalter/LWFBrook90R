@@ -81,17 +81,17 @@ climate/soil combinations.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_multisite_LWFB90</span><span class="op">(</span>
-  <span class="va">options_b90</span>,
-  <span class="va">param_b90</span>,
-  soil <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">climate</span>,
-  climate_args <span class="op">=</span> <span class="cn">NULL</span>,
-  all_combinations <span class="op">=</span> <span class="cn">FALSE</span>,
-  cores <span class="op">=</span> <span class="fl">2</span>,
-  show_progress <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_multisite_LWFB90</span><span class="op">(</span></span>
+<span>  <span class="va">options_b90</span>,</span>
+<span>  <span class="va">param_b90</span>,</span>
+<span>  soil <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">climate</span>,</span>
+<span>  climate_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  all_combinations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  show_progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -195,61 +195,61 @@ using <code><a href="https://progressr.futureverse.org/reference/handlers.html" 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>budburst_method <span class="op">=</span> <span class="st">"Menzel"</span>, enddate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-12-31"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># define parameter sets</span></span>
-<span class="r-in"><span class="va">param_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>spruce <span class="op">=</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">5</span>,</span>
-<span class="r-in">                                         budburst_species <span class="op">=</span> <span class="st">"Picea abies (frueh)"</span>,</span>
-<span class="r-in">                                         winlaifrac <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>,</span>
-<span class="r-in">                beech <span class="op">=</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">6</span>,</span>
-<span class="r-in">                                        budburst_species <span class="op">=</span> <span class="st">"Fagus sylvatica"</span>,</span>
-<span class="r-in">                                        winlaifrac <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># define list of soil objects</span></span>
-<span class="r-in"><span class="va">soils</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>soil1 <span class="op">=</span> <span class="va">soil</span>, soil2 <span class="op">=</span> <span class="va">soil</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># define list of climate objects</span></span>
-<span class="r-in"><span class="va">climates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>clim1 <span class="op">=</span> <span class="va">slb1_meteo</span>, clim2 <span class="op">=</span> <span class="va">slb1_meteo</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># run two parameter sets on a series of climate and soil-objects</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">run_multisite_LWFB90</span><span class="op">(</span>param_b90 <span class="op">=</span> <span class="va">param_l</span>,</span>
-<span class="r-in">                      options_b90 <span class="op">=</span> <span class="va">opts</span>,</span>
-<span class="r-in">                      soil <span class="op">=</span> <span class="va">soils</span>,</span>
-<span class="r-in">                      climate <span class="op">=</span> <span class="va">climates</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_meteo"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"slb1_soil"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_optionsLWFB90.html">set_optionsLWFB90</a></span><span class="op">(</span>budburst_method <span class="op">=</span> <span class="st">"Menzel"</span>, enddate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-12-31"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># define parameter sets</span></span></span>
+<span class="r-in"><span><span class="va">param_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>spruce <span class="op">=</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>                                         budburst_species <span class="op">=</span> <span class="st">"Picea abies (frueh)"</span>,</span></span>
+<span class="r-in"><span>                                         winlaifrac <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                beech <span class="op">=</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fl">6</span>,</span></span>
+<span class="r-in"><span>                                        budburst_species <span class="op">=</span> <span class="st">"Fagus sylvatica"</span>,</span></span>
+<span class="r-in"><span>                                        winlaifrac <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">soil</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">slb1_soil</span>, <span class="fu"><a href="ptfs.html">hydpar_wessolek_tab</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">texture</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># define list of soil objects</span></span></span>
+<span class="r-in"><span><span class="va">soils</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>soil1 <span class="op">=</span> <span class="va">soil</span>, soil2 <span class="op">=</span> <span class="va">soil</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># define list of climate objects</span></span></span>
+<span class="r-in"><span><span class="va">climates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>clim1 <span class="op">=</span> <span class="va">slb1_meteo</span>, clim2 <span class="op">=</span> <span class="va">slb1_meteo</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># run two parameter sets on a series of climate and soil-objects</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">run_multisite_LWFB90</span><span class="op">(</span>param_b90 <span class="op">=</span> <span class="va">param_l</span>,</span></span>
+<span class="r-in"><span>                      options_b90 <span class="op">=</span> <span class="va">opts</span>,</span></span>
+<span class="r-in"><span>                      soil <span class="op">=</span> <span class="va">soils</span>,</span></span>
+<span class="r-in"><span>                      climate <span class="op">=</span> <span class="va">climates</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "clim1 soil1 spruce" "clim2 soil2 beech" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set up and run individual parameter sets for individual locations</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set up location parameters</span></span>
-<span class="r-in"><span class="va">loc_parm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>loc_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">climates</span><span class="op">)</span>,</span>
-<span class="r-in">                       coords_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48.0</span>, <span class="fl">54.0</span><span class="op">)</span>,</span>
-<span class="r-in">                       eslope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="fl">0</span><span class="op">)</span>,</span>
-<span class="r-in">                       aspect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">180</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create input list of multiple param_b90 list objects</span></span>
-<span class="r-in"><span class="va">param_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">climates</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">loc_parms</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">parms</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">parms</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">loc_parm</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">parms</span><span class="op">)</span>, nomatch <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span class="r-in">    <span class="va">loc_parm</span><span class="op">[</span><span class="va">loc_parm</span><span class="op">$</span><span class="va">loc_id</span> <span class="op">==</span> <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">loc_parm</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">parms</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in">  <span class="va">parms</span></span>
-<span class="r-in"><span class="op">}</span>, loc_parm <span class="op">=</span> <span class="va">loc_parm</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">param_l</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"locpar1"</span>, <span class="st">"locpar2"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">run_multisite_LWFB90</span><span class="op">(</span>param_b90 <span class="op">=</span> <span class="va">param_l</span>,</span>
-<span class="r-in">                      options_b90 <span class="op">=</span> <span class="va">opts</span>,</span>
-<span class="r-in">                      soil <span class="op">=</span> <span class="va">soils</span>,</span>
-<span class="r-in">                      climate <span class="op">=</span> <span class="va">climates</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set up and run individual parameter sets for individual locations</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set up location parameters</span></span></span>
+<span class="r-in"><span><span class="va">loc_parm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>loc_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">climates</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                       coords_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48.0</span>, <span class="fl">54.0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                       eslope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>,<span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                       aspect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">180</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create input list of multiple param_b90 list objects</span></span></span>
+<span class="r-in"><span><span class="va">param_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">climates</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">loc_parms</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">parms</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">parms</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">loc_parm</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">parms</span><span class="op">)</span>, nomatch <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>    <span class="va">loc_parm</span><span class="op">[</span><span class="va">loc_parm</span><span class="op">$</span><span class="va">loc_id</span> <span class="op">==</span> <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">loc_parm</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">parms</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="va">parms</span></span></span>
+<span class="r-in"><span><span class="op">}</span>, loc_parm <span class="op">=</span> <span class="va">loc_parm</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">param_l</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"locpar1"</span>, <span class="st">"locpar2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">run_multisite_LWFB90</span><span class="op">(</span>param_b90 <span class="op">=</span> <span class="va">param_l</span>,</span></span>
+<span class="r-in"><span>                      options_b90 <span class="op">=</span> <span class="va">opts</span>,</span></span>
+<span class="r-in"><span>                      soil <span class="op">=</span> <span class="va">soils</span>,</span></span>
+<span class="r-in"><span>                      climate <span class="op">=</span> <span class="va">climates</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "clim1 soil1 locpar1" "clim2 soil2 locpar2"</span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
