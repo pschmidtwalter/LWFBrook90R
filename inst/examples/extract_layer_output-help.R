@@ -1,9 +1,10 @@
 # create a data.frame with monthly values
 # identifiers: layer number, yr and mo
 df <- expand.grid(nl = 1:5,
-                  yr = 2002:2003,
+                  yr = 2002,
                   mo = 1:12)
 df
+
 #add a value variable
 df$var <- runif(nrow(df), -1,0)
 

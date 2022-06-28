@@ -4,39 +4,49 @@
 \alias{extract_layer_output}
 \title{Extracts values from layer data and organizes layer-wise variables in columns}
 \usage{
-extract_layer_output(dat, layers = NULL, value_vars = NULL, sep = "")
+extract_layer_output(
+  x,
+  layers = NULL,
+  value_vars = NULL,
+  layer_index_name = "nl",
+  sep = ""
+)
 }
 \arguments{
-\item{dat}{Data.frame with layer data organized in rows and identified by a
-layer number column \code{nl}.}
+\item{x}{Data.frame or data.table with layer data organized in rows and
+identified by a layer index column named \code{layer_index_nm}.}
 
-\item{layers}{Integer vector addressing the layer numbers (nl) to be
-extracted from dat. If not supplied, values from all layers will be
-returned.}
+\item{layers}{Integer vector to select a subset of layers. If not supplied,
+values from all layers will be returned.}
 
 \item{value_vars}{Character vector containing names of value-variables to be
-extracted from dat. If not supplied, \code{value_vars} will be guessed.}
+extracted from \code{x}. If not supplied, \code{value_vars} will be
+guessed.}
+
+\item{layer_index_name}{Column containing layer index. Defaults to 'nl' as in
+\code{layer_output}.}
 
 \item{sep}{Separation character for constructig names from variable name and
 layer index.}
 }
 \value{
 A data.table with the layers' values of the variables organized in
-  columns (wide format) with the names being made up of the variable name and
-  layer number.
+  columns with the names being made up of the variable name and the layer index.
 }
 \description{
-Convenience function to reorganize soil layer data such as BELO and SWAT to
-the wide format, by casting variables with the layer number, using
-data.table's \code{dcast}-function.
+Convenience function to reorganize soil layer time series data from
+\code{layer_output} list entry produced with \code{\link{run_LWFB90}}. The data is tansformed to a
+wide format, by casting the variables with the layer number using data.table's
+\code{\link[data.table]{dcast}}-function.
 }
 \examples{
 # create a data.frame with monthly values
 # identifiers: layer number, yr and mo
 df <- expand.grid(nl = 1:5,
-                  yr = 2002:2003,
+                  yr = 2002,
                   mo = 1:12)
 df
+
 #add a value variable
 df$var <- runif(nrow(df), -1,0)
 
