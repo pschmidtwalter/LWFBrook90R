@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_outputs.R
 \name{process_outputs_LWFB90}
 \alias{process_outputs_LWFB90}
-\title{Process model outputs from}
+\title{Aggregate and group model outputs similar to ancient LWFB90 textfile outputs (.ASC-files)}
 \usage{
 process_outputs_LWFB90(x, selection = set_outputLWFB90(), prec_interval = 1)
 }

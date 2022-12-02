@@ -1,4 +1,4 @@
-#' Process model outputs from
+#' Aggregate and group model outputs similar to ancient LWFB90 textfile outputs (.ASC-files)
 #'
 #' Returns selected groups of variables in the chosen temporal aggregation
 #'
