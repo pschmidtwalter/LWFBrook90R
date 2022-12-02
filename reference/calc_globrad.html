@@ -19,7 +19,7 @@ calculated using the Angström-formula."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.2</span>
       </span>
     </div>
 
@@ -121,111 +121,843 @@ global radiation?</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-12-31"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">'day'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">calc_globrad</span><span class="op">(</span><span class="va">dates</span>, sunhours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">365</span>, <span class="fl">0</span>, <span class="fl">7</span><span class="op">)</span>,lat <span class="op">=</span> <span class="fl">52.8</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]  3.620460  3.620460  3.545138  3.545138  4.334574  4.334574  3.071149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [8]  3.071149  4.335691  4.335691  2.220846  2.220846  3.799551  3.799551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [15]  2.547941  2.547941  3.512355  3.512355  2.302417  2.302417  4.601114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [22]  4.601114  3.703563  3.703563  3.217944  3.217944  4.347146  4.347146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [29]  2.863746  2.863746  2.272419  2.272419  4.624312  4.624312  4.150934</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [36]  4.150934  3.444894  3.444894  4.396090  4.396090  3.769288  3.769288</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [43]  2.126469  2.126469  2.244059  2.244059  4.261198  4.261198  2.683885</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [50]  2.683885  4.705406  4.705406  3.326706  3.326706  3.212850  3.212850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [57]  4.020639  4.020639  3.297076  3.297076  2.431304  2.431304  4.141991</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [64]  4.141991  2.786964  2.786964  5.858755  5.858755  4.608562  4.608562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [71]  4.820753  4.820753  3.515174  3.515174  3.751056  3.751056  4.555651</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [78]  4.555651  3.325250  3.325250  3.601245  3.601245  5.993380  5.993380</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [85]  3.790881  3.790881  4.226591  4.226591  5.346611  5.346611  3.339710</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [92]  3.339710  7.709614  7.709614  4.346246  4.346246  5.679792  5.679792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [99]  7.626197  7.626197  5.989119  5.989119  3.775974  3.775974  5.923973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [106]  5.923973  5.781643  5.781643  7.445446  7.445446  8.209210  8.209210</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [113]  4.002014  4.002014  6.949869  6.949869  7.703841  7.703841  7.255943</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [120]  7.255943  5.451285  5.451285  9.153329  9.153329  8.546051  8.546051</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [127]  6.455901  6.455901  4.885849  4.885849  7.621275  7.621275  9.892884</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [134]  9.892884  6.130043  6.130043  6.166666  6.166666  6.326812  6.326812</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [141]  9.181991  9.181991  6.659265  6.659265  6.099167  6.099167 10.384341</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [148] 10.384341  8.544587  8.544587 10.813507 10.813507  8.362423  8.362423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [155]  8.036241  8.036241  7.550035  7.550035  8.596939  8.596939  9.227368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [162]  9.227368  9.282448  9.282448  9.791161  9.791161  8.567417  8.567417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [169] 12.413693 12.413693 12.017416 12.017416  9.549510  9.549510 10.088558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [176] 10.088558 10.981515 10.981515 10.283630 10.283630 11.382927 11.382927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [183] 12.383840 12.383840 12.304344 12.304344 10.219727 10.219727  7.693798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [190]  7.693798 12.353684 12.353684  8.702196  8.702196  8.846648  8.846648</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [197] 11.578243 11.578243 10.922247 10.922247 11.339912 11.339912 13.221862</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [204] 13.221862 10.192110 10.192110 11.728311 11.728311 10.712973 10.712973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [211] 14.031571 14.031571  8.237337  8.237337 11.076493 11.076493 12.742950</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [218] 12.742950 10.877053 10.877053 12.340875 12.340875 11.197482 11.197482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [225] 11.347134 11.347134 13.773263 13.773263 10.007393 10.007393 12.955053</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [232] 12.955053  8.764170  8.764170 10.251119 10.251119 11.739450 11.739450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [239] 12.121269 12.121269 14.389759 14.389759 10.824614 10.824614 10.338792</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [246] 10.338792 15.343509 15.343509 15.808889 15.808889 12.125557 12.125557</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [253] 11.623812 11.623812  9.619067  9.619067 10.132465 10.132465 12.315351</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [260] 12.315351 17.325619 17.325619 16.453681 16.453681 16.717260 16.717260</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [267] 10.702347 10.702347 18.040922 18.040922 14.534982 14.534982 18.035424</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [274] 18.035424 14.773591 14.773591 14.403798 14.403798 14.197690 14.197690</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [281] 17.917089 17.917089 13.389746 13.389746 14.801091 14.801091 11.082022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [288] 11.082022 11.172977 11.172977 16.936801 16.936801 13.057873 13.057873</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [295] 12.845954 12.845954 13.094685 13.094685 11.269405 11.269405 10.245218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [302] 10.245218 18.328384 18.328384 16.888676 16.888676 15.659705 15.659705</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [309] 13.842181 13.842181 10.841037 10.841037 17.964976 17.964976 17.034333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [316] 17.034333 12.572320 12.572320 11.988811 11.988811 18.354520 18.354520</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [323] 18.859953 18.859953 18.555232 18.555232 17.570141 17.570141 13.211056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [330] 13.211056 14.563268 14.563268 11.017313 11.017313 18.081153 18.081153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [337] 16.545229 16.545229 14.847115 14.847115 18.375558 18.375558 15.303889</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [344] 15.303889 15.354856 15.354856 14.017696 14.017696 13.608018 13.608018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [351] 15.890228 15.890228 14.775848 14.775848 12.563931 12.563931 13.368610</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [358] 13.368610 13.825930 13.825930 13.276596 13.276596 12.101189 12.101189</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [365] 19.046988 19.046988 18.268688 18.268688 16.583635 16.583635 17.332590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [372] 17.332590 17.872369 17.872369 14.795679 14.795679 13.315279 13.315279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [379] 14.765271 14.765271 11.949050 11.949050 12.684663 12.684663 17.425414</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [386] 17.425414 15.925028 15.925028 14.437570 14.437570 12.431760 12.431760</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [393] 12.297353 12.297353 11.037526 11.037526 13.386293 13.386293  9.903085</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [400]  9.903085 11.601964 11.601964 16.531356 16.531356  9.933941  9.933941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [407] 16.683424 16.683424 15.844943 15.844943  9.780873  9.780873 16.344261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [414] 16.344261 10.025723 10.025723 11.798666 11.798666 16.301282 16.301282</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [421] 16.982395 16.982395  9.474777  9.474777 16.568049 16.568049 16.776531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [428] 16.776531  9.582976  9.582976  9.994210  9.994210 16.811952 16.811952</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [435] 15.780456 15.780456 13.248501 13.248501 15.588096 15.588096 16.690829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [442] 16.690829 11.796375 11.796375  9.513813  9.513813  9.983021  9.983021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [449]  9.295168  9.295168 11.919089 11.919089 11.937430 11.937430 15.985157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [456] 15.985157 14.943855 14.943855 10.751980 10.751980 14.028121 14.028121</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [463]  9.581689  9.581689  8.356926  8.356926  9.781802  9.781802 13.496809</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [470] 13.496809  9.994468  9.994468 13.977624 13.977624 11.765696 11.765696</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [477] 12.971115 12.971115  9.462969  9.462969 11.015826 11.015826  9.507375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [484]  9.507375 10.414668 10.414668 14.244289 14.244289 11.434907 11.434907</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [491] 10.060194 10.060194 10.241493 10.241493 10.367107 10.367107 13.813789</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [498] 13.813789 12.384543 12.384543 12.520086 12.520086 10.081315 10.081315</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [505] 10.526625 10.526625 11.325461 11.325461  6.515961  6.515961 13.143567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [512] 13.143567  6.460901  6.460901 10.526968 10.526968 12.258361 12.258361</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [519]  9.551775  9.551775  6.931078  6.931078  8.042869  8.042869  6.834879</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [526]  6.834879 11.066497 11.066497  9.967537  9.967537  8.780235  8.780235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [533]  7.907958  7.907958  9.902367  9.902367  9.968563  9.968563  7.991286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [540]  7.991286  8.684145  8.684145  7.297285  7.297285  6.516728  6.516728</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [547]  9.579698  9.579698  6.697124  6.697124  6.521686  6.521686  8.224714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [554]  8.224714  8.947936  8.947936  8.379427  8.379427  8.370165  8.370165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [561]  7.717355  7.717355  8.215280  8.215280  5.531139  5.531139  4.584110</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [568]  4.584110  5.181602  5.181602  4.934186  4.934186  5.770371  5.770371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [575]  8.175556  8.175556  8.000609  8.000609  4.405743  4.405743  6.794047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [582]  6.794047  5.401071  5.401071  3.749679  3.749679  5.886974  5.886974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [589]  4.553666  4.553666  5.666434  5.666434  3.943889  3.943889  6.049192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [596]  6.049192  3.722931  3.722931  4.205127  4.205127  5.554375  5.554375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [603]  6.465466  6.465466  6.537709  6.537709  4.286013  4.286013  3.843896</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [610]  3.843896  3.959019  3.959019  4.964317  4.964317  4.969529  4.969529</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [617]  6.553917  6.553917  4.374680  4.374680  5.776857  5.776857  3.026060</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [624]  3.026060  6.106928  6.106928  5.520524  5.520524  3.505219  3.505219</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [631]  2.815206  2.815206  2.687717  2.687717  4.161327  4.161327  5.475677</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [638]  5.475677  2.443150  2.443150  4.908809  4.908809  2.955404  2.955404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [645]  3.471159  3.471159  2.578003  2.578003  3.116722  3.116722  3.636289</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [652]  3.636289  3.803344  3.803344  4.855391  4.855391  1.889503  1.889503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [659]  4.188360  4.188360  4.718618  4.718618  3.583248  3.583248  2.242591</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [666]  2.242591  4.338670  4.338670  3.620946  3.620946  1.983066  1.983066</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [673]  1.995733  1.995733  4.348988  4.348988  4.164227  4.164227  1.827188</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [680]  1.827188  1.924729  1.924729  2.638154  2.638154  1.970007  1.970007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [687]  4.232048  4.232048  3.662251  3.662251  2.537643  2.537643  3.898163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [694]  3.898163  2.090779  2.090779  3.843095  3.843095  1.649609  1.649609</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [701]  2.129299  2.129299  3.150557  3.150557  2.095387  2.095387  3.340877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [708]  3.340877  2.101405  2.101405  3.161395  3.161395  4.146553  4.146553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [715]  2.456277  2.456277  3.698530  3.698530  3.682438  3.682438  4.039458</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [722]  4.039458  1.980057  1.980057  1.502355  1.502355  2.075649  2.075649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [729]  2.654261  2.654261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]  4.051924  2.921158  4.332304  4.394328  2.751310  2.163679  2.979235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [8]  2.330285  3.291168  3.100544  2.425043  2.508406  3.886041  3.727829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15]  3.417859  3.034628  2.079698  2.632397  4.981318  2.149182  5.327241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [22]  5.161409  2.717619  4.517439  4.205764  5.760374  4.314643  5.472304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29]  3.698951  4.478622  3.900921  3.287656  4.834356  2.747649  4.572258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36]  4.703354  2.864569  5.340902  4.068437  6.783093  6.898649  5.183746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43]  7.386528  5.086185  3.463035  6.297327  6.829088  5.349614  6.140581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [50]  4.602931  8.290934  8.452250  5.689639  8.753457  6.758447  4.406442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57]  8.285889  8.091490  4.460520  7.288638  4.584703  6.870209  5.449853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [64]  6.722323  6.460604  9.742932  9.269414  5.542238  5.641923  6.817492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71]  6.094965  5.325136  6.725266  9.965310  6.234238  8.027235  7.553822</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [78]  6.806992  9.007760  8.263666  6.556792  8.791635  7.323486  7.995581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] 12.345993  6.422252  7.779435 11.375170  7.078416  8.073760 13.413012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [92] 13.306435 10.102122 12.080074 14.154728  9.393229 11.476416 11.800846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99]  7.781585  9.321507  8.293387 13.468273 14.804519 12.958013 11.907176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106] 14.869969 10.535078 12.016004 14.322715 12.156702 15.174120 15.648974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113] 10.140634 11.762287 12.576680  9.442587 16.371751 11.853884 12.930887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [120] 15.254317  8.995028 16.371635  9.256293 16.399425 13.655264 11.595279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127] 16.103132 13.239302 13.297005 14.671601 16.100976 17.654957 15.665569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [134] 17.255002  9.674904 10.938692 18.141481 17.156799 15.622390 16.560258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141] 12.930683 14.547136 12.441551 16.883557 17.887500 15.041473 12.016819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [148] 13.435405 13.106883 18.130532 15.915969 11.222245 16.753454 11.686177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155] 18.199060 15.084817 16.615857 18.118891 10.513390 17.323197 10.872280</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [162] 16.342265 13.309151 17.156012 13.449218 12.498027 11.578736 13.133225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169] 11.654825 17.623826 12.758415 14.084868 11.676889 17.338482 12.502310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176] 13.506954 13.263324 17.486656 13.238965 15.816731 11.014614 18.163220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [183] 11.077903 13.563004 11.856974 12.928150 16.020844 10.231205 14.191833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [190] 10.642834 15.801432 15.476389 14.155481 18.223582 15.582399 14.981164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [197] 11.786809 16.735984 13.540598 16.897547 17.324436 12.396954 16.081420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [204] 10.835712 15.612283 11.516777 17.630485 15.289748 13.027878 13.462983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [211] 13.994859 15.374908 11.164728 15.682385 16.257195 15.702704 11.991899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [218] 11.577684  9.069405 13.364105  9.516368 15.068772 12.388863 14.942315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [225] 12.364876  8.650030 15.262539 14.143440 11.745193  8.459074  9.624171</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [232]  8.577912 11.983626 12.680433 12.649231 10.635343  9.873925 15.253697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [239] 10.870753 12.277497  9.000667 12.541957 10.302623 10.702675  8.863892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [246]  7.344929 10.237110  7.522318  7.583334 11.934126  7.537941 10.043361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [253] 10.434389 11.030087  6.495687  7.414909 11.235049  7.450484  9.575933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [260] 11.306072 12.438087  6.512644  8.679990  5.673407 11.355298 10.077704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [267]  8.908994  7.300363  9.479786  7.891307 10.530584  6.139807  9.277531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [274]  9.102446  9.330171  6.043691  9.173337  5.419772  6.836164  7.397800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [281]  8.595583  8.477155  4.775181  6.789343  9.191158  6.524289  6.009190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [288]  8.649869  7.207188  6.240661  8.342822  3.872470  4.156516  7.089546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [295]  7.015631  4.760757  6.059453  4.950502  3.764695  6.297693  4.317034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [302]  5.168680  4.416679  5.065020  3.865708  5.068492  3.235630  4.055303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [309]  6.294792  4.418584  4.490526  4.073857  3.429833  5.077484  5.936753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [316]  2.989326  2.577412  2.941299  4.381381  4.775215  5.017270  5.256489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [323]  5.057242  2.517633  3.089767  3.986978  2.765492  1.885074  4.397775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [330]  2.773637  3.080284  3.500521  1.856266  4.200246  1.983429  3.894929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [337]  2.456523  3.092251  1.925129  2.958078  4.416989  2.950578  3.453176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [344]  3.565784  1.671440  3.734622  4.269161  2.753559  2.025123  2.908317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [351]  4.025422  3.218917  2.996324  3.534047  3.799276  1.885800  1.978562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [358]  2.243365  1.648331  3.479062  4.102513  2.023665  4.202006  2.006862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [365]  2.714471  4.051924  2.921158  4.332304  4.394328  2.751310  2.163679</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [372]  2.979235  2.330285  3.291168  3.100544  2.425043  2.508406  3.886041</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [379]  3.727829  3.417859  3.034628  2.079698  2.632397  4.981318  2.149182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [386]  5.327241  5.161409  2.717619  4.517439  4.205764  5.760374  4.314643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [393]  5.472304  3.698951  4.478622  3.900921  3.287656  4.834356  2.747649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [400]  4.572258  4.703354  2.864569  5.340902  4.068437  6.783093  6.898649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [407]  5.183746  7.386528  5.086185  3.463035  6.297327  6.829088  5.349614</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [414]  6.140581  4.602931  8.290934  8.452250  5.689639  8.753457  6.758447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [421]  4.406442  8.285889  8.091490  4.460520  7.288638  4.584703  6.870209</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [428]  5.449853  6.722323  6.460604  9.742932  9.269414  5.542238  5.641923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [435]  6.817492  6.094965  5.325136  6.725266  9.965310  6.234238  8.027235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [442]  7.553822  6.806992  9.007760  8.263666  6.556792  8.791635  7.323486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [449]  7.995581 12.345993  6.422252  7.779435 11.375170  7.078416  8.073760</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [456] 13.413012 13.306435 10.102122 12.080074 14.154728  9.393229 11.476416</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [463] 11.800846  7.781585  9.321507  8.293387 13.468273 14.804519 12.958013</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [470] 11.907176 14.869969 10.535078 12.016004 14.322715 12.156702 15.174120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [477] 15.648974 10.140634 11.762287 12.576680  9.442587 16.371751 11.853884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [484] 12.930887 15.254317  8.995028 16.371635  9.256293 16.399425 13.655264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [491] 11.595279 16.103132 13.239302 13.297005 14.671601 16.100976 17.654957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [498] 15.665569 17.255002  9.674904 10.938692 18.141481 17.156799 15.622390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [505] 16.560258 12.930683 14.547136 12.441551 16.883557 17.887500 15.041473</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [512] 12.016819 13.435405 13.106883 18.130532 15.915969 11.222245 16.753454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [519] 11.686177 18.199060 15.084817 16.615857 18.118891 10.513390 17.323197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [526] 10.872280 16.342265 13.309151 17.156012 13.449218 12.498027 11.578736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [533] 13.133225 11.654825 17.623826 12.758415 14.084868 11.676889 17.338482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [540] 12.502310 13.506954 13.263324 17.486656 13.238965 15.816731 11.014614</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [547] 18.163220 11.077903 13.563004 11.856974 12.928150 16.020844 10.231205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [554] 14.191833 10.642834 15.801432 15.476389 14.155481 18.223582 15.582399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [561] 14.981164 11.786809 16.735984 13.540598 16.897547 17.324436 12.396954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [568] 16.081420 10.835712 15.612283 11.516777 17.630485 15.289748 13.027878</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [575] 13.462983 13.994859 15.374908 11.164728 15.682385 16.257195 15.702704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [582] 11.991899 11.577684  9.069405 13.364105  9.516368 15.068772 12.388863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [589] 14.942315 12.364876  8.650030 15.262539 14.143440 11.745193  8.459074</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [596]  9.624171  8.577912 11.983626 12.680433 12.649231 10.635343  9.873925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [603] 15.253697 10.870753 12.277497  9.000667 12.541957 10.302623 10.702675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [610]  8.863892  7.344929 10.237110  7.522318  7.583334 11.934126  7.537941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [617] 10.043361 10.434389 11.030087  6.495687  7.414909 11.235049  7.450484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [624]  9.575933 11.306072 12.438087  6.512644  8.679990  5.673407 11.355298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [631] 10.077704  8.908994  7.300363  9.479786  7.891307 10.530584  6.139807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [638]  9.277531  9.102446  9.330171  6.043691  9.173337  5.419772  6.836164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [645]  7.397800  8.595583  8.477155  4.775181  6.789343  9.191158  6.524289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [652]  6.009190  8.649869  7.207188  6.240661  8.342822  3.872470  4.156516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [659]  7.089546  7.015631  4.760757  6.059453  4.950502  3.764695  6.297693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [666]  4.317034  5.168680  4.416679  5.065020  3.865708  5.068492  3.235630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [673]  4.055303  6.294792  4.418584  4.490526  4.073857  3.429833  5.077484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [680]  5.936753  2.989326  2.577412  2.941299  4.381381  4.775215  5.017270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [687]  5.256489  5.057242  2.517633  3.089767  3.986978  2.765492  1.885074</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [694]  4.397775  2.773637  3.080284  3.500521  1.856266  4.200246  1.983429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [701]  3.894929  2.456523  3.092251  1.925129  2.958078  4.416989  2.950578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [708]  3.453176  3.565784  1.671440  3.734622  4.269161  2.753559  2.025123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [715]  2.908317  4.025422  3.218917  2.996324  3.534047  3.799276  1.885800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [722]  1.978562  2.243365  1.648331  3.479062  4.102513  2.023665  4.202006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [729]  2.006862  2.714471</span>
+<span class="r-in"><span><span class="fu">calc_globrad</span><span class="op">(</span><span class="va">dates</span>, sunhours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">365</span>, <span class="fl">0</span>, <span class="fl">7</span><span class="op">)</span>,lat <span class="op">=</span> <span class="fl">52.8</span>, full_output <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     doy      dates   sunhours daylength    extrat   globrad</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1 2002-01-01 2.46940211  7.463176  6.099033  2.533777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     2 2002-01-02 1.98509709  7.483435  6.149345  2.352941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     3 2002-01-03 3.41295660  7.505323  6.203934  2.961566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     4 2002-01-04 4.28245554  7.528820  6.262814  3.346874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     5 2002-01-05 6.90052384  7.553900  6.325996  4.470913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    6 2002-01-06 0.93611440  7.580540  6.393496  1.993138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    7 2002-01-07 6.32372797  7.608714  6.465324  4.303050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15    8 2002-01-08 6.37339206  7.638396  6.541496  4.364449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    9 2002-01-09 6.65004456  7.669557  6.622023  4.526385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19   10 2002-01-10 6.77500677  7.702170  6.706920  4.626511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   11 2002-01-11 4.17766602  7.736204  6.796198  3.534074</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23   12 2002-01-12 0.81198011  7.771631  6.889871  2.082395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   13 2002-01-13 5.61610919  7.808419  6.987950  4.259986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   14 2002-01-14 6.05660367  7.846537  7.090446  4.509107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   15 2002-01-15 3.48169965  7.885954  7.197371  3.388185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   16 2002-01-16 3.52633328  7.926639  7.308732  3.452905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33   17 2002-01-17 6.05602728  7.968559  7.424539  4.677424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35   18 2002-01-18 2.26656361  8.011681  7.544799  2.953440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37   19 2002-01-19 2.40156296  8.055974  7.669519  3.060558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40   20 2002-01-20 1.37580626  8.101405  7.798703  2.611876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41   21 2002-01-21 1.25070141  8.147942  7.932354  2.591893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43   22 2002-01-22 6.67424756  8.195553  8.070474  5.303811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45   23 2002-01-23 4.08696419  8.244205  8.213063  4.089029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48   24 2002-01-24 5.49920327  8.293867  8.360119  4.861595</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49   25 2002-01-25 1.51085670  8.344507  8.511639  2.898469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51   26 2002-01-26 0.11883164  8.396093  8.667618  2.228242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53   27 2002-01-27 3.84639127  8.448595  8.828046  4.216583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56   28 2002-01-28 3.78478454  8.501983  8.992915  4.249894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58   29 2002-01-29 4.66303572  8.556225  9.162213  4.787199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59   30 2002-01-30 3.36947737  8.611293  9.335925  4.160489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61   31 2002-01-31 2.68337574  8.667157  9.514035  3.851295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63   32 2002-02-01 3.21995589  8.723789  9.696523  4.213627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66   33 2002-02-02 1.29737240  8.781160  9.883368  3.200951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67   34 2002-02-03 2.12213521  8.839243 10.074546  3.727991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69   35 2002-02-04 3.66790735  8.898011 10.270030  4.684245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71   36 2002-02-05 1.13341801  8.957438 10.469790  3.279838</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74   37 2002-02-06 5.16735998  9.017498 10.673795  5.726689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75   38 2002-02-07 1.46141486  9.078165 10.882010  3.596403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77   39 2002-02-08 6.70268429  9.139416 11.094398  6.841816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79   40 2002-02-09 3.80898988  9.201226 11.310918  5.168894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82   41 2002-02-10 3.20783568  9.263572 11.531528  4.879479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83   42 2002-02-11 2.52451481  9.326432 11.756182  4.530150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86   43 2002-02-12 6.16633132  9.389784 11.984831  6.931466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87   44 2002-02-13 2.70963348  9.453606 12.217425  4.805262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89   45 2002-02-14 0.36075458  9.517878 12.453910  3.349497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91   46 2002-02-15 6.80566864  9.582579 12.694229  7.681358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94   47 2002-02-16 4.11819437  9.647690 12.938322  5.995994</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95   48 2002-02-17 2.36577992  9.713192 13.186128  4.902362</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97   49 2002-02-18 2.32690182  9.779067 13.437583  4.958113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99   50 2002-02-19 4.84154180  9.845297 13.692618  6.789908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102  51 2002-02-20 2.81960138  9.911864 13.951164  5.472116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103  52 2002-02-21 6.10020609  9.978754 14.213148  7.897674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105  53 2002-02-22 3.94826194 10.045948 14.478496  6.464796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107  54 2002-02-23 0.33752400 10.113433 14.747130  3.932867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110  55 2002-02-24 5.51161591 10.181192 15.018971  7.820023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112  56 2002-02-25 0.82764334 10.249211 15.293936  4.440991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113  57 2002-02-26 4.49105607 10.317477 15.571940  7.282111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115  58 2002-02-27 3.21829895 10.385975 15.852898  6.419391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117  59 2002-02-28 3.68153527 10.454693 16.136720  6.875387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120  60 2002-03-01 6.97285010 10.523618 16.423316  9.546796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121  61 2002-03-02 1.20296542 10.592738 16.712592  5.127132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123  62 2002-03-03 1.14209237 10.662040 17.004454  5.161852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125  63 2002-03-04 1.21032576 10.731513 17.298805  5.300201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128  64 2002-03-05 6.23416195 10.801147 17.595546  9.476749</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129  65 2002-03-06 4.52624917 10.870930 17.894578  8.198961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131  66 2002-03-07 2.20310250 10.940852 18.195799  6.380946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133  67 2002-03-08 2.62287219 11.010902 18.499104  6.828083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136  68 2002-03-09 1.45184781 11.081072 18.804391  5.932978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138  69 2002-03-10 4.60283987 11.151350 19.111552  8.722137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139  70 2002-03-11 3.43226332 11.221729 19.420480  7.825081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141  71 2002-03-12 1.00492548 11.292198 19.731067  5.810729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143  72 2002-03-13 2.78272723 11.362749 20.043203  7.465082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146  73 2002-03-14 0.73443759 11.433374 20.356778  5.743016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147  74 2002-03-15 2.18193958 11.504062 20.671679  7.128286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149  75 2002-03-16 0.89637827 11.574807 20.987796  6.059619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 151  76 2002-03-17 0.09784302 11.645600 21.305014  5.415753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154  77 2002-03-18 3.13266239 11.716433 21.623220  8.296542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 155  78 2002-03-19 1.65850384 11.787297 21.942300  7.029245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157  79 2002-03-20 1.73911517 11.858185 22.262140  7.198012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 159  80 2002-03-21 6.37418741 11.929088 22.582624 11.679054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162  81 2002-03-22 2.83894172 12.000000 22.903638  8.435163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 163  82 2002-03-23 5.81269592 12.070912 23.225065 11.398232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166  83 2002-03-24 6.75031603 12.141815 23.546791 12.432189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167  84 2002-03-25 0.96878216 12.212703 23.868700  6.913877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169  85 2002-03-26 3.37564544 12.283567 24.190677  9.371588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171  86 2002-03-27 3.46788534 12.354400 24.512606  9.568501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 174  87 2002-03-28 3.60848010 12.425193 24.834373  9.814748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 175  88 2002-03-29 0.39545086 12.495938 25.155863  6.687011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 177  89 2002-03-30 1.07907980 12.566626 25.476961  7.463077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 179  90 2002-03-31 1.83034182 12.637251 25.797553  8.317609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182  91 2002-04-01 6.99539522 12.707802 26.117528 13.717975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 183  92 2002-04-02 0.80413272 12.778271 26.436771  7.441022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 185  93 2002-04-03 6.57344962 12.848650 26.755170 13.532849</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 187  94 2002-04-04 6.28283047 12.918928 27.072615 13.351233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 190  95 2002-04-05 6.63754467 12.989098 27.388994 13.845259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 192  96 2002-04-06 1.68194303 13.059148 27.704199  8.710120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 193  97 2002-04-07 1.32818001 13.129070 28.018120  8.421733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 195  98 2002-04-08 0.34622573 13.198853 28.330649  7.454240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197  99 2002-04-09 6.97296435 13.268487 28.641680 14.686426</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200 100 2002-04-10 0.23826168 13.337960 28.951106  7.496359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 201 101 2002-04-11 1.17414461 13.407262 29.258822  8.595880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 203 102 2002-04-12 5.44573965 13.476382 29.564726 13.364662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 205 103 2002-04-13 2.61212808 13.545307 29.868714 10.347176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 208 104 2002-04-14 4.23848833 13.614025 30.170685 12.239229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 209 105 2002-04-15 5.28587180 13.682523 30.470539 13.503368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 211 106 2002-04-16 0.69164845 13.750789 30.768176  8.465846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 213 107 2002-04-17 6.54780571 13.818808 31.063500 15.125329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 216 108 2002-04-18 3.38418137 13.886567 31.356413 11.659910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 218 109 2002-04-19 0.86481263 13.954052 31.646820  8.892372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219 110 2002-04-20 0.15341598 14.021246 31.934628  8.158366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221 111 2002-04-21 0.33101648 14.088136 32.219743  8.433455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223 112 2002-04-22 6.71317389 14.154703 32.502075 15.832924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 226 113 2002-04-23 3.15535138 14.220933 32.781534 11.832179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 227 114 2002-04-24 3.85988686 14.286808 33.058030 12.730174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 229 115 2002-04-25 0.61778378 14.352310 33.331477  9.050233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 231 116 2002-04-26 3.22921952 14.417421 33.601789 12.163518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 234 117 2002-04-27 0.56994133 14.482122 33.868881  9.133672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 235 118 2002-04-28 5.93994315 14.546394 34.132670 15.502115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 237 119 2002-04-29 6.69282545 14.610216 34.393074 16.475867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 239 120 2002-04-30 3.60280109 14.673568 34.650012 12.916312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 242 121 2002-05-01 5.74445136 14.736428 34.903405 15.528752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 243 122 2002-05-02 1.91684448 14.798774 35.153175 11.064941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 245 123 2002-05-03 1.46660826 14.860584 35.399245 10.596608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 248 124 2002-05-04 1.55351428 14.921835 35.641540 10.765708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 249 125 2002-05-05 1.09361330 14.982502 35.879987 10.279485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 251 126 2002-05-06 3.00463333 15.042562 36.114511 12.635422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 253 127 2002-05-07 5.86147937 15.101989 36.345041 16.139494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 256 128 2002-05-08 0.92805463 15.160757 36.571508 10.262226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 257 129 2002-05-09 2.10542201 15.218840 36.793843 11.743548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 259 130 2002-05-10 6.17770543 15.276211 37.011977 16.736823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 261 131 2002-05-11 2.73410302 15.332843 37.225844 12.625457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 264 132 2002-05-12 4.99382268 15.388707 37.435378 15.432963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 265 133 2002-05-13 2.58008221 15.443775 37.640517 12.554297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 267 134 2002-05-14 6.18644796 15.498017 37.841197 17.012962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 269 135 2002-05-15 2.03096944 15.551405 38.037357 11.993125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 272 136 2002-05-16 5.46307561 15.603907 38.228936 16.249390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 274 137 2002-05-17 1.80022244 15.655493 38.415875 11.812686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 275 138 2002-05-18 1.87924167 15.706133 38.598118 11.958665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 277 139 2002-05-19 6.51771097 15.755795 38.775606 17.714068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 279 140 2002-05-20 2.17832246 15.804447 38.948286 12.421187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 282 141 2002-05-21 6.45175211 15.852058 39.116103 17.739109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 283 142 2002-05-22 6.90946876 15.898595 39.279005 18.355004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 285 143 2002-05-23 6.87524751 15.944026 39.436940 18.362066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 287 144 2002-05-24 1.15134492 15.988319 39.589859 11.322930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 290 145 2002-05-25 1.23374098 16.031441 39.737713 11.463487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 291 146 2002-05-26 1.12340186 16.073361 39.880455 11.363779</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 293 147 2002-05-27 5.69911826 16.114046 40.018039 17.081179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 295 148 2002-05-28 1.40182126 16.153463 40.150421 11.779761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298 149 2002-05-29 0.77470704 16.191581 40.277558 11.032955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 300 150 2002-05-30 5.04929001 16.228369 40.399408 16.384782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 301 151 2002-05-31 0.74270833 16.263796 40.515933 11.054091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 303 152 2002-06-01 4.85288740 16.297830 40.627093 16.205392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 305 153 2002-06-02 0.10364637 16.330443 40.732853 10.312475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 308 154 2002-06-03 1.83165167 16.361604 40.833176 12.493894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 309 155 2002-06-04 0.63007650 16.391286 40.928031 11.018639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 311 156 2002-06-05 4.01728455 16.419460 41.017385 15.272127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 313 157 2002-06-06 0.62186736 16.446100 41.101209 11.052371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 316 158 2002-06-07 4.26223485 16.471180 41.179475 15.622860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 317 159 2002-06-08 6.69463272 16.494677 41.252156 18.684468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 319 160 2002-06-09 2.91631917 16.516565 41.319229 13.977662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 321 161 2002-06-10 0.57071559 16.536824 41.380671 11.059228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 324 162 2002-06-11 5.61924347 16.555433 41.436461 17.391295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 325 163 2002-06-12 3.83402186 16.572373 41.486582 15.170610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 328 164 2002-06-13 3.32158524 16.587625 41.531016 14.540938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 329 165 2002-06-14 4.18552217 16.601175 41.569750 15.632763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 331 166 2002-06-15 4.89094499 16.613007 41.602770 16.524715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 333 167 2002-06-16 5.59462079 16.623108 41.630068 17.412959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 336 168 2002-06-17 6.40441955 16.631469 41.651634 18.432481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 337 169 2002-06-18 6.09042704 16.638080 41.667464 18.043126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 339 170 2002-06-19 4.05216474 16.642934 41.677552 15.493142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 341 171 2002-06-20 1.65166315 16.646025 41.681897 12.488369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 344 172 2002-06-21 5.73036725 16.647351 41.680500 17.593776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 345 173 2002-06-22 3.12222379 16.646909 41.673363 14.326380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 347 174 2002-06-23 6.79143738 16.644700 41.660491 18.914363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 349 175 2002-06-24 0.60932717 16.640727 41.641891 11.172865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 352 176 2002-06-25 5.73741165 16.634994 41.617572 17.581346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 354 177 2002-06-26 0.54705070 16.627507 41.587545 11.081009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 355 178 2002-06-27 1.65044865 16.618275 41.551823 12.451321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357 179 2002-06-28 0.06490537 16.607306 41.510423 10.458722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359 180 2002-06-29 3.68849495 16.594614 41.463360 14.973883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 362 181 2002-06-30 1.58848341 16.580211 41.410655 12.336358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 363 182 2002-07-01 0.08694090 16.564113 41.352328 10.446606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 365 183 2002-07-02 6.00088071 16.546336 41.288405 17.809160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 367 184 2002-07-03 0.80074162 16.526900 41.218909 11.303272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 370 185 2002-07-04 5.99019935 16.505823 41.143868 17.751816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 371 186 2002-07-05 2.52731000 16.483128 41.063311 13.413887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 373 187 2002-07-06 5.44833322 16.458837 40.977269 17.026626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 375 188 2002-07-07 2.10698427 16.432973 40.885775 12.842567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 378 189 2002-07-08 0.26547183 16.405563 40.788864 10.527235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 380 190 2002-07-09 4.86444544 16.376632 40.686570 16.214326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 381 191 2002-07-10 2.79190936 16.346207 40.578932 13.610146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 383 192 2002-07-11 5.04557755 16.314316 40.465990 16.374017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 385 193 2002-07-12 4.83562399 16.280989 40.347784 16.078803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 388 194 2002-07-13 0.39003785 16.246255 40.224356 10.538939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 389 195 2002-07-14 5.82093270 16.210144 40.095751 17.222969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 391 196 2002-07-15 1.57594210 16.172686 39.962013 11.937546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 393 197 2002-07-16 4.33581514 16.133915 39.823189 15.306823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 396 198 2002-07-17 6.86479900 16.093860 39.679327 18.382395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 397 199 2002-07-18 0.54699637 16.052554 39.530476 10.556126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 399 200 2002-07-19 4.87922632 16.010029 39.376687 15.844404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 401 201 2002-07-20 1.13282506 15.966317 39.218012 11.195780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 404 202 2002-07-21 3.58540221 15.921451 39.054503 14.161030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 405 203 2002-07-22 5.76661181 15.875462 38.886214 16.784078</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 408 204 2002-07-23 4.78194676 15.828384 38.713200 15.526164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 409 205 2002-07-24 6.64539012 15.780249 38.535519 17.747933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 411 206 2002-07-25 1.83430432 15.731088 38.353226 11.824372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 413 207 2002-07-26 1.32938820 15.680933 38.166382 11.159418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 416 208 2002-07-27 2.46652713 15.629816 37.975044 12.490165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 417 209 2002-07-28 1.90591151 15.577768 37.779274 11.755931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 419 210 2002-07-29 3.29412049 15.524820 37.579134 13.381632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 421 211 2002-07-30 1.05663714 15.471001 37.374685 10.619978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 424 212 2002-07-31 4.91978566 15.416342 37.165992 15.221851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 425 213 2002-08-01 0.21521784 15.360873 36.953119  9.497151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 427 214 2002-08-02 0.02276033 15.304621 36.736132  9.211349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 429 215 2002-08-03 2.81284660 15.247616 36.515097 12.496886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 432 216 2002-08-04 0.15716586 15.189886 36.290082  9.260263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 434 217 2002-08-05 0.46730053 15.131457 36.061156  9.572122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 435 218 2002-08-06 0.49595111 15.072356 35.828388  9.546558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 437 219 2002-08-07 2.86532372 15.012610 35.591848 12.294512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 439 220 2002-08-08 6.08281185 14.952243 35.351609 16.028703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 442 221 2002-08-09 4.94449093 14.891281 35.107744 14.605512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 443 222 2002-08-10 5.20553337 14.829748 34.860325 14.833412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 445 223 2002-08-11 5.01063189 14.767666 34.609429 14.523803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 447 224 2002-08-12 3.21295148 14.705060 34.355129 12.341959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 450 225 2002-08-13 4.41526699 14.641952 34.097505 13.665412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 451 226 2002-08-14 2.35395153 14.578362 33.836632 11.190939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 453 227 2002-08-15 0.61820481 14.514313 33.572591  9.108123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 455 228 2002-08-16 0.19020036 14.449824 33.305462  8.545562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 458 229 2002-08-17 4.25474680 14.384916 33.035326 13.144399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 460 230 2002-08-18 5.93166354 14.319607 32.762264 14.976183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 461 231 2002-08-19 2.55349395 14.253916 32.486361 11.031448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 463 232 2002-08-20 5.36260222 14.187862 32.207701 14.138716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 465 233 2002-08-21 3.04059103 14.121461 31.926370 11.418738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 468 234 2002-08-22 2.74093493 14.054730 31.642455 10.996049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 469 235 2002-08-23 6.40830996 13.987686 31.356043 15.021730</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 471 236 2002-08-24 0.90158898 13.920345 31.067223  8.772882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 473 237 2002-08-25 1.37192722 13.852721 30.776085  9.218002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 476 238 2002-08-26 3.67601342 13.784830 30.482721 11.685108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 477 239 2002-08-27 0.29317140 13.716686 30.187223  7.869407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 479 240 2002-08-28 1.59674037 13.648302 29.889684  9.220846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 481 241 2002-08-29 1.54374127 13.579692 29.590199  9.079459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 484 242 2002-08-30 1.55673871 13.510869 29.288864  9.009565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 485 243 2002-08-31 6.83780604 13.441846 28.985774 14.618909</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 487 244 2002-09-01 4.34941491 13.372633 28.681027 11.834472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 490 245 2002-09-02 1.47927383 13.303244 28.374722  8.671265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 491 246 2002-09-03 0.81220567 13.233689 28.066958  7.878032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 493 247 2002-09-04 0.28363789 13.163980 27.757836  7.238501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 495 248 2002-09-05 1.46087493 13.094126 27.447457  8.392982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 498 249 2002-09-06 5.11994788 13.024138 27.135924 12.117712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 499 250 2002-09-07 3.49335999 12.954027 26.823338 10.322608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 501 251 2002-09-08 5.64942100 12.883802 26.509805 12.439596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 503 252 2002-09-09 5.45287892 12.813472 26.195428 12.122698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 506 253 2002-09-10 1.84631370 12.743047 25.880314  8.344951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 507 254 2002-09-11 0.78781590 12.672536 25.564567  7.185780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 509 255 2002-09-12 1.07475499 12.601947 25.248295  7.388722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 511 256 2002-09-13 1.87297257 12.531289 24.931604  8.096085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 514 257 2002-09-14 6.16193795 12.460572 24.614602 12.239794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 516 258 2002-09-15 0.03187173 12.389802 24.297397  6.105601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 517 259 2002-09-16 2.66202492 12.318988 23.980097  8.585968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 519 260 2002-09-17 3.84351064 12.248139 23.662812  9.628441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 521 261 2002-09-18 1.51814851 12.177262 23.345649  7.291672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 524 262 2002-09-19 3.72042901 12.106365 23.028718  9.295678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 525 263 2002-09-20 2.77867558 12.035456 22.712128  8.299854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 527 264 2002-09-21 0.67388426 11.964544 22.395989  6.229707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 529 265 2002-09-22 1.37217744 11.893635 22.080409  6.793819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 532 266 2002-09-23 3.48325685 11.822738 21.765497  8.647688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 533 267 2002-09-24 3.95738581 11.751861 21.451363  8.974665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 535 268 2002-09-25 4.18002312 11.681012 21.138114  9.066641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 537 269 2002-09-26 3.88780228 11.610198 20.825859  8.693348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 540 270 2002-09-27 0.95029311 11.539428 20.514705  5.973388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 542 271 2002-09-28 3.19641011 11.468711 20.204761  7.866794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 543 272 2002-09-29 0.87244014 11.398053 19.896131  5.735487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 545 273 2002-09-30 3.21691588 11.327464 19.588923  7.678785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 547 274 2002-10-01 1.32800586 11.256953 19.283241  5.958252</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 550 275 2002-10-02 6.24507570 11.186528 18.979189 10.042530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 551 276 2002-10-03 6.43979786 11.116198 18.676871 10.079128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 553 277 2002-10-04 3.70301088 11.045973 18.376389  7.674313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 555 278 2002-10-05 2.41826454 10.975862 18.077844  6.510968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 558 279 2002-10-06 1.84276511 10.905874 17.781337  5.947590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 559 280 2002-10-07 1.51575177 10.836020 17.486965  5.594787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 561 281 2002-10-08 4.98334286 10.766311 17.194826  8.278144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 563 282 2002-10-09 1.66011265 10.696756 16.905016  5.538064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 566 283 2002-10-10 3.24906983 10.627367 16.617629  6.694634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 567 284 2002-10-11 4.58466690 10.558154 16.332759  7.629276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 570 285 2002-10-12 1.71691281 10.489131 16.050495  5.326236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 571 286 2002-10-13 2.68085734 10.420308 15.770928  5.971444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 573 287 2002-10-14 0.40730000 10.351698 15.494145  4.178354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 575 288 2002-10-15 0.95210842 10.283314 15.220231  4.509661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 578 289 2002-10-16 6.17402482 10.215170 14.949271  8.254970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 579 290 2002-10-17 6.50892336 10.147279 14.681345  8.378976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 581 291 2002-10-18 3.50079068 10.079655 14.416534  6.107655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 583 292 2002-10-19 5.15024541 10.012314 14.154915  7.179310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 586 293 2002-10-20 4.32740224  9.945270 13.896562  6.497488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 587 294 2002-10-21 6.23245859  9.878539 13.641550  7.713675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 589 295 2002-10-22 3.24542002  9.812138 13.389948  5.561887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 591 296 2002-10-23 1.46570570  9.746084 13.141825  4.273651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 594 297 2002-10-24 4.95288545  9.680393 12.897247  6.523692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 596 298 2002-10-25 0.31913354  9.615084 12.656277  3.374106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 597 299 2002-10-26 4.86854582  9.550176 12.418977  6.270254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 599 300 2002-10-27 2.94431290  9.485687 12.185404  4.937497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 601 301 2002-10-28 6.40816122  9.421638 11.955615  7.054731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 604 302 2002-10-29 4.82860153  9.358048 11.729663  5.958574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 605 303 2002-10-30 3.38800402  9.294940 11.507600  4.974159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 607 304 2002-10-31 4.59334560  9.232334 11.289473  5.630783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 609 305 2002-11-01 0.72996553  9.170252 11.075328  3.209638</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 612 306 2002-11-02 4.83310351  9.108719 10.865209  5.598853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 613 307 2002-11-03 4.01648966  9.047757 10.659156  5.030701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 615 308 2002-11-04 0.20191272  8.987390 10.457208  2.731769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 617 309 2002-11-05 6.75264402  8.927644 10.259398  6.444824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 620 310 2002-11-06 4.05966892  8.868543 10.065762  4.820295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 622 311 2002-11-07 1.90263024  8.810114  9.876328  3.535527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 623 312 2002-11-08 5.69509841  8.752384  9.691126  5.575746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 625 313 2002-11-09 4.72027550  8.695379  9.510180  4.958840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 627 314 2002-11-10 6.79906355  8.639127  9.333513  6.006154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 630 315 2002-11-11 5.45645917  8.583658  9.161147  5.202066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 631 316 2002-11-12 6.29266393  8.528999  8.993100  5.565813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 633 317 2002-11-13 2.70948433  8.475180  8.829388  3.618709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 635 318 2002-11-14 6.67588127  8.422232  8.670025  5.603654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 638 319 2002-11-15 0.27557123  8.370184  8.515023  2.268926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 639 320 2002-11-16 5.33485942  8.319067  8.364392  4.773061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 641 321 2002-11-17 5.79373726  8.268912  8.218139  4.933616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 643 322 2002-11-18 4.41657987  8.219751  8.076271  4.188811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 646 323 2002-11-19 2.37271743  8.171616  7.938791  3.137255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 647 324 2002-11-20 1.19643479  8.124538  7.805702  2.526167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 650 325 2002-11-21 1.23876691  8.078549  7.677004  2.507848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 651 326 2002-11-22 6.14432970  8.033683  7.552698  4.776406</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 653 327 2002-11-23 2.28913518  7.989971  7.432780  2.922945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 655 328 2002-11-24 6.14249764  7.947446  7.317248  4.657024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 658 329 2002-11-25 1.40802509  7.906140  7.206095  2.443200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 659 330 2002-11-26 3.90188372  7.866085  7.099317  3.535598</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 661 331 2002-11-27 5.10272789  7.827314  6.996907  4.029914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 663 332 2002-11-28 3.91915377  7.789856  6.898857  3.460156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 666 333 2002-11-29 4.01818224  7.753745  6.805157  3.464589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 667 334 2002-11-30 2.71899136  7.719011  6.715800  2.861757</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 669 335 2002-12-01 3.36737780  7.685684  6.630775  3.110285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 671 336 2002-12-02 6.15065374  7.653793  6.550072  4.269365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 674 337 2002-12-03 5.61251251  7.623368  6.473680  4.001462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 676 338 2002-12-04 6.17543676  7.594437  6.401590  4.203132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 677 339 2002-12-05 5.43515437  7.567027  6.333789  3.858127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 679 340 2002-12-06 1.54754911  7.541163  6.270268  2.210939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 681 341 2002-12-07 4.61029803  7.516872  6.211016  3.457445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 684 342 2002-12-08 3.66124149  7.494177  6.156023  3.042752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 685 343 2002-12-09 3.66105246  7.473100  6.105278  3.021799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 687 344 2002-12-10 1.40597335  7.453664  6.058772  2.086122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 689 345 2002-12-11 4.67723375  7.435887  6.016497  3.396337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 692 346 2002-12-12 4.26635925  7.419789  5.978443  3.213405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 693 347 2002-12-13 0.66689072  7.405386  5.944603  1.753821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 695 348 2002-12-14 1.99585341  7.392694  5.914970  2.277194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 697 349 2002-12-15 0.73934354  7.381725  5.889539  1.767329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 700 350 2002-12-16 3.12828944  7.372493  5.868303  2.712092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 702 351 2002-12-17 5.80327106  7.365006  5.851259  3.768071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 703 352 2002-12-18 4.78185441  7.359273  5.838404  3.356419</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 705 353 2002-12-19 3.75581356  7.355300  5.829736  2.945844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 707 354 2002-12-20 4.18744490  7.353091  5.825253  3.114999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 710 355 2002-12-21 5.16968768  7.352649  5.824956  3.504018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 711 356 2002-12-22 5.91256559  7.353975  5.828845  3.800395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 713 357 2002-12-23 2.48684719  7.357066  5.836924  2.445734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 715 358 2002-12-24 0.56132777  7.361920  5.849194  1.685292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 718 359 2002-12-25 5.10240549  7.368531  5.865662  3.497281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 719 360 2002-12-26 4.81582184  7.376892  5.886331  3.392956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 721 361 2002-12-27 6.27274221  7.386993  5.911209  3.987585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 723 362 2002-12-28 6.62145011  7.398825  5.940303  4.143161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 726 363 2002-12-29 2.14249538  7.412375  5.973622  2.356722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 727 364 2002-12-30 1.55984264  7.427627  6.011174  2.133983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 729 365 2002-12-31 0.56465384  7.444567  6.052971  1.742795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     1 2003-01-01 2.46940211  7.463176  6.099033  2.533777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     2 2003-01-02 1.98509709  7.483435  6.149345  2.352941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     3 2003-01-03 3.41295660  7.505323  6.203934  2.961566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     4 2003-01-04 4.28245554  7.528820  6.262814  3.346874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    5 2003-01-05 6.90052384  7.553900  6.325996  4.470913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    6 2003-01-06 0.93611440  7.580540  6.393496  1.993138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13    7 2003-01-07 6.32372797  7.608714  6.465324  4.303050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    8 2003-01-08 6.37339206  7.638396  6.541496  4.364449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    9 2003-01-09 6.65004456  7.669557  6.622023  4.526385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20   10 2003-01-10 6.77500677  7.702170  6.706920  4.626511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   11 2003-01-11 4.17766602  7.736204  6.796198  3.534074</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   12 2003-01-12 0.81198011  7.771631  6.889871  2.082395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   13 2003-01-13 5.61610919  7.808419  6.987950  4.259986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28   14 2003-01-14 6.05660367  7.846537  7.090446  4.509107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   15 2003-01-15 3.48169965  7.885954  7.197371  3.388185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31   16 2003-01-16 3.52633328  7.926639  7.308732  3.452905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34   17 2003-01-17 6.05602728  7.968559  7.424539  4.677424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36   18 2003-01-18 2.26656361  8.011681  7.544799  2.953440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38   19 2003-01-19 2.40156296  8.055974  7.669519  3.060558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39   20 2003-01-20 1.37580626  8.101405  7.798703  2.611876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42   21 2003-01-21 1.25070141  8.147942  7.932354  2.591893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44   22 2003-01-22 6.67424756  8.195553  8.070474  5.303811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46   23 2003-01-23 4.08696419  8.244205  8.213063  4.089029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47   24 2003-01-24 5.49920327  8.293867  8.360119  4.861595</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50   25 2003-01-25 1.51085670  8.344507  8.511639  2.898469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52   26 2003-01-26 0.11883164  8.396093  8.667618  2.228242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54   27 2003-01-27 3.84639127  8.448595  8.828046  4.216583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55   28 2003-01-28 3.78478454  8.501983  8.992915  4.249894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57   29 2003-01-29 4.66303572  8.556225  9.162213  4.787199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60   30 2003-01-30 3.36947737  8.611293  9.335925  4.160489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62   31 2003-01-31 2.68337574  8.667157  9.514035  3.851295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64   32 2003-02-01 3.21995589  8.723789  9.696523  4.213627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65   33 2003-02-02 1.29737240  8.781160  9.883368  3.200951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68   34 2003-02-03 2.12213521  8.839243 10.074546  3.727991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70   35 2003-02-04 3.66790735  8.898011 10.270030  4.684245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72   36 2003-02-05 1.13341801  8.957438 10.469790  3.279838</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73   37 2003-02-06 5.16735998  9.017498 10.673795  5.726689</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76   38 2003-02-07 1.46141486  9.078165 10.882010  3.596403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78   39 2003-02-08 6.70268429  9.139416 11.094398  6.841816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80   40 2003-02-09 3.80898988  9.201226 11.310918  5.168894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81   41 2003-02-10 3.20783568  9.263572 11.531528  4.879479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84   42 2003-02-11 2.52451481  9.326432 11.756182  4.530150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85   43 2003-02-12 6.16633132  9.389784 11.984831  6.931466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88   44 2003-02-13 2.70963348  9.453606 12.217425  4.805262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90   45 2003-02-14 0.36075458  9.517878 12.453910  3.349497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92   46 2003-02-15 6.80566864  9.582579 12.694229  7.681358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93   47 2003-02-16 4.11819437  9.647690 12.938322  5.995994</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96   48 2003-02-17 2.36577992  9.713192 13.186128  4.902362</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98   49 2003-02-18 2.32690182  9.779067 13.437583  4.958113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100  50 2003-02-19 4.84154180  9.845297 13.692618  6.789908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101  51 2003-02-20 2.81960138  9.911864 13.951164  5.472116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104  52 2003-02-21 6.10020609  9.978754 14.213148  7.897674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106  53 2003-02-22 3.94826194 10.045948 14.478496  6.464796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108  54 2003-02-23 0.33752400 10.113433 14.747130  3.932867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109  55 2003-02-24 5.51161591 10.181192 15.018971  7.820023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111  56 2003-02-25 0.82764334 10.249211 15.293936  4.440991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114  57 2003-02-26 4.49105607 10.317477 15.571940  7.282111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116  58 2003-02-27 3.21829895 10.385975 15.852898  6.419391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118  59 2003-02-28 3.68153527 10.454693 16.136720  6.875387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119  60 2003-03-01 6.97285010 10.523618 16.423316  9.546796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122  61 2003-03-02 1.20296542 10.592738 16.712592  5.127132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124  62 2003-03-03 1.14209237 10.662040 17.004454  5.161852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126  63 2003-03-04 1.21032576 10.731513 17.298805  5.300201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127  64 2003-03-05 6.23416195 10.801147 17.595546  9.476749</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130  65 2003-03-06 4.52624917 10.870930 17.894578  8.198961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132  66 2003-03-07 2.20310250 10.940852 18.195799  6.380946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134  67 2003-03-08 2.62287219 11.010902 18.499104  6.828083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135  68 2003-03-09 1.45184781 11.081072 18.804391  5.932978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137  69 2003-03-10 4.60283987 11.151350 19.111552  8.722137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140  70 2003-03-11 3.43226332 11.221729 19.420480  7.825081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142  71 2003-03-12 1.00492548 11.292198 19.731067  5.810729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144  72 2003-03-13 2.78272723 11.362749 20.043203  7.465082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145  73 2003-03-14 0.73443759 11.433374 20.356778  5.743016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148  74 2003-03-15 2.18193958 11.504062 20.671679  7.128286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150  75 2003-03-16 0.89637827 11.574807 20.987796  6.059619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 152  76 2003-03-17 0.09784302 11.645600 21.305014  5.415753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 153  77 2003-03-18 3.13266239 11.716433 21.623220  8.296542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 156  78 2003-03-19 1.65850384 11.787297 21.942300  7.029245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 158  79 2003-03-20 1.73911517 11.858185 22.262140  7.198012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 160  80 2003-03-21 6.37418741 11.929088 22.582624 11.679054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161  81 2003-03-22 2.83894172 12.000000 22.903638  8.435163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 164  82 2003-03-23 5.81269592 12.070912 23.225065 11.398232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165  83 2003-03-24 6.75031603 12.141815 23.546791 12.432189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168  84 2003-03-25 0.96878216 12.212703 23.868700  6.913877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 170  85 2003-03-26 3.37564544 12.283567 24.190677  9.371588</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 172  86 2003-03-27 3.46788534 12.354400 24.512606  9.568501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 173  87 2003-03-28 3.60848010 12.425193 24.834373  9.814748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 176  88 2003-03-29 0.39545086 12.495938 25.155863  6.687011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 178  89 2003-03-30 1.07907980 12.566626 25.476961  7.463077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 180  90 2003-03-31 1.83034182 12.637251 25.797553  8.317609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 181  91 2003-04-01 6.99539522 12.707802 26.117528 13.717975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 184  92 2003-04-02 0.80413272 12.778271 26.436771  7.441022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 186  93 2003-04-03 6.57344962 12.848650 26.755170 13.532849</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 188  94 2003-04-04 6.28283047 12.918928 27.072615 13.351233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 189  95 2003-04-05 6.63754467 12.989098 27.388994 13.845259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 191  96 2003-04-06 1.68194303 13.059148 27.704199  8.710120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 194  97 2003-04-07 1.32818001 13.129070 28.018120  8.421733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196  98 2003-04-08 0.34622573 13.198853 28.330649  7.454240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198  99 2003-04-09 6.97296435 13.268487 28.641680 14.686426</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199 100 2003-04-10 0.23826168 13.337960 28.951106  7.496359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 202 101 2003-04-11 1.17414461 13.407262 29.258822  8.595880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 204 102 2003-04-12 5.44573965 13.476382 29.564726 13.364662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 206 103 2003-04-13 2.61212808 13.545307 29.868714 10.347176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 207 104 2003-04-14 4.23848833 13.614025 30.170685 12.239229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 210 105 2003-04-15 5.28587180 13.682523 30.470539 13.503368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 212 106 2003-04-16 0.69164845 13.750789 30.768176  8.465846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 214 107 2003-04-17 6.54780571 13.818808 31.063500 15.125329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 215 108 2003-04-18 3.38418137 13.886567 31.356413 11.659910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 217 109 2003-04-19 0.86481263 13.954052 31.646820  8.892372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220 110 2003-04-20 0.15341598 14.021246 31.934628  8.158366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222 111 2003-04-21 0.33101648 14.088136 32.219743  8.433455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 224 112 2003-04-22 6.71317389 14.154703 32.502075 15.832924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 225 113 2003-04-23 3.15535138 14.220933 32.781534 11.832179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 228 114 2003-04-24 3.85988686 14.286808 33.058030 12.730174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 230 115 2003-04-25 0.61778378 14.352310 33.331477  9.050233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 232 116 2003-04-26 3.22921952 14.417421 33.601789 12.163518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 233 117 2003-04-27 0.56994133 14.482122 33.868881  9.133672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 236 118 2003-04-28 5.93994315 14.546394 34.132670 15.502115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 238 119 2003-04-29 6.69282545 14.610216 34.393074 16.475867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 240 120 2003-04-30 3.60280109 14.673568 34.650012 12.916312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 241 121 2003-05-01 5.74445136 14.736428 34.903405 15.528752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 244 122 2003-05-02 1.91684448 14.798774 35.153175 11.064941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 246 123 2003-05-03 1.46660826 14.860584 35.399245 10.596608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 247 124 2003-05-04 1.55351428 14.921835 35.641540 10.765708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 250 125 2003-05-05 1.09361330 14.982502 35.879987 10.279485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 252 126 2003-05-06 3.00463333 15.042562 36.114511 12.635422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 254 127 2003-05-07 5.86147937 15.101989 36.345041 16.139494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 255 128 2003-05-08 0.92805463 15.160757 36.571508 10.262226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 258 129 2003-05-09 2.10542201 15.218840 36.793843 11.743548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 260 130 2003-05-10 6.17770543 15.276211 37.011977 16.736823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 262 131 2003-05-11 2.73410302 15.332843 37.225844 12.625457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 263 132 2003-05-12 4.99382268 15.388707 37.435378 15.432963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 266 133 2003-05-13 2.58008221 15.443775 37.640517 12.554297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 268 134 2003-05-14 6.18644796 15.498017 37.841197 17.012962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 270 135 2003-05-15 2.03096944 15.551405 38.037357 11.993125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 271 136 2003-05-16 5.46307561 15.603907 38.228936 16.249390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 273 137 2003-05-17 1.80022244 15.655493 38.415875 11.812686</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 276 138 2003-05-18 1.87924167 15.706133 38.598118 11.958665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 278 139 2003-05-19 6.51771097 15.755795 38.775606 17.714068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 280 140 2003-05-20 2.17832246 15.804447 38.948286 12.421187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 281 141 2003-05-21 6.45175211 15.852058 39.116103 17.739109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 284 142 2003-05-22 6.90946876 15.898595 39.279005 18.355004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 286 143 2003-05-23 6.87524751 15.944026 39.436940 18.362066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 288 144 2003-05-24 1.15134492 15.988319 39.589859 11.322930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 289 145 2003-05-25 1.23374098 16.031441 39.737713 11.463487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 292 146 2003-05-26 1.12340186 16.073361 39.880455 11.363779</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 294 147 2003-05-27 5.69911826 16.114046 40.018039 17.081179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 296 148 2003-05-28 1.40182126 16.153463 40.150421 11.779761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297 149 2003-05-29 0.77470704 16.191581 40.277558 11.032955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 299 150 2003-05-30 5.04929001 16.228369 40.399408 16.384782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 302 151 2003-05-31 0.74270833 16.263796 40.515933 11.054091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 304 152 2003-06-01 4.85288740 16.297830 40.627093 16.205392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 306 153 2003-06-02 0.10364637 16.330443 40.732853 10.312475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 307 154 2003-06-03 1.83165167 16.361604 40.833176 12.493894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 310 155 2003-06-04 0.63007650 16.391286 40.928031 11.018639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 312 156 2003-06-05 4.01728455 16.419460 41.017385 15.272127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314 157 2003-06-06 0.62186736 16.446100 41.101209 11.052371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 315 158 2003-06-07 4.26223485 16.471180 41.179475 15.622860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 318 159 2003-06-08 6.69463272 16.494677 41.252156 18.684468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 320 160 2003-06-09 2.91631917 16.516565 41.319229 13.977662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 322 161 2003-06-10 0.57071559 16.536824 41.380671 11.059228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 323 162 2003-06-11 5.61924347 16.555433 41.436461 17.391295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 326 163 2003-06-12 3.83402186 16.572373 41.486582 15.170610</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 327 164 2003-06-13 3.32158524 16.587625 41.531016 14.540938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 330 165 2003-06-14 4.18552217 16.601175 41.569750 15.632763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 332 166 2003-06-15 4.89094499 16.613007 41.602770 16.524715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 334 167 2003-06-16 5.59462079 16.623108 41.630068 17.412959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 335 168 2003-06-17 6.40441955 16.631469 41.651634 18.432481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 338 169 2003-06-18 6.09042704 16.638080 41.667464 18.043126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 340 170 2003-06-19 4.05216474 16.642934 41.677552 15.493142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 342 171 2003-06-20 1.65166315 16.646025 41.681897 12.488369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 343 172 2003-06-21 5.73036725 16.647351 41.680500 17.593776</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 346 173 2003-06-22 3.12222379 16.646909 41.673363 14.326380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 348 174 2003-06-23 6.79143738 16.644700 41.660491 18.914363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 350 175 2003-06-24 0.60932717 16.640727 41.641891 11.172865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 351 176 2003-06-25 5.73741165 16.634994 41.617572 17.581346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 353 177 2003-06-26 0.54705070 16.627507 41.587545 11.081009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356 178 2003-06-27 1.65044865 16.618275 41.551823 12.451321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358 179 2003-06-28 0.06490537 16.607306 41.510423 10.458722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360 180 2003-06-29 3.68849495 16.594614 41.463360 14.973883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 361 181 2003-06-30 1.58848341 16.580211 41.410655 12.336358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 364 182 2003-07-01 0.08694090 16.564113 41.352328 10.446606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 366 183 2003-07-02 6.00088071 16.546336 41.288405 17.809160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 368 184 2003-07-03 0.80074162 16.526900 41.218909 11.303272</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 369 185 2003-07-04 5.99019935 16.505823 41.143868 17.751816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 372 186 2003-07-05 2.52731000 16.483128 41.063311 13.413887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 374 187 2003-07-06 5.44833322 16.458837 40.977269 17.026626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 376 188 2003-07-07 2.10698427 16.432973 40.885775 12.842567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 377 189 2003-07-08 0.26547183 16.405563 40.788864 10.527235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 379 190 2003-07-09 4.86444544 16.376632 40.686570 16.214326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 382 191 2003-07-10 2.79190936 16.346207 40.578932 13.610146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 384 192 2003-07-11 5.04557755 16.314316 40.465990 16.374017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 386 193 2003-07-12 4.83562399 16.280989 40.347784 16.078803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 387 194 2003-07-13 0.39003785 16.246255 40.224356 10.538939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 390 195 2003-07-14 5.82093270 16.210144 40.095751 17.222969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 392 196 2003-07-15 1.57594210 16.172686 39.962013 11.937546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 394 197 2003-07-16 4.33581514 16.133915 39.823189 15.306823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 395 198 2003-07-17 6.86479900 16.093860 39.679327 18.382395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 398 199 2003-07-18 0.54699637 16.052554 39.530476 10.556126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 400 200 2003-07-19 4.87922632 16.010029 39.376687 15.844404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 402 201 2003-07-20 1.13282506 15.966317 39.218012 11.195780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 403 202 2003-07-21 3.58540221 15.921451 39.054503 14.161030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 406 203 2003-07-22 5.76661181 15.875462 38.886214 16.784078</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 407 204 2003-07-23 4.78194676 15.828384 38.713200 15.526164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 410 205 2003-07-24 6.64539012 15.780249 38.535519 17.747933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 412 206 2003-07-25 1.83430432 15.731088 38.353226 11.824372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 414 207 2003-07-26 1.32938820 15.680933 38.166382 11.159418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 415 208 2003-07-27 2.46652713 15.629816 37.975044 12.490165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 418 209 2003-07-28 1.90591151 15.577768 37.779274 11.755931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 420 210 2003-07-29 3.29412049 15.524820 37.579134 13.381632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 422 211 2003-07-30 1.05663714 15.471001 37.374685 10.619978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 423 212 2003-07-31 4.91978566 15.416342 37.165992 15.221851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 426 213 2003-08-01 0.21521784 15.360873 36.953119  9.497151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 428 214 2003-08-02 0.02276033 15.304621 36.736132  9.211349</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 430 215 2003-08-03 2.81284660 15.247616 36.515097 12.496886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 431 216 2003-08-04 0.15716586 15.189886 36.290082  9.260263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 433 217 2003-08-05 0.46730053 15.131457 36.061156  9.572122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 436 218 2003-08-06 0.49595111 15.072356 35.828388  9.546558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 438 219 2003-08-07 2.86532372 15.012610 35.591848 12.294512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 440 220 2003-08-08 6.08281185 14.952243 35.351609 16.028703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 441 221 2003-08-09 4.94449093 14.891281 35.107744 14.605512</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 444 222 2003-08-10 5.20553337 14.829748 34.860325 14.833412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 446 223 2003-08-11 5.01063189 14.767666 34.609429 14.523803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 448 224 2003-08-12 3.21295148 14.705060 34.355129 12.341959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 449 225 2003-08-13 4.41526699 14.641952 34.097505 13.665412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 452 226 2003-08-14 2.35395153 14.578362 33.836632 11.190939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 454 227 2003-08-15 0.61820481 14.514313 33.572591  9.108123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 456 228 2003-08-16 0.19020036 14.449824 33.305462  8.545562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 457 229 2003-08-17 4.25474680 14.384916 33.035326 13.144399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 459 230 2003-08-18 5.93166354 14.319607 32.762264 14.976183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 462 231 2003-08-19 2.55349395 14.253916 32.486361 11.031448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 464 232 2003-08-20 5.36260222 14.187862 32.207701 14.138716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 466 233 2003-08-21 3.04059103 14.121461 31.926370 11.418738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 467 234 2003-08-22 2.74093493 14.054730 31.642455 10.996049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 470 235 2003-08-23 6.40830996 13.987686 31.356043 15.021730</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 472 236 2003-08-24 0.90158898 13.920345 31.067223  8.772882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 474 237 2003-08-25 1.37192722 13.852721 30.776085  9.218002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 475 238 2003-08-26 3.67601342 13.784830 30.482721 11.685108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 478 239 2003-08-27 0.29317140 13.716686 30.187223  7.869407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 480 240 2003-08-28 1.59674037 13.648302 29.889684  9.220846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 482 241 2003-08-29 1.54374127 13.579692 29.590199  9.079459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 483 242 2003-08-30 1.55673871 13.510869 29.288864  9.009565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 486 243 2003-08-31 6.83780604 13.441846 28.985774 14.618909</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 488 244 2003-09-01 4.34941491 13.372633 28.681027 11.834472</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 489 245 2003-09-02 1.47927383 13.303244 28.374722  8.671265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 492 246 2003-09-03 0.81220567 13.233689 28.066958  7.878032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 494 247 2003-09-04 0.28363789 13.163980 27.757836  7.238501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 496 248 2003-09-05 1.46087493 13.094126 27.447457  8.392982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 497 249 2003-09-06 5.11994788 13.024138 27.135924 12.117712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 500 250 2003-09-07 3.49335999 12.954027 26.823338 10.322608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 502 251 2003-09-08 5.64942100 12.883802 26.509805 12.439596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 504 252 2003-09-09 5.45287892 12.813472 26.195428 12.122698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 505 253 2003-09-10 1.84631370 12.743047 25.880314  8.344951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 508 254 2003-09-11 0.78781590 12.672536 25.564567  7.185780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 510 255 2003-09-12 1.07475499 12.601947 25.248295  7.388722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 512 256 2003-09-13 1.87297257 12.531289 24.931604  8.096085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 513 257 2003-09-14 6.16193795 12.460572 24.614602 12.239794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 515 258 2003-09-15 0.03187173 12.389802 24.297397  6.105601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 518 259 2003-09-16 2.66202492 12.318988 23.980097  8.585968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 520 260 2003-09-17 3.84351064 12.248139 23.662812  9.628441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 522 261 2003-09-18 1.51814851 12.177262 23.345649  7.291672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 523 262 2003-09-19 3.72042901 12.106365 23.028718  9.295678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 526 263 2003-09-20 2.77867558 12.035456 22.712128  8.299854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 528 264 2003-09-21 0.67388426 11.964544 22.395989  6.229707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 530 265 2003-09-22 1.37217744 11.893635 22.080409  6.793819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 531 266 2003-09-23 3.48325685 11.822738 21.765497  8.647688</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 534 267 2003-09-24 3.95738581 11.751861 21.451363  8.974665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 536 268 2003-09-25 4.18002312 11.681012 21.138114  9.066641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 538 269 2003-09-26 3.88780228 11.610198 20.825859  8.693348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 539 270 2003-09-27 0.95029311 11.539428 20.514705  5.973388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 541 271 2003-09-28 3.19641011 11.468711 20.204761  7.866794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 544 272 2003-09-29 0.87244014 11.398053 19.896131  5.735487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 546 273 2003-09-30 3.21691588 11.327464 19.588923  7.678785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 548 274 2003-10-01 1.32800586 11.256953 19.283241  5.958252</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 549 275 2003-10-02 6.24507570 11.186528 18.979189 10.042530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 552 276 2003-10-03 6.43979786 11.116198 18.676871 10.079128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 554 277 2003-10-04 3.70301088 11.045973 18.376389  7.674313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 556 278 2003-10-05 2.41826454 10.975862 18.077844  6.510968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 557 279 2003-10-06 1.84276511 10.905874 17.781337  5.947590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 560 280 2003-10-07 1.51575177 10.836020 17.486965  5.594787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 562 281 2003-10-08 4.98334286 10.766311 17.194826  8.278144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 564 282 2003-10-09 1.66011265 10.696756 16.905016  5.538064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 565 283 2003-10-10 3.24906983 10.627367 16.617629  6.694634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 568 284 2003-10-11 4.58466690 10.558154 16.332759  7.629276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 569 285 2003-10-12 1.71691281 10.489131 16.050495  5.326236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 572 286 2003-10-13 2.68085734 10.420308 15.770928  5.971444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 574 287 2003-10-14 0.40730000 10.351698 15.494145  4.178354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 576 288 2003-10-15 0.95210842 10.283314 15.220231  4.509661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 577 289 2003-10-16 6.17402482 10.215170 14.949271  8.254970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 580 290 2003-10-17 6.50892336 10.147279 14.681345  8.378976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 582 291 2003-10-18 3.50079068 10.079655 14.416534  6.107655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 584 292 2003-10-19 5.15024541 10.012314 14.154915  7.179310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 585 293 2003-10-20 4.32740224  9.945270 13.896562  6.497488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 588 294 2003-10-21 6.23245859  9.878539 13.641550  7.713675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 590 295 2003-10-22 3.24542002  9.812138 13.389948  5.561887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 592 296 2003-10-23 1.46570570  9.746084 13.141825  4.273651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 593 297 2003-10-24 4.95288545  9.680393 12.897247  6.523692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 595 298 2003-10-25 0.31913354  9.615084 12.656277  3.374106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 598 299 2003-10-26 4.86854582  9.550176 12.418977  6.270254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 600 300 2003-10-27 2.94431290  9.485687 12.185404  4.937497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 602 301 2003-10-28 6.40816122  9.421638 11.955615  7.054731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 603 302 2003-10-29 4.82860153  9.358048 11.729663  5.958574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 606 303 2003-10-30 3.38800402  9.294940 11.507600  4.974159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 608 304 2003-10-31 4.59334560  9.232334 11.289473  5.630783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 610 305 2003-11-01 0.72996553  9.170252 11.075328  3.209638</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 611 306 2003-11-02 4.83310351  9.108719 10.865209  5.598853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 614 307 2003-11-03 4.01648966  9.047757 10.659156  5.030701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 616 308 2003-11-04 0.20191272  8.987390 10.457208  2.731769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 618 309 2003-11-05 6.75264402  8.927644 10.259398  6.444824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 619 310 2003-11-06 4.05966892  8.868543 10.065762  4.820295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 621 311 2003-11-07 1.90263024  8.810114  9.876328  3.535527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 624 312 2003-11-08 5.69509841  8.752384  9.691126  5.575746</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 626 313 2003-11-09 4.72027550  8.695379  9.510180  4.958840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 628 314 2003-11-10 6.79906355  8.639127  9.333513  6.006154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 629 315 2003-11-11 5.45645917  8.583658  9.161147  5.202066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 632 316 2003-11-12 6.29266393  8.528999  8.993100  5.565813</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 634 317 2003-11-13 2.70948433  8.475180  8.829388  3.618709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 636 318 2003-11-14 6.67588127  8.422232  8.670025  5.603654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 637 319 2003-11-15 0.27557123  8.370184  8.515023  2.268926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 640 320 2003-11-16 5.33485942  8.319067  8.364392  4.773061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 642 321 2003-11-17 5.79373726  8.268912  8.218139  4.933616</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 644 322 2003-11-18 4.41657987  8.219751  8.076271  4.188811</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 645 323 2003-11-19 2.37271743  8.171616  7.938791  3.137255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 648 324 2003-11-20 1.19643479  8.124538  7.805702  2.526167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 649 325 2003-11-21 1.23876691  8.078549  7.677004  2.507848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 652 326 2003-11-22 6.14432970  8.033683  7.552698  4.776406</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 654 327 2003-11-23 2.28913518  7.989971  7.432780  2.922945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 656 328 2003-11-24 6.14249764  7.947446  7.317248  4.657024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 657 329 2003-11-25 1.40802509  7.906140  7.206095  2.443200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 660 330 2003-11-26 3.90188372  7.866085  7.099317  3.535598</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 662 331 2003-11-27 5.10272789  7.827314  6.996907  4.029914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 664 332 2003-11-28 3.91915377  7.789856  6.898857  3.460156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 665 333 2003-11-29 4.01818224  7.753745  6.805157  3.464589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 668 334 2003-11-30 2.71899136  7.719011  6.715800  2.861757</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 670 335 2003-12-01 3.36737780  7.685684  6.630775  3.110285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 672 336 2003-12-02 6.15065374  7.653793  6.550072  4.269365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 673 337 2003-12-03 5.61251251  7.623368  6.473680  4.001462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 675 338 2003-12-04 6.17543676  7.594437  6.401590  4.203132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 678 339 2003-12-05 5.43515437  7.567027  6.333789  3.858127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 680 340 2003-12-06 1.54754911  7.541163  6.270268  2.210939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 682 341 2003-12-07 4.61029803  7.516872  6.211016  3.457445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 683 342 2003-12-08 3.66124149  7.494177  6.156023  3.042752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 686 343 2003-12-09 3.66105246  7.473100  6.105278  3.021799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 688 344 2003-12-10 1.40597335  7.453664  6.058772  2.086122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 690 345 2003-12-11 4.67723375  7.435887  6.016497  3.396337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 691 346 2003-12-12 4.26635925  7.419789  5.978443  3.213405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 694 347 2003-12-13 0.66689072  7.405386  5.944603  1.753821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 696 348 2003-12-14 1.99585341  7.392694  5.914970  2.277194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 698 349 2003-12-15 0.73934354  7.381725  5.889539  1.767329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 699 350 2003-12-16 3.12828944  7.372493  5.868303  2.712092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 701 351 2003-12-17 5.80327106  7.365006  5.851259  3.768071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 704 352 2003-12-18 4.78185441  7.359273  5.838404  3.356419</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 706 353 2003-12-19 3.75581356  7.355300  5.829736  2.945844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 708 354 2003-12-20 4.18744490  7.353091  5.825253  3.114999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 709 355 2003-12-21 5.16968768  7.352649  5.824956  3.504018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 712 356 2003-12-22 5.91256559  7.353975  5.828845  3.800395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 714 357 2003-12-23 2.48684719  7.357066  5.836924  2.445734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 716 358 2003-12-24 0.56132777  7.361920  5.849194  1.685292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 717 359 2003-12-25 5.10240549  7.368531  5.865662  3.497281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 720 360 2003-12-26 4.81582184  7.376892  5.886331  3.392956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 722 361 2003-12-27 6.27274221  7.386993  5.911209  3.987585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 724 362 2003-12-28 6.62145011  7.398825  5.940303  4.143161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 725 363 2003-12-29 2.14249538  7.412375  5.973622  2.356722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 728 364 2003-12-30 1.55984264  7.427627  6.011174  2.133983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 730 365 2003-12-31 0.56465384  7.444567  6.052971  1.742795</span>
 </code></pre></div>
     </div>
   </div>
@@ -240,7 +972,7 @@ global radiation?</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

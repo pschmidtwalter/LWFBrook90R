@@ -20,7 +20,7 @@ dcast-function."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.2</span>
       </span>
     </div>
 
@@ -197,68 +197,81 @@ layer index.</p></dd>
 <span class="r-in"><span><span class="va">df</span><span class="op">$</span><span class="va">var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo        var1       var2        var3        var4        var5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.26044662 -0.5275225 -0.01765187 -0.55911791 -0.72114545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.91818920 -0.4392953 -0.07913925 -0.79263684 -0.04388789</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.96662087 -0.1465437 -0.86395520 -0.51541360 -0.38144328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.14519965 -0.2977820 -0.37900882 -0.45555255 -0.97248916</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.25316228 -0.8989728 -0.04061916 -0.50461444 -0.37718254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.85602602 -0.2475825 -0.76999149 -0.33195017 -0.21393706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.01868047 -0.9018402 -0.00714043 -0.46163265 -0.45644703</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.03571327 -0.7417072 -0.07655145 -0.95436456 -0.98887871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.35261227 -0.2494264 -0.10750864 -0.01230859 -0.42571726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.18181377 -0.2534076 -0.46266320 -0.23263262 -0.53367410</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.62488517 -0.6213107 -0.32646627 -0.80073161 -0.05052239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.63926894 -0.4376853 -0.88677347 -0.41238449 -0.37700701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo          var1        var2        var3        var4       var5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.6604087350 -0.49599468 -0.38924788 -0.24016617 -0.9943165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.8157186965 -0.11900442 -0.86373865 -0.04891902 -0.3404958</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.1440986381 -0.46896233 -0.74097196 -0.13928286 -0.6522067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.7516575304 -0.12386228 -0.63821652 -0.24975252 -0.6327502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.5687884816 -0.36484161 -0.85685200 -0.02806434 -0.8338161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.3887608903 -0.88754760 -0.78725627 -0.91715769 -0.5309347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.2263173803 -0.92962676 -0.63281406 -0.10599313 -0.3874370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.6940298409 -0.79865368 -0.02825094 -0.01461289 -0.7664521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.0006663974 -0.83874300 -0.57202021 -0.01268145 -0.5771520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.2108226879 -0.50112467 -0.88471162 -0.66060718 -0.7526447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.0840416148 -0.45591559 -0.71723979 -0.89118256 -0.7201205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.1872406271 -0.01004734 -0.61241404 -0.61275118 -0.1688927</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># add more variables</span></span></span>
 <span class="r-in"><span><span class="va">df</span><span class="op">$</span><span class="va">var1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span><span class="op">$</span><span class="va">var2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># extract specific layers</span></span></span>
-<span class="r-in"><span><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span>,layers <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo      var_2       var_3       var_4   var1_2   var1_3   var1_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.5275225 -0.01765187 -0.55911791 1.583381 1.516790 1.603359</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.4392953 -0.07913925 -0.79263684 1.677406 1.968752 1.618214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.1465437 -0.86395520 -0.51541360 1.774900 1.586921 1.459746</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.2977820 -0.37900882 -0.45555255 1.907859 1.838462 1.185900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.8989728 -0.04061916 -0.50461444 1.130133 1.609057 1.011706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.2475825 -0.76999149 -0.33195017 1.694514 1.011169 1.213058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.9018402 -0.00714043 -0.46163265 1.681584 1.385671 1.434968</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.7417072 -0.07655145 -0.95436456 1.014324 1.826376 1.631161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.2494264 -0.10750864 -0.01230859 1.281610 1.817036 1.971949</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.2534076 -0.46266320 -0.23263262 1.454697 1.496553 1.302598</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.6213107 -0.32646627 -0.80073161 1.052666 1.864502 1.199080</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.4376853 -0.88677347 -0.41238449 1.611126 1.405800 1.279769</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       var2_2   var2_3   var2_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2.404431 2.034675 2.888916</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2.969851 2.636369 2.164340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2.144542 2.381472 2.319157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2.817583 2.011659 2.222922</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2.647659 2.309105 2.964435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2.071517 2.833819 2.865145</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2.451566 2.825573 2.795343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2.806668 2.516375 2.507404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2.967896 2.597354 2.237342</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2.420796 2.235249 2.076118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2.071585 2.162098 2.915111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2.189528 2.861301 2.796308</span>
+<span class="r-in"><span><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span>,layers <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, sep <span class="op">=</span> <span class="st">"_layer"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo  var_layer2  var_layer3  var_layer4 var1_layer2 var1_layer3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 -0.49599468 -0.38924788 -0.24016617    1.034072    1.366088</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 -0.11900442 -0.86373865 -0.04891902    1.877693    1.543911</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 -0.46896233 -0.74097196 -0.13928286    1.787305    1.157732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 -0.12386228 -0.63821652 -0.24975252    1.728979    1.214924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 -0.36484161 -0.85685200 -0.02806434    1.708412    1.647308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 -0.88754760 -0.78725627 -0.91715769    1.369074    1.907781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 -0.92962676 -0.63281406 -0.10599313    1.985935    1.649099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 -0.79865368 -0.02825094 -0.01461289    1.685857    1.803241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 -0.83874300 -0.57202021 -0.01268145    1.753132    1.467901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 -0.50112467 -0.88471162 -0.66060718    1.538525    1.628515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 -0.45591559 -0.71723979 -0.89118256    1.697251    1.297335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 -0.01004734 -0.61241404 -0.61275118    1.294390    1.083163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     var1_layer4 var2_layer2 var2_layer3 var2_layer4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    1.135266    2.690744    2.745203    2.661621</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    1.075998    2.505973    2.500467    2.335621</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    1.913960    2.712678    2.397027    2.155924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    1.332644    2.285411    2.651411    2.132374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    1.573728    2.141527    2.844493    2.682987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:    1.384039    2.674670    2.880955    2.544448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:    1.717799    2.319094    2.331887    2.933384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:    1.173337    2.196105    2.329777    2.146152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    1.162189    2.581448    2.326244    2.484829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    1.283339    2.557142    2.293662    2.672061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:    1.284306    2.256852    2.264511    2.663328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    1.743540    2.672641    2.722269    2.039990</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#extract specific variables</span></span></span>
-<span class="r-in"><span><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span>, layers <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, value_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var1"</span>, <span class="st">"var2"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo   var1_2   var1_3   var1_4   var2_2   var2_3   var2_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1 1.583381 1.516790 1.603359 2.404431 2.034675 2.888916</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2 1.677406 1.968752 1.618214 2.969851 2.636369 2.164340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3 1.774900 1.586921 1.459746 2.144542 2.381472 2.319157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4 1.907859 1.838462 1.185900 2.817583 2.011659 2.222922</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5 1.130133 1.609057 1.011706 2.647659 2.309105 2.964435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6 1.694514 1.011169 1.213058 2.071517 2.833819 2.865145</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7 1.681584 1.385671 1.434968 2.451566 2.825573 2.795343</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8 1.014324 1.826376 1.631161 2.806668 2.516375 2.507404</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9 1.281610 1.817036 1.971949 2.967896 2.597354 2.237342</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10 1.454697 1.496553 1.302598 2.420796 2.235249 2.076118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11 1.052666 1.864502 1.199080 2.071585 2.162098 2.915111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12 1.611126 1.405800 1.279769 2.189528 2.861301 2.796308</span>
+<span class="r-in"><span><span class="fu">extract_layer_output</span><span class="op">(</span><span class="va">df</span>, layers <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, value_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var1"</span>, <span class="st">"var2"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_layer"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       yr mo var1_layer2 var1_layer3 var1_layer4 var2_layer2 var2_layer3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2002  1    1.034072    1.366088    1.135266    2.690744    2.745203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 2002  2    1.877693    1.543911    1.075998    2.505973    2.500467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 2002  3    1.787305    1.157732    1.913960    2.712678    2.397027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 2002  4    1.728979    1.214924    1.332644    2.285411    2.651411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 2002  5    1.708412    1.647308    1.573728    2.141527    2.844493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 2002  6    1.369074    1.907781    1.384039    2.674670    2.880955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 2002  7    1.985935    1.649099    1.717799    2.319094    2.331887</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 2002  8    1.685857    1.803241    1.173337    2.196105    2.329777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9: 2002  9    1.753132    1.467901    1.162189    2.581448    2.326244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10: 2002 10    1.538525    1.628515    1.283339    2.557142    2.293662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11: 2002 11    1.697251    1.297335    1.284306    2.256852    2.264511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12: 2002 12    1.294390    1.083163    1.743540    2.672641    2.722269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     var2_layer4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    2.661621</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    2.335621</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    2.155924</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    2.132374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    2.682987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:    2.544448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:    2.933384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:    2.146152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    2.484829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    2.672061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:    2.663328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:    2.039990</span>
 </code></pre></div>
     </div>
   </div>
@@ -273,7 +286,7 @@ layer index.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

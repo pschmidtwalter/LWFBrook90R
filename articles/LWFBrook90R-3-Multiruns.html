@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.2</span>
       </span>
     </div>
 
@@ -100,13 +100,33 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>With ‘LWFBrook90R’, parallelized multi-run simulations can be performed conveniently, extending the basic single-run applications using the function <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> described in the introductory vignette. Two different multi-run functions exist for two different problems:</p>
+<p>With ‘LWFBrook90R’, parallelized multi-run simulations can be
+performed conveniently, extending the basic single-run applications
+using the function <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> described in the
+introductory vignette. Two different multi-run functions exist for two
+different problems:</p>
 <ol style="list-style-type: decimal">
-<li>Perform Monte-Carlo simulations with single parameters set up for variation, and</li>
-<li>simulations over multiple locations, parameter sets, or climate scenarios.</li>
+<li>Perform Monte-Carlo simulations with single parameters set up for
+variation, and</li>
+<li>simulations over multiple locations, parameter sets, or climate
+scenarios.</li>
 </ol>
-<p>For the first case, the function <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> is available. The second problem can be tackled using the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, which is described in detail in the vignette <a href="LWFBrook90R-4-Multisite-Runs.html">‘Multi-Site simulations’</a>.</p>
-<p>Both functions are wrapper functions for <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> and allow for parallel processing of tasks, using a specified number of CPUs to speed up the execution of a multi-run simulation. They return lists containing the individual single run simulation results, as they are returned by <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. These result-lists can become very large if many simulations are performed, and the selected output comprises daily data sets and especially the individual soil layers’ daily soil moisture states. Huge amounts of data produced can overload the memory, this vignette therefore starts with a data management section on how to make best use of the <code>output_fun</code>-argument of <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> to reduce the amount of data returned.</p>
+<p>For the first case, the function <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> is
+available. The second problem can be tackled using the function
+<code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, which is described in detail in the
+vignette <a href="LWFBrook90R-4-Multisite-Runs.html">‘Multi-Site
+simulations’</a>.</p>
+<p>Both functions are wrapper functions for <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>
+and allow for parallel processing of tasks, using a specified number of
+CPUs to speed up the execution of a multi-run simulation. They return
+lists containing the individual single run simulation results, as they
+are returned by <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. These result-lists can become
+very large if many simulations are performed, and the selected output
+comprises daily data sets and especially the individual soil layers’
+daily soil moisture states. Huge amounts of data produced can overload
+the memory, this vignette therefore starts with a data management
+section on how to make best use of the <code>output_fun</code>-argument
+of <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> to reduce the amount of data returned.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pschmidtwalter.github.io/LWFBrook90R/">LWFBrook90R</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></code></pre></div>
@@ -114,8 +134,33 @@
 <div class="section level2">
 <h2 id="data-management-i-output_fun-argument">Data management (i): <code>output_fun</code>-argument<a class="anchor" aria-label="anchor" href="#data-management-i-output_fun-argument"></a>
 </h2>
-<p>To minimize memory allocation, it is recommended to reduce the selected output to a minimum and make use of the <code>output_fun</code>-argument of <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. With this argument, it is possible to pass custom functions to <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>, which directly perform on the simulation output list object. With <code>rtrn_output = FALSE</code>, the original simulation output (<code>output</code>, <code>layer_output</code>) then can be discarded, and only the results from the <code>output_fun</code>-argument are returned. This can be very useful for model calibration or sensitivity analyses tasks comprising ten thousands of simulations in a Monte-Carlo setting. With this magnitude, memory allocation is critical, and only a relatively small output can be returned for each individual simulation (e.g., a measure of agreement between simulated and observed values). Similarly, it is possible to define functions for custom output aggregation, or to redirect the simulation output to a file or database, as we will see later.</p>
-<p>To demonstrate the usage of the <code>output_fun</code>-argument, we perform a Monte-Carlo simulation using the function <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code>, and define a function that returns annual mean soil water storage and transpiration during the growing season. In a first step, the function integrates depth-specific soil moisture to soil water storage down to specified soil layer (<code>tolayer</code>, passed via <code>...</code> to <code>output_fun</code>), and in a second step calculates mean soil water storage over the growing season, along with the sum of transpiration. The growing season thereby is defined by the input parameters <code>budburstdoy</code> and <code>leaffalldoy</code>.</p>
+<p>To minimize memory allocation, it is recommended to reduce the
+selected output to a minimum and make use of the
+<code>output_fun</code>-argument of <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. With this
+argument, it is possible to pass custom functions to
+<code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>, which directly perform on the simulation
+output list object. With <code>rtrn_output = FALSE</code>, the original
+simulation output (<code>output</code>, <code>layer_output</code>) then
+can be discarded, and only the results from the
+<code>output_fun</code>-argument are returned. This can be very useful
+for model calibration or sensitivity analyses tasks comprising ten
+thousands of simulations in a Monte-Carlo setting. With this magnitude,
+memory allocation is critical, and only a relatively small output can be
+returned for each individual simulation (e.g., a measure of agreement
+between simulated and observed values). Similarly, it is possible to
+define functions for custom output aggregation, or to redirect the
+simulation output to a file or database, as we will see later.</p>
+<p>To demonstrate the usage of the <code>output_fun</code>-argument, we
+perform a Monte-Carlo simulation using the function
+<code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code>, and define a function that returns
+annual mean soil water storage and transpiration during the growing
+season. In a first step, the function integrates depth-specific soil
+moisture to soil water storage down to specified soil layer
+(<code>tolayer</code>, passed via <code>...</code> to
+<code>output_fun</code>), and in a second step calculates mean soil
+water storage over the growing season, along with the sum of
+transpiration. The growing season thereby is defined by the input
+parameters <code>budburstdoy</code> and <code>leaffalldoy</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">tolayer</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># aggregate SWAT</span></span>
@@ -144,7 +189,8 @@
 <span>                     param_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                     climate <span class="op">=</span> <span class="va">slb1_meteo</span>,</span>
 <span>                     soil <span class="op">=</span> <span class="va">soil</span><span class="op">)</span></span></code></pre></div>
-<p>and apply the function to the return, to see that our custom output function works:</p>
+<p>and apply the function to the return, to see that our custom output
+function works:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">output_function</span><span class="op">(</span><span class="va">b90res</span>, tolayer <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      yr swat_vp_mean tran_vp_sum</span></span>
@@ -154,14 +200,33 @@
 <div class="section level2">
 <h2 id="multi-run-simulations-with-run_multi_lwfb90">Multi-run simulations with <code>run_multi_LWFB90()</code><a class="anchor" aria-label="anchor" href="#multi-run-simulations-with-run_multi_lwfb90"></a>
 </h2>
-<p>As mentioned, <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> is a wrapper for <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> takes a data.frame <code>paramvar</code> containing variable parameter values in columns and their realizations in rows. For each row in <code>paramvar</code>, the respective parameter values in <code>param_b90</code> are replaced by name, and <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> is called. Further arguments to <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> have to be specified and are passed on.</p>
-<p>For the multi-run simulation, we set up two parameters for variation, the maximum leaf area index (<code>maxlai</code>) and the maximum leaf conductance (<code>glmax</code>). We define a data.frame with two columns, containing 50 random uniform realizations of the two parameters:</p>
+<p>As mentioned, <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> is a wrapper for
+<code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>. <code><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90()</a></code> takes a
+data.frame <code>paramvar</code> containing variable parameter values in
+columns and their realizations in rows. For each row in
+<code>paramvar</code>, the respective parameter values in
+<code>param_b90</code> are replaced by name, and
+<code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> is called. Further arguments to
+<code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code> have to be specified and are passed on.</p>
+<p>For the multi-run simulation, we set up two parameters for variation,
+the maximum leaf area index (<code>maxlai</code>) and the maximum leaf
+conductance (<code>glmax</code>). We define a data.frame with two
+columns, containing 50 random uniform realizations of the two
+parameters:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2021</span><span class="op">)</span></span>
 <span><span class="va">N</span><span class="op">=</span><span class="fl">50</span></span>
 <span><span class="va">paramvar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>maxlai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">N</span>, <span class="fl">4</span>,<span class="fl">7</span><span class="op">)</span>,</span>
 <span>                       glmax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">N</span>,<span class="fl">0.003</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Now we can run the simulation. We suppress the selected simulation result objects and model input from being returned, and only return the values from our <code>output_fun</code> defined above. We pass <code>tolayer = 15</code> so that soil water storage is integrated down to the 15th soil layer, corresponding to 0-100 cm soil depth. Note that the <code>param_b90</code> object (and thus parameters <code>budburstdoy</code> and <code>leaffalldoy</code>) is available to our <code>output_fun</code>, although it is not included in the return (<code>rtrn_input = FALSE</code>).</p>
+<p>Now we can run the simulation. We suppress the selected simulation
+result objects and model input from being returned, and only return the
+values from our <code>output_fun</code> defined above. We pass
+<code>tolayer = 15</code> so that soil water storage is integrated down
+to the 15th soil layer, corresponding to 0-100 cm soil depth. Note that
+the <code>param_b90</code> object (and thus parameters
+<code>budburstdoy</code> and <code>leaffalldoy</code>) is available to
+our <code>output_fun</code>, although it is not included in the return
+(<code>rtrn_input = FALSE</code>).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mrun_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_multi_LWFB90.html">run_multi_LWFB90</a></span><span class="op">(</span>paramvar <span class="op">=</span> <span class="va">paramvar</span>,</span>
 <span>                             param_b90 <span class="op">=</span> <span class="fu"><a href="../reference/set_paramLWFB90.html">set_paramLWFB90</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -172,17 +237,26 @@
 <span>                             rtrn_input <span class="op">=</span> <span class="cn">FALSE</span>, rtrn_output <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                             output_fun <span class="op">=</span> <span class="va">output_function</span>,</span>
 <span>                             tolayer <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="co"># argument to output_fun</span></span></code></pre></div>
-<p>The result is a list of the individual single-run results, from which we can easily extract the results of our output function and <code><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist()</a></code> them together in a data.table:</p>
+<p>The result is a list of the individual single-run results, from which
+we can easily extract the results of our output function and
+<code><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist()</a></code> them together in a data.table:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mrun_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mrun_res</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">output_fun</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>                     idcol <span class="op">=</span> <span class="st">"singlerun"</span><span class="op">)</span></span></code></pre></div>
-<p>Now we can display the results of the 50 simulations using boxplots:</p>
+<p>Now we can display the results of the 50 simulations using
+boxplots:</p>
 <div class="figure">
 <img src="LWFBrook90R-3-Multiruns_files/figure-html/boxplots-1.png" alt="Growing season soil water storage and transpiration of 50 simulations, with random variation of parameters 'maxlai' and 'glmax'" width="672"><p class="caption">
-Growing season soil water storage and transpiration of 50 simulations, with random variation of parameters ‘maxlai’ and ‘glmax’
+Growing season soil water storage and transpiration of 50 simulations,
+with random variation of parameters ‘maxlai’ and ‘glmax’
 </p>
 </div>
-<p>We ran 50 simulations, all with the same climate, soil, and parameters except for <code>maxlai</code> and <code>glmax</code>, that where varied randomly. In the next vignette <a href="LWFBrook90R-4-Multisite-Runs.html">‘Multi-Site simulations’</a>, we will learn how to make use of multiple climate, soil, and parameter sets using the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, to simulate a set of different sites.</p>
+<p>We ran 50 simulations, all with the same climate, soil, and
+parameters except for <code>maxlai</code> and <code>glmax</code>, that
+where varied randomly. In the next vignette <a href="LWFBrook90R-4-Multisite-Runs.html">‘Multi-Site simulations’</a>,
+we will learn how to make use of multiple climate, soil, and parameter
+sets using the function <code><a href="../reference/run_multisite_LWFB90.html">run_multisite_LWFB90()</a></code>, to simulate
+a set of different sites.</p>
 </div>
   </div>
 
@@ -203,7 +277,7 @@ Growing season soil water storage and transpiration of 50 simulations, with rand
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
