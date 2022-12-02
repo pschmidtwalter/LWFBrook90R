@@ -1,4 +1,10 @@
-# LWFBrook90R 0.5.1
+# LWFBrook90R 0.5.2
+
+## Bug fixes
+
+ - Major bug fixed concerning the calculation of global radiation from sunshine duration hours
+
+# LWFBrook90R 0.5.1 
 
 ## Bug fixes
 

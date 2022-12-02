@@ -35,4 +35,5 @@ calculated using the Angström-formula.
 \examples{
 dates <- seq.Date(as.Date("2002-01-01"), as.Date("2003-12-31"), by = 'day')
 calc_globrad(dates, sunhours = runif(365, 0, 7),lat = 52.8)
+calc_globrad(dates, sunhours = runif(365, 0, 7),lat = 52.8, full_output = TRUE)
 }

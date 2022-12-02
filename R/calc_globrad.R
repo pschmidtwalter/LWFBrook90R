@@ -22,6 +22,7 @@
 #' @examples
 #' dates <- seq.Date(as.Date("2002-01-01"), as.Date("2003-12-31"), by = 'day')
 #' calc_globrad(dates, sunhours = runif(365, 0, 7),lat = 52.8)
+#' calc_globrad(dates, sunhours = runif(365, 0, 7),lat = 52.8, full_output = TRUE)
 calc_globrad <- function(dates, sunhours, lat,
                         a0=0.25,
                         b0=0.5,
@@ -33,7 +34,8 @@ calc_globrad <- function(dates, sunhours, lat,
              daylength = dayLength(lat * pi/180, i = 1:366),
              extrat = exd(lat * pi/180, i = 1:366))
 
-  dat <- merge(dat, exterr.DayL, by = "doy")[order(dat$dates),]
+  dat <- merge(dat, exterr.DayL, by = "doy")
+  dat <- dat[order(dat$dates),]
   dat$globrad <- with(dat, (a0 + b0 * sunhours / daylength) * extrat)
 
   if (any(dat$daylength < dat$sunhours)) {
