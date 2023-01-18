@@ -2,7 +2,12 @@
 
 ## Bug fixes
 
- - Major bug fixed concerning the calculation of global radiation from sunshine duration hours
+ - Major bug fixed concerning the calculation of global radiation from sunshine duration hours (see issue [#65](https://github.com/pschmidtwalter/LWFBrook90R/issues/65))
+ - small bug concerning aggregation of output variables in `BudgMon` and `BudgAnn` using miscellaneous function `process_output_LWFB90()`
+ 
+## Changes
+  
+ - default root-growth-period parameter (`rgroper`) was set to 0, to prevent root growth. The parameter defines the period during which the final root length density distribution is reached. The user now needs to actively switch on root growth by choosing a value > 0. It as advised to carefully investigate layer-wise root water uptake (`tran`) when using the root growth module for young stands.
 
 # LWFBrook90R 0.5.1 
 

@@ -7,8 +7,8 @@
 #' @param selection A [7,5]-matrix with row and column names, flagging the
 #'   desired groups of variables at specified time intervals (see
 #'   \code{\link{set_outputLWFB90}}).
-#' @param prec_interval The applied precipitation interval of the simulation
-#'   that produced \code{x}. Default is 1.
+#' @param prec_interval The precipitation interval of the simulation
+#'   that produced \code{x}. If available, the value \code{x$model_input$options_b90$prec_interval} is used.
 #'
 #' @return A named list containing the selected groups of variables in the
 #'   desired temporal resolution. The names are constructed from
@@ -30,17 +30,35 @@
 #'            climate = slb1_meteo,
 #'            soil = soil)
 #'
+#' # Calculate output-aggregations using the returned object
 #' process_outputs_LWFB90(res, selection = outsel)
-
+#'
+#' # or calculate aggregations at run time by passing the function via output_fun-arg
+#' run_LWFB90(options_b90 = opts,
+#'            param_b90 = parms,
+#'            climate = slb1_meteo,
+#'            soil = soil,
+#'            rtrn_input = FALSE,
+#'            output_fun = process_outputs_LWFB90,
+#'            selection = outsel)$output_fun
+#'
 process_outputs_LWFB90 <- function(x,
                                    selection = set_outputLWFB90(),
-                                   prec_interval = 1)
+                                   prec_interval = NULL)
 {
 
   # to pass CRAN check notes
   adef<-NULL;awat<-NULL;balerr<-NULL;da<-NULL;doy<-NULL;evap<-NULL;flow<-NULL;gwat<-NULL;
   intr<-NULL;ints<-NULL;mo<-NULL;nits<-NULL;nl<-NULL;relawat<-NULL;rfal<-NULL;safrac<-NULL;
   seep<-NULL;sfal<-NULL;snow<-NULL;stres<-NULL;swat<-NULL;vrfln<-NULL;yr<-NULL;
+
+  if (!is.null(x$model_input$options_b90$prec_interval)){
+    prec_interval <- x$model_input$options_b90$prec_interval
+  } else {
+    if (is.null(prec_interval)){
+      stop("Please provide the precipitation interval!")
+    }
+  }
 
   select <- rownames(selection)[which(rowSums(selection) > 0)]
 
@@ -198,11 +216,11 @@ process_outputs_LWFB90 <- function(x,
               evap = round(sum(evap) / prec_interval,1),
               seep = round(sum(seep) / prec_interval,1),
               # for state variables: take last entry in period
-              snow = round(snow[rowid(yr, doy) == prec_interval],1),
-              swat = round(swat[rowid(yr, doy) == prec_interval],1),
-              gwat = round(gwat[rowid(yr, doy) == prec_interval],1),
-              intr = round(intr[rowid(yr, doy) == prec_interval],1),
-              ints = round(ints[rowid(yr, doy) == prec_interval],1)),
+              snow = round(last(snow),1),
+              swat = round(last(swat),1),
+              gwat = round(last(gwat),1),
+              intr = round(last(intr),1),
+              ints = round(last(ints),1)),
               by = list(yr, mo, da, doy)]
         }
         if (per == "Mon") {
@@ -213,11 +231,11 @@ process_outputs_LWFB90 <- function(x,
               evap = round(sum(evap) / prec_interval,1),
               seep = round(sum(seep) / prec_interval,1),
               # for state variables: take last entry in period
-              snow = round(snow[rowid(yr, mo) == prec_interval],1),
-              swat = round(swat[rowid(yr, mo) == prec_interval],1),
-              gwat = round(gwat[rowid(yr, mo) == prec_interval],1),
-              intr = round(intr[rowid(yr, mo) == prec_interval],1),
-              ints = round(ints[rowid(yr, mo) == prec_interval],1)),
+              snow = round(last(snow),1),
+              swat = round(last(swat),1),
+              gwat = round(last(gwat),1),
+              intr = round(last(intr),1),
+              ints = round(last(ints),1)),
               by = list(yr, mo)]
         }
         if (per == "Ann") {
@@ -228,11 +246,11 @@ process_outputs_LWFB90 <- function(x,
               evap = round(sum(evap) / prec_interval,1),
               seep = round(sum(seep) / prec_interval,1),
               # for state variables: take last entry in period
-              snow = round(snow[rowid(yr) == prec_interval],1),
-              swat = round(swat[rowid(yr) == prec_interval],1),
-              gwat = round(gwat[rowid(yr) == prec_interval],1),
-              intr = round(intr[rowid(yr) == prec_interval],1),
-              ints = round(ints[rowid(yr) == prec_interval],1)),
+              snow = round(last(snow),1),
+              swat = round(last(swat),1),
+              gwat = round(last(gwat),1),
+              intr = round(last(intr),1),
+              ints = round(last(ints),1)),
               by = list(yr)]
         }
       }

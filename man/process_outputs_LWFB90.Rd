@@ -4,7 +4,7 @@
 \alias{process_outputs_LWFB90}
 \title{Aggregate and group model outputs similar to ancient LWFB90 textfile outputs (.ASC-files)}
 \usage{
-process_outputs_LWFB90(x, selection = set_outputLWFB90(), prec_interval = 1)
+process_outputs_LWFB90(x, selection = set_outputLWFB90(), prec_interval = NULL)
 }
 \arguments{
 \item{x}{Named list with items \code{x$output} and/or \code{x$layer_output}
@@ -14,8 +14,8 @@ process_outputs_LWFB90(x, selection = set_outputLWFB90(), prec_interval = 1)
 desired groups of variables at specified time intervals (see
 \code{\link{set_outputLWFB90}}).}
 
-\item{prec_interval}{The applied precipitation interval of the simulation
-that produced \code{x}. Default is 1.}
+\item{prec_interval}{The precipitation interval of the simulation
+that produced \code{x}. If available, the value \code{x$model_input$options_b90$prec_interval} is used.}
 }
 \value{
 A named list containing the selected groups of variables in the
@@ -41,5 +41,16 @@ res <- run_LWFB90(options_b90 = opts,
            climate = slb1_meteo,
            soil = soil)
 
+# Calculate output-aggregations using the returned object
 process_outputs_LWFB90(res, selection = outsel)
+
+# or calculate aggregations at run time by passing the function via output_fun-arg
+run_LWFB90(options_b90 = opts,
+           param_b90 = parms,
+           climate = slb1_meteo,
+           soil = soil,
+           rtrn_input = FALSE,
+           output_fun = process_outputs_LWFB90,
+           selection = outsel)$output_fun
+
 }
