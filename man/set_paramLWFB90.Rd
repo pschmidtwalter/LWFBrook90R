@@ -123,7 +123,7 @@ Create the list of model parameters
  age_ini      \tab Age of stand (for root development). Default: 100 \tab a                 \tab Water supply           \cr
  initrdep     \tab Initial root depth. Default: 0.25\tab m                 \tab Water supply           \cr
  initrlen     \tab Initial water-absorbing root length per unit area. Default: 12\tab m/m-2             \tab Water supply           \cr
- rgroper      \tab Period of net root growth. Default: 30 \tab a                  \tab Water supply           \cr
+ rgroper      \tab Period of net root growth. A value of 0 prevents root growth. Default: 0 \tab a                  \tab Water supply           \cr
  rgrorate     \tab Vertical root growth rate. Default: 0.03 \tab m a-1             \tab Water supply           \cr
  fxylem       \tab Fraction of internal plant resistance to water flow that is in the Xylem. Default: 0.5 \tab -                  \tab Water supply           \cr
  maxrlen      \tab Total length of fine roots per unit ground area. Default: 3000 \tab m m-2             \tab Water supply           \cr
