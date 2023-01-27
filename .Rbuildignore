@@ -15,3 +15,4 @@ examples_all.R
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^CRAN-SUBMISSION$
