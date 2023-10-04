@@ -98,7 +98,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     ! read PRFILE.DAT if requested
     
     if (NPINT .GT. 1) then
-        DTP = DT / real( NPINT, kind=8)
+        DTP = DT / real( NPINT, kind=c_double)
 !         OPEN (UNIT = 10, FILE = 'in/PRFILE.DAT')
     else
         DTP = DT
@@ -821,7 +821,7 @@ end subroutine s_brook90_f
 
 !function makeString( nn, num, nf, fmt) result(res)
 !    integer, intent(in) :: nn
-!    real(kind=8), dimension(nn), intent(in) :: num
+!    real(kind=c_double), dimension(nn), intent(in) :: num
 !    integer, intent(in) :: nf
 !    character(len=nf), intent(in) :: fmt
 !    character(len=255) :: res
@@ -836,7 +836,7 @@ end subroutine s_brook90_f
 subroutine ACCUM (A1, A2, A3, A4, A5, B1, B2, B3, B4, B5)
 !     accumulator; adds Aj to Bj
     IMPLICIT NONE
-    real(kind=8) ::  A1, A2, A3, A4, A5, B1, B2, B3, B4, B5
+    real(kind=c_double) ::  A1, A2, A3, A4, A5, B1, B2, B3, B4, B5
 
     B1 = B1 + A1
     B2 = B2 + A2
@@ -850,8 +850,8 @@ subroutine ACCUMI (N, A1, A2, A3, A4, A5, B1, B2, B3, B4, B5)
 !     accumulator for array components; adds Aj(i) to Bj(i) for each i up to n
     IMPLICIT NONE
     integer :: N, I
-    real(kind=8) :: A1(*), A2(*), A3(*), A4(*), A5(*)
-    real(kind=8) :: B1(*), B2(*), B3(*), B4(*), B5(*)
+    real(kind=c_double) :: A1(*), A2(*), A3(*), A4(*), A5(*)
+    real(kind=c_double) :: B1(*), B2(*), B3(*), B4(*), B5(*)
 
     DO 10 I = 1, N
         B1(I) = B1(I) + A1(I)
@@ -868,33 +868,33 @@ subroutine AVAILEN (SLRAD, ALBEDO, C1, C2, C3, TA, EA, RATIO, SHEAT, CR, LAI, SA
 !     net radiation extinction from Shuttleworth and Wallace(1985)
     IMPLICIT NONE
 !     input
-    real(kind=8) :: SLRAD   ! solar radiation on slope, W/m2
-    real(kind=8) :: ALBEDO  ! albedo
-    real(kind=8) :: C1      ! intercept of relation of solar radiation to sunshine
+    real(kind=c_double) :: SLRAD   ! solar radiation on slope, W/m2
+    real(kind=c_double) :: ALBEDO  ! albedo
+    real(kind=c_double) :: C1      ! intercept of relation of solar radiation to sunshine
                          ! duration
-    real(kind=8) :: C2      ! slope of relation of solar radiation to sunshine
+    real(kind=c_double) :: C2      ! slope of relation of solar radiation to sunshine
                          ! duration
-    real(kind=8) :: C3      ! longwave correction factor for overcast sky
-    real(kind=8) :: TA      ! air temperature, degC
-    real(kind=8) :: RATIO   ! ratio of solar radiation on horizontal to potential
+    real(kind=c_double) :: C3      ! longwave correction factor for overcast sky
+    real(kind=c_double) :: TA      ! air temperature, degC
+    real(kind=c_double) :: RATIO   ! ratio of solar radiation on horizontal to potential
                          ! insolation for day
-    real(kind=8) :: EA      ! vapor pressure, kPa
-    real(kind=8) :: SHEAT   ! average soil heat flux for the day, W/m2, usually 0
-    real(kind=8) :: CR      ! light extinction coefficient for projected LAI + SAI"
-    real(kind=8) :: LAI     ! leaf area index, m2/m2
-    real(kind=8) :: SAI     ! stem area index, m2/m2
+    real(kind=c_double) :: EA      ! vapor pressure, kPa
+    real(kind=c_double) :: SHEAT   ! average soil heat flux for the day, W/m2, usually 0
+    real(kind=c_double) :: CR      ! light extinction coefficient for projected LAI + SAI"
+    real(kind=c_double) :: LAI     ! leaf area index, m2/m2
+    real(kind=c_double) :: SAI     ! stem area index, m2/m2
 !     output
-    real(kind=8) :: AAR      ! available energy rate, W/m2
-    real(kind=8) :: ASUBSR   ! availble energy rate at ground, W/m2
-    real(kind=8) :: LNGNETR  ! net longwave radiation, W/m2
+    real(kind=c_double) :: AAR      ! available energy rate, W/m2
+    real(kind=c_double) :: ASUBSR   ! availble energy rate at ground, W/m2
+    real(kind=c_double) :: LNGNETR  ! net longwave radiation, W/m2
 !     local
-    real(kind=8) :: SOLNET  ! net solar radiation, W/m2
-    real(kind=8) :: EFFEM   ! effective emissivity from clear sky
-    real(kind=8) :: NOVERN  ! sunshine duration fraction of daylength
-    real(kind=8) :: CLDCOR  ! cloud cover correction to net longwave under clear
+    real(kind=c_double) :: SOLNET  ! net solar radiation, W/m2
+    real(kind=c_double) :: EFFEM   ! effective emissivity from clear sky
+    real(kind=c_double) :: NOVERN  ! sunshine duration fraction of daylength
+    real(kind=c_double) :: CLDCOR  ! cloud cover correction to net longwave under clear
                          ! sky
 
-    real(kind=8) :: RN      ! net radiation, W/m2
+    real(kind=c_double) :: RN      ! net radiation, W/m2
 
 
     SOLNET = (1.0d0 - ALBEDO) * SLRAD
@@ -919,13 +919,13 @@ subroutine BYFLFR (BYPAR, NLAYER, WETNES, Par, QFFC, QFPAR, BYFRAC, MPar, ML)
     integer :: BYPAR     ! 1 to allow BYFL, or 0 to prevent BYFL
     integer :: NLAYER    ! number of soil layers to be used in model, <= ML
     integer :: MPAR,ML   ! maximum number of parameters and layers
-    real(kind=8) :: WETNES(*) ! wetness, fraction of saturation
-!    real(kind=8) :: WETF(*)   ! wetness at field capacity, dimensionless
-    real(kind=8) :: QFFC      ! BYFL fraction at field capacity
-    real(kind=8) :: QFPAR     ! quick flow parameter
-    real(kind=8) :: Par(MPar,ML)  ! parameter array
+    real(kind=c_double) :: WETNES(*) ! wetness, fraction of saturation
+!    real(kind=c_double) :: WETF(*)   ! wetness at field capacity, dimensionless
+    real(kind=c_double) :: QFFC      ! BYFL fraction at field capacity
+    real(kind=c_double) :: QFPAR     ! quick flow parameter
+    real(kind=c_double) :: Par(MPar,ML)  ! parameter array
 !     output
-    real(kind=8) :: BYFRAC(*) ! fraction of layer infiltration to bypass flow
+    real(kind=c_double) :: BYFRAC(*) ! fraction of layer infiltration to bypass flow
 !     local
     integer :: I         ! counter
 
@@ -947,28 +947,28 @@ subroutine CANOPY (SNOW, SNODEN, MXRTLN, MXKPL, DENSEF, HEIGHT, LAI, SAI, RTLEN,
 !     canopy parameters
     IMPLICIT NONE
 !     input
-    real(kind=8) :: SNOW      ! water equivalent of snow on the ground, mm
-    real(kind=8) :: SNODEN    ! snow density, mm/mm
-    real(kind=8) :: MXRTLN    ! maximum root length per unit land area, m/m2
-    real(kind=8) :: MXKPL     ! maximum plant conductivity, (mm/d)/MPa
-!     real(kind=8) :: CS        ! ratio of projected SAI to canopy height, m-1, not needed in this version
-    real(kind=8) :: DENSEF    ! density factor
+    real(kind=c_double) :: SNOW      ! water equivalent of snow on the ground, mm
+    real(kind=c_double) :: SNODEN    ! snow density, mm/mm
+    real(kind=c_double) :: MXRTLN    ! maximum root length per unit land area, m/m2
+    real(kind=c_double) :: MXKPL     ! maximum plant conductivity, (mm/d)/MPa
+!     real(kind=c_double) :: CS        ! ratio of projected SAI to canopy height, m-1, not needed in this version
+    real(kind=c_double) :: DENSEF    ! density factor
 !     output
-    real(kind=8) :: HEIGHT    ! canopy height above any snow, m, minimum of 0.01 m
-    real(kind=8) :: LAI       ! leaf area index, m2/m2, minimum of 0.00001
-    real(kind=8) :: SAI       ! stem area index, m2/m2
-    real(kind=8) :: RTLEN     ! root length per unit land area, m/m2
-    real(kind=8) :: RPLANT    ! plant resistivity to water flow, MPa d/mm
+    real(kind=c_double) :: HEIGHT    ! canopy height above any snow, m, minimum of 0.01 m
+    real(kind=c_double) :: LAI       ! leaf area index, m2/m2, minimum of 0.00001
+    real(kind=c_double) :: SAI       ! stem area index, m2/m2
+    real(kind=c_double) :: RTLEN     ! root length per unit land area, m/m2
+    real(kind=c_double) :: RPLANT    ! plant resistivity to water flow, MPa d/mm
 !     local
-    real(kind=8) :: SNODEP    ! snow depth
-    real(kind=8) :: HNOSNO    ! height of canopy without snow
-    real(kind=8) :: HSNO      ! height of canopy above snow
-    real(kind=8) :: RATIO     ! fraction of canopy above snow
-    real(kind=8) :: KPL       ! plant conductivity, mm d-1 MPa-1
+    real(kind=c_double) :: SNODEP    ! snow depth
+    real(kind=c_double) :: HNOSNO    ! height of canopy without snow
+    real(kind=c_double) :: HSNO      ! height of canopy above snow
+    real(kind=c_double) :: RATIO     ! fraction of canopy above snow
+    real(kind=c_double) :: KPL       ! plant conductivity, mm d-1 MPa-1
 !     intrinsic
 !        REAL, MAX
 !     external functions needed
-!    real(kind=8) :: INTERP
+!    real(kind=c_double) :: INTERP
 
     SNODEP = .0010d0 * SNOW / SNODEN
     HNOSNO = MAX(.010d0, HEIGHT)
@@ -992,21 +992,21 @@ subroutine DSLOP (DSLOPE, LENGTH, THICK, STONEF, PSIM, RHOWG, KK, DSFLI)
 !     downslope flow rate from layer
     IMPLICIT NONE
 !     input
-    real(kind=8) :: DSLOPE  ! slope for soil water flow, radians
+    real(kind=c_double) :: DSLOPE  ! slope for soil water flow, radians
                          ! no DSFLI if DSLOPE = 0
-    real(kind=8) :: LENGTH  ! slope length (for DSFLI), m
-    real(kind=8) :: THICK   ! layer thicknesses, mm
-    real(kind=8) :: STONEF  ! stone volume fraction, unitless
-    real(kind=8) :: PSIM    ! matric soil water potential, kPa
-    real(kind=8) :: RHOWG   ! density of water times acceleration of gravity,
+    real(kind=c_double) :: LENGTH  ! slope length (for DSFLI), m
+    real(kind=c_double) :: THICK   ! layer thicknesses, mm
+    real(kind=c_double) :: STONEF  ! stone volume fraction, unitless
+    real(kind=c_double) :: PSIM    ! matric soil water potential, kPa
+    real(kind=c_double) :: RHOWG   ! density of water times acceleration of gravity,
                          ! kPa/mm
-    real(kind=8) :: KK      ! hydraulic conductivity, mm/d
+    real(kind=c_double) :: KK      ! hydraulic conductivity, mm/d
 !     output
-    real(kind=8) :: DSFLI   ! downslope flow rate from layer, mm/d
+    real(kind=c_double) :: DSFLI   ! downslope flow rate from layer, mm/d
 !     local
-    real(kind=8) :: LL      ! LENGTH in mm
-    real(kind=8) :: GRAD    ! downslope potential gradient, kPa/mm
-    real(kind=8) :: ARATIO  ! outflow area / map area
+    real(kind=c_double) :: LL      ! LENGTH in mm
+    real(kind=c_double) :: GRAD    ! downslope potential gradient, kPa/mm
+    real(kind=c_double) :: ARATIO  ! outflow area / map area
 !     intrinsic
 !        SIN, COS
 
@@ -1028,15 +1028,15 @@ subroutine EQUIVSLP (LAT, SLOPE, ASPECT, L1, L2)
 !     Swift's L1 and L2, Lee (3.31, 3.32)
     IMPLICIT NONE
 !     inputs
-    real(kind=8) ::  LAT     ! latitude, radians (S neg)
-    real(kind=8) :: SLOPE   ! slope, radians
-    real(kind=8) :: ASPECT  ! aspect, radians from N thru E
+    real(kind=c_double) ::  LAT     ! latitude, radians (S neg)
+    real(kind=c_double) :: SLOPE   ! slope, radians
+    real(kind=c_double) :: ASPECT  ! aspect, radians from N thru E
 !     outputs
-    real(kind=8) :: L1      ! latitude of equivalent slope, radians
-    real(kind=8) :: L2      ! time shift of equivalent slope, radians
+    real(kind=c_double) :: L1      ! latitude of equivalent slope, radians
+    real(kind=c_double) :: L2      ! time shift of equivalent slope, radians
 !     local
-    real(kind=8) :: D1
-    real(kind=8) :: PI
+    real(kind=c_double) :: D1
+    real(kind=c_double) :: PI
 !     intrinsic
 !        SIN, COS, ATAN, ASIN
 !
@@ -1057,10 +1057,10 @@ subroutine ESAT (TA, ES, DELTA)
 !     from Murray J Applied Meteorol 6:203
     IMPLICIT NONE
 !     input
-    real(kind=8) :: TA      ! air temperature, degC
+    real(kind=c_double) :: TA      ! air temperature, degC
 !     output
-    real(kind=8) :: ES      ! saturated vapor pressure at TA, kPa
-    real(kind=8) :: DELTA   ! dES/dTA at TA, kPa/K
+    real(kind=c_double) :: ES      ! saturated vapor pressure at TA, kPa
+    real(kind=c_double) :: DELTA   ! dES/dTA at TA, kPa/K
 !     intrinsic
 !        EXP
 
@@ -1077,14 +1077,14 @@ subroutine GWATER (GWAT, GSC, GSP, DT, VRFLN, GWFL, SEEP)
 !     calculates groundwater flow and seepage loss
     IMPLICIT NONE
 !     input
-    real(kind=8) :: GWAT    ! groundwater storage below soil layers, mm
-    real(kind=8) :: GSC     ! discharge from GWAT, fraction per day, d-1
-    real(kind=8) :: GSP     ! fraction of discharge to seepage
-    real(kind=8) :: DT      ! time step for interval, d
-    real(kind=8) :: VRFLN   ! vertical drainage rate from lowest layer, mm/d
+    real(kind=c_double) :: GWAT    ! groundwater storage below soil layers, mm
+    real(kind=c_double) :: GSC     ! discharge from GWAT, fraction per day, d-1
+    real(kind=c_double) :: GSP     ! fraction of discharge to seepage
+    real(kind=c_double) :: DT      ! time step for interval, d
+    real(kind=c_double) :: VRFLN   ! vertical drainage rate from lowest layer, mm/d
 !     output
-    real(kind=8) :: GWFL    ! streamflow from groundwater discharge, mm/d
-    real(kind=8) :: SEEP    ! deep seepage loss from groundwater, mm/d
+    real(kind=c_double) :: GWFL    ! streamflow from groundwater discharge, mm/d
+    real(kind=c_double) :: SEEP    ! deep seepage loss from groundwater, mm/d
 
     IF (GSC .LT. 1E-08) THEN
 !        no groundwater
@@ -1109,25 +1109,25 @@ subroutine INFLOW (NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TRANI, SLVP,
     IMPLICIT NONE
 !     input
     integer :: NLAYER    ! number of soil layers being used, max of 20
-    real(kind=8) :: DTI       ! time step for iteration interval, d
-    real(kind=8) :: INFRAC(*) ! fraction of infiltration to each layer
-    real(kind=8) :: BYFRAC(*) ! fraction of layer infiltration to bypass flow
-    real(kind=8) :: SLFL      ! input rate to soil surface, mm/d
-    real(kind=8) :: DSFLI(*)  ! downslope flow rate from layer, mm/d
-    real(kind=8) :: TRANI(*)  ! transpiration rate from layer, mm/d
-    real(kind=8) :: SLVP      ! evaporation rate from soil, mm/d
-    real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
-    real(kind=8) :: SWATI(*)  ! water volume in layer, mm
-    real(kind=8) :: VRFLI(*)  ! vertical drainage rate from layer, mm/d
+    real(kind=c_double) :: DTI       ! time step for iteration interval, d
+    real(kind=c_double) :: INFRAC(*) ! fraction of infiltration to each layer
+    real(kind=c_double) :: BYFRAC(*) ! fraction of layer infiltration to bypass flow
+    real(kind=c_double) :: SLFL      ! input rate to soil surface, mm/d
+    real(kind=c_double) :: DSFLI(*)  ! downslope flow rate from layer, mm/d
+    real(kind=c_double) :: TRANI(*)  ! transpiration rate from layer, mm/d
+    real(kind=c_double) :: SLVP      ! evaporation rate from soil, mm/d
+    real(kind=c_double) :: SWATMX(*) ! maximum water storage for layer, mm
+    real(kind=c_double) :: SWATI(*)  ! water volume in layer, mm
+    real(kind=c_double) :: VRFLI(*)  ! vertical drainage rate from layer, mm/d
 !     output
-    real(kind=8) :: VV(*)     ! modified VRFLI, mm/d
-    real(kind=8) :: BYFLI(*)  ! bypass flow rate from layer, mm/d
-    real(kind=8) :: INFLI(*)  ! infiltration rate into layer, mm/d
-    real(kind=8) :: NTFLI(*)  ! net flow rate into layer, mm/d
+    real(kind=c_double) :: VV(*)     ! modified VRFLI, mm/d
+    real(kind=c_double) :: BYFLI(*)  ! bypass flow rate from layer, mm/d
+    real(kind=c_double) :: INFLI(*)  ! infiltration rate into layer, mm/d
+    real(kind=c_double) :: NTFLI(*)  ! net flow rate into layer, mm/d
 !     local
     integer :: I         ! index variable for layer number
-    real(kind=8) :: INFIL     ! water reaching layer, SLFL * INFRAC(I), mm/d
-    real(kind=8) :: MAXIN     ! maximum allowed rate of input of water to layer,
+    real(kind=c_double) :: INFIL     ! water reaching layer, SLFL * INFRAC(I), mm/d
+    real(kind=c_double) :: MAXIN     ! maximum allowed rate of input of water to layer,
                            ! mm/d
 
     DO 100 I = NLAYER, 1, -1
@@ -1179,18 +1179,18 @@ end subroutine INFLOW
 subroutine INFPAR (INFEXP, ILAYER, NLAYER, THICK, INFRAC)
     IMPLICIT NONE
 !     input
-    real(kind=8) :: INFEXP    ! infiltration exponent, 0 all to top, 1 uniform
+    real(kind=c_double) :: INFEXP    ! infiltration exponent, 0 all to top, 1 uniform
                            ! with depth
                            !     >1.0=more at bottom than at top
     integer :: ILAYER    ! number of layers over which infiltration is
                            ! distributed
     integer :: NLAYER    ! number of soil layers being used
-    real(kind=8) :: THICK(*)  ! layer thicknesses, mm
+    real(kind=c_double) :: THICK(*)  ! layer thicknesses, mm
 !     output
-    real(kind=8) :: INFRAC(*) ! fraction of infiltration to each layer
+    real(kind=c_double) :: INFRAC(*) ! fraction of infiltration to each layer
 !     local
-    real(kind=8) :: THICKT    ! total thickness of ILAYERs, mm
-    real(kind=8) :: THICKA(0:NLAYER) ! accumulated thickness downward, mm
+    real(kind=c_double) :: THICKT    ! total thickness of ILAYERs, mm
+    real(kind=c_double) :: THICKA(0:NLAYER) ! accumulated thickness downward, mm
     integer :: I         ! do counter
 
     IF (INFEXP .LE. 0.) THEN
@@ -1222,23 +1222,23 @@ subroutine INTER (RFAL, PINT, LAI, SAI, FRINTL, FRINTS, CINTRL, CINTRS, DTP, INT
 !        variables
     IMPLICIT NONE
 !     input
-    real(kind=8) :: RFAL     ! rainfall rate, mm/d
-    real(kind=8) :: PINT     ! potential interception rate, mm/d
-    real(kind=8) :: LAI      ! projected leaf area index, m2/m2
-    real(kind=8) :: SAI      ! projected stem area index, m2/m2
-    real(kind=8) :: FRINTL   ! intercepted fraction of RFAL per unit LAI
-    real(kind=8) :: FRINTS   ! intercepted fraction of RFAL per unit SAI
-    real(kind=8) :: CINTRL   ! maximum interception storage of rain per unit LAI, mm
-    real(kind=8) :: CINTRS   ! maximum interception storage of rain per unit SAI, mm
-    real(kind=8) :: DTP      ! precipitation interval time step, d
-    real(kind=8) :: INTR     ! intercepted rain, mm
+    real(kind=c_double) :: RFAL     ! rainfall rate, mm/d
+    real(kind=c_double) :: PINT     ! potential interception rate, mm/d
+    real(kind=c_double) :: LAI      ! projected leaf area index, m2/m2
+    real(kind=c_double) :: SAI      ! projected stem area index, m2/m2
+    real(kind=c_double) :: FRINTL   ! intercepted fraction of RFAL per unit LAI
+    real(kind=c_double) :: FRINTS   ! intercepted fraction of RFAL per unit SAI
+    real(kind=c_double) :: CINTRL   ! maximum interception storage of rain per unit LAI, mm
+    real(kind=c_double) :: CINTRS   ! maximum interception storage of rain per unit SAI, mm
+    real(kind=c_double) :: DTP      ! precipitation interval time step, d
+    real(kind=c_double) :: INTR     ! intercepted rain, mm
 !     output
-    real(kind=8) :: RINT     ! rain catch rate, mm/d
-    real(kind=8) :: IRVP     ! evaporation rate of intercepted rain, mm/d
+    real(kind=c_double) :: RINT     ! rain catch rate, mm/d
+    real(kind=c_double) :: IRVP     ! evaporation rate of intercepted rain, mm/d
 !     local
-    real(kind=8) :: INTRMX   ! maximum canopy storage for rain, mm
-    real(kind=8) :: CATCH    ! maximum RINT, mm/d
-    real(kind=8) :: NEWINT   ! first approximation to new canopy storage (INTR)
+    real(kind=c_double) :: INTRMX   ! maximum canopy storage for rain, mm
+    real(kind=c_double) :: CATCH    ! maximum RINT, mm/d
+    real(kind=c_double) :: NEWINT   ! first approximation to new canopy storage (INTR)
 
     CATCH = (FRINTL * LAI + FRINTS * SAI)
     If (Catch .GT. 1.0d0) Catch = 1.0d0
@@ -1272,31 +1272,31 @@ subroutine INTER24 (RFAL, PINT, LAI, SAI, FRINTL, FRINTS, CINTRL, CINTRS, DURATN
 !        variables
     IMPLICIT NONE
 !     input
-    real(kind=8) :: RFAL     ! 24-hour average rainfall rate, mm/d
-    real(kind=8) :: PINT     ! potential interception rate, mm/d
-    real(kind=8) :: LAI      ! projected leaf area index, m2/m2
-    real(kind=8) :: SAI      ! projected stem area index, m2/m2
-    real(kind=8) :: FRINTL   ! intercepted fraction of RFAL per unit LAI
-    real(kind=8) :: FRINTS   ! intercepted fraction of RFAL per unit SAI
-    real(kind=8) :: CINTRL   ! maximum interception storage of rain per unit LAI, mm
-    real(kind=8) :: CINTRS   ! maximum interception storage of rain per unit SAI, mm
-    real(kind=8) :: DURATN   ! average storm duration, hr
-    real(kind=8) :: INTR     ! intercepted rain storage, mm,
+    real(kind=c_double) :: RFAL     ! 24-hour average rainfall rate, mm/d
+    real(kind=c_double) :: PINT     ! potential interception rate, mm/d
+    real(kind=c_double) :: LAI      ! projected leaf area index, m2/m2
+    real(kind=c_double) :: SAI      ! projected stem area index, m2/m2
+    real(kind=c_double) :: FRINTL   ! intercepted fraction of RFAL per unit LAI
+    real(kind=c_double) :: FRINTS   ! intercepted fraction of RFAL per unit SAI
+    real(kind=c_double) :: CINTRL   ! maximum interception storage of rain per unit LAI, mm
+    real(kind=c_double) :: CINTRS   ! maximum interception storage of rain per unit SAI, mm
+    real(kind=c_double) :: DURATN   ! average storm duration, hr
+    real(kind=c_double) :: INTR     ! intercepted rain storage, mm,
 !     output
-    real(kind=8) :: RINT     ! rain catch rate, mm/d
-    real(kind=8) :: IRVP     ! evaporation rate of intercepted rain, mm/d
+    real(kind=c_double) :: RINT     ! rain catch rate, mm/d
+    real(kind=c_double) :: IRVP     ! evaporation rate of intercepted rain, mm/d
 !     local
-    real(kind=8) :: INTRMX   ! maximum canopy storage for rain, mm
-    real(kind=8) :: INTRNU   ! canopy storage at end of hour, mm
-    real(kind=8) :: NEWINT   ! first approximation to INTRNU, mm
-    real(kind=8) :: RINTHR   ! rain catch rate for hour, mm/hr
-    real(kind=8) :: CATCH    ! maximum RINTHR, mm/hr
-    real(kind=8) :: IRVPHR   ! evaporation rate for hour, mm/hr
-    real(kind=8) :: SMINT    ! daily accumulated actual catch, mm
-    real(kind=8) :: SMVP     ! daily accumulated actual evaporation, mm
+    real(kind=c_double) :: INTRMX   ! maximum canopy storage for rain, mm
+    real(kind=c_double) :: INTRNU   ! canopy storage at end of hour, mm
+    real(kind=c_double) :: NEWINT   ! first approximation to INTRNU, mm
+    real(kind=c_double) :: RINTHR   ! rain catch rate for hour, mm/hr
+    real(kind=c_double) :: CATCH    ! maximum RINTHR, mm/hr
+    real(kind=c_double) :: IRVPHR   ! evaporation rate for hour, mm/hr
+    real(kind=c_double) :: SMINT    ! daily accumulated actual catch, mm
+    real(kind=c_double) :: SMVP     ! daily accumulated actual evaporation, mm
     integer :: IHD     ! half DURATN in truncated integer hours
     integer :: I       ! hour, 0 to 23
-    real(kind=8) :: DTH      ! time step, = 1 hr
+    real(kind=c_double) :: DTH      ! time step, = 1 hr
 !     intrinsic
 !       REAL, INT
     IHD = INT((DURATN + .10d0) / 2.0d0)
@@ -1313,7 +1313,7 @@ subroutine INTER24 (RFAL, PINT, LAI, SAI, FRINTL, FRINTS, CINTRL, CINTRS, DURATN
 !           during rain, mm/hr is rate in mm/d divided by hr of rain/d
             CATCH = (FRINTL * LAI + FRINTS * SAI)
             If (Catch .GT. 1.0d0) Catch = 1.0d0
-            CATCH = Catch * RFAL / REAL(2 * IHD, kind=8)
+            CATCH = Catch * RFAL / REAL(2 * IHD, kind=c_double)
         ENDIF
         NEWINT = INTRNU + (CATCH - PINT / 24.0d0) * DTH
         IF (NEWINT .GT. .00010d0) THEN
@@ -1353,38 +1353,38 @@ subroutine ITER (NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTIN
 !     input
     integer :: NLAYER    ! number of soil layers to be used in model
     integer :: MPAR,ML   ! maximum number of parameters and layers
-    real(kind=8) :: DTI       ! time step for iteration interval, d
-    real(kind=8) :: DTIMIN    ! minimum time step for iteration interval, d
-    real(kind=8) :: DPSIDW(*) ! rate of change of total potential with water
+    real(kind=c_double) :: DTI       ! time step for iteration interval, d
+    real(kind=c_double) :: DTIMIN    ! minimum time step for iteration interval, d
+    real(kind=c_double) :: DPSIDW(*) ! rate of change of total potential with water
                            ! content, kPa/mm
-    real(kind=8) :: NTFLI(*)  ! net flow rate into layer, mm/d
-    real(kind=8) :: Thick(*)  ! thickness of layer, mm
-    real(kind=8) :: Wetnes(*) ! water saturation of layer
-    real(kind=8) :: TRANI(*)  ! actual transpiration (also output after check)
-    real(kind=8) :: SLVP      ! actual evaporation (also output after check)
-    real(kind=8) :: Par(MPar,ML)  ! parameter array
+    real(kind=c_double) :: NTFLI(*)  ! net flow rate into layer, mm/d
+    real(kind=c_double) :: Thick(*)  ! thickness of layer, mm
+    real(kind=c_double) :: Wetnes(*) ! water saturation of layer
+    real(kind=c_double) :: TRANI(*)  ! actual transpiration (also output after check)
+    real(kind=c_double) :: SLVP      ! actual evaporation (also output after check)
+    real(kind=c_double) :: Par(MPar,ML)  ! parameter array
     integer :: iModel    ! type of parameterization of hydraulic functions
-    real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
-!     real(kind=8) :: SWATI(*)  ! actual water storage for layer, mm
-    real(kind=8) :: PSITI(*)  ! total potential, kPa
-    real(kind=8) :: DSWMAX    ! maximum change allowed in SWATI, percent of
+    real(kind=c_double) :: SWATMX(*) ! maximum water storage for layer, mm
+!     real(kind=c_double) :: SWATI(*)  ! actual water storage for layer, mm
+    real(kind=c_double) :: PSITI(*)  ! total potential, kPa
+    real(kind=c_double) :: DSWMAX    ! maximum change allowed in SWATI, percent of
                            ! SWATMX(i)
-    real(kind=8) :: DPSIMX    ! maximum potential difference considered
+    real(kind=c_double) :: DPSIMX    ! maximum potential difference considered
                            ! "equal", kPa
     integer :: pr  ! print output to console?
 
 !     output
-    real(kind=8) :: DTINEW    ! second estimate of DTI
+    real(kind=c_double) :: DTINEW    ! second estimate of DTI
 !     local
-    real(kind=8) :: A(NLAYER)
-    real(kind=8) :: T(NLAYER)
-    real(kind=8) :: TT        ! new potential difference between layers
-    real(kind=8) :: PP        ! original potential difference between layers
-    real(kind=8) :: Thr,Th,K,psi  ! residual and actual water content
-!     real(kind=8) :: Eps       ! minimal time step, d
+    real(kind=c_double) :: A(NLAYER)
+    real(kind=c_double) :: T(NLAYER)
+    real(kind=c_double) :: TT        ! new potential difference between layers
+    real(kind=c_double) :: PP        ! original potential difference between layers
+    real(kind=c_double) :: Thr,Th,K,psi  ! residual and actual water content
+!     real(kind=c_double) :: Eps       ! minimal time step, d
     integer :: I,J       ! do counter
 !     function
-!     real(kind=8) :: FTheta,FK,FPSIM,FRSS
+!     real(kind=c_double) :: FTheta,FK,FPSIM,FRSS
 
 !     first approximation to new total potential
     DO 10 I = 1, NLAYER
@@ -1470,17 +1470,17 @@ subroutine MinPsi (ThCrit,PsiCRit,Par,iModel,NLAYER,MPar,ML)
 !     minimum soil matric potential to allow water supply for evapotranspiration , Hammel, 2001
     IMPLICIT NONE
 !     input
-    real(kind=8) :: ThCrit    !  minimal fraction of water content above residual water content to allow water supply for evapotranspiration
-    real(kind=8) :: PsiCRit(*)! actual relative values of root length per unit volume
+    real(kind=c_double) :: ThCrit    !  minimal fraction of water content above residual water content to allow water supply for evapotranspiration
+    real(kind=c_double) :: PsiCRit(*)! actual relative values of root length per unit volume
     integer :: I         ! iteration index
     integer :: iModel    ! hydraulic parameterization
     integer :: MPAR,ML   ! maximum number of parameters and layers
     integer :: NLAYER    ! number of soil layers (max 1000)
-    real(kind=8) :: Par(MPar,ML ) ! hydraulic parameters
+    real(kind=c_double) :: Par(MPar,ML ) ! hydraulic parameters
 !     local
-    real(kind=8) :: WetCrit   ! minimal wetness corresponding to ThCrit
+    real(kind=c_double) :: WetCrit   ! minimal wetness corresponding to ThCrit
 !     functions
-!     real(kind=8) :: FPSIM
+!     real(kind=c_double) :: FPSIM
 
     if(iModel.eq.0) then
         DO 10 I = 1, NLAYER
@@ -1501,26 +1501,26 @@ subroutine PLNTRES (NLAYER, THICK, STONEF, RTLEN, RELDEN, RTRAD, RPLANT, FXYLEM,
     IMPLICIT NONE
 !     input
     integer :: NLAYER ! number of soil layers (max 50)
-    real(kind=8) :: THICK(*) ! layer thicknesses, mm
-    real(kind=8) :: STONEF(*)! stone volume fraction, unitless
-    real(kind=8) :: RTLEN    ! root length per unit land area, m/m2,
+    real(kind=c_double) :: THICK(*) ! layer thicknesses, mm
+    real(kind=c_double) :: STONEF(*)! stone volume fraction, unitless
+    real(kind=c_double) :: RTLEN    ! root length per unit land area, m/m2,
                         ! RTLEN * DENSEF
-    real(kind=8) :: RELDEN(*)! relative values of root length per unit volume
-    real(kind=8) :: RTRAD    ! average root radius, mm
-    real(kind=8) :: RPLANT   ! plant resistance to water flow, MPa d/mm,
+    real(kind=c_double) :: RELDEN(*)! relative values of root length per unit volume
+    real(kind=c_double) :: RTRAD    ! average root radius, mm
+    real(kind=c_double) :: RPLANT   ! plant resistance to water flow, MPa d/mm,
                         ! 1/(KPLANT*DENSEF)
-    real(kind=8) :: FXYLEM   ! fraction of plant resistance in xylem
+    real(kind=c_double) :: FXYLEM   ! fraction of plant resistance in xylem
 !     output
-    real(kind=8) :: RXYLEM   ! xylem resistance, MPa d/mm, 1E20 if no roots
-    real(kind=8) :: RROOTI(*)! root resistance for layer, MPa d/mm, 1E20 if no roots
-    real(kind=8) :: ALPHA(*) ! modified Cowan alpha, MPa
+    real(kind=c_double) :: RXYLEM   ! xylem resistance, MPa d/mm, 1E20 if no roots
+    real(kind=c_double) :: RROOTI(*)! root resistance for layer, MPa d/mm, 1E20 if no roots
+    real(kind=c_double) :: ALPHA(*) ! modified Cowan alpha, MPa
 !     local
     integer :: I       ! layer counter
-    real(kind=8) :: D(NLAYER)   ! stonefree layer thickness
-    real(kind=8) :: SUM      ! total relative length, mm
-    real(kind=8) :: RTFRAC   ! fraction of total root length in layer
-    real(kind=8) :: RTDENI   ! root density for layer, mm/mm3
-    real(kind=8) :: DELT     ! root cross-sectional area * LI, dimensionless
+    real(kind=c_double) :: D(NLAYER)   ! stonefree layer thickness
+    real(kind=c_double) :: SUM      ! total relative length, mm
+    real(kind=c_double) :: RTFRAC   ! fraction of total root length in layer
+    real(kind=c_double) :: RTDENI   ! root density for layer, mm/mm3
+    real(kind=c_double) :: DELT     ! root cross-sectional area * LI, dimensionless
 !     intrinsic
 !       LOG
 
@@ -1557,14 +1557,14 @@ subroutine RootGrowth (frelden, RELDEN, tini, age, rgroper, inirdep, inirlen, NL
 !     root growth according to LWF root growth model, Hammel and Kennel, 2000
     IMPLICIT NONE
 !     input
-    real(kind=8) :: frelden(*)! final relative values of root length per unit volume
-    real(kind=8) :: RELDEN(*) ! actual relative values of root length per unit volume
-    real(kind=8) :: tini(*)   ! initial time for root growth in layer
-    real(kind=8) :: age       ! age of vegetation
-    real(kind=8) :: rgroper   ! period of root growth in layer, a
-    real(kind=8) :: inirdep   ! intial root depth, m
-    real(kind=8) :: inirlen   ! intial total root length, m m-2
-    real(kind=8) :: rl0       ! constant intial root length density, m m-3
+    real(kind=c_double) :: frelden(*)! final relative values of root length per unit volume
+    real(kind=c_double) :: RELDEN(*) ! actual relative values of root length per unit volume
+    real(kind=c_double) :: tini(*)   ! initial time for root growth in layer
+    real(kind=c_double) :: age       ! age of vegetation
+    real(kind=c_double) :: rgroper   ! period of root growth in layer, a
+    real(kind=c_double) :: inirdep   ! intial root depth, m
+    real(kind=c_double) :: inirlen   ! intial total root length, m m-2
+    real(kind=c_double) :: rl0       ! constant intial root length density, m m-3
     integer :: NLAYER    ! number of soil layers (max 1000)
     integer ::I         ! number of soil layers (max 1000)
 
@@ -1594,29 +1594,29 @@ subroutine ROUGH (HEIGHT, ZMINH, LAI, SAI, CZS, CZR, HS, HR, LPC, CS, Z0G, Z0C, 
 !     closed canopy parameters
     IMPLICIT NONE
 !     input
-    real(kind=8) :: HEIGHT    ! canopy height, m, minimum of 0.01 m
-    real(kind=8) :: ZMINH     ! ZA minus HEIGHT,reference height above canopy top,m
-    real(kind=8) :: LAI       ! leaf area index, m2/m2, minimum of 0.00001
-    real(kind=8) :: SAI       ! stem area index, m2/m2
-    real(kind=8) :: CZS       ! ratio of roughness to height for smooth closed
+    real(kind=c_double) :: HEIGHT    ! canopy height, m, minimum of 0.01 m
+    real(kind=c_double) :: ZMINH     ! ZA minus HEIGHT,reference height above canopy top,m
+    real(kind=c_double) :: LAI       ! leaf area index, m2/m2, minimum of 0.00001
+    real(kind=c_double) :: SAI       ! stem area index, m2/m2
+    real(kind=c_double) :: CZS       ! ratio of roughness to height for smooth closed
                           ! canopies
-    real(kind=8) :: CZR       ! ratio of roughness to height for rough closed
+    real(kind=c_double) :: CZR       ! ratio of roughness to height for rough closed
                           ! canopies
-    real(kind=8) :: HS        ! height below which CZS applies, m
-    real(kind=8) :: HR        ! height above which CZR applies, m
-    real(kind=8) :: LPC       ! minimum LAI defining a closed canopy
-    real(kind=8) :: CS        ! ratio of projected SAI to canopy height, m-1
+    real(kind=c_double) :: HS        ! height below which CZS applies, m
+    real(kind=c_double) :: HR        ! height above which CZR applies, m
+    real(kind=c_double) :: LPC       ! minimum LAI defining a closed canopy
+    real(kind=c_double) :: CS        ! ratio of projected SAI to canopy height, m-1
 !     input and output, ZOGS in B90
-    real(kind=8) :: Z0G       ! roughness parameter of soil surface, m
+    real(kind=c_double) :: Z0G       ! roughness parameter of soil surface, m
 !     output
-    real(kind=8) :: Z0C       ! roughness length for closed canopy, m
-    real(kind=8) :: DISPC     ! zero-plane displacement for closed canopy, m
-    real(kind=8) :: Z0        ! roughness parameter, m
-    real(kind=8) :: DISP      ! zero-plane displacement, m
-    real(kind=8) :: ZA        ! reference height for TA, EA, UA, above ground, m
+    real(kind=c_double) :: Z0C       ! roughness length for closed canopy, m
+    real(kind=c_double) :: DISPC     ! zero-plane displacement for closed canopy, m
+    real(kind=c_double) :: Z0        ! roughness parameter, m
+    real(kind=c_double) :: DISP      ! zero-plane displacement, m
+    real(kind=c_double) :: ZA        ! reference height for TA, EA, UA, above ground, m
 !     local
-    real(kind=8) :: RATIO     ! (LAI + SAI) / (LAI + SAI for closed canopy)
-    real(kind=8) :: XX
+    real(kind=c_double) :: RATIO     ! (LAI + SAI) / (LAI + SAI for closed canopy)
+    real(kind=c_double) :: XX
 !     intrinsic
 !        LOG, EXP, MIN
 
@@ -1648,21 +1648,21 @@ subroutine SNOENRGY (TSNOW, TA, DAYLEN, CCFAC, MELFAC, SLFDAY, LAI, SAI, LAIMLT,
 !     snow surface energy balance
     IMPLICIT NONE
 !     input
-    real(kind=8) :: TSNOW   ! snowpack temperature (isothermal assumed), degC
-    real(kind=8) :: TA      ! "mean" temperature for the day, C
-    real(kind=8) :: DAYLEN  ! daylength in fraction of day
-    real(kind=8) :: CCFAC   ! cold content factor, MJ m-2 d-1 K-1
-    real(kind=8) :: MELFAC  ! degree day melt factor for open, MJ m-2 d-1 K-1
-    real(kind=8) :: SLFDAY  ! ratio of potential insolation on slope to on
+    real(kind=c_double) :: TSNOW   ! snowpack temperature (isothermal assumed), degC
+    real(kind=c_double) :: TA      ! "mean" temperature for the day, C
+    real(kind=c_double) :: DAYLEN  ! daylength in fraction of day
+    real(kind=c_double) :: CCFAC   ! cold content factor, MJ m-2 d-1 K-1
+    real(kind=c_double) :: MELFAC  ! degree day melt factor for open, MJ m-2 d-1 K-1
+    real(kind=c_double) :: SLFDAY  ! ratio of potential insolation on slope to on
                          ! horizontal for day
-    real(kind=8) :: LAI     ! leaf area index, m2/m2
-    real(kind=8) :: SAI     ! stem area index, m2/m2
-    real(kind=8) :: LAIMLT  ! parameter for snowmelt dependence on LAI,
+    real(kind=c_double) :: LAI     ! leaf area index, m2/m2
+    real(kind=c_double) :: SAI     ! stem area index, m2/m2
+    real(kind=c_double) :: LAIMLT  ! parameter for snowmelt dependence on LAI,
                          ! dimensionless
-    real(kind=8) :: SAIMLT  ! parameter for snowmelt dependence on SAI,
+    real(kind=c_double) :: SAIMLT  ! parameter for snowmelt dependence on SAI,
                          ! dimensionless
 !     output
-    real(kind=8) :: SNOEN   ! energy flux density to snow surface, MJ m-2 d-1
+    real(kind=c_double) :: SNOEN   ! energy flux density to snow surface, MJ m-2 d-1
 !     intrinsic
 !        EXP
 
@@ -1681,11 +1681,11 @@ subroutine SNOFRAC (TMAX, TMIN, RSTEMP, SNOFRC)
 !     separates RFAL from SFAL
     IMPLICIT NONE
 !     input
-    real(kind=8) :: TMAX    ! maximum temperature for the day, C
-    real(kind=8) :: TMIN    ! minimum temperature for the day, C
-    real(kind=8) :: RSTEMP  ! base temperature for snow-rain transition, C
+    real(kind=c_double) :: TMAX    ! maximum temperature for the day, C
+    real(kind=c_double) :: TMIN    ! minimum temperature for the day, C
+    real(kind=c_double) :: RSTEMP  ! base temperature for snow-rain transition, C
 !     output
-    real(kind=8) :: SNOFRC  ! fraction of precipitation for the day as SFAL,
+    real(kind=c_double) :: SNOFRC  ! fraction of precipitation for the day as SFAL,
                          ! unitless
 
     IF (TMIN .GE. RSTEMP) THEN
@@ -1703,34 +1703,34 @@ subroutine SNOVAP (TSNOW, TA, EA, UA, ZA, HEIGHT, Z0, DISP, Z0C, DISPC, Z0GS, LW
 !     snow evaporation and condensation
     IMPLICIT NONE
 !     input
-    real(kind=8) :: DISP    ! zero-plane displacement, m
-    real(kind=8) :: DISPC   ! zero-plane displacement for closed canopy of HEIGHT,m
-    real(kind=8) :: EA      ! vapor pressure for the day, kPa
-    real(kind=8) :: HEIGHT  ! canopy height, m
-    real(kind=8) :: KSNVP   ! multiplier to fix snow evaporation problem
-    real(kind=8) :: LAI     ! leaf area index, m2/m2
-    real(kind=8) :: LWIDTH  ! leaf width, m
-    real(kind=8) :: NN      ! wind/diffusivity extinction coefficient
-    real(kind=8) :: RHOTP   ! ratio of total leaf area to projected area
-    real(kind=8) :: SAI     ! stem area index, m2/m2
-    real(kind=8) :: TA      ! mean  temperature for the day at reference height,C
-    real(kind=8) :: TSNOW   ! snowpack temperature (isothermal assumed), C
-    real(kind=8) :: UA      ! average wind speed for the day at reference height,
+    real(kind=c_double) :: DISP    ! zero-plane displacement, m
+    real(kind=c_double) :: DISPC   ! zero-plane displacement for closed canopy of HEIGHT,m
+    real(kind=c_double) :: EA      ! vapor pressure for the day, kPa
+    real(kind=c_double) :: HEIGHT  ! canopy height, m
+    real(kind=c_double) :: KSNVP   ! multiplier to fix snow evaporation problem
+    real(kind=c_double) :: LAI     ! leaf area index, m2/m2
+    real(kind=c_double) :: LWIDTH  ! leaf width, m
+    real(kind=c_double) :: NN      ! wind/diffusivity extinction coefficient
+    real(kind=c_double) :: RHOTP   ! ratio of total leaf area to projected area
+    real(kind=c_double) :: SAI     ! stem area index, m2/m2
+    real(kind=c_double) :: TA      ! mean  temperature for the day at reference height,C
+    real(kind=c_double) :: TSNOW   ! snowpack temperature (isothermal assumed), C
+    real(kind=c_double) :: UA      ! average wind speed for the day at reference height,
                          ! m/s
-    real(kind=8) :: Z0      ! roughness parameter, m
-    real(kind=8) :: Z0C     ! roughness parameter for closed canopy of HEIGHT, m
-    real(kind=8) :: Z0GS    ! snow surface roughness, m
-    real(kind=8) :: ZA      ! reference height for TA, EA, UA, above ground, m
+    real(kind=c_double) :: Z0      ! roughness parameter, m
+    real(kind=c_double) :: Z0C     ! roughness parameter for closed canopy of HEIGHT, m
+    real(kind=c_double) :: Z0GS    ! snow surface roughness, m
+    real(kind=c_double) :: ZA      ! reference height for TA, EA, UA, above ground, m
 !     output
-    real(kind=8) :: PSNVP   ! potential snow evaporation, mm/d
+    real(kind=c_double) :: PSNVP   ! potential snow evaporation, mm/d
 !     local
-    real(kind=8) :: DUMMY
-    real(kind=8) :: ESNOW   ! vapor pressure at snow surface, kPa
-    real(kind=8) :: RAA     ! Shuttleworth-Wallace atmosphere aerodynamic
+    real(kind=c_double) :: DUMMY
+    real(kind=c_double) :: ESNOW   ! vapor pressure at snow surface, kPa
+    real(kind=c_double) :: RAA     ! Shuttleworth-Wallace atmosphere aerodynamic
                          ! resistance, s/m
-    real(kind=8) :: RAC     ! Shuttleworth-Wallace canopy aerodynamic
+    real(kind=c_double) :: RAC     ! Shuttleworth-Wallace canopy aerodynamic
                          ! resistance, s/m
-    real(kind=8) :: RAS     ! Shuttleworth-Wallace ground aerodynamic resistance,
+    real(kind=c_double) :: RAS     ! Shuttleworth-Wallace ground aerodynamic resistance,
                          ! s/m
 !     intrinsic
 !        MIN
@@ -1756,31 +1756,31 @@ subroutine SNOWPACK (RTHR, STHR, PSNVP, SNOEN, CC, SNOW, SNOWLQ, DTP, TA, MAXLQF
 !           evaporation, and melt
     IMPLICIT NONE
 !     input
-    real(kind=8) ::  RTHR    ! rain throughfall rate, mm/d
-    real(kind=8) ::  STHR    ! snow throughfall rate, mm/d
-    real(kind=8) ::  PSNVP   ! potential evaporation rate from snowpack, mm/d
-    real(kind=8) ::  SNOEN   ! energy flux density to snow surface, MJ m-2 d-1
-    real(kind=8) ::  DTP     ! time step for precipitation interval, may be <= 1 d
-    real(kind=8) ::  TA      ! "mean" temperature for the day, C
-    real(kind=8) ::  MAXLQF  ! maximum liquid water fraction of SNOW, dimensionless
-    real(kind=8) ::  GRDMLT  ! rate of groundmelt of snowpack, mm/d
+    real(kind=c_double) ::  RTHR    ! rain throughfall rate, mm/d
+    real(kind=c_double) ::  STHR    ! snow throughfall rate, mm/d
+    real(kind=c_double) ::  PSNVP   ! potential evaporation rate from snowpack, mm/d
+    real(kind=c_double) ::  SNOEN   ! energy flux density to snow surface, MJ m-2 d-1
+    real(kind=c_double) ::  DTP     ! time step for precipitation interval, may be <= 1 d
+    real(kind=c_double) ::  TA      ! "mean" temperature for the day, C
+    real(kind=c_double) ::  MAXLQF  ! maximum liquid water fraction of SNOW, dimensionless
+    real(kind=c_double) ::  GRDMLT  ! rate of groundmelt of snowpack, mm/d
 !     input and output
-    real(kind=8) ::  CC      ! cold content of snowpack (positive), MJ/m2
-    real(kind=8) ::  SNOW    ! water equivalent of snow on the ground, mm
-    real(kind=8) ::  SNOWLQ  ! liquid water content of snow on the ground, mm
+    real(kind=c_double) ::  CC      ! cold content of snowpack (positive), MJ/m2
+    real(kind=c_double) ::  SNOW    ! water equivalent of snow on the ground, mm
+    real(kind=c_double) ::  SNOWLQ  ! liquid water content of snow on the ground, mm
 !     output
-    real(kind=8) ::  RSNO    ! rain added to snowpack, mm/d
-    real(kind=8) ::  SNVP    ! evaporation rate from snowpack, mm/d
-    real(kind=8) ::  SMLT    ! melt drainage rate from snowpack, mm/d
+    real(kind=c_double) ::  RSNO    ! rain added to snowpack, mm/d
+    real(kind=c_double) ::  SNVP    ! evaporation rate from snowpack, mm/d
+    real(kind=c_double) ::  SMLT    ! melt drainage rate from snowpack, mm/d
 !     local
-    real(kind=8) ::  FRAC    ! groundmelt and evaporation fraction of SNOW,
+    real(kind=c_double) ::  FRAC    ! groundmelt and evaporation fraction of SNOW,
                          ! dimensionless
-    real(kind=8) ::  EQEN    ! meltwater equivalent of energy input, including
+    real(kind=c_double) ::  EQEN    ! meltwater equivalent of energy input, including
                          ! warm rain, mm
-    real(kind=8) ::  NMLT    ! -EQEN when EQEN is negative, "negative melt", mm
-    real(kind=8) ::  ALQ     ! MAXLQF*SNOW - SNOWLQ, available space for liquid
+    real(kind=c_double) ::  NMLT    ! -EQEN when EQEN is negative, "negative melt", mm
+    real(kind=c_double) ::  ALQ     ! MAXLQF*SNOW - SNOWLQ, available space for liquid
                          ! water, mm
-    real(kind=8) ::  RIN     ! RTHR*DTP, rain input to snow, mm
+    real(kind=c_double) ::  RIN     ! RTHR*DTP, rain input to snow, mm
 !     intrinsic
 !        MIN, MAX
 !     snow throughfall and its cold content, SNOWLQ unchanged
@@ -1938,39 +1938,39 @@ subroutine SOILPAR (NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
 !       input
     integer :: NLAYER    ! number of soil layers
     integer :: MPAR, ML   ! maximum number of parameters and layers
-    real(kind=8) :: THICK(*)  ! layer thicknesses, mm"
-    real(kind=8) :: THSAT     ! theta at saturation, matrix porosity, iModel=0
-    real(kind=8) :: THS       ! theta at saturation, matrix porosity, iModel=1
-    real(kind=8) :: THR       ! residual theta, iModel=1
-    real(kind=8) :: STONEF(*) ! stone volume fraction, unitless"
-    real(kind=8) :: THETAF    ! volumetric water content at field capacity"
-    real(kind=8) :: PSIF      ! matric potential at field capacity, kPa
-    real(kind=8) :: BEXP      ! exponent for psi-theta relation
-    real(kind=8) :: WETINF    ! wetness at dry end of near-saturation range
-    real(kind=8) :: PSIM(*)   ! matric soil water potential for layer, kPa
-    real(kind=8) :: KF        ! hydraulic conductivity at field capacity, mm/d
-    real(kind=8) :: PSICR     ! minimum plant leaf water potential, MPa
+    real(kind=c_double) :: THICK(*)  ! layer thicknesses, mm"
+    real(kind=c_double) :: THSAT     ! theta at saturation, matrix porosity, iModel=0
+    real(kind=c_double) :: THS       ! theta at saturation, matrix porosity, iModel=1
+    real(kind=c_double) :: THR       ! residual theta, iModel=1
+    real(kind=c_double) :: STONEF(*) ! stone volume fraction, unitless"
+    real(kind=c_double) :: THETAF    ! volumetric water content at field capacity"
+    real(kind=c_double) :: PSIF      ! matric potential at field capacity, kPa
+    real(kind=c_double) :: BEXP      ! exponent for psi-theta relation
+    real(kind=c_double) :: WETINF    ! wetness at dry end of near-saturation range
+    real(kind=c_double) :: PSIM(*)   ! matric soil water potential for layer, kPa
+    real(kind=c_double) :: KF        ! hydraulic conductivity at field capacity, mm/d
+    real(kind=c_double) :: PSICR     ! minimum plant leaf water potential, MPa
     integer :: iModel    ! parameterization of hydraulic functions
-    real(kind=8) :: Par(MPar,ML)  ! parameter array
+    real(kind=c_double) :: Par(MPar,ML)  ! parameter array
     integer :: pr     ! print messages to console?
     integer :: timer     ! check timelimits set by R-user?
 !       output
-    real(kind=8) :: PSIG(*)   ! gravity potential, kPa
-    real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
-    real(kind=8) :: WETF      ! wetness at field capacity, dimensionless
-    real(kind=8) :: WETC(*)   ! wetness at PSICR, dimensionless
-    real(kind=8) :: CHM       ! Clapp and Hornberger m, kPa
-    real(kind=8) :: CHN       ! Clapp and Hornberger n
-    real(kind=8) :: WETNES(*) ! wetness, fraction of saturation
-    real(kind=8) :: SWATI(*)  ! water volume in layer, mm
-    real(kind=8) :: KSAT      ! saturated hydraulic conductivity, mm/d
+    real(kind=c_double) :: PSIG(*)   ! gravity potential, kPa
+    real(kind=c_double) :: SWATMX(*) ! maximum water storage for layer, mm
+    real(kind=c_double) :: WETF      ! wetness at field capacity, dimensionless
+    real(kind=c_double) :: WETC(*)   ! wetness at PSICR, dimensionless
+    real(kind=c_double) :: CHM       ! Clapp and Hornberger m, kPa
+    real(kind=c_double) :: CHN       ! Clapp and Hornberger n
+    real(kind=c_double) :: WETNES(*) ! wetness, fraction of saturation
+    real(kind=c_double) :: SWATI(*)  ! water volume in layer, mm
+    real(kind=c_double) :: KSAT      ! saturated hydraulic conductivity, mm/d
     integer :: error          ! error code (default 0)
 !       function
-!         real(kind=8) :: FWETK, FPSIM, FWETNES, FTHETA
+!         real(kind=c_double) :: FWETK, FPSIM, FWETNES, FTHETA
 !       local
     integer :: I         ! soil layer
 !       intrinsic
-    real(kind=8) :: PSIINF(NLAYER)
+    real(kind=c_double) :: PSIINF(NLAYER)
 !          potential at dry end of near saturation range, kPa
 
     DO 100 I = 1, NLAYER
@@ -2051,23 +2051,23 @@ subroutine SOILVAR (NLAYER, iModel, Par, PSIG, PSIM, WETNES, SWATI, &
 !     input
     integer :: NLAYER    ! number of soil layers
     integer :: MPAR,ML   ! maximum number of parameters and layers
-    real(kind=8) :: PSIG(*)   ! gravity potential, kPa
-    real(kind=8) :: PSIM(*)   ! matric soil water potential for layer, kPa
-    real(kind=8) :: WETNES(*) ! wetness, fraction of saturation.
-!     real(kind=8) :: THSAT     ! theta at saturation, matrix porosity
-    real(kind=8) :: KF        ! hydraulic conductivity at field capacity, mm/d
-    real(kind=8) :: BEXP      ! exponent for psi-theta relation
-    real(kind=8) :: WETF      ! wetness at field capacity, dimensionless
-    real(kind=8) :: SWATI(*)  ! water volume in layer, mm
+    real(kind=c_double) :: PSIG(*)   ! gravity potential, kPa
+    real(kind=c_double) :: PSIM(*)   ! matric soil water potential for layer, kPa
+    real(kind=c_double) :: WETNES(*) ! wetness, fraction of saturation.
+!     real(kind=c_double) :: THSAT     ! theta at saturation, matrix porosity
+    real(kind=c_double) :: KF        ! hydraulic conductivity at field capacity, mm/d
+    real(kind=c_double) :: BEXP      ! exponent for psi-theta relation
+    real(kind=c_double) :: WETF      ! wetness at field capacity, dimensionless
+    real(kind=c_double) :: SWATI(*)  ! water volume in layer, mm
     integer :: iModel    ! parameterization of hydraulic functions
-    real(kind=8) :: Par(MPar,ML)  ! parameter array
+    real(kind=c_double) :: Par(MPar,ML)  ! parameter array
 !     output
-    real(kind=8) :: PSITI(*)  ! total potential, kPa
-    real(kind=8) :: THETA(*)  ! water content, mm water / mm soil matrix
-    real(kind=8) :: SWAT      ! total soil water in all layers, mm
-    real(kind=8) :: KK(*)     ! hydraulic conductivity, mm/d
+    real(kind=c_double) :: PSITI(*)  ! total potential, kPa
+    real(kind=c_double) :: THETA(*)  ! water content, mm water / mm soil matrix
+    real(kind=c_double) :: SWAT      ! total soil water in all layers, mm
+    real(kind=c_double) :: KK(*)     ! hydraulic conductivity, mm/d
 !     function
-!         real(kind=8) :: FK, FTheta
+!         real(kind=c_double) :: FK, FTheta
 !     local
     integer :: I         !soil layer
 
@@ -2097,16 +2097,16 @@ subroutine SRFLFR (QLAYER, SWATI, SWATQX, QFPAR, SWATQF, QFFC, SAFRAC)
     IMPLICIT NONE
 !     input
     integer :: QLAYER    ! number of soil layers for SRFL
-    real(kind=8) :: SWATI(*)  ! water volume by layer, mm
-    real(kind=8) :: SWATQX    ! maximum water storage for layers 1 through QLAYER
-    real(kind=8) :: QFPAR     ! quickflow parameter, 0 for bucket
-    real(kind=8) :: SWATQF    ! water storage at field capacity for layers 1
+    real(kind=c_double) :: SWATI(*)  ! water volume by layer, mm
+    real(kind=c_double) :: SWATQX    ! maximum water storage for layers 1 through QLAYER
+    real(kind=c_double) :: QFPAR     ! quickflow parameter, 0 for bucket
+    real(kind=c_double) :: SWATQF    ! water storage at field capacity for layers 1
                            ! through QLAYER, mm
-    real(kind=8) :: QFFC      ! SRFL fraction at field capacity
+    real(kind=c_double) :: QFFC      ! SRFL fraction at field capacity
 !     output
-    real(kind=8) :: SAFRAC    ! source area fraction
+    real(kind=c_double) :: SAFRAC    ! source area fraction
 !     local
-    real(kind=8) :: SUM       ! soil water in layers 1 through QLAYER
+    real(kind=c_double) :: SUM       ! soil water in layers 1 through QLAYER
     integer :: I
 
     SUM = 0.0d0
@@ -2125,15 +2125,15 @@ subroutine SRFPAR (QLAYER, Par, THICK, STONEF, SWATMX, SWATQX, SWATQF, MPar, ML)
 !     input
     integer :: QLAYER    ! number of soil layers for SRFL
     integer :: MPAR,ML   ! maximum number of parameters and layers
-!    real(kind=8) :: THETAF(*) ! volumetric water content of layer at field capacity
-    real(kind=8) :: THICK(*)  ! layer thickness, mm
-    real(kind=8) :: STONEF(*) ! stone volume fraction of layer
-    real(kind=8) :: SWATMX(*) ! maximum water storage for layer, mm
-    real(kind=8) :: Par(MPar,ML)  ! parameter array
+!    real(kind=c_double) :: THETAF(*) ! volumetric water content of layer at field capacity
+    real(kind=c_double) :: THICK(*)  ! layer thickness, mm
+    real(kind=c_double) :: STONEF(*) ! stone volume fraction of layer
+    real(kind=c_double) :: SWATMX(*) ! maximum water storage for layer, mm
+    real(kind=c_double) :: Par(MPar,ML)  ! parameter array
 !     output
-    real(kind=8) :: SWATQX    ! maximum water storage for layers 1 through
+    real(kind=c_double) :: SWATQX    ! maximum water storage for layers 1 through
                            ! QLAYER, mm
-    real(kind=8) :: SWATQF    ! water storage at field capacity for layers 1
+    real(kind=c_double) :: SWATQF    ! water storage at field capacity for layers 1
                            ! through QLAYER, mm
 !     local
     integer :: I
@@ -2152,35 +2152,35 @@ subroutine SRSC (RAD, TA, VPD, LAI, SAI, GLMIN, GLMAX, R5, CVPD, RM, CR, TL, T1,
 !        Stewart (1988)
     IMPLICIT NONE
 !     input
-    real(kind=8) :: RAD     ! solar radiation on canopy, W/m2
-    real(kind=8) :: TA      ! mean  temperature for the day at reference height,
+    real(kind=c_double) :: RAD     ! solar radiation on canopy, W/m2
+    real(kind=c_double) :: TA      ! mean  temperature for the day at reference height,
                          ! degC
-    real(kind=8) :: VPD     ! vapor pressure deficit, kPa
-    real(kind=8) :: LAI     ! projected leaf area index
-    real(kind=8) :: SAI     ! projected stem area index
-    real(kind=8) :: GLMIN   ! minimum leaf conductance, closed stomates, all
+    real(kind=c_double) :: VPD     ! vapor pressure deficit, kPa
+    real(kind=c_double) :: LAI     ! projected leaf area index
+    real(kind=c_double) :: SAI     ! projected stem area index
+    real(kind=c_double) :: GLMIN   ! minimum leaf conductance, closed stomates, all
                          ! sides, s/m
-    real(kind=8) :: GLMAX   ! maximum leaf conductance, open stomates, all
+    real(kind=c_double) :: GLMAX   ! maximum leaf conductance, open stomates, all
                          ! sides, s/m
-    real(kind=8) :: R5      ! solar radiation at which conductance is halved, W/m2
-    real(kind=8) :: CVPD    ! vpd at which leaf conductance is halved, kPa
-    real(kind=8) :: RM      ! maximum solar radiation, at which FR = 1, W/m2
-    real(kind=8) :: CR      ! light extinction coefficient for LAI, projected area
-    real(kind=8) :: TL      ! temperature below which stomates are closed, degC
-    real(kind=8) :: T1      ! lowest temp. at which stomates not temp. limited,
+    real(kind=c_double) :: R5      ! solar radiation at which conductance is halved, W/m2
+    real(kind=c_double) :: CVPD    ! vpd at which leaf conductance is halved, kPa
+    real(kind=c_double) :: RM      ! maximum solar radiation, at which FR = 1, W/m2
+    real(kind=c_double) :: CR      ! light extinction coefficient for LAI, projected area
+    real(kind=c_double) :: TL      ! temperature below which stomates are closed, degC
+    real(kind=c_double) :: T1      ! lowest temp. at which stomates not temp. limited,
                          ! degC
-    real(kind=8) :: T2      ! highest temp. at which stomates not temp. limited,
+    real(kind=c_double) :: T2      ! highest temp. at which stomates not temp. limited,
                          ! degC
-    real(kind=8) :: TH      ! temperature above which stomates are closed, degC
+    real(kind=c_double) :: TH      ! temperature above which stomates are closed, degC
 !     output
-    real(kind=8) :: RSC     ! canopy surface resistance, s/m
+    real(kind=c_double) :: RSC     ! canopy surface resistance, s/m
 !     local
-    real(kind=8) :: FS      ! correction for stem area
-    real(kind=8) :: R0      ! a light response parameter
-    real(kind=8) :: FRINT   ! integral of fR dL over Lp
-    real(kind=8) :: FD      ! dependence of leaf conductance on vpd, 0 to 1
-    real(kind=8) :: FT      ! dependence of leaf conductance on temperature,0 to 1
-    real(kind=8) :: GSC     ! canopy conductance, m/s
+    real(kind=c_double) :: FS      ! correction for stem area
+    real(kind=c_double) :: R0      ! a light response parameter
+    real(kind=c_double) :: FRINT   ! integral of fR dL over Lp
+    real(kind=c_double) :: FD      ! dependence of leaf conductance on vpd, 0 to 1
+    real(kind=c_double) :: FT      ! dependence of leaf conductance on temperature,0 to 1
+    real(kind=c_double) :: GSC     ! canopy conductance, m/s
 !     intrinsic
 !        LOG, EXP
 
@@ -2218,8 +2218,8 @@ subroutine SUMI (N, A1, A2, A3, A4, A5, A6, B1, B2, B3, B4,B5, B6)
 !     array summer; sums Aj(i) for i = 1,n with result in Bj
     IMPLICIT NONE
     integer ::  N, I
-    real(kind=8) :: A1(*), A2(*), A3(*), A4(*), A5(*), A6(*)
-    real(kind=8) :: B1, B2, B3, B4, B5, B6
+    real(kind=c_double) :: A1(*), A2(*), A3(*), A4(*), A5(*), A6(*)
+    real(kind=c_double) :: B1, B2, B3, B4, B5, B6
 
     CALL ZERO(B1, B2, B3, B4, B5, B6)
     DO 20 I = 1, N
@@ -2238,34 +2238,34 @@ subroutine SUNDS (LAT, SLOPE, DOY, L1, L2, DAYLEN, I0HDAY, SLFDAY)
 !     from Swift (1976)
     IMPLICIT NONE
 !     input
-    real(kind=8) :: LAT     ! latitude, radians
-    real(kind=8) :: SLOPE   ! slope, radians
+    real(kind=c_double) :: LAT     ! latitude, radians
+    real(kind=c_double) :: SLOPE   ! slope, radians
     integer :: DOY     ! day of the year
-    real(kind=8) :: L1      ! latitude of equivalent slope, radians, from EQUIVSLP
-    real(kind=8) :: L2      ! time shift of equivalent slope,radians,from EQUIVSLP
+    real(kind=c_double) :: L1      ! latitude of equivalent slope, radians, from EQUIVSLP
+    real(kind=c_double) :: L2      ! time shift of equivalent slope,radians,from EQUIVSLP
 !     outputs
-    real(kind=8) :: DAYLEN  ! daylength (sun above horizontal) in fraction of
+    real(kind=c_double) :: DAYLEN  ! daylength (sun above horizontal) in fraction of
                          ! day, d
-    real(kind=8) :: I0HDAY  ! potential insolation on horizontal surface, MJ/m2
-    real(kind=8) :: SLFDAY  ! ratio of potential insolation on slope to
+    real(kind=c_double) :: I0HDAY  ! potential insolation on horizontal surface, MJ/m2
+    real(kind=c_double) :: SLFDAY  ! ratio of potential insolation on slope to
                          ! horizontal, map area
 !     local
-    real(kind=8) :: I0SDAY  ! potential insolation on slope, map area basis, MJ/m2
-    real(kind=8) :: SCD     ! solar constant for day, W/m2
-    real(kind=8) :: DEC     ! declination of the sun, radians
+    real(kind=c_double) :: I0SDAY  ! potential insolation on slope, map area basis, MJ/m2
+    real(kind=c_double) :: SCD     ! solar constant for day, W/m2
+    real(kind=c_double) :: DEC     ! declination of the sun, radians
     integer :: TWORIS  ! 1 if two sunrises on slope
-    real(kind=8) :: T       ! temporary variable
-    real(kind=8) :: T0      ! hour angle of sunrise on horizontal, radians
-    real(kind=8) :: T1      ! hour angle of sunset on horizontal
-    real(kind=8) :: T2      ! hour angle of sunrise on slope
-    real(kind=8) :: T3      ! hour angle of sunset on slope
-    real(kind=8) :: T6      ! hour angle of sunrise on equivalent slope
-    real(kind=8) :: T7      ! hour angle of sunset on equivalent slope
-    real(kind=8) :: T8      ! hour angle of second sunrise on slope
-    real(kind=8) :: T9      ! hour angle of second sunset on slope
+    real(kind=c_double) :: T       ! temporary variable
+    real(kind=c_double) :: T0      ! hour angle of sunrise on horizontal, radians
+    real(kind=c_double) :: T1      ! hour angle of sunset on horizontal
+    real(kind=c_double) :: T2      ! hour angle of sunrise on slope
+    real(kind=c_double) :: T3      ! hour angle of sunset on slope
+    real(kind=c_double) :: T6      ! hour angle of sunrise on equivalent slope
+    real(kind=c_double) :: T7      ! hour angle of sunset on equivalent slope
+    real(kind=c_double) :: T8      ! hour angle of second sunrise on slope
+    real(kind=c_double) :: T9      ! hour angle of second sunset on slope
 !     external functions needed
-!     real(kind=8) :: HAFDAY
-!     real(kind=8) :: FUNC3
+!     real(kind=c_double) :: HAFDAY
+!     real(kind=c_double) :: FUNC3
 !     intrinsic
 !        COS, SIN, MIN, MAX, ASIN
 
@@ -2323,24 +2323,24 @@ subroutine SWPE (AA, ASUBS, VPD, RAA, RAC, RAS, RSC, RSS, DELTA, PRATE, ERATE)
 !     Shuttleworth and Wallace (1985) transpiration and ground evaporation
     IMPLICIT NONE
 !     input
-    real(kind=8) :: AA      ! net radiation at canopy top minus ground flux, W/m2
-    real(kind=8) :: ASUBS   ! net radiation minus ground flux at ground, W/m2
-    real(kind=8) :: VPD     ! vapor pressure deficit, kPa
-    real(kind=8) :: RAA     ! boundary layer resistance, s/m
-    real(kind=8) :: RAC     ! leaf-air resistance, s/m
-    real(kind=8) :: RAS     ! ground-air resistance, s/m
-    real(kind=8) :: RSC     ! canopy surface resistance, s/m
-    real(kind=8) :: RSS     ! ground evaporation resistance, s/m
-    real(kind=8) :: DELTA   ! dEsat/dTair, kPa/K
+    real(kind=c_double) :: AA      ! net radiation at canopy top minus ground flux, W/m2
+    real(kind=c_double) :: ASUBS   ! net radiation minus ground flux at ground, W/m2
+    real(kind=c_double) :: VPD     ! vapor pressure deficit, kPa
+    real(kind=c_double) :: RAA     ! boundary layer resistance, s/m
+    real(kind=c_double) :: RAC     ! leaf-air resistance, s/m
+    real(kind=c_double) :: RAS     ! ground-air resistance, s/m
+    real(kind=c_double) :: RSC     ! canopy surface resistance, s/m
+    real(kind=c_double) :: RSS     ! ground evaporation resistance, s/m
+    real(kind=c_double) :: DELTA   ! dEsat/dTair, kPa/K
 !     output
-    real(kind=8) :: PRATE   ! potential transpiration rate, mm/d
-    real(kind=8) :: ERATE   ! ground evaporation rate, mm/d
+    real(kind=c_double) :: PRATE   ! potential transpiration rate, mm/d
+    real(kind=c_double) :: ERATE   ! ground evaporation rate, mm/d
 !     local
-    real(kind=8) :: RS, RC, RA, CS, CC, PMS, PMC, D0
+    real(kind=c_double) :: RS, RC, RA, CS, CC, PMS, PMC, D0
                          ! as in Shuttleworth and Wallace (1985)
-    real(kind=8) :: LE      ! total latent heat flux density, W/m2
+    real(kind=c_double) :: LE      ! total latent heat flux density, W/m2
 !     external function needed
-!     real(kind=8) :: PM
+!     real(kind=c_double) :: PM
 
     RS = (DELTA + GAMMA) * RAS + GAMMA * RSS
     RC = (DELTA + GAMMA) * RAC + GAMMA * RSC
@@ -2361,20 +2361,20 @@ subroutine SWGE (AA, ASUBS, VPD, RAA, RAS, RSS, DELTA, ARATE, ERATE)
 !        known
     IMPLICIT NONE
 !     input
-    real(kind=8) :: AA      ! net radiation at canopy top minus ground flux, W/m2
-    real(kind=8) :: ASUBS   ! net radiation minus ground flux at ground, W/m2
-    real(kind=8) :: VPD     ! vapor pressure deficit, kPa
-    real(kind=8) :: RAA     ! boundary layer resistance, s/m
-    real(kind=8) :: RAS     ! ground-air resitance, s/m
-    real(kind=8) :: RSS     ! ground evaporation resistance, s/m
-    real(kind=8) :: DELTA   ! dEsat/dTair, kPa/K
-    real(kind=8) :: ARATE   ! actual transpiration rate, mm/d
+    real(kind=c_double) :: AA      ! net radiation at canopy top minus ground flux, W/m2
+    real(kind=c_double) :: ASUBS   ! net radiation minus ground flux at ground, W/m2
+    real(kind=c_double) :: VPD     ! vapor pressure deficit, kPa
+    real(kind=c_double) :: RAA     ! boundary layer resistance, s/m
+    real(kind=c_double) :: RAS     ! ground-air resitance, s/m
+    real(kind=c_double) :: RSS     ! ground evaporation resistance, s/m
+    real(kind=c_double) :: DELTA   ! dEsat/dTair, kPa/K
+    real(kind=c_double) :: ARATE   ! actual transpiration rate, mm/d
 !     output
-    real(kind=8) :: ERATE   ! ground evaporation rate, mm/d
+    real(kind=c_double) :: ERATE   ! ground evaporation rate, mm/d
 !     local
-    real(kind=8) :: RS, RA  ! as in Shuttleworth and Wallace (1985)
-    real(kind=8) :: LE      ! total latent heat flux density, W/m2
-    real(kind=8) :: LEC     ! actual transpiration latent heat flux density, W/m2
+    real(kind=c_double) :: RS, RA  ! as in Shuttleworth and Wallace (1985)
+    real(kind=c_double) :: LE      ! total latent heat flux density, W/m2
+    real(kind=c_double) :: LEC     ! actual transpiration latent heat flux density, W/m2
 
     LEC = ARATE / (ETOM * WTOMJ)
     RS = (DELTA + GAMMA) * RAS + GAMMA * RSS
@@ -2390,25 +2390,25 @@ subroutine SWGRA (UA, ZA, HEIGHT, Z0, DISP, Z0C, DISPC, Z0G, LWIDTH, &
 !     from Shuttleworth and Gurney (1990)
     IMPLICIT NONE
 !     input
-    real(kind=8) :: UA      ! wind speed at reference height, m/s
-    real(kind=8) :: ZA      ! reference height, m
-    real(kind=8) :: HEIGHT  ! canopy height, m
-    real(kind=8) :: Z0      ! roughness parameter, m
-    real(kind=8) :: DISP    ! zero-plane displacement, m
-    real(kind=8) :: Z0C     ! roughness length for closed canopy, m
-    real(kind=8) :: DISPC   ! zero-plane displacement for closed canopy, m
-    real(kind=8) :: Z0G     ! roughness parameter of soil surface, m
-    real(kind=8) :: LWIDTH  ! characteristic leaf width, m
-    real(kind=8) :: RHOTP   ! ratio of total leaf area to projected leaf area
-    real(kind=8) :: NN      ! wind/diffusivity extinction coefficient
-    real(kind=8) :: LAI     ! projected leaf area index
-    real(kind=8) :: SAI     ! projected stem area index
+    real(kind=c_double) :: UA      ! wind speed at reference height, m/s
+    real(kind=c_double) :: ZA      ! reference height, m
+    real(kind=c_double) :: HEIGHT  ! canopy height, m
+    real(kind=c_double) :: Z0      ! roughness parameter, m
+    real(kind=c_double) :: DISP    ! zero-plane displacement, m
+    real(kind=c_double) :: Z0C     ! roughness length for closed canopy, m
+    real(kind=c_double) :: DISPC   ! zero-plane displacement for closed canopy, m
+    real(kind=c_double) :: Z0G     ! roughness parameter of soil surface, m
+    real(kind=c_double) :: LWIDTH  ! characteristic leaf width, m
+    real(kind=c_double) :: RHOTP   ! ratio of total leaf area to projected leaf area
+    real(kind=c_double) :: NN      ! wind/diffusivity extinction coefficient
+    real(kind=c_double) :: LAI     ! projected leaf area index
+    real(kind=c_double) :: SAI     ! projected stem area index
 !     output
-    real(kind=8) :: RAA     ! boundary layer resistance, s/m
-    real(kind=8) :: RAC     ! leaf-air resistance, s/m
-    real(kind=8) :: RAS     ! ground-air resitance, s/m
+    real(kind=c_double) :: RAA     ! boundary layer resistance, s/m
+    real(kind=c_double) :: RAC     ! leaf-air resistance, s/m
+    real(kind=c_double) :: RAS     ! ground-air resitance, s/m
 !     local
-    real(kind=8) :: USTAR, KH, UH, RB
+    real(kind=c_double) :: USTAR, KH, UH, RB
 !     intrinsic
 !        LOG, EXP
 
@@ -2437,33 +2437,33 @@ subroutine TBYLAYER (J, PTR, DISPC, ALPHA, KK, RROOTI, RXYLEM, &
     IMPLICIT NONE
 !     input
     integer :: J        ! 1 for daytime, 2 for nighttime
-    real(kind=8) :: PTR       ! average potential transpiration rate over time
+    real(kind=c_double) :: PTR       ! average potential transpiration rate over time
                          ! period, mm/d
-    real(kind=8) :: DISPC     ! zero-plane displacement for closed canopy, m
-    real(kind=8) :: ALPHA(*)  ! modified Cowan alpha, MPa
-    real(kind=8) :: KK(*)     ! hydraulic conductivity, mm/d
-    real(kind=8) :: RROOTI(*) ! root resistance for layer, MPa d/mm
-    real(kind=8) :: RXYLEM    ! xylem resistance, MPa d/mm
-    real(kind=8) :: PSITI(*)  ! total soil water potential, kPa
+    real(kind=c_double) :: DISPC     ! zero-plane displacement for closed canopy, m
+    real(kind=c_double) :: ALPHA(*)  ! modified Cowan alpha, MPa
+    real(kind=c_double) :: KK(*)     ! hydraulic conductivity, mm/d
+    real(kind=c_double) :: RROOTI(*) ! root resistance for layer, MPa d/mm
+    real(kind=c_double) :: RXYLEM    ! xylem resistance, MPa d/mm
+    real(kind=c_double) :: PSITI(*)  ! total soil water potential, kPa
     integer :: NLAYER   ! number of soil layers (max 20)
-    real(kind=8) :: PSICR     ! critical potential for plant, MPa
+    real(kind=c_double) :: PSICR     ! critical potential for plant, MPa
     integer :: NOOUTF   ! 1 if no outflow allowed from roots, otherwise 0
 !     output
-    real(kind=8) :: ATR       ! actual transpiration rate over time period, mm/d
-    real(kind=8) :: ATRANI(*) ! actual transpiration rate from layer over time
+    real(kind=c_double) :: ATR       ! actual transpiration rate over time period, mm/d
+    real(kind=c_double) :: ATRANI(*) ! actual transpiration rate from layer over time
                          ! period, mm/d
 !     local
     integer :: I      ! layer counter
     integer :: II     ! loop index
-    real(kind=8) :: RI(0:NLAYER)  ! root plus rhizosphere resistance, MPa d/mm
-    real(kind=8) :: RT      ! combined root resistance from unflagged layers,
+    real(kind=c_double) :: RI(0:NLAYER)  ! root plus rhizosphere resistance, MPa d/mm
+    real(kind=c_double) :: RT      ! combined root resistance from unflagged layers,
                          ! MPa d/mm
-    real(kind=8) :: SUM     ! sum of layer conductances, (mm/d)/MPa
-    real(kind=8) :: TRMIN   ! largest negative transpiration loss, mm/d
-    real(kind=8) :: PSIT    ! weighted average total soil water potential for
+    real(kind=c_double) :: SUM     ! sum of layer conductances, (mm/d)/MPa
+    real(kind=c_double) :: TRMIN   ! largest negative transpiration loss, mm/d
+    real(kind=c_double) :: PSIT    ! weighted average total soil water potential for
                          ! unflagged layers, kPa
-    real(kind=8) :: R       ! (2/pi)(SUPPLY/PTR)
-    real(kind=8) :: SUPPLY  ! soil water supply rate, mm/d
+    real(kind=c_double) :: R       ! (2/pi)(SUPPLY/PTR)
+    real(kind=c_double) :: SUPPLY  ! soil water supply rate, mm/d
     integer :: IDEL   ! subscript of flagged layer
     integer :: FLAG(0:NLAYER) ! 1 if layer has no transpiration uptake,otherwise 0
     integer :: NEGFLAG ! 1 if second iteration is needed
@@ -2572,12 +2572,12 @@ subroutine Temper(N,NMat,THICK,ZL,MUE,STEP,MatNum,TempO,TempN, &
 
     integer :: i, M, N, NMat, MatNum(N)
     double precision      A(N), B(N), C(N), D(N)
-    real(kind=8) :: THICK(N), ZL(N), MUE(N), &
+    real(kind=c_double) :: THICK(N), ZL(N), MUE(N), &
                TempO(N),TempN(N),TPar(10,NMat),vNew(N), &
                ThNew(N),CapNew(N),CapOld(N),Cond(N) !Sink(N)
 
-    real(kind=8) :: tTop, tBot, STEP, CKM, QKM, HLU, HLO, FHLP, inFil
-    real(kind=8) :: zeroCurTemp, zeroCurRange,  zeroCurU,  zeroCurL ! LF
+    real(kind=c_double) :: tTop, tBot, STEP, CKM, QKM, HLU, HLO, FHLP, inFil
+    real(kind=c_double) :: zeroCurTemp, zeroCurRange,  zeroCurU,  zeroCurL ! LF
     integer :: IFEHL
 !
 !     ------------------- Berechnung der Transportparameter --------------------
@@ -2659,7 +2659,7 @@ subroutine TRIDIG(N,A,B,C,D,X,IFEHL)
 
     integer :: I, J, K, N, IFEHL
     double precision A(N),B(N),C(N),CH(N),D(N),DH(N)
-    real(kind=8) :: X(N),ALPHA
+    real(kind=c_double) :: X(N),ALPHA
 
     IFEHL=0
 
@@ -2709,22 +2709,22 @@ subroutine VERT (KK, KK1, KSAT, KSAT1, THICK, THICK1, PSIT, PSIT1, STONE, STONE1
 !        mm/day   = kPa/mm   * mm/day  / kPa/mm
     IMPLICIT NONE
 !     input
-    real(kind=8) :: KK      ! hydraulic conductivity for upper layer, mm/d
-    real(kind=8) :: KK1     ! hydraulic conductivity for lower layer, mm/d
-    real(kind=8) :: KSAT    ! saturated hydraulic conductivity of upper layer,mm/d
-    real(kind=8) :: KSAT1   ! saturated hydraulic conductivity of lower layer,mm/d
-    real(kind=8) :: THICK   ! thickness of upper layer, mm
-    real(kind=8) :: THICK1  ! thickness of lower layer, mm
-    real(kind=8) :: PSIT    ! total potential of upper layer, kPa
-    real(kind=8) :: PSIT1   ! total potential of lower layer, kPa
-    real(kind=8) :: STONE   ! stone volume fraction of upper layer, unitless
-    real(kind=8) :: STONE1  ! stone volume fraction of lower layer, unitless
-    real(kind=8) :: RHOWG   ! density of water times gravity acceleration, kPa/mm
+    real(kind=c_double) :: KK      ! hydraulic conductivity for upper layer, mm/d
+    real(kind=c_double) :: KK1     ! hydraulic conductivity for lower layer, mm/d
+    real(kind=c_double) :: KSAT    ! saturated hydraulic conductivity of upper layer,mm/d
+    real(kind=c_double) :: KSAT1   ! saturated hydraulic conductivity of lower layer,mm/d
+    real(kind=c_double) :: THICK   ! thickness of upper layer, mm
+    real(kind=c_double) :: THICK1  ! thickness of lower layer, mm
+    real(kind=c_double) :: PSIT    ! total potential of upper layer, kPa
+    real(kind=c_double) :: PSIT1   ! total potential of lower layer, kPa
+    real(kind=c_double) :: STONE   ! stone volume fraction of upper layer, unitless
+    real(kind=c_double) :: STONE1  ! stone volume fraction of lower layer, unitless
+    real(kind=c_double) :: RHOWG   ! density of water times gravity acceleration, kPa/mm
 !     output
-    real(kind=8) :: VRFLI   ! vertical drainage rate from layer i, mm/d
+    real(kind=c_double) :: VRFLI   ! vertical drainage rate from layer i, mm/d
 !     local
-    real(kind=8) :: GRAD    ! potential gradient, positive downward, kPa/mm
-    real(kind=8) :: KKMEAN  ! geometric mean conductivity
+    real(kind=c_double) :: GRAD    ! potential gradient, positive downward, kPa/mm
+    real(kind=c_double) :: KKMEAN  ! geometric mean conductivity
 !     intrinsic
 !        LOG, EXP
 
@@ -2741,37 +2741,37 @@ subroutine WEATHER (TMAX, TMIN, DAYLEN, I0HDAY, EA, UW, ZA, DISP, Z0, WNDRAT, FE
     Z0W, ZW, SOLRAD, TA, TADTM, TANTM, UA, UADTM, UANTM)
     IMPLICIT NONE
 !     input
-    real(kind=8) :: TMAX    ! maximum temperature for the day, C
-    real(kind=8) :: TMIN    ! minimum temperature for the day, C
-    real(kind=8) :: DAYLEN  ! daylength in fraction of day
-    real(kind=8) :: I0HDAY  ! potential insolation on horizontal, MJ m-2 d-1
-    real(kind=8) :: EA      ! vapor pressure for the day, kPa
-    real(kind=8) :: UW      ! average wind speed for day at weather station, m/s
-    real(kind=8) :: ZA      ! reference height for TA, EA, UA, above ground, m
-    real(kind=8) :: DISP    ! zero-plane displacement, m
-    real(kind=8) :: Z0      ! roughness parameter, m
-    real(kind=8) :: WNDRAT  ! ratio of nighttime to daytime wind speed
-    real(kind=8) :: FETCH   ! weather station fetch, m
-    real(kind=8) :: Z0W     ! weather station roughness parameter, m
-    real(kind=8) :: ZW      ! weather station measurement height for wind, m
+    real(kind=c_double) :: TMAX    ! maximum temperature for the day, C
+    real(kind=c_double) :: TMIN    ! minimum temperature for the day, C
+    real(kind=c_double) :: DAYLEN  ! daylength in fraction of day
+    real(kind=c_double) :: I0HDAY  ! potential insolation on horizontal, MJ m-2 d-1
+    real(kind=c_double) :: EA      ! vapor pressure for the day, kPa
+    real(kind=c_double) :: UW      ! average wind speed for day at weather station, m/s
+    real(kind=c_double) :: ZA      ! reference height for TA, EA, UA, above ground, m
+    real(kind=c_double) :: DISP    ! zero-plane displacement, m
+    real(kind=c_double) :: Z0      ! roughness parameter, m
+    real(kind=c_double) :: WNDRAT  ! ratio of nighttime to daytime wind speed
+    real(kind=c_double) :: FETCH   ! weather station fetch, m
+    real(kind=c_double) :: Z0W     ! weather station roughness parameter, m
+    real(kind=c_double) :: ZW      ! weather station measurement height for wind, m
 !     input and output
-    real(kind=8) :: SOLRAD  ! solar radiation for the day, horizontal surface,
+    real(kind=c_double) :: SOLRAD  ! solar radiation for the day, horizontal surface,
                          ! MJ/m2
 !     output
-    real(kind=8) :: TA      ! mean temperature for the day, C
-    real(kind=8) :: TADTM   ! average daytime temperature, C
-    real(kind=8) :: TANTM   ! average nighttime temperature, C
-    real(kind=8) :: UADTM   ! average wind speed for daytime at ZA, m/s
-    real(kind=8) :: UANTM   ! average wind speed for nighttime at ZA, m/s
+    real(kind=c_double) :: TA      ! mean temperature for the day, C
+    real(kind=c_double) :: TADTM   ! average daytime temperature, C
+    real(kind=c_double) :: TANTM   ! average nighttime temperature, C
+    real(kind=c_double) :: UADTM   ! average wind speed for daytime at ZA, m/s
+    real(kind=c_double) :: UANTM   ! average wind speed for nighttime at ZA, m/s
 !     local
-    real(kind=8) :: UA      ! average wind speed for the day at reference height,
+    real(kind=c_double) :: UA      ! average wind speed for the day at reference height,
                          ! m/s
-    real(kind=8) :: PI
-    real(kind=8) :: DUMMY
+    real(kind=c_double) :: PI
+    real(kind=c_double) :: DUMMY
 !     intrinsic
 !        SIN
 !     external function needed
-!     real(kind=8) :: WNDADJ
+!     real(kind=c_double) :: WNDADJ
 
     PI = 3.14160d0
 !     estimate SOLRAD if missing
@@ -2798,7 +2798,7 @@ end subroutine WEATHER
 subroutine ZERO (V1, V2, V3, V4, V5, V6)
 !     zeroes variables
     IMPLICIT NONE
-    real(kind=8) :: V1, V2, V3, V4, V5, V6
+    real(kind=c_double) :: V1, V2, V3, V4, V5, V6
 
     V1 = 0.0d0
     V2 = 0.0d0
@@ -2813,7 +2813,7 @@ subroutine ZEROA (N, A1, A2, A3, A4)
 !     zeroes arrays
     IMPLICIT NONE
     integer :: N, I
-    real(kind=8) :: A1(*), A2(*), A3(*), A4(*)
+    real(kind=c_double) :: A1(*), A2(*), A3(*), A4(*)
 
     DO 30 I = 1, N
         A1(I) = 0.0d0
@@ -2832,28 +2832,28 @@ function FDPSIDW (WETNES,Par,iModel)
 !     d PSI / d WETNES, used in 2nd approximation to iteration timestep
     IMPLICIT NONE
 !     input
-    real(kind=8) :: WETNES   ! wetness, fraction of saturation
+    real(kind=c_double) :: WETNES   ! wetness, fraction of saturation
     integer :: iModel    ! parameterization of hydraulic functions
-    real(kind=8) :: Par(*)  ! parameter array
+    real(kind=c_double) :: Par(*)  ! parameter array
 !                         Clapp and Hornberger (iModel=0)
-    real(kind=8) :: PSIF     ! matrix potential at field capacity, kPa
-    real(kind=8) :: BEXP     ! exponent for psi-theta relation
-    real(kind=8) :: WETINF   ! wetness at dry end of near-saturation range
-    real(kind=8) :: WETF     ! saturation fraction at field capacity
-    real(kind=8) :: CHM      ! Clapp and Hornberger m, kPa
-    real(kind=8) :: CHN      ! Clapp and Hornberger n
+    real(kind=c_double) :: PSIF     ! matrix potential at field capacity, kPa
+    real(kind=c_double) :: BEXP     ! exponent for psi-theta relation
+    real(kind=c_double) :: WETINF   ! wetness at dry end of near-saturation range
+    real(kind=c_double) :: WETF     ! saturation fraction at field capacity
+    real(kind=c_double) :: CHM      ! Clapp and Hornberger m, kPa
+    real(kind=c_double) :: CHN      ! Clapp and Hornberger n
 !                         Mualem van Genuchten (iModel=1)
-!     real(kind=8) :: THS      ! water content at saturation
-!     real(kind=8) :: THR      ! residual water content
-    real(kind=8) :: ALFA     ! parameter alpha, 1/m
-    real(kind=8) :: MVGN     ! parameter n
-!     real(kind=8) :: KS       ! hydraulic conductivity at saturation, mm/d
-!     real(kind=8) :: A        ! tortuosity parameter (default = 0.5)
+!     real(kind=c_double) :: THS      ! water content at saturation
+!     real(kind=c_double) :: THR      ! residual water content
+    real(kind=c_double) :: ALFA     ! parameter alpha, 1/m
+    real(kind=c_double) :: MVGN     ! parameter n
+!     real(kind=c_double) :: KS       ! hydraulic conductivity at saturation, mm/d
+!     real(kind=c_double) :: A        ! tortuosity parameter (default = 0.5)
 !     output
-    real(kind=8) :: FDPSIDW  ! d PSI / d WETNES, kPa
+    real(kind=c_double) :: FDPSIDW  ! d PSI / d WETNES, kPa
 !
-    real(kind=8) :: MVGM     ! parameter m
-    real(kind=8) :: TINY     !
+    real(kind=c_double) :: MVGM     ! parameter m
+    real(kind=c_double) :: TINY     !
     Parameter (TINY = 1.e-6)
 
     FDPSIDW = 0.0d0
@@ -2899,28 +2899,28 @@ function FK (Wetnes, Par, iModel)
 !     hydraulic conductivity from wetness
     IMPLICIT NONE
 !     input
-    real(kind=8), intent(in) :: WETNES  ! wetness, fraction of saturation
+    real(kind=c_double), intent(in) :: WETNES  ! wetness, fraction of saturation
     integer, intent(in) :: iModel   ! parameterization of hydraulic functions
-    real(kind=8), intent(in) :: Par(*)  ! parameter array
+    real(kind=c_double), intent(in) :: Par(*)  ! parameter array
 !                         Clapp and Hornberger (iModel=0)
-!     real(kind=8) :: PSIF     ! matrix potential at field capacity, kPa
-    real(kind=8) :: BEXP     ! exponent for psi-theta relation
-!     real(kind=8) :: WETINF   ! wetness at dry end of near-saturation range
-    real(kind=8) :: WETF     ! saturation fraction at field capacity
-!     real(kind=8) :: CHM      ! Clapp and Hornberger m, kPa
-!     real(kind=8) :: CHN      ! Clapp and Hornberger n
-    real(kind=8) :: KF       ! hydraulic conductivity at field capacity, mm/d
+!     real(kind=c_double) :: PSIF     ! matrix potential at field capacity, kPa
+    real(kind=c_double) :: BEXP     ! exponent for psi-theta relation
+!     real(kind=c_double) :: WETINF   ! wetness at dry end of near-saturation range
+    real(kind=c_double) :: WETF     ! saturation fraction at field capacity
+!     real(kind=c_double) :: CHM      ! Clapp and Hornberger m, kPa
+!     real(kind=c_double) :: CHN      ! Clapp and Hornberger n
+    real(kind=c_double) :: KF       ! hydraulic conductivity at field capacity, mm/d
 !                        Mualem van Genuchten (iModel=1)
-!     real(kind=8) :: THS      ! water content at saturation
-!     real(kind=8) :: THR      ! residual water content
-    real(kind=8) :: ALFA     ! parameter alpha, 1/m
-    real(kind=8) :: MVGN     ! parameter n
-    real(kind=8) :: KS       ! hydraulic conductivity at saturation, mm/d
-    real(kind=8) :: A        ! tortuosity parameter (default = 0.5)
+!     real(kind=c_double) :: THS      ! water content at saturation
+!     real(kind=c_double) :: THR      ! residual water content
+    real(kind=c_double) :: ALFA     ! parameter alpha, 1/m
+    real(kind=c_double) :: MVGN     ! parameter n
+    real(kind=c_double) :: KS       ! hydraulic conductivity at saturation, mm/d
+    real(kind=c_double) :: A        ! tortuosity parameter (default = 0.5)
 !     output
-    real(kind=8) :: FK       !  hydraulic conductivity, mm/d
+    real(kind=c_double) :: FK       !  hydraulic conductivity, mm/d
 
-    real(kind=8) :: TINY,AWET!
+    real(kind=c_double) :: TINY,AWET!
     parameter (TINY = 1.e-6)
 
     FK = 0.0d0
@@ -2952,28 +2952,28 @@ function FPSIM (WETNES, Par, iModel)
 !     matric potential from wetness
     IMPLICIT NONE
 !     input
-    real(kind=8) :: WETNES   ! wetness, fraction of saturation
+    real(kind=c_double) :: WETNES   ! wetness, fraction of saturation
     integer :: iModel   ! parameterization of hydraulic functions
-    real(kind=8) :: Par(*)  ! parameter array
+    real(kind=c_double) :: Par(*)  ! parameter array
 !                         Clapp and Hornberger (iModel=0)
-    real(kind=8) :: PSIF     ! matrix potential at field capacity, kPa
-    real(kind=8) :: BEXP     ! exponent for psi-theta relation
-    real(kind=8) :: WETINF   ! wetness at dry end of near-saturation range
-    real(kind=8) :: WETF     ! saturation fraction at field capacity
-    real(kind=8) :: CHM      ! Clapp and Hornberger m, kPa
-    real(kind=8) :: CHN      ! Clapp and Hornberger n
+    real(kind=c_double) :: PSIF     ! matrix potential at field capacity, kPa
+    real(kind=c_double) :: BEXP     ! exponent for psi-theta relation
+    real(kind=c_double) :: WETINF   ! wetness at dry end of near-saturation range
+    real(kind=c_double) :: WETF     ! saturation fraction at field capacity
+    real(kind=c_double) :: CHM      ! Clapp and Hornberger m, kPa
+    real(kind=c_double) :: CHN      ! Clapp and Hornberger n
 !                         Mualem van Genuchten (iModel=1)
-!     real(kind=8) :: THS      ! water content at saturation
-!     real(kind=8) :: THR      ! residual water content
-    real(kind=8) :: ALFA     ! parameter alpha, 1/m
-    real(kind=8) :: MVGN     ! parameter n
-    real(kind=8) :: MVGM     ! parameter m
-!     real(kind=8) :: KS       ! hydraulic conductivity at saturation, mm/d
-!     real(kind=8) :: A        ! tortuosity parameter (default = 0.5)
+!     real(kind=c_double) :: THS      ! water content at saturation
+!     real(kind=c_double) :: THR      ! residual water content
+    real(kind=c_double) :: ALFA     ! parameter alpha, 1/m
+    real(kind=c_double) :: MVGN     ! parameter n
+    real(kind=c_double) :: MVGM     ! parameter m
+!     real(kind=c_double) :: KS       ! hydraulic conductivity at saturation, mm/d
+!     real(kind=c_double) :: A        ! tortuosity parameter (default = 0.5)
 !     output
-    real(kind=8) :: FPSIM    ! matric potential, kPa
+    real(kind=c_double) :: FPSIM    ! matric potential, kPa
 !     integer :: i
-    real(kind=8) :: TINY,AWET!
+    real(kind=c_double) :: TINY,AWET!
     parameter (TINY = 1.e-6)
 
     FPSIM = 0.0d0
@@ -3013,22 +3013,22 @@ function FRSS (RSSA, RSSB, Par, PSIM, PsiCrit) !, iModel
 !     soil surface resistance to evaporation
     IMPLICIT NONE
 !     input
-    real(kind=8) :: RSSA    ! soil evaporation resistance at field capacity, s/m
-    real(kind=8) :: RSSB    ! exponent in relation of soil evap res to water
+    real(kind=c_double) :: RSSA    ! soil evaporation resistance at field capacity, s/m
+    real(kind=c_double) :: RSSB    ! exponent in relation of soil evap res to water
                          ! potential
-    real(kind=8) :: PSIM    ! matric potential, kPa
+    real(kind=c_double) :: PSIM    ! matric potential, kPa
 !     Integer iModel  ! parameterization of hydraulic functions
-    real(kind=8) :: Par(*)  ! hydraulic parameter
+    real(kind=c_double) :: Par(*)  ! hydraulic parameter
 !     output
-    real(kind=8) :: FRSS    ! Shuttleworth-Wallace soil surface resistance, s/m
+    real(kind=c_double) :: FRSS    ! Shuttleworth-Wallace soil surface resistance, s/m
 !     function
-!     real(kind=8) :: FWetnes, FDPSIDW, FK
+!     real(kind=c_double) :: FWetnes, FDPSIDW, FK
 !     local
-!     real(kind=8) :: Wetnes
-!     real(kind=8) :: Diff    ! actual diffusivity
-!     real(kind=8) :: DiffF   ! diffusivity at field capacity
-    real(kind=8) :: PSIF    ! water potential at field capacity, kPa
-    real(kind=8) :: PsiCrit ! critical matric potential, kPa
+!     real(kind=c_double) :: Wetnes
+!     real(kind=c_double) :: Diff    ! actual diffusivity
+!     real(kind=c_double) :: DiffF   ! diffusivity at field capacity
+    real(kind=c_double) :: PSIF    ! water potential at field capacity, kPa
+    real(kind=c_double) :: PsiCrit ! critical matric potential, kPa
 
     FRSS = 0.0d0
 
@@ -3060,16 +3060,16 @@ function FTheta (Wetnes,Par,iModel)
 !     water content from wetness
     IMPLICIT NONE
 !     input
-    real(kind=8) :: Wetnes   ! wetness
+    real(kind=c_double) :: Wetnes   ! wetness
     integer :: iModel   ! parameterization of hydraulic functions
-    real(kind=8) :: Par(*)  ! parameter array
+    real(kind=c_double) :: Par(*)  ! parameter array
 !                         Clapp and Hornberger (iModel=0)
-!     real(kind=8) :: THSAT    ! water content at saturation
+!     real(kind=c_double) :: THSAT    ! water content at saturation
 !                         Mualem van Genuchten (iModel=1)
-    real(kind=8) :: THS      ! water content at saturation
-    real(kind=8) :: THR      ! residual water content
+    real(kind=c_double) :: THS      ! water content at saturation
+    real(kind=c_double) :: THR      ! residual water content
 !     output
-    real(kind=8) :: FTheta   ! water content
+    real(kind=c_double) :: FTheta   ! water content
 
     FTheta = 0.0d0
 
@@ -3087,13 +3087,13 @@ function FUNC3 (DEC, L2, L1, T3, T2)
 !     daily integration for slope after Swift (1976), d
     IMPLICIT NONE
 !     input
-    real(kind=8) :: DEC     ! declination of the sun, radians
-    real(kind=8) :: L2      ! time shift of equivalent slope, radians
-    real(kind=8) :: L1      ! latitude of equivalent slope, radians
-    real(kind=8) :: T3      ! hour angle of sunset on slope
-    real(kind=8) :: T2      ! hour angle of sunrise on slope
+    real(kind=c_double) :: DEC     ! declination of the sun, radians
+    real(kind=c_double) :: L2      ! time shift of equivalent slope, radians
+    real(kind=c_double) :: L1      ! latitude of equivalent slope, radians
+    real(kind=c_double) :: T3      ! hour angle of sunset on slope
+    real(kind=c_double) :: T2      ! hour angle of sunrise on slope
 !     output
-    real(kind=8) :: FUNC3
+    real(kind=c_double) :: FUNC3
 !     intrinsic
 !        SIN, COS
 
@@ -3111,30 +3111,30 @@ function FWETK (K, Par, iModel, pr, timer)
     integer iModel   ! parameterization of hydraulic functions
     integer :: pr ! print messages flag
     integer :: timer ! Check-Flag for timelimits set by user
-    real(kind=8) :: Par(*)  ! parameter array
+    real(kind=c_double) :: Par(*)  ! parameter array
 !                         Mualem van Genuchten (iModel=1)
-!     real(kind=8) :: THS      ! water content at saturation
-!     real(kind=8) :: THR      ! residual water content
-!     real(kind=8) :: ALFA     ! parameter alpha, 1/m
-!     real(kind=8) :: MVGN     ! parameter n
-!     real(kind=8) :: KS       ! hydraulic conductivity at saturation, mm/d
-    real(kind=8) :: K        ! hydraulic conductivity, mm/d
-!     real(kind=8) :: A        ! tortuosity parameter (default = 0.5)
+!     real(kind=c_double) :: THS      ! water content at saturation
+!     real(kind=c_double) :: THR      ! residual water content
+!     real(kind=c_double) :: ALFA     ! parameter alpha, 1/m
+!     real(kind=c_double) :: MVGN     ! parameter n
+!     real(kind=c_double) :: KS       ! hydraulic conductivity at saturation, mm/d
+    real(kind=c_double) :: K        ! hydraulic conductivity, mm/d
+!     real(kind=c_double) :: A        ! tortuosity parameter (default = 0.5)
 !     output
-    real(kind=8) :: FWETK    ! wetness at KF if FWETK -99999.d0 then there is error
+    real(kind=c_double) :: FWETK    ! wetness at KF if FWETK -99999.d0 then there is error
 !      function
-!         real(kind=8) :: FK
+!         real(kind=c_double) :: FK
 !      local
-    real(kind=8) :: WetStart
-    real(kind=8) :: WetOld
-    real(kind=8) :: WetNew
-    real(kind=8) :: KOld
-    real(kind=8) :: KNew
+    real(kind=c_double) :: WetStart
+    real(kind=c_double) :: WetOld
+    real(kind=c_double) :: WetNew
+    real(kind=c_double) :: KOld
+    real(kind=c_double) :: KNew
     integer :: It, ItMax !, Itk, ItKonv ! number of iterations, maximum of that
-    real(kind=8) :: Eps      ! precision of solution
-    real(kind=8) :: DeltaS   ! relative difference for numerical differentiation
-    real(kind=8) :: dKdS1, dKdS2, Konver
-    real(kind=8) :: b0,b1,b2,b3
+    real(kind=c_double) :: Eps      ! precision of solution
+    real(kind=c_double) :: DeltaS   ! relative difference for numerical differentiation
+    real(kind=c_double) :: dKdS1, dKdS2, Konver
+    real(kind=c_double) :: b0,b1,b2,b3
 
 !    parameter (ItKonv = 1000, ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
      parameter (ItMax=50, DeltaS=0.0010d0, Eps=1.e-6)
@@ -3219,31 +3219,31 @@ function FWETNES (PSIM,Par,iModel)
 !     wetness from matric potential
     IMPLICIT NONE
 !     input
-    real(kind=8) :: PSIM    ! matric potential, kPa
-    real(kind=8) :: Par(*)  ! parameter array
+    real(kind=c_double) :: PSIM    ! matric potential, kPa
+    real(kind=c_double) :: Par(*)  ! parameter array
     integer :: iModel    ! parameterization of hydraulic functions
 !                        Clapp and Hornberger (iModel=0)
-    real(kind=8) :: PSIF     ! matrix potential at field capacity, kPa
-!     real(kind=8) :: PSIINF     ! matrix potential at field capacity, kPa
-    real(kind=8) :: BEXP     ! exponent for psi-theta relation
-    real(kind=8) :: WETINF   ! wetness at dry end of near-saturation range
-    real(kind=8) :: WETF     ! saturation fraction at field capacity
-    real(kind=8) :: CHM      ! Clapp and Hornberger m, kPa
-    real(kind=8) :: CHN      ! Clapp and Hornberger n
-!     real(kind=8) :: THETAF   ! volumetric water content at field capacity"
+    real(kind=c_double) :: PSIF     ! matrix potential at field capacity, kPa
+!     real(kind=c_double) :: PSIINF     ! matrix potential at field capacity, kPa
+    real(kind=c_double) :: BEXP     ! exponent for psi-theta relation
+    real(kind=c_double) :: WETINF   ! wetness at dry end of near-saturation range
+    real(kind=c_double) :: WETF     ! saturation fraction at field capacity
+    real(kind=c_double) :: CHM      ! Clapp and Hornberger m, kPa
+    real(kind=c_double) :: CHN      ! Clapp and Hornberger n
+!     real(kind=c_double) :: THETAF   ! volumetric water content at field capacity"
 !                         Mualem van Genuchten (iModel=1)
-!     real(kind=8) :: THS      ! water content at saturation
-!     real(kind=8) :: THR      ! residual water content
-    real(kind=8) :: ALFA     ! parameter alpha, 1/m
-    real(kind=8) :: MVGN     ! parameter n
-    real(kind=8) :: MVGM     ! parameter m
-!     real(kind=8) :: KS       ! hydraulic conductivity at saturation, mm/d
-! vt    real(kind=8) :: A        ! tortuosity parameter (default = 0.5)
+!     real(kind=c_double) :: THS      ! water content at saturation
+!     real(kind=c_double) :: THR      ! residual water content
+    real(kind=c_double) :: ALFA     ! parameter alpha, 1/m
+    real(kind=c_double) :: MVGN     ! parameter n
+    real(kind=c_double) :: MVGM     ! parameter m
+!     real(kind=c_double) :: KS       ! hydraulic conductivity at saturation, mm/d
+! vt    real(kind=c_double) :: A        ! tortuosity parameter (default = 0.5)
 
 !     output
-    real(kind=8) :: FWETNES  ! wetness, fraction of saturation
+    real(kind=c_double) :: FWETNES  ! wetness, fraction of saturation
 
-    real(kind=8) :: bpsi
+    real(kind=c_double) :: bpsi
 !     integer :: i
 
     FWETNES = 0.0d0
@@ -3289,13 +3289,13 @@ function HAFDAY (LAT, DEC)
 !     half day length in radians
     IMPLICIT NONE
 !     inputs
-    real(kind=8) :: LAT     ! latitude, radians (S neg)
-    real(kind=8) :: DEC     ! declination of the sun, radians
+    real(kind=c_double) :: LAT     ! latitude, radians (S neg)
+    real(kind=c_double) :: DEC     ! declination of the sun, radians
 !     output
-    real(kind=8) :: HAFDAY  ! half daylength, radians
+    real(kind=c_double) :: HAFDAY  ! half daylength, radians
 !     local
-    real(kind=8) :: ARG
-    real(kind=8) :: PI
+    real(kind=c_double) :: ARG
+    real(kind=c_double) :: PI
 !     intrinsic
 !        ABS, TAN, ACOS
     HAFDAY = 0.0d0
@@ -3328,14 +3328,14 @@ function INTERP (NPAIRS, FUNCT, XVALUE)
     IMPLICIT NONE
 !     input
     integer :: NPAIRS  ! number of pairs of values to be used
-    real(kind=8) ::  FUNCT(*)! array of pairs of values: x1, y1, x2, y2, ...
-    real(kind=8) ::  XVALUE  ! x value
+    real(kind=c_double) ::  FUNCT(*)! array of pairs of values: x1, y1, x2, y2, ...
+    real(kind=c_double) ::  XVALUE  ! x value
 !     output
-    real(kind=8) ::  INTERP  ! y value
+    real(kind=c_double) ::  INTERP  ! y value
 !     local
     integer :: I, J ! DO indexes
-    real(kind=8) ::  XX(1:10) ! Cseries of x values of FUNCT
-    real(kind=8) ::  YY(1:10) ! Cseries of y values of FUNCT
+    real(kind=c_double) ::  XX(1:10) ! Cseries of x values of FUNCT
+    real(kind=c_double) ::  YY(1:10) ! Cseries of y values of FUNCT
 
     INTERP = 0.0d0
 !     put FUNCT into XX and YY
@@ -3363,13 +3363,13 @@ function PM (AA, VPD, DELTA, RA, RC)
 !     Penman-Monteith transpiration rate equation
     IMPLICIT NONE
 !     input
-    real(kind=8) :: AA      ! net energy input, Rn - S, W/m2
-    real(kind=8) :: VPD     ! vapor pressure deficit, kPa
-    real(kind=8) :: DELTA   ! dEsat/dTair, kPa/K
-    real(kind=8) :: RA      ! boundary layer resistance, s/m
-    real(kind=8) :: RC      ! canopy resistance, s/m
+    real(kind=c_double) :: AA      ! net energy input, Rn - S, W/m2
+    real(kind=c_double) :: VPD     ! vapor pressure deficit, kPa
+    real(kind=c_double) :: DELTA   ! dEsat/dTair, kPa/K
+    real(kind=c_double) :: RA      ! boundary layer resistance, s/m
+    real(kind=c_double) :: RC      ! canopy resistance, s/m
 !     output
-    real(kind=8) :: PM      ! Penman-Monteith latent heat flux density, W/m2
+    real(kind=c_double) :: PM      ! Penman-Monteith latent heat flux density, W/m2
 
     PM = 0.0d0
 
@@ -3382,17 +3382,17 @@ function WNDADJ (ZA, DISP, Z0, FETCH, ZW, Z0W)
 !        wind speed at weather station
     IMPLICIT NONE
 !    input
-    real(kind=8) :: ZA      ! reference height, m
-    real(kind=8) :: DISP    ! height of zero-plane, m
-    real(kind=8) :: Z0      ! roughness parameter, m
-    real(kind=8) :: FETCH   ! weather station fetch, m
-    real(kind=8) :: ZW      ! weather station measurement height for wind,
+    real(kind=c_double) :: ZA      ! reference height, m
+    real(kind=c_double) :: DISP    ! height of zero-plane, m
+    real(kind=c_double) :: Z0      ! roughness parameter, m
+    real(kind=c_double) :: FETCH   ! weather station fetch, m
+    real(kind=c_double) :: ZW      ! weather station measurement height for wind,
                          ! above any zero plane, m
-    real(kind=8) :: Z0W     ! weather station roughness parameter, m
+    real(kind=c_double) :: Z0W     ! weather station roughness parameter, m
 !     output
-    real(kind=8) :: WNDADJ  ! ratio
+    real(kind=c_double) :: WNDADJ  ! ratio
 !     local
-    real(kind=8) :: HIBL    ! height of internal boundary layer, m
+    real(kind=c_double) :: HIBL    ! height of internal boundary layer, m
 !     intrinsic
 !        LOG
 
