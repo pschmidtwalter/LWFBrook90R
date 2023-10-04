@@ -1,4 +1,3 @@
-library(LWFBrook90R)
 
 # Set up the input data
 data("slb1_soil")
@@ -50,6 +49,8 @@ test_that("NAs in soil are refused",{
 # manipulate climate
 clim_bad <- slb1_meteo[data.table::year(slb1_meteo$dates) == 2002,]
 clim_bad$dates[170] <- as.Date("2002-06-30")
+clim_na <- slb1_meteo[data.table::year(slb1_meteo$dates) == 2002,]
+clim_na[160:165,c(5,8)] <- NA
 
 opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-30"))
 parms <- set_paramLWFB90()
@@ -61,6 +62,13 @@ test_that("errorhandling works",{
               climate = clim_bad,
               soil = soil,
               rtrn_input = FALSE, rtrn_output = FALSE)
+  )
+  expect_error(
+    run_LWFB90(options_b90 = opts,
+               param_b90 = set_paramLWFB90(),
+               climate = clim_na,
+               soil = soil,
+               rtrn_input = FALSE)
   )
 
   expect_error(

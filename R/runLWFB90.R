@@ -297,10 +297,9 @@ run_LWFB90 <- function(options_b90,
       soil_materials = param_b90$soil_materials,
       soil_nodes = param_b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
       output_log = verbose,
+      chk_input = chk_input,
       timelimit = timelimit
     )
-    ## check for simulation errors ----
-    chk_errors()
 
     finishing_time <- Sys.time()
     simtime <- finishing_time - start
@@ -309,31 +308,6 @@ run_LWFB90 <- function(options_b90,
     if (verbose == TRUE) {
       message(paste("Simulation successful! Duration:", round(simtime,2), "seconds"))
     }
-
-    ## process and manage outputs ----
-    # precipitation interval outputs (to come)
-
-    # daily outputs
-    simout$output <- data.table::data.table(simout$output)
-    data.table::setnames(simout$output, names(simout$output),
-                         c('yr','mo','da','doy','rfal','rint','sfal','sint','rthr','sthr','rsno',
-                           'rnet','smlt','snow','swat','gwat','intr', 'ints','evap','tran','irvp',
-                           'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
-                           'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
-                           'stres','adef','awat','relawat','nits','balerr', 'slrad',
-                           'solnet', 'lngnet', 'aa', 'asubs'))
-
-    # layer outputs
-    simout$layer_output <- data.table::rbindlist(lapply(seq(dim(simout$layer_output)[3]),
-                                                        function(x) data.frame(simout$layer_output[ , , x])),
-                                                 idcol = "nl")
-    data.table::setnames(simout$layer_output, paste0("X", 1:14),
-                         c('yr','mo','da','doy','swati','theta','wetnes','psimi','infl',
-                           'byfl','tran','vrfl','dsfl','ntfl'))
-
-    simout$layer_output <- simout$layer_output[order(simout$layer_output$yr,
-                                                     simout$layer_output$doy,
-                                                     simout$layer_output$nl),]
 
     ## initialize return value ----
     simres <- list(simulation_duration = simtime,
@@ -348,7 +322,6 @@ run_LWFB90 <- function(options_b90,
 
     ## append simulation results  ----
     simres[names(simout)[-1]] <- simout[-1] # append without error-code
-
 
     ## apply functions on simulation output ----
     if (!is.null(output_fun)) {
@@ -370,7 +343,7 @@ run_LWFB90 <- function(options_b90,
 
       # TODO: simres is copied for use in each output_fun.
       # Better to name -object directly in the call to output_fun,
-      # instead of addressing the whole list x.
+      # instead of addressing the whole list x?
       simres$output_fun <- tryCatch( {
 
         Map(do.call, output_fun, lapply(outfunargsnms, function(x,args) args[x], args = outfunargs))
@@ -401,30 +374,6 @@ run_LWFB90 <- function(options_b90,
     message("Finished!")
   }
   return(simres)
-}
-
-# check for errors -------------------------------------------------------------
-chk_errors <- function(){
-  eval.parent(quote({
-    if (simout$error_code != 0L) {
-      if (simout$error_code == 1L) stop("Simulation terminated abnormally: 'initial matrix psi > 0'
-                                        (rerun with verbose = TRUE to see more information)")
-      if (simout$error_code == 2L) stop("Simulation initialization failed: 'FWETK failed to determine wetness at KF'
-                                           (rerun with verbose = TRUE  to see more information)")
-      if (simout$error_code == 3L) stop("Simulation terminated abnormally: 'inconsistent dates in climate!'
-                                        (rerun with verbose = TRUE  to see more information)")
-      if (simout$error_code == 4L) stop("Simulation terminated abnormally: 'inconsistent dates in precipitation input!'
-                                        (rerun with verbose = TRUE  to see more information)")
-      if (simout$error_code == 5L) stop("Simulation terminated abnormally: 'wrong precipitation interval input!'
-                                        (rerun with verbose = TRUE  to see more information)")
-      if (simout$error_code == 6L) stop("Simulation terminated abnormally: 'negative soil water storage!'
-                                        (rerun with verbose = TRUE  to see more information)")
-      if (simout$error_code == 7L) stop("Simulation terminated abnormally: 'water storage exceeds water capacity!'
-                                        (rerun with verbose = TRUE  to see more information)")
-
-    }
-  }))
-
 }
 
 ## check-functions for input ---------------------------------------------------
@@ -556,24 +505,6 @@ chk_clim <- function() {
   }))
 }
 
-# chk_obs <- function(){
-#   eval.parent(quote({
-#     if (!is.null(obs)) {
-#       names(obs) <- tolower(names(obs))
-#       stopifnot("dates" %in% names(obs),
-#                 inherits(obs$dates, "Date"),
-#                 length(obs) > 1)
-#       if (min(obs$dates) > options_b90$startdate & max(obs$dates) < options_b90$enddate) {
-#         stop("Your observations are not within the simulation period.")
-#       }
-#       if (is.null(gof_fun)) {
-#         stop("Please provide a function(sim, obs) or list of functions to calculate
-#            goodness-of-fit measures for observed variables.")
-#       }
-#     }
-#   }))
-# }
-
 chk_soil <- function(){
 
   eval.parent(quote({
@@ -627,7 +558,6 @@ chk_soil <- function(){
       if (options_b90$root_method == "soilvar" & is.null(soil$rootden)) {
         stop("Please provide column 'rootden' in 'soil'-data.frame when using options_b90$root_method = 'soilvar'.")
       }
-
 
     }
   }))

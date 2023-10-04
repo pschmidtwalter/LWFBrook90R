@@ -13,6 +13,7 @@ r_lwfbrook90(
   soil_nodes,
   precdat = NULL,
   output_log = TRUE,
+  chk_input = TRUE,
   timelimit = Inf
 )
 }
@@ -46,6 +47,8 @@ number), layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden
 month, day, interval-number (1:precint), prec, mesflp.}
 
 \item{output_log}{Logical whether to print runtime output to console.}
+
+\item{chk_input}{Logical whether to check for NaNs in model inputs.}
 
 \item{timelimit}{Integer to set elapsed time limits for running the model.}
 }

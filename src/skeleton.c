@@ -6,10 +6,10 @@
 
 void F77_NAME(s_brook90_f)(double *siteparam, double *climveg, double *param, double *pdur,
     double *soil_materials, double *soil_nodes, double *precdat,
-    int *pr, int *timer, int *error, double *output, double *output_layer);
+    int *pr, int *timer, int *error, int *chk, double *output, double *output_layer);
 
 extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEXP soil_materials,
-    SEXP soil_nodes, SEXP precdat, SEXP pr, SEXP timer, SEXP n_days, SEXP n_lays, SEXP n_pint){
+    SEXP soil_nodes, SEXP precdat, SEXP pr, SEXP timer, SEXP chk, SEXP n_days, SEXP n_lays, SEXP n_pint){
 
 
     int n; // total length of layer output
@@ -33,8 +33,10 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
     INTEGER(dims)[2] = n_l_c;
     setAttrib( output_layer, R_DimSymbol, dims);
 
-    F77_CALL(s_brook90_f)(REAL(siteparam), REAL(climveg), REAL(param), REAL(pdur), REAL(soil_materials),
-        REAL(soil_nodes), REAL(precdat), INTEGER(pr), INTEGER(timer), INTEGER(error), REAL(output), REAL(output_layer));
+    F77_CALL(s_brook90_f)(REAL(siteparam), REAL(climveg), REAL(param), REAL(pdur),
+             REAL(soil_materials),REAL(soil_nodes), REAL(precdat), INTEGER(pr),
+             INTEGER(timer), INTEGER(error),INTEGER(chk),
+             REAL(output), REAL(output_layer));
 
     SEXP out_full = PROTECT( allocVector(VECSXP, 3) );
     SET_VECTOR_ELT(out_full, 0, error);
@@ -47,7 +49,7 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
 }
 
 static const R_CallMethodDef CallEntries[] = {
-  {"s_brook90_c",   (DL_FUNC) &s_brook90_c,   12},
+  {"s_brook90_c",   (DL_FUNC) &s_brook90_c,   13},
   {NULL,         NULL,                0}
 };
 

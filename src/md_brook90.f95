@@ -39,7 +39,7 @@ module fbrook_mod
 contains
 
 subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, &
-                     pr, timer, error, output_day, output_layer) bind(C, name="s_brook90_f_")
+                     pr, timer, error, chk, output_day, output_layer) bind(C, name="s_brook90_f_")
 
     implicit none
 
@@ -65,6 +65,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     ! Error-code
     integer(kind=c_int), intent(inout) :: error
 
+    ! NaN-check of inputs
+    integer(kind=c_int), intent(in) :: chk
+
     ! Output matrix
     real(kind=c_double), dimension( INT(param(1) * siteparam(6)), 47), intent(inout) :: output_day
     real(kind=c_double), dimension( INT(param(1) * siteparam(6)), 14, INT(param(65))), intent(inout) :: output_layer
@@ -82,7 +85,13 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     RSNO = -1
     TSNOW = 0
 
-    ! Parameters
+    ! Check for missing values in Inputs
+    if (chk == 1) then
+        call check_for_NaN_inputs(param, siteparam, soil_materials, soil_nodes, climveg, precdat, error)
+        if (error /= 0) go to 999
+    end if
+
+        ! Parameters
     include 'PFILE.h'
 
     ! Site level information
@@ -96,7 +105,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     LAT = LAT / 57.296 ! convert to lat: 180/pi
 
     ! read PRFILE.DAT if requested
-    
+
     if (NPINT .GT. 1) then
         DTP = DT / real( NPINT, kind=c_double)
 !         OPEN (UNIT = 10, FILE = 'in/PRFILE.DAT')
@@ -573,7 +582,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
 !           flows accumulated over precip interval
             INCLUDE 'PACCUM.h'
-           
+
 !           time remaining in precipitation time-step
             DTRI = DTRI - DTI
 
@@ -720,8 +729,8 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !           precipitation interval output
            INCLUDE 'output_pint.h'
            INCLUDE 'output_layer_pint.h'
-           
-!           flows accumulated over day 
+
+!           flows accumulated over day
            INCLUDE 'DACCUM.h'
 
 !           accumulate iterations
@@ -740,18 +749,18 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     ! stress factor - ratio of actual to potential transpiration
     ! separate, based on daily values.
         if (PTRAND .GT. 0.001d0) THEN
-            STRES = TRAND / PTRAND 
+            STRES = TRAND / PTRAND
         else
             STRES = 1.0d0
         end if
         if (STRES .GT. 1.d0) STRES = 1.d0
-        output_day(NPINT*IDAY, 37) = STRES !STRES     
-        
-!   calc for daily water balance error 
+        output_day(NPINT*IDAY, 37) = STRES !STRES
+
+!   calc for daily water balance error
         BALERD = STORD - (INTR + INTS + SNOW + SWAT + GWAT) + PRECD - EVAPD - FLOWD - SEEPD
         STORD = INTR + INTS + SNOW + SWAT + GWAT
-        
-        output_day(NPINT*IDAY, 42) = BALERD !STRES 
+
+        output_day(NPINT*IDAY, 42) = BALERD !STRES
 
         IF (DOM .EQ. DAYMO(MONTH)) THEN
 !        set up for next month
@@ -987,6 +996,78 @@ subroutine CANOPY (SNOW, SNODEN, MXRTLN, MXKPL, DENSEF, HEIGHT, LAI, SAI, RTLEN,
     RPLANT = 1.0d0 / KPL
 
 end subroutine CANOPY
+
+subroutine check_for_NaN_inputs(param, siteparam, soil_materials, soil_nodes, climveg, precdat, error)
+    use, intrinsic :: iso_c_binding, only: c_double, c_int
+    implicit none
+
+    ! Inputs that will be checked for NaNs
+    real(kind=c_double), dimension(:), intent(in) :: param
+    real(kind=c_double), dimension(:), intent(in) :: siteparam
+    real(kind=c_double), dimension(:, :), intent(in) :: soil_materials
+    real(kind=c_double), dimension(:, :), intent(in) :: soil_nodes
+    real(kind=c_double), dimension(:, :), intent(in) :: climveg
+    real(kind=c_double), dimension(:, :), intent(in) :: precdat
+
+    ! Error code
+    integer, intent(inout) :: error
+
+    ! Laufvariablen
+    integer :: lv1, lv2
+
+    ! Checking
+    !param
+    do lv1 = 1, size(param, 1)
+        if(param(lv1)/=param(lv1)) then
+            call intpr("NaN Error in param-input (row):", -1, (/ lv1/),1)
+            error = 8
+        end if
+    end do
+    !site_param
+    do lv1 = 1, size(siteparam, 1)
+        if(siteparam(lv1)/=siteparam(lv1)) then
+            call intpr("NaN Error in siteparam-input (row):", -1, (/ lv1/),1)
+            error = 8
+        end if
+    end do
+    !soil_nodes
+    do lv2 = 1, size(soil_nodes, 2)
+       do lv1 = 1, size(soil_nodes, 1)
+           if(soil_nodes(lv1,lv2)/=soil_nodes(lv1,lv2))then
+               call intpr("NaN Error in soil_nodes-input (row col):", -1, (/ lv1, lv2/),2)
+               error = 8
+           end if
+       end do
+    end do
+    ! soil_materials
+    do lv2 = 1, size(soil_materials, 2)
+       do lv1 = 1, size(soil_materials, 1)
+           if(soil_materials(lv1,lv2)/=soil_materials(lv1,lv2))then
+               call intpr("NaN Error in soil_materials-input (row col):", -1, (/ lv1, lv2/),2)
+               error = 8
+           end if
+       end do
+    end do
+    !veg
+    do lv2 = 1, size(climveg, 2)
+        do lv1 = 1, size(climveg, 1)
+           if(climveg(lv1,lv2)/=climveg(lv1,lv2))then
+               call intpr("NaN Error in climate and vegetation input (row col):", -1, (/ lv1, lv2/),2)
+               error = 8
+           end if
+        end do
+    end do
+    ! meteo
+    do lv2 = 1, size(precdat, 2)
+       do lv1 = 1, size(precdat, 1)
+           if(precdat(lv1,lv2)/=precdat(lv1,lv2))then
+                call intpr("NaN Error in precipitation-input (row col):", -1, (/ lv1, lv2/),2)
+                error = 8
+           end if
+       end do
+    end do
+
+end subroutine check_for_NAN_inputs
 
 subroutine DSLOP (DSLOPE, LENGTH, THICK, STONEF, PSIM, RHOWG, KK, DSFLI)
 !     downslope flow rate from layer
