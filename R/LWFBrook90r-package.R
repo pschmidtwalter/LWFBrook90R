@@ -10,6 +10,5 @@
 #' to derive hydraulic parameters from soil physical properties. For an
 #' introduction to the basic usage see \code{vignette('intro_LWFB90')}.
 #'
-#' @docType package
-#' @name LWFBrook90R
-NULL
+#' @keywords internal
+"_PACKAGE"
