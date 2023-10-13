@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.3</span>
       </span>
     </div>
 
@@ -81,6 +81,7 @@
 <span>  <span class="va">soil_nodes</span>,</span>
 <span>  precdat <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_log <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  chk_input <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  timelimit <span class="op">=</span> <span class="cn">Inf</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -131,6 +132,10 @@ month, day, interval-number (1:precint), prec, mesflp.</p></dd>
 
 <dt>output_log</dt>
 <dd><p>Logical whether to print runtime output to console.</p></dd>
+
+
+<dt>chk_input</dt>
+<dd><p>Logical whether to check for NaNs in model inputs.</p></dd>
 
 
 <dt>timelimit</dt>
