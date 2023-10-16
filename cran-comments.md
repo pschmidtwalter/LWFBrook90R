@@ -1,8 +1,10 @@
-## Version 0.5.2
+## Version 0.5.3
+
+This is a resubmission after beeing removed from CRAN due to late fixes of check warnings with R-devel ("non-portable use of kind").
 
 ### Test environments
 * R-hub:
-  * Ubuntu Linux 20.04.1 LTS, R-release, GCC: R-release (4.2.2)
+  * Ubuntu Linux 20.04.1 LTS, GCC: R-release (4.3.1)
   * Windows Server 2022, 64 bit: R-devel
   * Fedora Linux, clang, gfortran: R-devel
   * Debian Linux, GCC ASAN/UBSAN: R-devel
@@ -13,7 +15,7 @@
 
 ### R CMD check
 
-0 errors | 0 warnings | <1 notes
+0 errors | 0 warnings | 1 notes
 
 There were no errors or warnings.
 Some test environments return 1 NOTE because of a known URL-issue with https://doi.org/10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2

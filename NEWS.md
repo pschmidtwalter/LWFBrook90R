@@ -1,3 +1,13 @@
+# LWFBrook90R 0.5.3
+
+## Bug fixes
+
+ - fixed R CMD check Warnings due to non-portable use of kind
+
+## Changes
+
+ - Moved input checks for missing values from R to Fortran model code
+
 # LWFBrook90R 0.5.2
 
 ## Bug fixes
