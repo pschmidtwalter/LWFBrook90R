@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.4.9000</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ later:</p>
 <code class="sourceCode R"><span><span class="va">tdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">fnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">tdir</span>, <span class="st">"/clim"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">".csv"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fnames</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">[</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/IDateTime.html" class="external-link">year</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2002</span>,<span class="op">]</span>, </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">[</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/IDateTime.html" class="external-link">year</a></span><span class="op">(</span><span class="va">slb1_meteo</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2002</span>,<span class="op">]</span>, </span>
 <span>            file <span class="op">=</span> <span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>For testing, we perform a single run with <code><a href="../reference/run_LWFB90.html">run_LWFB90()</a></code>

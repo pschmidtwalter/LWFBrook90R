@@ -18,7 +18,7 @@ parallel, with varying input parameters."><!-- mathjax --><script src="https://c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.4.9000</span>
       </span>
     </div>
 
@@ -212,7 +212,7 @@ using <code><a href="https://progressr.futureverse.org/reference/handlers.html" 
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "RunNo.7"  "RunNo.8"  "RunNo.9"  "RunNo.10"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># extract results</span></span></span>
-<span class="r-in"><span><span class="va">evapday</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">evapday</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">b90.multi</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="va">x</span><span class="op">$</span><span class="va">output</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"yr"</span>, <span class="st">"doy"</span>, <span class="st">"evap"</span><span class="op">)</span><span class="op">]</span> <span class="op">}</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  idcol <span class="op">=</span> <span class="st">"srun"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
