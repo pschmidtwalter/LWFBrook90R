@@ -25,7 +25,7 @@ vary_parms <- data.frame(maxlai = c(0.941, 0.952),
                          fsintsai = c(0.981, 0.982),
                          soil_materials.ths2 = c(0.991,0.992))
 
-res_multi <- run_multi_LWFB90(paramvar = vary_parms[1:N,],
+res_multi <- run_multi_LWFB90(paramvar = vary_parms,
                               param_b90 = parms,
                               options_b90 = opts,
                               climate = slb1_meteo)
