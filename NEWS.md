@@ -1,3 +1,9 @@
+# LWFBrook90R 0.5.4.9000
+
+## Bug fixes
+
+ - fixed problem in parameter replacement multirun-permutations [#65](https://github.com/pschmidtwalter/LWFBrook90R/issues/70)
+
 # LWFBrook90R 0.5.3
 
 ## Bug fixes

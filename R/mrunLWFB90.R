@@ -81,17 +81,19 @@ run_multi_LWFB90 <- function(paramvar,
   # determine list and vector elements in param_b90
   is_ll <- lapply(param_b90, function(x) is.list(x) | length(x) > 1 )
 
-  # which of the columns in paramvar belong to the list-parameters?
+  # which of paramvar's columns belong to the list-parameters?
   param_ll <- sapply(names(param_b90[names(is_ll)[which(is_ll == TRUE)]]),
                      simplify = FALSE,
-                     FUN =  grep,
-                     x = paramvar_nms)
+                     FUN = function(x) {
+                       which(grepl(x,paramvar_nms, fixed = TRUE) &
+                               grepl("[[:digit:].]",paramvar_nms))
+                     })
 
   # determine number of nonzero list entries
   param_ll_len <- length(param_ll[sapply(param_ll, function(x) length(x) > 0)])
 
   # check if all the names of paramvar can be found in param_b90
-  if (param_ll_len > 0L) { #length > 1 includede in paramvar
+  if (param_ll_len > 0L) { #length > 1 included in paramvar
     # remove zeros
     param_ll <- param_ll[sapply(param_ll, function(x) length(x) > 0)]
     singlepar_nms <- paramvar_nms[-unlist(param_ll)]
@@ -100,6 +102,7 @@ run_multi_LWFB90 <- function(paramvar,
     singlepar_nms <- paramvar_nms
     nms <- paramvar_nms
   }
+
 
   if (!all(nms %in% names(param_b90))) {
     stop( paste( "Not all names of 'paramvar' were found in 'param_b90'! Check names:",
