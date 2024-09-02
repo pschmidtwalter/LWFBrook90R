@@ -17,5 +17,5 @@ meteo <- slb1_meteo[which(dates >= opts$startdate
 
 res <- run_LWFB90(options_b90 = opts, param_b90 = parms, climate = meteo, soil =soil)
 
-saveRDS(res, file = "inst/testdata/simresults.rds")
-saveRDS(meteo, file = "inst/testdata/meteo.rds")
+saveRDS(res, file = "tests_compare_actual_vs_previous/simresults.rds")
+saveRDS(meteo, file = "tests_compare_actual_vs_previous/meteo.rds")

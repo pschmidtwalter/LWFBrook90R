@@ -15,19 +15,14 @@ meteo <- slb1_meteo[which(dates >= opts$startdate
 
 res_actual <- run_LWFB90(options_b90 = opts, param_b90 = parms, climate = meteo, soil =soil)
 
-#meteo <- readRDS(system.file("testdata/meteo.rds", package = "LWFBrook90R"))
-#res_previous <- readRDS(system.file("testdata/simresults.rds", package = "LWFBrook90R"))
-
 meteo <- readRDS("tests_compare_actual_vs_previous/meteo.rds")
 res_previous <- readRDS("tests_compare_actual_vs_previous/simresults.rds")
-
-res_actual$output[,`:=`(snowlq = NULL, cc= NULL)]
-res_actual$layer_output[,`:=`(relawati = NULL)]
 
 test_that("sim-outputs of actual are equal to previous", {
   expect_equal(res_actual$output, res_previous$output)
   expect_equal(res_actual$layer_output, res_previous$layer_output)
 })
+
 
 test_that("sim-inputs of actual are equal to previous", {
   expect_equal(res_actual$model_input$param_b90, res_previous$model_input$param_b90)

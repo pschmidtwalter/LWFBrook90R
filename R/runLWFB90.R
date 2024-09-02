@@ -110,7 +110,7 @@
 #' solnet \tab net solar radiation on slope over daytime \tab W/m2 \cr
 #' smlt \tab snowmelt \tab mm/d \cr
 #' snow \tab snowpack water equivalent \tab mm \cr
-#' snowlq \tab iquid water content of snow on the ground \tab mm \cr
+#' snowlq \tab liquid water content of snow on the ground \tab mm \cr
 #' snvp \tab evaporation from snowpack \tab mm/d \cr
 #' srfl \tab source area flow \tab mm/d \cr
 #' stres \tab tran / ptran (daily value, output at the day's last precipitation interval) \tab - \cr
