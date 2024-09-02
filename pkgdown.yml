@@ -1,13 +1,12 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   LWFBook90R-1-Intro: LWFBook90R-1-Intro.html
   LWFBrook90R-2-Options_Param: LWFBrook90R-2-Options_Param.html
   LWFBrook90R-3-Multiruns: LWFBrook90R-3-Multiruns.html
   LWFBrook90R-4-Multisite-Runs: LWFBrook90R-4-Multisite-Runs.html
-last_built: 2023-12-08T11:37Z
+last_built: 2024-09-02T12:02Z
 urls:
   reference: https://pschmidtwalter.github.io/LWFBrook90R/reference
   article: https://pschmidtwalter.github.io/LWFBrook90R/articles
-

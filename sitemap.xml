@@ -1,120 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/404.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBook90R-1-Intro.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBrook90R-2-Options_Param.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBrook90R-3-Multiruns.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBrook90R-4-Multisite-Runs.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/LWFBrook90R-package.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/approx_standprop.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/calc_globrad.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/calc_vegperiod.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/correct_prec.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/extract_layer_output.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/make_rootden.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/make_seasLAI.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/make_standprop.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/param_to_rlwfbrook90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/plant_b90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/plant_coupmodel.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/plant_linear.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/process_outputs_LWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/ptfs.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/r_lwfbrook90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/replace_vecelements.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/run_LWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/run_multi_LWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/run_multisite_LWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/set_optionsLWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/set_outputLWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/set_paramLWFB90.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_meteo.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_prec2013_hh.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_soil.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_standprop.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/soil_to_param.html</loc>
-  </url>
-  <url>
-    <loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/standprop_yearly_to_param.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/404.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBook90R-1-Intro.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBrook90R-2-Options_Param.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBrook90R-3-Multiruns.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/LWFBrook90R-4-Multisite-Runs.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/articles/index.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/authors.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/index.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/news/index.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/LWFBrook90R-package.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/approx_standprop.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/calc_globrad.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/calc_vegperiod.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/correct_prec.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/extract_layer_output.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/index.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/make_rootden.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/make_seasLAI.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/make_standprop.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/param_to_rlwfbrook90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/plant_b90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/plant_coupmodel.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/plant_linear.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/process_outputs_LWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/ptfs.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/r_lwfbrook90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/replace_vecelements.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/run_LWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/run_multi_LWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/run_multisite_LWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/set_optionsLWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/set_outputLWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/set_paramLWFB90.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_meteo.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_prec2013_hh.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_soil.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/slb1_standprop.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/soil_to_param.html</loc></url>
+<url><loc>https://pschmidtwalter.github.io/LWFBrook90R/reference/standprop_yearly_to_param.html</loc></url>
 </urlset>
+
