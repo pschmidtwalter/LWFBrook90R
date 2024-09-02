@@ -4,6 +4,11 @@
 
  - fixed problem in parameter replacement multirun-permutations [#65](https://github.com/pschmidtwalter/LWFBrook90R/issues/70)
 
+## Changes:
+ 
+ - set check.data = F in vegperiod::vegperiod to be compatible with extreme climates
+
+
 # LWFBrook90R 0.5.3
 
 ## Bug fixes

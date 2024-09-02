@@ -190,7 +190,8 @@ run_LWFB90 <- function(options_b90,
                                       leaffalldoy.fixed = param_b90$leaffalldoy,
                                       species = param_b90$budburst_species,
                                       est.prev = ifelse(length(climyears) <= 5,
-                                                        length(climyears) - 1, 5))
+                                                        length(climyears) - 1, 5),
+                                      check.data = FALSE)
   param_b90$budburstdoy <- budburst_leaffall$start
   param_b90$leaffalldoy <- budburst_leaffall$end
 
