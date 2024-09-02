@@ -12,6 +12,8 @@ $(SHLIB): $(FT_OBJS) $(C_OBJS)
 
 # Dependency of objects (?)
 # <name.o>: <modulename.o>
+md_typedefs.o: md_decl_const.o
+md_brook90.o: md_typedefs.o
 md_brook90.o: md_decl_const.o
 
 # Source (object) of Fortran modules

@@ -1,4 +1,4 @@
-# LWFBrook90R 0.5.4.9000
+# LWFBrook90R 0.6.0.9000
 
 ## Bug fixes
 
@@ -6,9 +6,10 @@
 
 ## Changes:
  
- - set check.data = F in vegperiod::vegperiod to be compatible with extreme climates
+ - added a constant head lower boundary condition: It is now possible to define the depth of a constant ground water table (`param_b90$water_table_depth`). In this way, capillary rise can be simulated. Default is -9999, meaning no groundwater influence (i.e. unit gradient flow from the bottom of the soil profile). Any depth can be specified, also a depth below the lowest soil layer. If the water table is within the soil profile, soil layers below the water table are saturated with water. 
  - added variables 'relawati' (relative plant available water content) to `layer_output`, and 'snowlq' (liquid water content of snow on the ground) and 'cc' (cold content of snow pack) to `output`. The latter two are important initial variables for continuing a simulation.
- - added 'snowlqini' and 'snowccini' to the list of parameters (`param_b90`). These can now passed as initital variables to snowlq and cc, for simulation conitnuation
+ - added 'snowlqini' and 'snowccini' to the list of parameters (`param_b90`). These can now passed as initital variables to snowlq and cc, for simulation continuation
+ - set check.data = F in vegperiod::vegperiod to be compatible with extreme climates
 
 # LWFBrook90R 0.5.3
 

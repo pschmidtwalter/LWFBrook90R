@@ -14,7 +14,6 @@
 !     xxxxMflow for month, mm
 !     xxxxYflow for year, mm
 
-integer, parameter :: ML = 1000, MPar= 10, MMat=20, Reset=1
 real(kind=c_double) :: B0              !,B1,B2,B3,B4,B5     ! buffer
 !real(kind=c_double) :: A0,A1           !,A2,A3,A4,A5     ! buffer
 real(kind=c_double) :: AA(2)           ! average available energy over daytime or nighttime, W/m2
@@ -108,6 +107,7 @@ real(kind=c_double) :: GSP             ! * fraction of discharge to seepage
 real(kind=c_double) :: GWAT            ! **** groundwater storage below soil layers, mm
 real(kind=c_double) :: GWFL            ! streamflow rate from groundwater, mm/d
 real(kind=c_double) :: GWFLP, GWFLD    ! , GWFLM, GWFLYgroundwater flow
+type(groundwater_variables) :: gwv ! groundwater variables (including groundwater_level, N_groundwater, ... (see md_typedefs.f95))
 double precision   HA(ML), HB(ML), HC(ML), HD(ML) ! Buffers for heat flow
 integer :: HEAT                 !  switch to include (1) or to exclude (0) soil heat flow
 real(kind=c_double) :: HeatCapNew(ML), HeatCapOld(ML) ! Volumetric heat capacity of layer [J m-3 K-1]

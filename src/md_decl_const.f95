@@ -26,4 +26,6 @@ module mod_decl_const
     real(kind=c_double), parameter :: zeroCurRange = 1.d0 ! near zero degree Celsius caused by the latent heat of fusion and thawing, see for example Boike et al. 1998
     real(kind=c_double), parameter :: zeroCurTemp = 0.d0  ! zeroCurTemp temperature for the so-called zero curtain
 
+    integer, parameter :: ML = 1000, MPar= 10, MMat=20, Reset=1
+
 end module mod_decl_const

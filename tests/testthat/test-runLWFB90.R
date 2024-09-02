@@ -164,6 +164,26 @@ test_that("precipitation input works",{
 })
 
 
+test_that("water table input works",{
+  # from layer 16 there should be groundwater
+  res <- run_LWFB90(options_b90 = opts,
+                                param_b90 = set_paramLWFB90(water_table_depth = -1),
+                                climate = slb1_meteo,
+                                soil = soil)
+  expect_equal(res$layer_output[nl==16, unique(wetnes)], 1)
+  expect_true(res$layer_output[nl==15, mean(wetnes)] < 1)
+  expect_true(res$layer_output[nl==10, mean(wetnes)] < 1)
+
+  # groundwater shortly below lower boundary
+  res <- run_LWFB90(options_b90 = opts,
+                    param_b90 = set_paramLWFB90(water_table_depth = -2.2),
+                    climate = slb1_meteo,
+                    soil = soil)
+  expect_true(all(res$layer_output[nl==21, wetnes] > test_default$layer_output[nl == 21, wetnes]))
+
+})
+
+
 
 
 
