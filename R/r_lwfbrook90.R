@@ -2,9 +2,9 @@
 #'
 #' Passes input data matrices to the Fortran model code and returns the results
 #'
-#' @param siteparam A [1,6] matrix with site level information: start year,
+#' @param siteparam A [1,8] matrix with site level information: start year,
 #'   start doy, latitude, initial snow, initial groundwater, precipitation
-#'   interval.
+#'   interval, a snow cover's  liquid water (SNOWLQ) and cold content (CC).
 #' @param climveg A matrix with 15 columns of climatic and vegetation data:
 #'   year, month, day, global radiation in MJ/(m² d), tmax (deg C), tmin (deg
 #'   C), vappres (kPa), wind (m/s), prec (mm), mesfl (mm), densef (-), stand
@@ -58,7 +58,7 @@ r_lwfbrook90 <- function(
   # Run the model
   out <- .Call(
     's_brook90_c',
-    siteparam = as.matrix(siteparam, ncol = 6, nrow = 1),
+    siteparam = as.matrix(siteparam, ncol = 8, nrow = 1),
     climveg = as.matrix(climveg, ncol = 15),
     param = as.vector(param),
     pdur = as.matrix( pdur, ncol = 12 ),

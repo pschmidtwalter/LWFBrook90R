@@ -118,6 +118,7 @@ asubs \tab average available energy below canopy \tab W/m2 \cr
 awat \tab total available soil water in layers with roots between -6.18 kPa and \code{param_b90$psicr} \tab mm \cr
 balerr \tab error in water balance (daily value, output at the day's last precipitation interval) \tab mm \cr
 byfl \tab total bypass flow \tab mm/d \cr
+cc \tab cold content of snowpack (positive) \tab MJ m-2 \cr
 dsfl \tab downslope flow \tab mm/d \cr
 evap \tab evapotranspiration \tab mm/d \cr
 flow \tab total streamflow \tab mm/d \cr
@@ -149,6 +150,7 @@ slrad \tab average solar radiation on slope over daytime \tab W/m2 \cr
 solnet \tab net solar radiation on slope over daytime \tab W/m2 \cr
 smlt \tab snowmelt \tab mm/d \cr
 snow \tab snowpack water equivalent \tab mm \cr
+snowlq \tab iquid water content of snow on the ground \tab mm \cr
 snvp \tab evaporation from snowpack \tab mm/d \cr
 srfl \tab source area flow \tab mm/d \cr
 stres \tab tran / ptran (daily value, output at the day's last precipitation interval) \tab - \cr

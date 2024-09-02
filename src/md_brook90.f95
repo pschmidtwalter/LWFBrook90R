@@ -50,7 +50,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     real(kind=c_double), dimension(84), intent(in) :: param
     real(kind=c_double), dimension(1,12), intent(in) :: pdur
 
-    real(kind=c_double), dimension(6), intent(in) :: siteparam
+    real(kind=c_double), dimension(8), intent(in) :: siteparam
     real(kind=c_double), dimension( INT(param(66)),8), intent(in) :: soil_materials
     real(kind=c_double), dimension( INT(param(65)),6), intent(in) :: soil_nodes
     real(kind=c_double), dimension( INT(param(1)),15), intent(in) :: climveg
@@ -151,9 +151,11 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     STORD = INTR + INTS + SNOW + SWAT + GWAT
     STORM = STORD
     STORY = STORD
-    ! any initial snow has zero liquid water and cold content
-    CC = 0.0d0
-    SNOWLQ = 0.0d0
+
+    ! initialize liquid water and cold content of snowpack
+    SNOWLQ = siteparam( 7 )
+    CC = siteparam( 8 )
+
 
     ! program initializations
     IDAY = 1

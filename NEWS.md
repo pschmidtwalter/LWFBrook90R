@@ -8,7 +8,7 @@
  
  - set check.data = F in vegperiod::vegperiod to be compatible with extreme climates
  - added variables 'relawati' (relative plant available water content) to `layer_output`, and 'snowlq' (liquid water content of snow on the ground) and 'cc' (cold content of snow pack) to `output`. The latter two are important initial variables for continuing a simulation.
- - 
+ - added 'snowlqini' and 'snowccini' to the list of parameters (`param_b90`). These can now passed as initital variables to snowlq and cc, for simulation conitnuation
 
 # LWFBrook90R 0.5.3
 

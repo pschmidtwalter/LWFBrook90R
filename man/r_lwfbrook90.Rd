@@ -18,9 +18,9 @@ r_lwfbrook90(
 )
 }
 \arguments{
-\item{siteparam}{A [1,6] matrix with site level information: start year,
+\item{siteparam}{A [1,8] matrix with site level information: start year,
 start doy, latitude, initial snow, initial groundwater, precipitation
-interval.}
+interval, a snow cover's  liquid water (SNOWLQ) and cold content (CC).}
 
 \item{climveg}{A matrix with 15 columns of climatic and vegetation data:
 year, month, day, global radiation in MJ/(m² d), tmax (deg C), tmin (deg
