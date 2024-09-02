@@ -14,8 +14,8 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
 
     int n; // total length of layer output
 
-    const int n_cols_out = 47; // number of colums for basic output
-    const int n_cols_outlay = 14; // number of colums for layer output
+    const int n_cols_out = 49; // number of colums for basic output
+    const int n_cols_outlay = 15; // number of colums for layer output
 
     const int n_d_c = INTEGER(n_days)[0];
     const int n_l_c = INTEGER(n_lays)[0];
@@ -24,7 +24,7 @@ extern SEXP s_brook90_c(SEXP siteparam, SEXP climveg, SEXP param, SEXP pdur, SEX
     SEXP error = PROTECT( allocVector(INTSXP, 1) );
     SEXP output = PROTECT( allocMatrix(REALSXP, n_d_c * n_p_c, n_cols_out) );
 
-    n = n_d_c * 14 * n_l_c * n_p_c;
+    n = n_d_c * 15 * n_l_c * n_p_c;
     SEXP output_layer = PROTECT( allocVector(REALSXP, n) );
     SEXP dims = PROTECT( allocVector(INTSXP, 3) );
 

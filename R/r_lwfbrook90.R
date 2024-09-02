@@ -88,7 +88,7 @@ r_lwfbrook90 <- function(
                          'isvp','slvp','snvp','pint','ptran','pslvp','flow','seep',
                          'srfl','slfl','byfl','dsfl','gwfl','vrfln','safrac',
                          'stres','adef','awat','relawat','nits','balerr', 'slrad',
-                         'solnet', 'lngnet', 'aa', 'asubs'))
+                         'solnet', 'lngnet', 'aa', 'asubs', 'snowlq', 'cc'))
 
   # layer outputs
   out$layer_output <- data.table::rbindlist(
@@ -98,7 +98,7 @@ r_lwfbrook90 <- function(
 
   data.table::setnames(out$layer_output, names(out$layer_output)[-1],
                        c('yr','mo','da','doy','swati','theta','wetnes','psimi','infl',
-                         'byfl','tran','vrfl','dsfl','ntfl'))
+                         'byfl','tran','vrfl','dsfl','ntfl', 'relawati'))
 
   return(out)
 }
