@@ -29,7 +29,7 @@
 #'  qffc         \tab Quickflow fraction of infiltrating water at field capacity, for value 0 there is no quickflow (bypass or surface) unless soil profile surface becomes saturated. Default: 0  \tab -                  \tab Flow                   \cr
 #'  qfpar        \tab Quickflow shape parameter. Default: 1 \tab -                  \tab Flow                   \cr
 #'  qlayer       \tab Number of layers which are considered for generation of surface or source area flow. Default: 0\tab -                  \tab Flow                   \cr
-#'  water_table_depth \tab Depth of the water table for a constant head boundary. -9999 Means gravitational flow boundary. Default: -9999\tab m                  \tab Flow                   \cr
+#'  water_table_depth \tab Depth of the water table for a constant head boundary. -9999 means gravitational flow boundary. Default: -9999\tab m                  \tab Flow                   \cr
 #'  gwatini      \tab Initial value of groundwater storage. Default: 0\tab mm                  \tab Initial                \cr
 #'  snowini      \tab Initial value of water content of snow pack. Default: 0\tab mm \tab Initial                \cr
 #'  snowlqini    \tab Initial value of liquid water content of snow pack. Default: 0\tab mm \tab Initial                \cr

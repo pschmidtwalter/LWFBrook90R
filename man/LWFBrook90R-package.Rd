@@ -34,6 +34,8 @@ Authors:
   \item Klaus Hammel
   \item Martin Kennel
   \item Anthony Federer
+  \item Tobias Hohenbrink (\href{https://orcid.org/0000-0002-5227-0171}{ORCID})
+  \item Gisbert Hetkamp
 }
 
 Other contributors:

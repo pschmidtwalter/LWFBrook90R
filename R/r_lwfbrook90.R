@@ -2,7 +2,7 @@
 #'
 #' Passes input data matrices to the Fortran model code and returns the results
 #'
-#' @param siteparam A [1,8] matrix with site level information: start year,
+#' @param siteparam A [1,9] matrix with site level information: start year,
 #'   start doy, latitude, initial snow, initial groundwater, precipitation
 #'   interval, a snow cover's  liquid water (SNOWLQ) and cold content (CC).
 #' @param climveg A matrix with 15 columns of climatic and vegetation data:
@@ -126,6 +126,8 @@ chk_errors <- function(){
       if (out$error_code == 7L) stop("Simulation terminated abnormally: 'water storage exceeds water capacity!'
                                         (rerun with verbose = TRUE  to see more information)")
       if (out$error_code[[1]] == 8L) stop("Simulation terminated abnormally due to undefined elements in input!'
+                                        (rerun with verbose = TRUE  to see more information)")
+      if (out$error_code[[1]] == 9L) stop("Simulation terminated abnormally: bad water table definition!'
                                         (rerun with verbose = TRUE  to see more information)")
 
     }

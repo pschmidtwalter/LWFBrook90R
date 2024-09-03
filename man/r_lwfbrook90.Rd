@@ -18,7 +18,7 @@ r_lwfbrook90(
 )
 }
 \arguments{
-\item{siteparam}{A [1,8] matrix with site level information: start year,
+\item{siteparam}{A [1,9] matrix with site level information: start year,
 start doy, latitude, initial snow, initial groundwater, precipitation
 interval, a snow cover's  liquid water (SNOWLQ) and cold content (CC).}
 
