@@ -1,19 +1,15 @@
-## Version 0.5.3
+## Version 0.6.0
 
 This is a resubmission after beeing removed from CRAN due to late fixes of check warnings with R-devel ("non-portable use of kind").
 
 ### Test environments
-* R-hub:
-  * Ubuntu Linux 20.04.1 LTS, GCC: R-release (4.3.1)
-  * Windows Server 2022, 64 bit: R-devel
-  * Fedora Linux, clang, gfortran: R-devel
-  * Debian Linux, GCC ASAN/UBSAN: R-devel
+
 * Github Actions:
   * latest Ubuntu: R-devel / R-release / R-old-release 
   * latest macOS: R-release
   * latest Windows: R-release
 
-### R CMD check
+### R CMD check results
 
 0 errors | 0 warnings | 1 notes
 
