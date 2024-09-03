@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9000</span>
       </span>
     </div>
 
@@ -75,9 +75,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="changes-0-6-0-9000">Changes:<a class="anchor" aria-label="anchor" href="#changes-0-6-0-9000"></a></h3>
-<ul><li>added a constant head lower boundary condition: It is now possible to define the depth of a constant ground water table (<code>param_b90$water_table_depth</code>). In this way, capillary rise can be simulated. Default is -9999, meaning no groundwater influence (i.e. unit gradient flow from the bottom of the soil profile). Any depth can be specified, also a depth below the lowest soil layer. If the water table is within the soil profile, soil layers below the water table are saturated with water.</li>
-<li>added variables ‘relawati’ (relative plant available water content) to <code>layer_output</code>, and ‘snowlq’ (liquid water content of snow on the ground) and ‘cc’ (cold content of snow pack) to <code>output</code>. The latter two are important initial variables for continuing a simulation.</li>
-<li>added ‘snowlqini’ and ‘snowccini’ to the list of parameters (<code>param_b90</code>). These can now passed as initital variables to snowlq and cc, for simulation continuation</li>
+<ul><li>added a constant head lower boundary condition: It is now possible to define the depth of a constant ground water table (<code>param_b90$water_table_depth</code>). In this way, capillary rise from a water table can be simulated. Default is -9999, meaning no groundwater influence (i.e. unit gradient flow at the bottom of the soil profile). Any depth can be specified, also a depth below the lowest soil layer. If the water table is within the soil profile, soil layers below the water table are saturated with water.</li>
+<li>added variables ‘relawati’ (relative plant available water contents of the soil layers) to <code>layer_output</code>, and ‘snowlq’ (liquid water content of snow on the ground) and ‘cc’ (cold content of snow pack) to <code>output</code>. The latter two are important initial variables for continuing a simulation.</li>
+<li>added ‘snowlqini’ and ‘snowccini’ to the list of parameters (<code>param_b90</code>). These can now be passed as initial variables to snowlq and cc, for simulation continuation</li>
 <li>set check.data = F in vegperiod::vegperiod to be compatible with extreme climates</li>
 </ul></div>
 </div>
@@ -250,7 +250,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
+  <p></p><p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
 </div>
 
 <div class="pkgdown">
