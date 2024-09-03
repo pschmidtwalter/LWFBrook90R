@@ -1,6 +1,6 @@
 ## Version 0.6.0
 
-This is a resubmission after beeing removed from CRAN due to late fixes of check warnings with R-devel ("non-portable use of kind").
+This is a new version with a new functionality. No breaking changes.
 
 ### Test environments
 
