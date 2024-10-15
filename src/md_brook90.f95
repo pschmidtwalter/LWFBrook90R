@@ -77,7 +77,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     include 'VARDCL.h'
 
     allocate( Par(MPar, ML) )
-    DATA DAYMO / 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/
+
+    DAYMO = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/)
+
     error = 0._c_int
 
     ! Not sure why temperature is not initialized

@@ -1,3 +1,10 @@
+# LWFBrook90R 0.6.1
+
+## Bug fixes
+
+ - maintenance
+ - added tests 
+
 # LWFBrook90R 0.6.0
 
 ## Bug fixes

@@ -1,3 +1,4 @@
+library(data.table)
 
 # Set up the input data
 data("slb1_soil")
@@ -52,6 +53,11 @@ clim_bad$dates[170] <- as.Date("2002-06-30")
 clim_na <- slb1_meteo[data.table::year(slb1_meteo$dates) == 2002,]
 clim_na[160:165,c(5,8)] <- NA
 
+meteo <- data.table(slb1_meteo[,c("dates", "tmin", "tmax", "prec", "tmean","vappres", "windspeed", "globrad" )])
+meteo <- meteo[year(dates)==2013,]
+data("slb1_prec2013_hh")
+setDT(slb1_prec2013_hh)
+
 opts <- set_optionsLWFB90(startdate = as.Date("2002-06-01"), enddate = as.Date("2002-06-30"))
 parms <- set_paramLWFB90()
 
@@ -78,4 +84,17 @@ test_that("errorhandling works",{
               soil = soil,
               rtrn_input = FALSE, rtrn_output = FALSE)
   )
+
+  # hourly input
+  expect_error(
+    run_LWFB90(options_b90 = set_optionsLWFB90(startdate = as.Date("2013-05-14"),
+                                               enddate = as.Date("2013-07-28"),
+                                               prec_interval = 20),
+               param_b90 = parms,
+               climate = meteo,
+               soil = soil,
+               precip = slb1_prec2013_hh)
+  )
+
+
 })
