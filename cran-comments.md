@@ -1,6 +1,6 @@
-## Version 0.6.0
+## Version 0.6.1
 
-This is a new version with a new functionality. No breaking changes.
+This version fixes an R CMD check warning with R-devel (Obsolescent feature: DATA statement at (1) after the first executable statement).
 
 ### Test environments
 
@@ -13,6 +13,5 @@ This is a new version with a new functionality. No breaking changes.
 
 0 errors | 0 warnings | 1 notes
 
-There were no errors or warnings.
-Some test environments return 1 NOTE because of a known URL-issue with https://doi.org/10.1175/1525-7541(2003)004%3C1276:SOAETS%3E2.0.CO;2
-This is a central reference for the package and thus needs to be included.
+NOTE: unable to verify current time (on local windows machine)
+
