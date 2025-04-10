@@ -106,7 +106,7 @@ model, and returns the selected results.
 
 \section{Outputs}{
 
-\tabular{llcl}{
+\tabular{llc}{
 \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
 yr \tab year \tab - \cr
 mo \tab month \tab - \cr
@@ -162,7 +162,7 @@ vrfln \tab vertical matrix drainage from lowest layer \tab mm/d \cr
 
 \section{Layer outputs}{
 
-\tabular{llcl}{
+\tabular{llc}{
 \strong{Name} \tab \strong{Description} \tab \strong{Unit} \cr
 yr \tab year \tab - \cr
 mo \tab month \tab - \cr
