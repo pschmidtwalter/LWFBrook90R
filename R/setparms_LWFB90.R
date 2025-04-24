@@ -252,9 +252,11 @@ set_paramLWFB90 <- function(...) {
 
   if (length(dots) > 0 ) {
     if (length(dots[which(names(dots) %in% names(param))]) < length(dots)) {
-      warning(paste("Not all arguments found in list! Check names:",
-                    names(dots[which(!names(dots) %in% names(param))])
-      ))
+      stop(
+        paste("Not all arguments found in list!\nCheck names:",
+              paste0(names(dots[which(!names(dots) %in% names(param))]),
+                     collapse = ", ")
+        ))
     }
     param[match(names(dots),names(param))] <- dots
   }
