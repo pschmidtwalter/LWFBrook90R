@@ -84,7 +84,7 @@ set_optionsLWFB90 <- function(...) {
                      collapse = ", ")
         ))
     }
-    ctrl[match(names(dots),names(param))] <- dots
+    ctrl[match(names(dots),names(ctrl))] <- dots
   }
   return(ctrl)
 
