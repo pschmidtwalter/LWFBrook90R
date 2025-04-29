@@ -118,7 +118,7 @@ asubs \tab average available energy below canopy \tab W/m2 \cr
 awat \tab total available soil water in layers with roots between -6.18 kPa and \code{param_b90$psicr} \tab mm \cr
 balerr \tab error in water balance (daily value, output at the day's last precipitation interval) \tab mm \cr
 byfl \tab total bypass flow \tab mm/d \cr
-cc \tab cold content of snowpack (positive) \tab MJ m-2 \cr
+cc \tab cold content of snowpack (positive) \tab MJ/m2 \cr
 dsfl \tab downslope flow \tab mm/d \cr
 evap \tab evapotranspiration \tab mm/d \cr
 flow \tab total streamflow \tab mm/d \cr
@@ -170,7 +170,7 @@ da \tab day of month \tab - \cr
 doy \tab day of year \tab - \cr
 nl \tab index of soil layer \tab \cr
 swati \tab soil water volume in layer \tab mm \cr
-theta \tab water content of soil layer, mm water / mm soil matrix \tab - \cr
+theta \tab water content of soil layer, mm water / mm soil matrix \tab m3/m3 \cr
 wetnes \tab wetness of soil layer, fraction of saturation \tab - \cr
 psimi \tab matric soil water potential for soil layer \tab kPa \cr
 infl \tab infiltration to soil water in soil layer \tab mm/d \cr

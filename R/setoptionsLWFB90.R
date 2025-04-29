@@ -78,11 +78,13 @@ set_optionsLWFB90 <- function(...) {
 
   if (length(dots) > 0 ) {
     if (length(dots[which(names(dots) %in% names(ctrl))]) < length(dots)) {
-      warning(paste("Not all arguments found in list! Check names:",
-                    names(dots[which(!names(dots) %in% names(ctrl))])
-      ))
+      stop(
+        paste("Invalid model control options provided!\nCheck names:",
+              paste0(names(dots[which(!names(dots) %in% names(ctrl))]),
+                     collapse = ", ")
+        ))
     }
-    ctrl[match(names(dots),names(ctrl))] <- dots
+    ctrl[match(names(dots),names(param))] <- dots
   }
   return(ctrl)
 
