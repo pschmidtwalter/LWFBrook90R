@@ -67,6 +67,14 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.6.2" id="lwfbrook90r-062">LWFBrook90R 0.6.2<small>2025-04-29</small><a class="anchor" aria-label="anchor" href="#lwfbrook90r-062"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-6-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-2"></a></h3>
+<ul><li>bad table format in docs fixed</li>
+<li>fixed input parameter name check failure when more than one unknown model parameters were supplied to <code><a href="../reference/set_paramLWFB90.html">set_paramLWFB90()</a></code> (<a href="https://github.com/pschmidtwalter/LWFBrook90R/pull/72" class="external-link">#72</a> by Valentin Gartiser.)</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.1" id="lwfbrook90r-061">LWFBrook90R 0.6.1<small>2024-10-16</small><a class="anchor" aria-label="anchor" href="#lwfbrook90r-061"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-6-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-1"></a></h3>
@@ -78,14 +86,14 @@
 <h2 class="page-header" data-toc-text="0.6.0" id="lwfbrook90r-060">LWFBrook90R 0.6.0<small>2024-09-03</small><a class="anchor" aria-label="anchor" href="#lwfbrook90r-060"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-6-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0"></a></h3>
-<ul><li>fixed problem in parameter replacement multirun-permutations <a href="https://github.com/pschmidtwalter/LWFBrook90R/issues/70" class="external-link">#65</a>
+<ul><li>fixed problem in parameter replacement multirun-permutations <a href="https://github.com/pschmidtwalter/LWFBrook90R/issues/70" class="external-link">#70</a>
 </li>
 </ul></div>
 <div class="section level3">
 <h3 id="changes-0-6-0">Changes:<a class="anchor" aria-label="anchor" href="#changes-0-6-0"></a></h3>
 <ul><li>added a constant head lower boundary condition: It is now possible to define the depth of a constant ground water table (<code>param_b90$water_table_depth</code>). In this way, capillary rise from a water table can be simulated. Default is -9999, meaning no groundwater influence (i.e. unit gradient flow at the bottom of the soil profile). Any depth can be specified, also a depth below the lowest soil layer. If the water table is within the soil profile, soil layers below the water table are saturated with water.</li>
-<li>added ouput variables ‘relawati’ (relative plant available water contents of the soil layers) to <code>layer_output</code>, and ‘snowlq’ (liquid water content of snow on the ground) and ‘cc’ (cold content of snow pack) to <code>output</code>. The latter two are important initial variables for continuing a simulation.</li>
-<li>added ‘snowlqini’ and ‘snowccini’ to the list of parameters (<code>param_b90</code>). These can now be passed as initial variables to snowlq and cc, for simulation continuation</li>
+<li>added output variables ‘relawati’ (relative plant available water contents of the soil layers) to <code>layer_output</code>, and ‘snowlq’ (liquid water content of snow on the ground) and ‘cc’ (cold content of snow pack) to <code>output</code>. The latter two are important initial variables for continuing a simulation.</li>
+<li>added ‘snowlqini’ and ‘snowccini’ to the list of parameters (<code>param_b90</code>). These can now be passed as initial variables to ‘snowlq’ and ‘cc’, for simulation continuation</li>
 <li>set check.data = F in vegperiod::vegperiod to be compatible with extreme climates</li>
 </ul></div>
 </div>
