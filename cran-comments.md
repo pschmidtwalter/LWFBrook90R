@@ -1,6 +1,4 @@
-## Version 0.6.1
-
-This version fixes an R CMD check warning with R-devel (Obsolescent feature: DATA statement at (1) after the first executable statement).
+## Version 0.6.2
 
 ### Test environments
 
@@ -11,7 +9,5 @@ This version fixes an R CMD check warning with R-devel (Obsolescent feature: DAT
 
 ### R CMD check results
 
-0 errors | 0 warnings | 1 notes
-
-NOTE: unable to verify current time (on local windows machine)
+0 errors | 0 warnings | 0 notes
 
