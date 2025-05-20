@@ -29,8 +29,9 @@ size limit between silt and sand should be 50 \eqn{\mu m}{\mum}.}
 
 \item{oc.pct}{Numeric vector of organic carbon content in mass \%.}
 
-\item{topsoil}{Logical: Is the sample from the topsoil? Used in
-\code{\link{hydpar_hypres_tab}}.}
+\item{topsoil}{Logical: Is the sample from the topsoil (upper 25 cm of
+mineral soil)? Used in \code{\link{hydpar_hypres_tab}} and
+\code{\link{hydpar_hypres}}.}
 
 \item{humconv}{Conversion factor from oc.pct to organic matter percent.
 Default: 1.72. Only for \code{hydpar_hypres_tab}.}

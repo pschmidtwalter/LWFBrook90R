@@ -14,8 +14,9 @@
 #'   \code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
 #'   be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes
 #'   according to FAO (1990) have to provided.
-#' @param topsoil Logical: Is the sample from the topsoil? Used in
-#'   \code{\link{hydpar_hypres_tab}}.
+#' @param topsoil Logical: Is the sample from the topsoil (upper 25 cm of
+#' mineral soil)? Used in \code{\link{hydpar_hypres_tab}} and
+#' \code{\link{hydpar_hypres}}.
 #' @param humconv Conversion factor from oc.pct to organic matter percent.
 #'   Default: 1.72. Only for \code{hydpar_hypres_tab}.
 #' @param n An integer value specifying the number of rows of the returned
@@ -110,6 +111,8 @@ hydpar_puh2 <- function(clay, silt, sand, bd, oc.pct=0.5){
 #' @export
 hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72 ){
   h <- NULL #pass CRAN check Notes
+
+  stopifnot("'topsoil' must be logical!" = all(is.logical(topsoil)))
 
   out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,
                     h=ifelse(oc.pct < 0.1,0.001,oc.pct/100), topsoil,
