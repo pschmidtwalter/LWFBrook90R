@@ -1,4 +1,4 @@
-#' Functions to derive soil hydraulic properties from soil properties
+#' Functions to derive soil hydraulic properties from soil physical properties
 #'
 #' A set of pedotransfer functions for deriving Mualem - van Genuchten
 #' parameters from soil physical properties of soil horizons, such as soil
@@ -14,10 +14,10 @@
 #'   \code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
 #'   be provided. When using \code{\link{hydpar_hypres_tab}}, texture classes
 #'   according to FAO (1990) have to provided.
-#' @param topsoil Logical: Is the sample from the topsoil? Used in
-#'   \code{\link{hydpar_hypres_tab}}.
+#' @param topsoil Logical vector stating if a sample is from the topsoil or the
+#'   subsoil. Used in \code{hydpar_hypres_tab} and \code{hydpar_hypres}.
 #' @param humconv Conversion factor from oc.pct to organic matter percent.
-#'   Default: 1.72. Only for \code{hydpar_hypres_tab}.
+#'   Default: 1.72. Only for \code{hydpar_hypres_tab} and \code{hydpar_hypres}.
 #' @param n An integer value specifying the number of rows of the returned
 #'   data.frame (i.e. the number of repetitions of the MvG-Parameter set, only
 #'   for \code{hydpar_ff_hamken}).
@@ -108,7 +108,7 @@ hydpar_puh2 <- function(clay, silt, sand, bd, oc.pct=0.5){
 
 #' @rdname ptfs
 #' @export
-hydpar_hypres <- function(clay, silt, bd, oc.pct=0.1, topsoil=TRUE, humconv=1.72 ){
+hydpar_hypres <- function(clay, silt, bd, oc.pct, topsoil, humconv=1.72 ){
   h <- NULL #pass CRAN check Notes
 
   out <- data.frame(clay=clay/100,silt=silt/100,bd=bd*1000,

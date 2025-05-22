@@ -1,3 +1,9 @@
+# LWFBrook90R (in development)
+
+## Changes
+ - removed default value for `topsoil` arguments in functions `hydpar_hypres()` and `hydpar_hypres_tab()`.
+
+
 # LWFBrook90R 0.6.2
  
 ## Bug fixes

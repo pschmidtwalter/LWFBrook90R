@@ -7,11 +7,11 @@
 \alias{hydpar_hypres_tab}
 \alias{hydpar_wessolek_tab}
 \alias{hydpar_ff_b90}
-\title{Functions to derive soil hydraulic properties from soil properties}
+\title{Functions to derive soil hydraulic properties from soil physical properties}
 \usage{
 hydpar_puh2(clay, silt, sand, bd, oc.pct = 0.5)
 
-hydpar_hypres(clay, silt, bd, oc.pct = 0.1, topsoil = TRUE, humconv = 1.72)
+hydpar_hypres(clay, silt, bd, oc.pct, topsoil, humconv = 1.72)
 
 hydpar_hypres_tab(texture, topsoil)
 
@@ -29,11 +29,11 @@ size limit between silt and sand should be 50 \eqn{\mu m}{\mum}.}
 
 \item{oc.pct}{Numeric vector of organic carbon content in mass \%.}
 
-\item{topsoil}{Logical: Is the sample from the topsoil? Used in
-\code{\link{hydpar_hypres_tab}}.}
+\item{topsoil}{Logical vector stating if a sample is from the topsoil or the
+subsoil. Used in \code{hydpar_hypres_tab} and \code{hydpar_hypres}.}
 
 \item{humconv}{Conversion factor from oc.pct to organic matter percent.
-Default: 1.72. Only for \code{hydpar_hypres_tab}.}
+Default: 1.72. Only for \code{hydpar_hypres_tab} and \code{hydpar_hypres}.}
 
 \item{texture}{Character vector of soil texture classes. For
 \code{hydpar_wessolek_tab} classes according to KA5 (AG Boden 2005) have to
@@ -77,7 +77,7 @@ Hammel & Kennel (2001) in their original LWF-Brook90 publication.
 
 hydpar_puh2(clay = c(10,20), silt = c(40,20), sand = c(50,60), bd = c(1.6, 1.4))
 
-hydpar_hypres(20,20,1.5,2)
+hydpar_hypres(20,20,1.5,2, topsoil = FALSE)
 
 hydpar_hypres_tab(texture = c("C","MF"), topsoil = c(TRUE,FALSE))
 
