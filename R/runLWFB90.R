@@ -437,6 +437,24 @@ chk_param <- function() {
       stop(paste("param_b90-list is incomplete. Missing list items:",
                  paste(nms[which(!nms %in% names(param_b90))], collapse = ", ")))
     }
+
+    # check water table input
+    if (inherits(param_b90$water_table_depth, "data.frame")) {
+      if (!all(c("dates", "water_table_depth") %in% names(param_b90$water_table_depth))) {
+        stop("Please provide the timeseries of water table depths as a data.frame or data.table with columns 'dates' and 'water_table_depth'!")
+      }
+
+      if (!data.table::is.data.table(param_b90$water_table_depth)) {
+        data.table::setDT(param_b90$water_table_depth)
+      }
+
+      if (min(param_b90$water_table_depth$dates) > options_b90$startdate | max(param_b90$water_table_depth$dates) < options_b90$enddate){
+        stop("water table timeseries not covering requested simulation period completely.")
+      }
+    }
+
+
+
   }))
 
 }

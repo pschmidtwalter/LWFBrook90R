@@ -29,6 +29,8 @@ r_lwfbrook90 <- function(
     timelimit  = Inf
 ){
 
+  # pacify check notes
+  dates<-NULL; water_table_depth<-NULL
 
   # create parameter vector
   param_vec <- param_to_rlwfbrook90(b90f_input)
@@ -48,6 +50,19 @@ r_lwfbrook90 <- function(
     precip = as.matrix(precip[,c("yr", "mo", "da","ii","prec", "mesfl")],ncol = 6)
   }
 
+  # prepare water table object
+  if (data.table::is.data.table(b90f_input$water_table_depth)) {
+    b90f_input$water_table_depth <- b90f_input$water_table_depth[, list(yr = data.table::year(dates),
+                                                                        mo = data.table::month(dates),
+                                                                        da = data.table::mday(dates),
+                                                                        water_table_depth)]
+  } else {
+    b90f_input$water_table_depth <- b90f_input$standprop_daily[, list(yr = data.table::year(dates),
+                                                                      mo = data.table::month(dates),
+                                                                      da = data.table::mday(dates),
+                                                                      water_table_depth = b90f_input$water_table_depth)]
+  }
+
   # set timeout
   setTimeLimit(elapsed = timelimit)
   on.exit(setTimeLimit(elapsed = Inf), add = TRUE)
@@ -62,6 +77,7 @@ r_lwfbrook90 <- function(
     soil_materials = as.matrix(b90f_input$soil_materials, ncol = 8),
     soil_nodes = as.matrix(b90f_input$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")], ncol = 6),
     precip = precip,
+    water_table_depth = as.matrix(b90f_input$water_table_depth, ncol = 4),
     pr = as.integer(output_log),
     timer = as.integer(!is.infinite(timelimit)),
     chk_input = as.integer(chk_input),
