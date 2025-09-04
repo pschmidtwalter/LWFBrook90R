@@ -222,6 +222,7 @@ run_LWFB90 <- function(options_b90,
 
   ### constrain to simulation period
   data.table::setDT(param_b90$standprop_daily)
+  dates <- NULL
   param_b90$standprop_daily <- param_b90$standprop_daily[data.table::between(dates,
                                                                              options_b90$startdate,
                                                                              options_b90$enddate),]
@@ -319,9 +320,10 @@ run_LWFB90 <- function(options_b90,
 
     ## append model input ----
     # might be needed for access from output_fun. Will be removed again later, if not required
+
     simres$model_input <- list(options_b90 = options_b90,
-                               param_b90 = param_b90,
-                               standprop_daily = standprop_daily)
+                               param_b90 = param_b90[-which(names(param_b90) == "standprop_daily")],
+                               standprop_daily = param_b90$standprop_daily)
 
 
     ## append simulation results  ----
@@ -371,7 +373,7 @@ run_LWFB90 <- function(options_b90,
     # 'dry' run = FALSE -> always return model input
     return(list(options_b90 = options_b90,
                 param_b90 = param_b90,
-                standprop_daily = standprop_daily))
+                standprop_daily = param_b90$standprop_daily))
   }
 
   if (verbose == TRUE) {

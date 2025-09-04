@@ -16,4 +16,4 @@ examples_all.R
 ^docs$
 ^pkgdown$
 ^CRAN-SUBMISSION$
-tests_compare_actual_vs_previous/
+^tests_compare_actual_vs_previous$

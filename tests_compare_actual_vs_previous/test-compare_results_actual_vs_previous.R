@@ -27,6 +27,7 @@ test_that("sim-outputs of actual are equal to previous", {
 })
 
 test_that("sim-inputs of actual are equal to previous", {
-  expect_equal(res_actual$model_input$param_b90, res_previous$model_input$param_b90)
-  expect_equal(res_actual$model_input$standprop_daily, res_previous$model_input$standprop_daily)
+  expect_equal(res_actual$model_input$param_b90[-which(names(res_actual$model_input$param_b90) %in% c("imodel","prec_interval", "startdate"))],
+               res_previous$model_input$param_b90)
+  expect_equal(setDF(res_actual$model_input$standprop_daily), res_previous$model_input$standprop_daily)
 })

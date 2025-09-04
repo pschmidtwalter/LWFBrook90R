@@ -124,7 +124,7 @@ test_that("single output functions works", {
 
 meteo <- data.table(slb1_meteo[,c("dates", "tmin", "tmax", "prec", "tmean","vappres", "windspeed", "globrad" )])
 meteo <- meteo[year(dates)==2013,]
-prec <- meteo[,list(dates, prec = prec*1.1)]
+prec <- meteo[,list(dates, prec = prec*1.1)] # to test if the right input (with prec-interval = 1, is prec from climate or from precip used?
 data("slb1_prec2013_hh")
 setDT(slb1_prec2013_hh)
 

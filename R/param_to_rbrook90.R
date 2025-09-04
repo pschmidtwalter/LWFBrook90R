@@ -1,13 +1,11 @@
-#' Create a parameter vector for the r_lwfbrook90-function
+#' Create parameter vectors for the LWF-Brook90 Fortran library
 #'
-#' The \code{param} vector for \code{\link{r_lwfbrook90}} is created from model
-#' parameters.
+#' Functions to create the \code{param} and \code{siteparam} vectors to be passed to the C-interface.
 #'
 #'
 #' @param b90f_input A named list of model parameters.
 #'
-#' @return A numerical vector with the parameters in the right order for
-#'   \code{\link{r_lwfbrook90}}.
+#' @return A numeric vector with the parameters in the required order.
 #'
 #' @name parms_to_rbrook90
 #'

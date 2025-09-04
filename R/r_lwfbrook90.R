@@ -1,34 +1,21 @@
 #' Interface function to the LWF-Brook90 model
 #'
-#' Passes input data matrices to the Fortran model code and returns the results
+#' Passes input data objects (parameters and meteorology) to the Fortran model
+#' code and returns the results
 #'
-#' @param siteparam A [1,9] matrix with site level information: start year,
-#'   start doy, latitude, initial snow, initial groundwater, precipitation
-#'   interval, a snow cover's  liquid water (SNOWLQ) and cold content (CC).
-#' @param climveg A matrix with 15 columns of climatic and vegetation data:
-#'   year, month, day, global radiation in MJ/(m² d), tmax (deg C), tmin (deg
-#'   C), vappres (kPa), wind (m/s), prec (mm), mesfl (mm), densef (-), stand
-#'   height (m), lai (m²/m²), sai (m²/m²), stand age (years).
-#' @param param A numeric vector of model input parameters (for the right order
-#'   see \code{\link{param_to_rlwfbrook90}}).
-#' @param pdur a [1,12]-matrix of precipitation durations (hours) for each
-#'   month.
-#' @param soil_materials A matrix of the 8 soil materials parameters. When
-#'   imodel = 1 (Mualem-van Genuchten), these refer to: mat, ths, thr, alpha
-#'   (1/m), npar, ksat (mm/d), tort (-), stonef (-). When imodel = 2
-#'   (Clapp-Hornberger): mat, thsat, thetaf, psif (kPa), bexp, kf (mm/d), wetinf
-#'   (-), stonef (-).
-#' @param soil_nodes A matrix of the soil model layers with columns nl (layer
-#'   number), layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden
-#'   (-).
-#' @param precdat A matrix of precipitation interval data with 6 columns: year,
-#'   month, day, interval-number (1:precint), prec, mesflp.
+#' @param b90f_input Brook90 input list object containing all the parameters required.
+#' @param meteo A data.table of hourly meteorological data with columns: Date (dates),
+#'   interval-number (hh, 1:precint), global radiation (globrad, W/m²), air temperature (tmean, deg C), rel. humidity
+#'   (relhum, \%), wind speed (windspeed, m/s) (m/s), precipitation (prec, mm), and
+#'   optionally longwave downward radiation (ld, W/m²).
+#' @param precip  An optional data.table of precipitation interval data with 6 columns: year,
+#'   month, day, interval-number (1:prec_interval), prec, mesflp.
 #' @param output_log Logical whether to print runtime output to console.
 #' @param chk_input Logical whether to check for NaNs in model inputs.
-#' @param timelimit Integer to set elapsed time limits for running the model.
+#' @param timelimit Integer for setting a time limit (in seconds, default: Inf) for the duration of the model execution.
 #'
 #' @return A list containing the daily and soil layer model outputs, along with
-#'   an error code of the simulation (see \code{\link{run_LWFB90}}.
+#'   an error code of the simulation.
 #'
 #' @export
 #' @useDynLib LWFBrook90R
@@ -58,7 +45,7 @@ r_lwfbrook90 <- function(
   if ( is.null(precip) ){
     precip <- matrix(-999, nrow = b90f_input$ndays * b90f_input$prec_interval, ncol = 6)
   } else {
-    precip = precip[,c("yr", "mo", "da","ii","prec", "mesfl")]
+    precip = as.matrix(precip[,c("yr", "mo", "da","ii","prec", "mesfl")],ncol = 6)
   }
 
   # set timeout
@@ -68,13 +55,13 @@ r_lwfbrook90 <- function(
   # Run the model
   out <- .Call(
     's_brook90_c',
-    siteparam = as.matrix(siteparam_vec, ncol = 9, nrow = 1),
+    siteparam = matrix(siteparam_vec, ncol = 9, nrow = 1),
     climveg = as.matrix(climveg, ncol = 15),
     param = as.vector(param_vec),
-    pdur = as.matrix( as.integer(b90f_input$pdur), ncol = 12, nrow = 1 ),
+    pdur = matrix( b90f_input$pdur, ncol = 1, nrow =12),
     soil_materials = as.matrix(b90f_input$soil_materials, ncol = 8),
-    soil_nodes = as.matrix(b90f_input$soil_nodes, ncol = 6),
-    precdat = as.matrix(precip, ncol = 6),
+    soil_nodes = as.matrix(b90f_input$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")], ncol = 6),
+    precip = precip,
     pr = as.integer(output_log),
     timer = as.integer(!is.infinite(timelimit)),
     chk_input = as.integer(chk_input),
