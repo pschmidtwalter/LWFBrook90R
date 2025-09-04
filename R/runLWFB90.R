@@ -182,6 +182,11 @@ run_LWFB90 <- function(options_b90,
   ## Number of Simulation days
   param_b90$ndays <-  as.integer(difftime(options_b90$enddate,options_b90$startdate)) + 1
 
+  # Other parameters required by b90f_input-arg of r_lwfbrook90
+  param_b90$imodel <- options_b90$imodel
+  param_b90$prec_interval <- options_b90$prec_interval
+  param_b90$startdate <- options_b90$startdate
+
 
   ## Vegetation-Period: calculate budburst and leaffall days of year  ----
   budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
@@ -213,22 +218,27 @@ run_LWFB90 <- function(options_b90,
   }
 
   ## Create daily standproperties from parameters ----
-  standprop_daily <- make_standprop(options_b90, param_b90, out_yrs = simyears)
+  param_b90$standprop_daily <- make_standprop(options_b90, param_b90, out_yrs = simyears)
 
   ### constrain to simulation period
-  standprop_daily <- standprop_daily[which(standprop_daily$dates >= options_b90$startdate
-                                           & standprop_daily$dates <= options_b90$enddate),]
+  data.table::setDT(param_b90$standprop_daily)
+  param_b90$standprop_daily <- param_b90$standprop_daily[data.table::between(dates,
+                                                                             options_b90$startdate,
+                                                                             options_b90$enddate),]
   if (verbose == TRUE) {
     message("Standproperties created succesfully")
   }
 
   # Prepare climate ----
   # constrain data to simulation period
-  climate <- climate[which(climate$dates >= options_b90$startdate
-                           & climate$dates <= options_b90$enddate),]
+  data.table::setDT(climate)
+  climate <- climate[data.table::between(dates,
+                                         options_b90$startdate,
+                                         options_b90$enddate),]
   if (!is.null(precip)){
-    precip <- precip[which(precip$dates >= options_b90$startdate
-                           & precip$dates <= options_b90$enddate),]
+    precip <- precip[data.table::between(dates,
+                                         options_b90$startdate,
+                                         options_b90$enddate),]
   }
 
   ## Precipitation correction (Richter) ----
@@ -287,19 +297,9 @@ run_LWFB90 <- function(options_b90,
     start <- Sys.time()
 
     simout <- r_lwfbrook90(
-      siteparam = data.frame(simyears[1],
-                             as.integer(format(options_b90$startdate, "%j")),
-                             param_b90$coords_y, param_b90$snowini, param_b90$gwatini,
-                             options_b90$prec_interval, param_b90$snowlqini,
-                             param_b90$snowccini, param_b90$water_table_depth),
-      climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
-                                  "vappres","windspeed","prec","mesfl")],
-                      standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
-      precdat = precip[,c("yr", "mo", "da","ii","prec", "mesfl")],
-      param = param_to_rlwfbrook90(param_b90, options_b90$imodel),
-      pdur = param_b90$pdur,
-      soil_materials = param_b90$soil_materials,
-      soil_nodes = param_b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
+      b90f_input = param_b90,
+      meteo = climate,
+      precip = precip,
       output_log = verbose,
       chk_input = chk_input,
       timelimit = timelimit

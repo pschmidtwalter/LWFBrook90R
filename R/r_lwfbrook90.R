@@ -34,21 +34,31 @@
 #' @useDynLib LWFBrook90R
 #'
 r_lwfbrook90 <- function(
-  siteparam,
-  climveg,
-  param,
-  pdur,
-  soil_materials,
-  soil_nodes,
-  precdat = NULL,
-  output_log = TRUE,
-  chk_input = TRUE,
-  timelimit  = Inf
+    b90f_input, # needs to be the complete list (check for completeness!)
+    meteo,
+    precip,
+    output_log = TRUE,
+    chk_input = TRUE,
+    timelimit  = Inf
 ){
 
-  # make a matrix of precipitation input data
-  if ( is.null(precdat) ){
-    precdat <- matrix(-999, nrow = param[1] * siteparam[[6]], ncol = 6)
+
+  # create parameter vector
+  param_vec <- param_to_rlwfbrook90(b90f_input)
+
+  # create site parameter vector
+  siteparam_vec <- siteparam_to_rlwfbrook90(b90f_input)
+
+  # create climveg table
+  climveg <- cbind(meteo[, c("yr", "mo", "da","globrad","tmax","tmin",
+                               "vappres","windspeed","prec","mesfl")],
+                   b90f_input$standprop_daily[, c("densef", "height", "lai", "sai", "age")])
+
+  # create matrix of precipitation input data
+  if ( is.null(precip) ){
+    precip <- matrix(-999, nrow = b90f_input$ndays * b90f_input$prec_interval, ncol = 6)
+  } else {
+    precip = precip[,c("yr", "mo", "da","ii","prec", "mesfl")]
   }
 
   # set timeout
@@ -58,19 +68,19 @@ r_lwfbrook90 <- function(
   # Run the model
   out <- .Call(
     's_brook90_c',
-    siteparam = as.matrix(siteparam, ncol = 8, nrow = 1),
+    siteparam = as.matrix(siteparam_vec, ncol = 9, nrow = 1),
     climveg = as.matrix(climveg, ncol = 15),
-    param = as.vector(param),
-    pdur = as.matrix( pdur, ncol = 12 ),
-    soil_materials = as.matrix(soil_materials, ncol = 8),
-    soil_nodes = as.matrix(soil_nodes, ncol = 6),
-    precdat = as.matrix(precdat, ncol = 6),
+    param = as.vector(param_vec),
+    pdur = as.matrix( as.integer(b90f_input$pdur), ncol = 12, nrow = 1 ),
+    soil_materials = as.matrix(b90f_input$soil_materials, ncol = 8),
+    soil_nodes = as.matrix(b90f_input$soil_nodes, ncol = 6),
+    precdat = as.matrix(precip, ncol = 6),
     pr = as.integer(output_log),
     timer = as.integer(!is.infinite(timelimit)),
     chk_input = as.integer(chk_input),
-    n_days = as.integer(param[1]),
-    n_lays = as.integer(param[65]),
-    n_pint = as.integer(siteparam[1,6])
+    n_days = as.integer(b90f_input$ndays),
+    n_lays = as.integer(nrow(b90f_input$soil_nodes)),
+    n_pint = as.integer(b90f_input$prec_interval)
   )
 
   names(out) <- c("error_code", "output", "layer_output" )
