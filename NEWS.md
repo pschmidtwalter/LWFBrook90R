@@ -3,6 +3,8 @@
 ## Changes
  - removed default value for `topsoil` arguments in functions `hydpar_hypres()` and `hydpar_hypres_tab()`.
 
+## Bug fixes
+ - DSLOPE conversion to radians was missing. 
 
 # LWFBrook90R 0.6.2
  
