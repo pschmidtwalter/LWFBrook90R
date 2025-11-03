@@ -217,6 +217,10 @@
     GSC = param( 80 )
     GSP = param( 81 )
 
+    ! Convert to radians
+    DSLOPE = DSLOPE / 57.296
+
+
     ! integration parameters -------
     DTIMAX = param( 82 )
     DSWMAX = param( 83 )
