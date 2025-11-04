@@ -189,9 +189,9 @@ test_that("water table input works",{
 clim <- data.table(slb1_meteo)
 dateseq <- clim[year(dates) == 2013, seq.Date(data.table::first(dates),data.table::last(dates), "day")]
 parms$water_table_depth <- data.table::data.table(dates = dateseq,
-                                                       water_table_depth = -1.1 + 0.5 * sin(6.28 * 1:length(dateseq) / length(dateseq) ))
+                                                  water_table_depth = -1.1 + 0.5 * sin(6.28 * 1:length(dateseq) / length(dateseq) ))
 
-parms$water_table_depth[, plot(dates,water_table_depth) ]
+#parms$water_table_depth[, plot(dates,water_table_depth) ]
 opts$startdate <- first(dateseq)
 opts$enddate <- last(dateseq)
 simout_water_table_ts <- run_LWFB90(options_b90 = opts,

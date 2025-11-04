@@ -4,10 +4,10 @@
 #' code and returns the results
 #'
 #' @param b90f_input Brook90 input list object containing all the parameters required.
-#' @param meteo A data.table of hourly meteorological data with columns: Date (dates),
-#'   interval-number (hh, 1:precint), global radiation (globrad, W/m²), air temperature (tmean, deg C), rel. humidity
-#'   (relhum, \%), wind speed (windspeed, m/s) (m/s), precipitation (prec, mm), and
-#'   optionally longwave downward radiation (ld, W/m²).
+#' @param meteo A data.table of daily meteorological data with columns: Date (dates),
+#'   global radiation (globrad, W/m²), minimum and maximum air temperature (tmin, tmax, deg C),
+#'   vapour pressure (vappress, kPa), wind speed (windspeed, m/s),
+#'   precipipitation (prec, mm), and measured flow (mesfl, mm).
 #' @param precip  An optional data.table of precipitation interval data with 6 columns: year,
 #'   month, day, interval-number (1:prec_interval), prec, mesflp.
 #' @param output_log Logical whether to print runtime output to console.

@@ -242,6 +242,12 @@ run_LWFB90 <- function(options_b90,
                                          options_b90$enddate),]
   }
 
+  if (data.table::is.data.table(param_b90$water_table_depth)) {
+    param_b90$water_table_depth <- param_b90$water_table_depth[data.table::between(dates,
+                                                                                   options_b90$startdate,
+                                                                                   options_b90$enddate),]
+  }
+
   ## Precipitation correction (Richter) ----
   if (options_b90$correct_prec == TRUE) {
     if (!is.null(precip)) {
