@@ -21,7 +21,7 @@
 #' @useDynLib LWFBrook90R
 #'
 r_lwfbrook90 <- function(
-    b90f_input, # needs to be the complete list (check for completeness!)
+    b90f_input,
     meteo,
     precip,
     output_log = TRUE,
