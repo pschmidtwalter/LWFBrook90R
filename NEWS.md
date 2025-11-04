@@ -5,6 +5,10 @@
  - simplified the low-level interface function, bringing a breaking change to users using the `r_lwfbrook90()` instead of `run_LWFB90()` for running the model
  - added an option to use a timeseries of groundwater table depths in the simulation. For activating this option, just provide a data.frame with columns 'dates', 'water_table_depth' to the `param_b90$water_table_depth` list item instead of a single fixed value.
 
+## Bug fixes
+ - conversion of input parameter `dslope` to radians was missing, causing incorrect downslope flow rates when `param_b90$dslope > 0` (see [#76](https://github.com/pschmidtwalter/LWFBrook90R/issues/76#issuecomment-3480040843)). 
+
+
 # LWFBrook90R 0.6.2
  
 ## Bug fixes
