@@ -83,13 +83,13 @@ series.
 
 ```{r}
 options_b90$lai_method <- "linear"
-param_b90$lai_doy <- c(1,110,117,135,175,220,250,290,365)
-param_b90$lai_frac <- c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)
+param_b90$lai_doy_tbl <- data.frame(lai_doy = c(1,110,117,135,175,220,250,290,365),
+                                    lai_frac = c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1))
+
 LAI_linear <-  make_seasLAI(method = options_b90$lai_method,
                             year = 2003,
                             maxlai = param_b90$maxlai,
-                            lai_doy = param_b90$lai_doy ,
-                            lai_frac = param_b90$lai_frac)
+                            lai_doy_tbl = param_b90$lai_doy_tbl)
 ```
 
 A third shape-option for the intra-annual variation of leaf area index is called
@@ -180,9 +180,9 @@ plot(seq.Date(as.Date("2001-01-01"), as.Date("2003-12-31"), by = "day"),
      lai_variation, col = "green", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)
 arrows( x0 = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
-        y0 = -1.0, y1 = -0.3, length = 0.15, code = 2, xpd =TRUE)
+        y0 = -1.0, y1 = 0, length = 0.15, code = 2, xpd =TRUE)
 text(x = as.Date(paste(param_b90$budburstdoy, years),format = "%j %Y"),
-     y = -1.3, paste("doy", param_b90$budburstdoy), xpd = TRUE)
+     y = -0.5, paste("doy", param_b90$budburstdoy), xpd = TRUE)
 par(oldpar)
 ```
 

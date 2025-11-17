@@ -8,19 +8,18 @@ lai_b90 <- make_seasLAI(method = "b90",
                        emerge_dur = 15,
                        leaffall_dur = 30)
 
-lai_doy <- c(1,110,117,135,175,220,250,290,365)
-lai_frac <- c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)
+lai_doy_table <- data.frame(lai_doy = c(1,110,117,135,175,220,250,290,365),
+                            lai_frac = c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1))
 lai_linear <- make_seasLAI(method = "linear",
                           year = 2001,
                           maxlai = 5,
-                          lai_doy = lai_doy,
-                          lai_frac = lai_frac)
+                          lai_doy_tbl = lai_doy_table)
 
 lai_coupmodel <- make_seasLAI(method = "Coupmodel",
                              year = 2001,
                              maxlai = 5,
-                             winlaifrac = 0.1,
-                             budburst_doy = 110,
+                             winlaifrac = 0.05,
+                             budburst_doy = 100,
                              leaffall_doy = 280,
                              shp_optdoy = 180,
                              shp_budburst = 0.5,
@@ -32,7 +31,7 @@ lines(lai_linear, col ="red",lwd = 2)
 lines(lai_coupmodel, col ="blue",lwd = 2)
 
 # incorparating between-year variability
-years <- 2001:2003
+years <- 2002:2004
 lai <- make_seasLAI(method = "Coupmodel",
                    year = years,
                    maxlai = c(4,6,5),
@@ -42,6 +41,31 @@ lai <- make_seasLAI(method = "Coupmodel",
                    shp_leaffall = 3,
                    shp_optdoy =c(210,180,240) )
 
-dates <- seq.Date(as.Date("2001-01-01"), as.Date("2003-12-31"), by = "day")
+dates <- seq.Date(as.Date("2002-01-01"), as.Date("2004-12-31"), by = "day")
 plot(dates,lai, col = "green", ylab = "lai [m²/m²]",
+     type ="l", xlab = "", lwd = 2)
+
+# doy/value-tables
+lai_linear1 <- make_seasLAI(method = "linear",
+                    year = years,
+                    maxlai = c(4,6,5),
+                    lai_doy_tbl = lai_doy_table)
+
+plot(dates,lai_linear1, col = "green", ylab = "lai [m²/m²]",
+     type ="l", xlab = "", lwd = 2)
+
+# linear interpolation for lists of annual tables
+lai_doy_table_l <- list("2002" = data.frame(lai_doy = c(1,90,97,115,155,200,230,270,365),
+                                          lai_frac = c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)),
+                        "2003" = data.frame(lai_doy = c(1,100,107,125,165,210,240,280,365),
+                                          lai_frac = c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)),
+                        "2004"= data.frame(lai_doy = c(1,110,117,135,175,220,250,290,365),
+                                           lai_frac = c(0.1,0.1,0.5,0.7,1.2,1.2,1.0,0.1,0.1)))
+
+lai_linear2 <- make_seasLAI(method = "linear",
+                    year = years,
+                    maxlai = c(4,6,5),
+                    lai_doy_tbl = lai_doy_table_l)
+
+lines(dates,lai_linear2, col = "darkgreen", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)

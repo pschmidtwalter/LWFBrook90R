@@ -80,6 +80,7 @@
 #'  shp_optdoy \tab Day of year when optimum value is reached - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
 #'  lai_doy \tab Day of year values for lai-interpolation - passed to \code{\link{make_seasLAI}} \tab doy               \tab Plant                  \cr
 #'  lai_frac \tab Fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+#'  lai_doy_tbl \tab data.frame with day of year values ('doy) and corresponding lai fractions ('lai_frac'), or a list of data.frames, with one entry for each year of the simulation - passed to \code{\link{make_seasLAI}}  \tab -               \tab Plant                  \cr
 #'  winlaifrac   \tab Minimum LAI as a fraction of maxlai. Default: 0 \tab -                  \tab Plant                  \cr
 #'  standprop_table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
 #'  cs           \tab Ratio of projected stem area index to canopy height. Default: 0.035 \tab m-1\tab Plant\cr
@@ -152,6 +153,7 @@ set_paramLWFB90 <- function(...) {
     leaffalldur = 58,
     lai_doy = NULL,
     lai_frac = NULL,
+    lai_doy_tbl = NULL,
     alb = 0.2,
     albsn = 0.5,
     ksnvp = 0.3,

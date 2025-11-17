@@ -218,6 +218,15 @@ run_LWFB90 <- function(options_b90,
   }
 
   ## Create daily standproperties from parameters ----
+
+  if (options_b90$lai_method == "linear" & is.null(param_b90$lai_doy_tbl)) {
+    warning("The use of param_b90-list items 'lai_doy' and 'lai_frac' for use with
+            lai_method = 'linear' will be deprecated in a future version.
+            It was replaced by 'lai_doy_tbl', to pass both variables as data.frame,
+            or as a list of data.frames, one for each year of the simulation.")
+    param_b90$lai_doy_tbl <- data.frame(lai_doy = param_b90$lai_doy,
+                                        lai_frac = param_b90$lai_frac)
+  }
   param_b90$standprop_daily <- make_standprop(options_b90, param_b90, out_yrs = simyears)
 
   ### constrain to simulation period
@@ -458,8 +467,6 @@ chk_param <- function() {
         stop("water table timeseries not covering requested simulation period completely.")
       }
     }
-
-
 
   }))
 

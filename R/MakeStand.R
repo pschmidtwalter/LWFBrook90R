@@ -64,7 +64,6 @@ make_standprop <- function(options_b90,
                                       shp_budburst = param_b90$shp_budburst,
                                       shp_leaffall = param_b90$shp_leaffall,
                                       shp_optdoy = param_b90$shp_optdoy,
-                                      lai_doy = param_b90$lai_doy,
-                                      lai_frac = param_b90$lai_frac)
+                                      lai_doy_tbl = param_b90$lai_doy_tble)
   return(standprop_daily)
 }

@@ -31,3 +31,4 @@ test_that("sim-inputs of actual are equal to previous", {
                res_previous$model_input$param_b90)
   expect_equal(setDF(res_actual$model_input$standprop_daily), res_previous$model_input$standprop_daily)
 })
+
