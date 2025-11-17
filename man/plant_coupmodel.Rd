@@ -5,7 +5,8 @@
 \title{Interpolate plant properties using the 'Coupmodel' method.}
 \usage{
 plant_coupmodel(
-  minval,
+  minval_before_incr,
+  minval_after_decr = minval_before_incr,
   maxval,
   doy.incr,
   doy.max,
@@ -16,16 +17,20 @@ plant_coupmodel(
 )
 }
 \arguments{
-\item{minval}{Minimum value.}
+\item{minval_before_incr}{Minimum value used for the time period before
+\code{doy.incr}.}
+
+\item{minval_after_decr}{Minimum value used for time period after
+\code{doy.decr}.}
 
 \item{maxval}{Maximum value.}
 
-\item{doy.incr}{Day of year when increasing from \code{minval} to
+\item{doy.incr}{Day of year when increasing from \code{minval_before_incr} to
 \code{maxval} begins.}
 
 \item{doy.max}{Day of year when \code{maxval} is reached.}
 
-\item{doy.min}{Day of year when \code{minval} is reached again.}
+\item{doy.min}{Day of year when \code{minval_after_decr} is reached.}
 
 \item{shape.incr}{Shape parameter of the increasing phase.}
 
@@ -40,7 +45,7 @@ A numeric vector of length \code{maxdoy}.
 Creates a daily sequence for one year from parameters
 }
 \examples{
-plot(plant_coupmodel(0,5, 121, 200, 280, 0.3, 3, 365))
+plot(plant_coupmodel(0,0.2,5,121, 200, 280, 0.3, 3, 365))
 
 }
 \references{

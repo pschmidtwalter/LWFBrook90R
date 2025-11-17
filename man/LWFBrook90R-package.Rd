@@ -36,6 +36,7 @@ Authors:
   \item Anthony Federer
   \item Tobias Hohenbrink (\href{https://orcid.org/0000-0002-5227-0171}{ORCID})
   \item Gisbert Hetkamp
+  \item Michael Köhler (\href{https://orcid.org/0000-0001-9773-2061}{ORCID})
 }
 
 Other contributors:

@@ -1,4 +1,4 @@
-#' Transfer standproperties height, maxlai, sai, densef, age to parameter list obeject
+#' Transfer standproperties height, maxlai, sai, densef, age to parameter list object
 #'
 #' Takes a data.frame of yearly stand properties, trims/extends the columns height, maxlai,
 #' sai, densef, and age for the years in \code{out_yrs}, and updates the provided parameter list.

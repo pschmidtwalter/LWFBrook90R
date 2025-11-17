@@ -2,12 +2,15 @@
 #'
 #' Creates a daily sequence for one year from parameters
 #'
-#' @param minval Minimum value.
+#' @param minval_before_incr Minimum value used for the time period before
+#'   \code{doy.incr}.
+#' @param minval_after_decr Minimum value used for time period after
+#'   \code{doy.decr}.
 #' @param maxval Maximum value.
-#' @param doy.incr Day of year when increasing from \code{minval} to
+#' @param doy.incr Day of year when increasing from \code{minval_before_incr} to
 #'   \code{maxval} begins.
 #' @param doy.max  Day of year when \code{maxval} is reached.
-#' @param doy.min Day of year when \code{minval} is reached again.
+#' @param doy.min Day of year when \code{minval_after_decr} is reached.
 #' @param shape.incr Shape parameter of the increasing phase.
 #' @param shape.decr Shape parameter of the decreasing phase.
 #' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
@@ -20,10 +23,11 @@
 #' \emph{Royal Institute of Technolgy, Dept of Civil and Environmental Engineering Stockholm}
 #'
 #' @examples
-#' plot(plant_coupmodel(0,5, 121, 200, 280, 0.3, 3, 365))
+#' plot(plant_coupmodel(0,0.2,5,121, 200, 280, 0.3, 3, 365))
 #'
 #' @export
-plant_coupmodel <- function(minval,
+plant_coupmodel <- function(minval_before_incr,
+                            minval_after_decr = minval_before_incr,
                             maxval,
                             doy.incr,
                             doy.max,
@@ -33,8 +37,7 @@ plant_coupmodel <- function(minval,
                             maxdoy) {
 
   inddays <- as.integer(c(1,doy.incr,doy.max,doy.min,maxdoy))
-  values <- c(minval, minval,maxval,minval,minval)
-
+  values <- c(minval_before_incr,minval_before_incr,maxval,minval_after_decr,minval_after_decr)
   forms <- c(1,shape.incr,shape.decr,1)
 
   ind <- c(rep(1L, as.integer(doy.incr) - 1),

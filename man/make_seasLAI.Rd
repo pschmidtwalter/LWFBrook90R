@@ -13,7 +13,7 @@ make_seasLAI(
   leaffall_doy = 279,
   emerge_dur = 28,
   leaffall_dur = 58,
-  shp_optdoy = 220,
+  shp_optdoy = budburst_doy + emerge_dur,
   shp_budburst = 0.5,
   shp_leaffall = 10,
   lai_doy = c(1, 121, 150, 280, 320, 365),
@@ -51,10 +51,14 @@ is reached.}
 \item{shp_leaffall}{Shape parameter growth cessation (required when
 \code{method = "Coupmodel"}).}
 
-\item{lai_doy}{Integer vector of days of years.}
+\item{lai_doy}{Integer vector or list of days of year (required when
+\code{method = "linear"}). Can be provided as a single vector which is then
+repeated for all years or as a named list with values for each year.}
 
-\item{lai_frac}{Vector of values of fractional leaf area index corresponding
-to lai_doy (required when \code{method = "linear"}).}
+\item{lai_frac}{Vector of fractional leaf area index corresponding to
+\code{lai_doy} (required when \code{method = "linear"}). Can be provided as
+a single vector which is then repeated for all years or as a named list
+with values for each year.}
 }
 \value{
 A vector of daily lai values covering the years specified.

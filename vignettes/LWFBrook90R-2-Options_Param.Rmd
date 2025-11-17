@@ -162,12 +162,14 @@ dates of budburst, by assigning a vector of values to the parameter
 ```{r,echo = 1:6, results = 'hide',fig.height=5, fig.width=7, fig.cap = "Options and parameters affecting interannual variation of leaf area index."}
 years <- 2001:2003
 param_b90$maxlai <- c(4,6,5)
+param_b90$winlaifrac <- 0.2
 param_b90$shp_optdoy <- c(210,180,240)
 param_b90$shp_budburst <- c(3,1,0.3)
 param_b90$budburstdoy <- c(100,135,121) 
 lai_variation <- make_seasLAI(method = options_b90$lai_method,
                               year = years,
                               maxlai = param_b90$maxlai,
+                              winlaifrac = param_b90$winlaifrac,
                               budburst_doy = param_b90$budburstdoy,
                               leaffall_doy = param_b90$leaffalldoy,
                               shp_budburst = param_b90$shp_budburst,
@@ -313,7 +315,7 @@ options_b90$budburst_method <- "Menzel"
 options_b90$leaffall_method <- "vonWilpert"
 param_b90$budburst_species <- "Fagus sylvatica"
 
-#run LWF-Brook90 without simulation
+# execute without simulation
 standprop_daily <- run_LWFB90(options_b90 = options_b90,
                               param_b90 = param_b90,
                               climate = slb1_meteo,
