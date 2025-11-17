@@ -38,31 +38,31 @@ standprop_yearly_to_param <- function(standprop_yearly,
   }
 
   # transfer table to parameters, trim/extend to out_yrs using constant interpolation and rule = 2 in approx
-  param_b90$height <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-12-31")),
+
+  param_b90$height <- stats::approx(x = standprop_yearly$year,
                                     y = standprop_yearly$height,
-                                    xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
+                                    xout = c(out_yrs[1]-1, out_yrs),
                                     method = 'constant', rule = 2)$y
   param_b90$height_ini <- param_b90$height[1]
   param_b90$height <- param_b90$height[-1]
 
-  param_b90$sai <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-12-31")),
+  param_b90$sai <- stats::approx(x = standprop_yearly$year,
                                  y = standprop_yearly$sai,
-                                 xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
+                                 xout = c(out_yrs[1]-1, out_yrs),
                                  method = 'constant', rule = 2)$y
   param_b90$sai_ini <- param_b90$sai[1]
   param_b90$sai <- param_b90$sai[-1]
 
-  param_b90$densef <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-12-31")),
+  param_b90$densef <- stats::approx(x = standprop_yearly$year,
                                     y = standprop_yearly$densef,
-                                    xout = as.Date(c(paste0(out_yrs[1],"-01-01"),paste0(out_yrs,"-12-31"))),
+                                    xout = c(out_yrs[1]-1, out_yrs),
                                     method = 'constant', rule = 2)$y
-
   param_b90$densef_ini <- param_b90$densef[1]
   param_b90$densef <- param_b90$densef[-1]
 
-  param_b90$maxlai <- stats::approx(x = as.Date(paste0(standprop_yearly$year,"-01-01")),
+  param_b90$maxlai <- stats::approx(x = standprop_yearly$year,
                                     y = standprop_yearly$maxlai,
-                                    xout = as.Date(paste0(out_yrs,"-01-01")),
+                                    xout = out_yrs,
                                     method = 'constant', rule = 2)$y
 
   # extend or constrain age from table for out_yrs

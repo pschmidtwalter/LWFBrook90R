@@ -22,7 +22,7 @@
 #'   \code{method = "Coupmodel"}).
 #' @param shp_leaffall Shape parameter growth cessation (required when
 #'   \code{method = "Coupmodel"}).
-#' @param lai_doy_tbl Data.frame with day of year ('doy') and LAI fraction
+#' @param lai_doy_table Data.frame with day of year ('doy') and LAI fraction
 #'   values ('lai_frac'), required when \code{method = "linear"}). Can be
 #'   provided as a single data.frame or a list of data.frames with one entry for
 #'   each year of the simulation.
@@ -42,7 +42,7 @@ make_seasLAI <- function(method="b90",
                          shp_optdoy=budburst_doy+emerge_dur, #MaxLAI DOY (Coupmodel)
                          shp_budburst=0.5, #Form parameter for leaf expension period (Coupmodel)
                          shp_leaffall=10, #Form parameter for leaf Fall (Coupmodel)
-                         lai_doy_tbl = data.frame(lai_doy = c(1,121,150,280,320,365),
+                         lai_doy_table = data.frame(lai_doy = c(1,121,150,280,320,365),
                                                   lai_frac = c(0,0,0.5,1,0.5,0))
                          ) {
   method <- match.arg(method, choices = c("b90", "linear", "Coupmodel"))
@@ -93,20 +93,20 @@ make_seasLAI <- function(method="b90",
 
     # ---  Plant linear -------------------
     # Single data.frame input: replicate each year and interpolate
-    if (is.data.frame(lai_doy_tbl)) {
+    if (is.data.frame(lai_doy_table)) {
       # single data.frame: replicate for each year
       lai <- lapply(1:length(year), function(y) {
         data.frame(year =rep(year[y], maxdoy[y]),
                    doy = 1:maxdoy[y],
-                   lai = plant_linear(doys = lai_doy_tbl$lai_doy,
-                                      values = lai_doy_tbl$lai_frac*maxlai[y],
+                   lai = plant_linear(doys = lai_doy_table$lai_doy,
+                                      values = lai_doy_table$lai_frac*maxlai[y],
                                       maxdoy = maxdoy[y]))
       })
     } else { # list-input
       lai <- lapply(1:length(year), function(y) {data.frame(year =rep(year[y], maxdoy[y]),
                                                             doy = 1:maxdoy[y],
-                                                            lai = plant_linear(doys = lai_doy_tbl[[y]]$lai_doy,
-                                                                               values = lai_doy_tbl[[y]]$lai_frac*maxlai[y],
+                                                            lai = plant_linear(doys = lai_doy_table[[y]]$lai_doy,
+                                                                               values = lai_doy_table[[y]]$lai_frac*maxlai[y],
                                                                                maxdoy = maxdoy[y]))
       })
     }

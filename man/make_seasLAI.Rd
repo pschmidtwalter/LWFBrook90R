@@ -16,7 +16,7 @@ make_seasLAI(
   shp_optdoy = budburst_doy + emerge_dur,
   shp_budburst = 0.5,
   shp_leaffall = 10,
-  lai_doy_tbl = data.frame(lai_doy = c(1, 121, 150, 280, 320, 365), lai_frac = c(0, 0,
+  lai_doy_table = data.frame(lai_doy = c(1, 121, 150, 280, 320, 365), lai_frac = c(0, 0,
     0.5, 1, 0.5, 0))
 )
 }
@@ -51,7 +51,7 @@ is reached.}
 \item{shp_leaffall}{Shape parameter growth cessation (required when
 \code{method = "Coupmodel"}).}
 
-\item{lai_doy_tbl}{Data.frame with day of year ('doy') and LAI fraction
+\item{lai_doy_table}{Data.frame with day of year ('doy') and LAI fraction
 values ('lai_frac'), required when \code{method = "linear"}). Can be
 provided as a single data.frame or a list of data.frames with one entry for
 each year of the simulation.}
@@ -79,7 +79,7 @@ lai_doy_table <- data.frame(lai_doy = c(1,110,117,135,175,220,250,290,365),
 lai_linear <- make_seasLAI(method = "linear",
                           year = 2001,
                           maxlai = 5,
-                          lai_doy_tbl = lai_doy_table)
+                          lai_doy_table = lai_doy_table)
 
 lai_coupmodel <- make_seasLAI(method = "Coupmodel",
                              year = 2001,
@@ -115,7 +115,7 @@ plot(dates,lai, col = "green", ylab = "lai [m²/m²]",
 lai_linear1 <- make_seasLAI(method = "linear",
                     year = years,
                     maxlai = c(4,6,5),
-                    lai_doy_tbl = lai_doy_table)
+                    lai_doy_table = lai_doy_table)
 
 plot(dates,lai_linear1, col = "green", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)
@@ -131,7 +131,7 @@ lai_doy_table_l <- list("2002" = data.frame(lai_doy = c(1,90,97,115,155,200,230,
 lai_linear2 <- make_seasLAI(method = "linear",
                     year = years,
                     maxlai = c(4,6,5),
-                    lai_doy_tbl = lai_doy_table_l)
+                    lai_doy_table = lai_doy_table_l)
 
 lines(dates,lai_linear2, col = "darkgreen", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)

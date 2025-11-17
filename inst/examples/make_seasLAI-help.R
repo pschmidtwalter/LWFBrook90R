@@ -13,7 +13,7 @@ lai_doy_table <- data.frame(lai_doy = c(1,110,117,135,175,220,250,290,365),
 lai_linear <- make_seasLAI(method = "linear",
                           year = 2001,
                           maxlai = 5,
-                          lai_doy_tbl = lai_doy_table)
+                          lai_doy_table = lai_doy_table)
 
 lai_coupmodel <- make_seasLAI(method = "Coupmodel",
                              year = 2001,
@@ -49,7 +49,7 @@ plot(dates,lai, col = "green", ylab = "lai [m²/m²]",
 lai_linear1 <- make_seasLAI(method = "linear",
                     year = years,
                     maxlai = c(4,6,5),
-                    lai_doy_tbl = lai_doy_table)
+                    lai_doy_table = lai_doy_table)
 
 plot(dates,lai_linear1, col = "green", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)
@@ -65,7 +65,7 @@ lai_doy_table_l <- list("2002" = data.frame(lai_doy = c(1,90,97,115,155,200,230,
 lai_linear2 <- make_seasLAI(method = "linear",
                     year = years,
                     maxlai = c(4,6,5),
-                    lai_doy_tbl = lai_doy_table_l)
+                    lai_doy_table = lai_doy_table_l)
 
 lines(dates,lai_linear2, col = "darkgreen", ylab = "lai [m²/m²]",
      type ="l", xlab = "", lwd = 2)
