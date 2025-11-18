@@ -5,7 +5,7 @@
 #'
 #' @param method Name of method for generating the sequence. Must be one of
 #'   "b90", "linear", "Coupmodel".
-#' @param year Vector of years to be returned.
+#' @param years Vector of years to be returned.
 #' @param maxlai Maximum leaf are index.
 #' @param winlaifrac Fraction of \code{maxlai} during winter (ignored when
 #'   \code{method = 'linear'}).
@@ -32,7 +32,7 @@
 #' @example inst/examples/make_seasLAI-help.R
 #' @export
 make_seasLAI <- function(method="b90",
-                         year,
+                         years,
                          maxlai,
                          winlaifrac = 0, #LAI in Winter
                          budburst_doy = 121, #Budburst DOY
@@ -47,15 +47,15 @@ make_seasLAI <- function(method="b90",
                          ) {
   method <- match.arg(method, choices = c("b90", "linear", "Coupmodel"))
 
-  minlai_last_year <- NULL; doys <- NULL; values <- NULL; min_lai <- NULL# CRAN Check Notes
+  minlai_last_year <- NULL; doys <- NULL; values <- NULL; minlai <- NULL# CRAN Check Notes
 
-  maxdoy <- ifelse( ((year %% 4 == 0) & (year %% 100 != 0)) | (year %% 400 == 0),
+  maxdoy <- ifelse( ((years %% 4 == 0) & (years %% 100 != 0)) | (years %% 400 == 0),
                     366, 365)
 
   if (method %in% c("b90", "Coupmodel")) {
 
     dat <- suppressWarnings(
-      data.table::data.table(year = year, maxlai = maxlai, winlaifrac = winlaifrac,
+      data.table::data.table(year = years, maxlai = maxlai, winlaifrac = winlaifrac,
                              budburst_doy = budburst_doy, leaffall_doy = leaffall_doy,
                              emerge_dur = emerge_dur, leaffall_dur = leaffall_dur,
                              shp_optdoy = shp_optdoy, shp_budburst = shp_budburst,
@@ -95,15 +95,15 @@ make_seasLAI <- function(method="b90",
     # Single data.frame input: replicate each year and interpolate
     if (is.data.frame(lai_doy_table)) {
       # single data.frame: replicate for each year
-      lai <- lapply(1:length(year), function(y) {
-        data.frame(year =rep(year[y], maxdoy[y]),
+      lai <- lapply(1:length(years), function(y) {
+        data.frame(year =rep(years[y], maxdoy[y]),
                    doy = 1:maxdoy[y],
                    lai = plant_linear(doys = lai_doy_table$lai_doy,
                                       values = lai_doy_table$lai_frac*maxlai[y],
                                       maxdoy = maxdoy[y]))
       })
     } else { # list-input
-      lai <- lapply(1:length(year), function(y) {data.frame(year =rep(year[y], maxdoy[y]),
+      lai <- lapply(1:length(years), function(y) {data.frame(year =rep(years[y], maxdoy[y]),
                                                             doy = 1:maxdoy[y],
                                                             lai = plant_linear(doys = lai_doy_table[[y]]$lai_doy,
                                                                                values = lai_doy_table[[y]]$lai_frac*maxlai[y],
@@ -112,6 +112,8 @@ make_seasLAI <- function(method="b90",
     }
 
     out <- rbindlist(lai)$lai
+  } else {
+    stop("Unknown lai_method. Possible methods: 'b90', 'linear', 'Coupmodel'")
   }
 
   return(out)

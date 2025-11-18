@@ -6,7 +6,7 @@
 \usage{
 make_seasLAI(
   method = "b90",
-  year,
+  years,
   maxlai,
   winlaifrac = 0,
   budburst_doy = 121,
@@ -24,7 +24,7 @@ make_seasLAI(
 \item{method}{Name of method for generating the sequence. Must be one of
 "b90", "linear", "Coupmodel".}
 
-\item{year}{Vector of years to be returned.}
+\item{years}{Vector of years to be returned.}
 
 \item{maxlai}{Maximum leaf are index.}
 
