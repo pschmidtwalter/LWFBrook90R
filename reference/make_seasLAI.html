@@ -18,7 +18,7 @@ values, dates and shape parameters using different methods."><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
       </span>
     </div>
 
@@ -76,18 +76,18 @@ values, dates and shape parameters using different methods.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_seasLAI</span><span class="op">(</span></span>
 <span>  method <span class="op">=</span> <span class="st">"b90"</span>,</span>
-<span>  <span class="va">year</span>,</span>
+<span>  <span class="va">years</span>,</span>
 <span>  <span class="va">maxlai</span>,</span>
 <span>  winlaifrac <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  budburst_doy <span class="op">=</span> <span class="fl">121</span>,</span>
 <span>  leaffall_doy <span class="op">=</span> <span class="fl">279</span>,</span>
 <span>  emerge_dur <span class="op">=</span> <span class="fl">28</span>,</span>
 <span>  leaffall_dur <span class="op">=</span> <span class="fl">58</span>,</span>
-<span>  shp_optdoy <span class="op">=</span> <span class="fl">220</span>,</span>
+<span>  shp_optdoy <span class="op">=</span> <span class="va">budburst_doy</span> <span class="op">+</span> <span class="va">emerge_dur</span>,</span>
 <span>  shp_budburst <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  shp_leaffall <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">121</span>, <span class="fl">150</span>, <span class="fl">280</span>, <span class="fl">320</span>, <span class="fl">365</span><span class="op">)</span>,</span>
-<span>  lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>  lai_doy_table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">121</span>, <span class="fl">150</span>, <span class="fl">280</span>, <span class="fl">320</span>, <span class="fl">365</span><span class="op">)</span>, lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>    <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,7 +100,7 @@ values, dates and shape parameters using different methods.</p>
 "b90", "linear", "Coupmodel".</p></dd>
 
 
-<dt id="arg-year">year<a class="anchor" aria-label="anchor" href="#arg-year"></a></dt>
+<dt id="arg-years">years<a class="anchor" aria-label="anchor" href="#arg-years"></a></dt>
 <dd><p>Vector of years to be returned.</p></dd>
 
 
@@ -147,13 +147,11 @@ is reached.</p></dd>
 <code>method = "Coupmodel"</code>).</p></dd>
 
 
-<dt id="arg-lai-doy">lai_doy<a class="anchor" aria-label="anchor" href="#arg-lai-doy"></a></dt>
-<dd><p>Integer vector of days of years.</p></dd>
-
-
-<dt id="arg-lai-frac">lai_frac<a class="anchor" aria-label="anchor" href="#arg-lai-frac"></a></dt>
-<dd><p>Vector of values of fractional leaf area index corresponding
-to lai_doy (required when <code>method = "linear"</code>).</p></dd>
+<dt id="arg-lai-doy-table">lai_doy_table<a class="anchor" aria-label="anchor" href="#arg-lai-doy-table"></a></dt>
+<dd><p>Data.frame with day of year ('doy') and LAI fraction
+values ('lai_frac'), required when <code>method = "linear"</code>). Can be
+provided as a single data.frame or a list of data.frames with one entry for
+each year of the simulation.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -173,19 +171,18 @@ to lai_doy (required when <code>method = "linear"</code>).</p></dd>
 <span class="r-in"><span>                       emerge_dur <span class="op">=</span> <span class="fl">15</span>,</span></span>
 <span class="r-in"><span>                       leaffall_dur <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">lai_doy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">110</span>,<span class="fl">117</span>,<span class="fl">135</span>,<span class="fl">175</span>,<span class="fl">220</span>,<span class="fl">250</span>,<span class="fl">290</span>,<span class="fl">365</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">lai_frac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lai_doy_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">110</span>,<span class="fl">117</span>,<span class="fl">135</span>,<span class="fl">175</span>,<span class="fl">220</span>,<span class="fl">250</span>,<span class="fl">290</span>,<span class="fl">365</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lai_linear</span> <span class="op">&lt;-</span> <span class="fu">make_seasLAI</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"linear"</span>,</span></span>
 <span class="r-in"><span>                          year <span class="op">=</span> <span class="fl">2001</span>,</span></span>
 <span class="r-in"><span>                          maxlai <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>                          lai_doy <span class="op">=</span> <span class="va">lai_doy</span>,</span></span>
-<span class="r-in"><span>                          lai_frac <span class="op">=</span> <span class="va">lai_frac</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                          lai_doy_table <span class="op">=</span> <span class="va">lai_doy_table</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lai_coupmodel</span> <span class="op">&lt;-</span> <span class="fu">make_seasLAI</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"Coupmodel"</span>,</span></span>
 <span class="r-in"><span>                             year <span class="op">=</span> <span class="fl">2001</span>,</span></span>
 <span class="r-in"><span>                             maxlai <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>                             winlaifrac <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
-<span class="r-in"><span>                             budburst_doy <span class="op">=</span> <span class="fl">110</span>,</span></span>
+<span class="r-in"><span>                             winlaifrac <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
+<span class="r-in"><span>                             budburst_doy <span class="op">=</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>                             leaffall_doy <span class="op">=</span> <span class="fl">280</span>,</span></span>
 <span class="r-in"><span>                             shp_optdoy <span class="op">=</span> <span class="fl">180</span>,</span></span>
 <span class="r-in"><span>                             shp_budburst <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
@@ -198,7 +195,7 @@ to lai_doy (required when <code>method = "linear"</code>).</p></dd>
 <span class="r-plt img"><img src="make_seasLAI-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># incorparating between-year variability</span></span></span>
-<span class="r-in"><span><span class="va">years</span> <span class="op">&lt;-</span> <span class="fl">2001</span><span class="op">:</span><span class="fl">2003</span></span></span>
+<span class="r-in"><span><span class="va">years</span> <span class="op">&lt;-</span> <span class="fl">2002</span><span class="op">:</span><span class="fl">2004</span></span></span>
 <span class="r-in"><span><span class="va">lai</span> <span class="op">&lt;-</span> <span class="fu">make_seasLAI</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"Coupmodel"</span>,</span></span>
 <span class="r-in"><span>                   year <span class="op">=</span> <span class="va">years</span>,</span></span>
 <span class="r-in"><span>                   maxlai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">6</span>,<span class="fl">5</span><span class="op">)</span>,</span></span>
@@ -208,10 +205,36 @@ to lai_doy (required when <code>method = "linear"</code>).</p></dd>
 <span class="r-in"><span>                   shp_leaffall <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>                   shp_optdoy <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">210</span>,<span class="fl">180</span>,<span class="fl">240</span><span class="op">)</span> <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2001-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2003-12-31"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.Date.html" class="external-link">seq.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2002-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2004-12-31"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dates</span>,<span class="va">lai</span>, col <span class="op">=</span> <span class="st">"green"</span>, ylab <span class="op">=</span> <span class="st">"lai [m²/m²]"</span>,</span></span>
 <span class="r-in"><span>     type <span class="op">=</span><span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">""</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="make_seasLAI-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># doy/value-tables</span></span></span>
+<span class="r-in"><span><span class="va">lai_linear1</span> <span class="op">&lt;-</span> <span class="fu">make_seasLAI</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"linear"</span>,</span></span>
+<span class="r-in"><span>                    year <span class="op">=</span> <span class="va">years</span>,</span></span>
+<span class="r-in"><span>                    maxlai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">6</span>,<span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    lai_doy_table <span class="op">=</span> <span class="va">lai_doy_table</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dates</span>,<span class="va">lai_linear1</span>, col <span class="op">=</span> <span class="st">"green"</span>, ylab <span class="op">=</span> <span class="st">"lai [m²/m²]"</span>,</span></span>
+<span class="r-in"><span>     type <span class="op">=</span><span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">""</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># linear interpolation for lists of annual tables</span></span></span>
+<span class="r-in"><span><span class="va">lai_doy_table_l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"2002"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">90</span>,<span class="fl">97</span>,<span class="fl">115</span>,<span class="fl">155</span>,<span class="fl">200</span>,<span class="fl">230</span>,<span class="fl">270</span>,<span class="fl">365</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                          lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        <span class="st">"2003"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">100</span>,<span class="fl">107</span>,<span class="fl">125</span>,<span class="fl">165</span>,<span class="fl">210</span>,<span class="fl">240</span>,<span class="fl">280</span>,<span class="fl">365</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                          lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        <span class="st">"2004"</span><span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">110</span>,<span class="fl">117</span>,<span class="fl">135</span>,<span class="fl">175</span>,<span class="fl">220</span>,<span class="fl">250</span>,<span class="fl">290</span>,<span class="fl">365</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                           lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lai_linear2</span> <span class="op">&lt;-</span> <span class="fu">make_seasLAI</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"linear"</span>,</span></span>
+<span class="r-in"><span>                    year <span class="op">=</span> <span class="va">years</span>,</span></span>
+<span class="r-in"><span>                    maxlai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">6</span>,<span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    lai_doy_table <span class="op">=</span> <span class="va">lai_doy_table_l</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">dates</span>,<span class="va">lai_linear2</span>, col <span class="op">=</span> <span class="st">"darkgreen"</span>, ylab <span class="op">=</span> <span class="st">"lai [m²/m²]"</span>,</span></span>
+<span class="r-in"><span>     type <span class="op">=</span><span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">""</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="make_seasLAI-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
@@ -222,11 +245,11 @@ to lai_doy (required when <code>method = "linear"</code>).</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
+  <p></p><p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Michael Köhler, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

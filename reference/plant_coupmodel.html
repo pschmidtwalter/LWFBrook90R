@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
       </span>
     </div>
 
@@ -73,7 +73,8 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plant_coupmodel</span><span class="op">(</span></span>
-<span>  <span class="va">minval</span>,</span>
+<span>  <span class="va">minval_before_incr</span>,</span>
+<span>  minval_after_decr <span class="op">=</span> <span class="va">minval_before_incr</span>,</span>
 <span>  <span class="va">maxval</span>,</span>
 <span>  <span class="va">doy.incr</span>,</span>
 <span>  <span class="va">doy.max</span>,</span>
@@ -88,8 +89,14 @@
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-minval">minval<a class="anchor" aria-label="anchor" href="#arg-minval"></a></dt>
-<dd><p>Minimum value.</p></dd>
+<dl><dt id="arg-minval-before-incr">minval_before_incr<a class="anchor" aria-label="anchor" href="#arg-minval-before-incr"></a></dt>
+<dd><p>Minimum value used for the time period before
+<code>doy.incr</code>.</p></dd>
+
+
+<dt id="arg-minval-after-decr">minval_after_decr<a class="anchor" aria-label="anchor" href="#arg-minval-after-decr"></a></dt>
+<dd><p>Minimum value used for time period after
+<code>doy.decr</code>.</p></dd>
 
 
 <dt id="arg-maxval">maxval<a class="anchor" aria-label="anchor" href="#arg-maxval"></a></dt>
@@ -97,7 +104,7 @@
 
 
 <dt id="arg-doy-incr">doy.incr<a class="anchor" aria-label="anchor" href="#arg-doy-incr"></a></dt>
-<dd><p>Day of year when increasing from <code>minval</code> to
+<dd><p>Day of year when increasing from <code>minval_before_incr</code> to
 <code>maxval</code> begins.</p></dd>
 
 
@@ -106,7 +113,7 @@
 
 
 <dt id="arg-doy-min">doy.min<a class="anchor" aria-label="anchor" href="#arg-doy-min"></a></dt>
-<dd><p>Day of year when <code>minval</code> is reached again.</p></dd>
+<dd><p>Day of year when <code>minval_after_decr</code> is reached.</p></dd>
 
 
 <dt id="arg-shape-incr">shape.incr<a class="anchor" aria-label="anchor" href="#arg-shape-incr"></a></dt>
@@ -134,7 +141,7 @@ soil-plant-atmosphere systems."
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">plant_coupmodel</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span>, <span class="fl">121</span>, <span class="fl">200</span>, <span class="fl">280</span>, <span class="fl">0.3</span>, <span class="fl">3</span>, <span class="fl">365</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">plant_coupmodel</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.2</span>,<span class="fl">5</span>,<span class="fl">121</span>, <span class="fl">200</span>, <span class="fl">280</span>, <span class="fl">0.3</span>, <span class="fl">3</span>, <span class="fl">365</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plant_coupmodel-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -147,11 +154,11 @@ soil-plant-atmosphere systems."
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
+  <p></p><p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Michael Köhler, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

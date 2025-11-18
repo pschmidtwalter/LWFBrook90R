@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LWFBrook90R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
       </span>
     </div>
 
@@ -150,7 +150,7 @@ to <code><a href="../reference/make_seasLAI.html">make_seasLAI()</a></code> that
 leaf area index development for a single year:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">LAI_b90</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/make_seasLAI.html">make_seasLAI</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">options_b90</span><span class="op">$</span><span class="va">lai_method</span>,</span>
-<span>                         year <span class="op">=</span> <span class="fl">2003</span>,</span>
+<span>                         years <span class="op">=</span> <span class="fl">2003</span>,</span>
 <span>                         maxlai <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">maxlai</span>,</span>
 <span>                         winlaifrac <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">winlaifrac</span>,</span>
 <span>                         budburst_doy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span>,</span>
@@ -167,13 +167,13 @@ interpolate the intra-annual course of leaf area index to a daily time
 series.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">options_b90</span><span class="op">$</span><span class="va">lai_method</span> <span class="op">&lt;-</span> <span class="st">"linear"</span></span>
-<span><span class="va">param_b90</span><span class="op">$</span><span class="va">lai_doy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">110</span>,<span class="fl">117</span>,<span class="fl">135</span>,<span class="fl">175</span>,<span class="fl">220</span>,<span class="fl">250</span>,<span class="fl">290</span>,<span class="fl">365</span><span class="op">)</span></span>
-<span><span class="va">param_b90</span><span class="op">$</span><span class="va">lai_frac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="va">param_b90</span><span class="op">$</span><span class="va">lai_doy_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>lai_doy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">110</span>,<span class="fl">117</span>,<span class="fl">135</span>,<span class="fl">175</span>,<span class="fl">220</span>,<span class="fl">250</span>,<span class="fl">290</span>,<span class="fl">365</span><span class="op">)</span>,</span>
+<span>                                      lai_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">1.2</span>,<span class="fl">1.2</span>,<span class="fl">1.0</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">LAI_linear</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/make_seasLAI.html">make_seasLAI</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">options_b90</span><span class="op">$</span><span class="va">lai_method</span>,</span>
-<span>                            year <span class="op">=</span> <span class="fl">2003</span>,</span>
+<span>                            years <span class="op">=</span> <span class="fl">2003</span>,</span>
 <span>                            maxlai <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">maxlai</span>,</span>
-<span>                            lai_doy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">lai_doy</span> ,</span>
-<span>                            lai_frac <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">lai_frac</span><span class="op">)</span></span></code></pre></div>
+<span>                            lai_doy_table <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">lai_doy_table</span><span class="op">)</span></span></code></pre></div>
 <p>A third shape-option for the intra-annual variation of leaf area
 index is called ‘Coupmodel’ and uses the interpolation method as
 implemented in the ‘Coupmodel’ <span class="citation">(Jansson and
@@ -188,7 +188,7 @@ parameters required <code>by lai_method = 'b90'</code>.</p>
 <span><span class="va">param_b90</span><span class="op">$</span><span class="va">shp_leaffall</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">param_b90</span><span class="op">$</span><span class="va">shp_optdoy</span> <span class="op">&lt;-</span> <span class="fl">180</span></span>
 <span><span class="va">LAI_coupmodel</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/make_seasLAI.html">make_seasLAI</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">options_b90</span><span class="op">$</span><span class="va">lai_method</span>,</span>
-<span>                               year <span class="op">=</span> <span class="fl">2003</span>,</span>
+<span>                               years <span class="op">=</span> <span class="fl">2003</span>,</span>
 <span>                               maxlai <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">maxlai</span>,</span>
 <span>                               budburst_doy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span>,</span>
 <span>                               leaffall_doy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">leaffalldoy</span>,</span>
@@ -198,7 +198,7 @@ parameters required <code>by lai_method = 'b90'</code>.</p>
 <p>A plot of all three methods shows the roles of the different
 parameters:</p>
 <div class="figure">
-<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-5-1.png" alt="Methods featured by make_seasLAI()" width="672"><p class="caption">
+<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Methods featured by make_seasLAI()" width="672"><p class="caption">
 Methods featured by make_seasLAI()
 </p>
 </div>
@@ -220,19 +220,12 @@ budburst, by assigning a vector of values to the parameter
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">years</span> <span class="op">&lt;-</span> <span class="fl">2001</span><span class="op">:</span><span class="fl">2003</span></span>
 <span><span class="va">param_b90</span><span class="op">$</span><span class="va">maxlai</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">6</span>,<span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">param_b90</span><span class="op">$</span><span class="va">winlaifrac</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
 <span><span class="va">param_b90</span><span class="op">$</span><span class="va">shp_optdoy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">210</span>,<span class="fl">180</span>,<span class="fl">240</span><span class="op">)</span></span>
 <span><span class="va">param_b90</span><span class="op">$</span><span class="va">shp_budburst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">0.3</span><span class="op">)</span></span>
-<span><span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">135</span>,<span class="fl">121</span><span class="op">)</span> </span>
-<span><span class="va">lai_variation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_seasLAI.html">make_seasLAI</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">options_b90</span><span class="op">$</span><span class="va">lai_method</span>,</span>
-<span>                              year <span class="op">=</span> <span class="va">years</span>,</span>
-<span>                              maxlai <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">maxlai</span>,</span>
-<span>                              budburst_doy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span>,</span>
-<span>                              leaffall_doy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">leaffalldoy</span>,</span>
-<span>                              shp_budburst <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">shp_budburst</span>,</span>
-<span>                              shp_leaffall <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">shp_leaffall</span>,</span>
-<span>                              shp_optdoy <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">shp_optdoy</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">param_b90</span><span class="op">$</span><span class="va">budburstdoy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">135</span>,<span class="fl">121</span><span class="op">)</span> </span></code></pre></div>
 <div class="figure">
-<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-6-1.png" alt="Options and parameters affecting interannual variation of leaf area index." width="672"><p class="caption">
+<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Options and parameters affecting interannual variation of leaf area index." width="672"><p class="caption">
 Options and parameters affecting interannual variation of leaf area
 index.
 </p>
@@ -316,7 +309,7 @@ budburst and leaffall only, and remain constant during winter.</p>
 timeseries of stand height using the different options and
 parameters:</p>
 <div class="figure">
-<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-9-1.png" alt="Interpolated stand height derived from parameters using approx_standprop()" width="672"><p class="caption">
+<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="Interpolated stand height derived from parameters using approx_standprop()" width="672"><p class="caption">
 Interpolated stand height derived from parameters using
 approx_standprop()
 </p>
@@ -358,7 +351,7 @@ model (<code>run = FALSE</code>), but only return the model input.</p>
 <span><span class="va">options_b90</span><span class="op">$</span><span class="va">leaffall_method</span> <span class="op">&lt;-</span> <span class="st">"vonWilpert"</span></span>
 <span><span class="va">param_b90</span><span class="op">$</span><span class="va">budburst_species</span> <span class="op">&lt;-</span> <span class="st">"Fagus sylvatica"</span></span>
 <span></span>
-<span><span class="co">#run LWF-Brook90 without simulation</span></span>
+<span><span class="co"># execute without simulation</span></span>
 <span><span class="va">standprop_daily</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_LWFB90.html">run_LWFB90</a></span><span class="op">(</span>options_b90 <span class="op">=</span> <span class="va">options_b90</span>,</span>
 <span>                              param_b90 <span class="op">=</span> <span class="va">param_b90</span>,</span>
 <span>                              climate <span class="op">=</span> <span class="va">slb1_meteo</span>,</span>
@@ -366,7 +359,7 @@ model (<code>run = FALSE</code>), but only return the model input.</p>
 <span>                              output <span class="op">=</span> <span class="va">output</span>, </span>
 <span>                              run <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">standprop_daily</span></span></code></pre></div>
 <div class="figure">
-<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-11-1.png" alt="Stand properties generated using table input of annual stand characteristics" width="672"><p class="caption">
+<img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="Stand properties generated using table input of annual stand characteristics" width="672"><p class="caption">
 Stand properties generated using table input of annual stand
 characteristics
 </p>
@@ -396,7 +389,7 @@ and
 is the depth coefficient. Larger values of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
 correspond to a greater proportion of roots in deeper soil layers:</p>
-<p><img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-12-1.png" width="384"></p>
+<p><img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="384"></p>
 <p>For larger values of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>,
 the root density will reach zero only in very deep soil layers. In order
@@ -443,7 +436,7 @@ returns a uniform root distribution, with the first vector-element of
 <span><span class="va">roots_constant</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_rootden.html">make_rootden</a></span><span class="op">(</span>soilnodes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">slb1_soil</span><span class="op">$</span><span class="va">upper</span><span class="op">)</span>, <span class="va">slb1_soil</span><span class="op">$</span><span class="va">lower</span><span class="op">)</span>, </span>
 <span>                               maxrootdepth <span class="op">=</span> <span class="va">param_b90</span><span class="op">$</span><span class="va">maxrootdepth</span>,</span>
 <span>                               method <span class="op">=</span> <span class="va">options_b90</span><span class="op">$</span><span class="va">root_method</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-15-1.png" width="384"></p>
+<p><img src="LWFBrook90R-2-Options_Param_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="384"></p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -474,12 +467,12 @@ Stockholm.
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
+<p>Developed by Paul Schmidt-Walter, Volodymyr Trotsiuk, Klaus Hammel, Martin Kennel, Anthony Federer, Tobias Hohenbrink, Gisbert Hetkamp, Michael Köhler, Bavarian State Institute of Forestry (LWF), Northwest German Forest Research Institute (NW-FVA).</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
