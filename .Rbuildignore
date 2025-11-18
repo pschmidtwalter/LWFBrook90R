@@ -17,3 +17,4 @@ examples_all.R
 ^pkgdown$
 ^CRAN-SUBMISSION$
 ^tests_compare_actual_vs_previous$
+NOTES.md

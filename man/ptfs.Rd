@@ -65,7 +65,7 @@ Function \code{hydpar_puh2} derives Mualem - van Genuchten (MvG) parameters
 using the regression functions developed by Puhlmann & von Wilpert (2011).
 The equations of Wösten et al. (1999) are available via \code{hydpar_hypres},
 and their tabulated values for soil texture classes can be derived using the
-function \code{hydpar_hypres_tab}. The table of MvG parameters from Wesselok
+function \code{hydpar_hypres_tab}. The table of MvG parameters from Wessolek
 et al. (2009; Tab. 10) is accessible by \code{hydpar_wessolek_tab}. For this
 function, soil texture classes after the German texture classification system
 (KA5, AG Boden 2005) have to be provided. To derive hydraulic parameters of

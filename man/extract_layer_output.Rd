@@ -26,7 +26,7 @@ guessed.}
 \item{layer_index_name}{Column containing layer index. Defaults to 'nl' as in
 \code{layer_output}.}
 
-\item{sep}{Separation character for constructig names from variable name and
+\item{sep}{Separation character for constructing names from variable name and
 layer index.}
 }
 \value{
@@ -35,7 +35,7 @@ A data.table with the layers' values of the variables organized in
 }
 \description{
 Convenience function to reorganize soil layer time series data from
-\code{layer_output} list entry produced with \code{\link{run_LWFB90}}. The data is tansformed to a
+\code{layer_output} list entry produced with \code{\link{run_LWFB90}}. The data is transformed to a
 wide format, by casting the variables with the layer number using data.table's
 \code{\link[data.table]{dcast}}-function.
 }

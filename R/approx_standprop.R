@@ -13,7 +13,7 @@
 #'   Ignored if \code{approx.method = 'constant'}.
 #' @param xout_yrs Vector of years for which output is generated. May be
 #'   longer or shorter than \code{x_yrs}. For years outside \code{x_yrs}, the value of the
-#'   closest data extrem is returned.
+#'   closest data extreme is returned.
 #' @param use_growthperiod Logical: Use startdoy and enddoy for linear
 #'   interpolation? If TRUE, yearly changes take place between startdoy and
 #'   enddoy, othe wise from end of year to end of the year after.

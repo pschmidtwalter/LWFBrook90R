@@ -1,7 +1,7 @@
 #' Extracts values from layer data and organizes layer-wise variables in columns
 #'
 #' Convenience function to reorganize soil layer time series data from
-#' \code{layer_output} list entry produced with \code{\link{run_LWFB90}}. The data is tansformed to a
+#' \code{layer_output} list entry produced with \code{\link{run_LWFB90}}. The data is transformed to a
 #' wide format, by casting the variables with the layer number using data.table's
 #' \code{\link[data.table]{dcast}}-function.
 #'
@@ -14,7 +14,7 @@
 #'   guessed.
 #' @param layer_index_name Column containing layer index. Defaults to 'nl' as in
 #'   \code{layer_output}.
-#' @param sep Separation character for constructig names from variable name and
+#' @param sep Separation character for constructing names from variable name and
 #'   layer index.
 #'
 #' @return A data.table with the layers' values of the variables organized in
