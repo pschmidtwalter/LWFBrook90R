@@ -2,36 +2,51 @@
 % Please edit documentation in R/plantb90.R
 \name{plant_b90}
 \alias{plant_b90}
-\title{Interpolate plant properties using the 'b90' method.}
+\title{Interpolate plant properties using the 'b90' method}
 \usage{
-plant_b90(minval, maxval, doy.incr, incr.dur, doy.decr, decr.dur, maxdoy)
+plant_b90(
+  minval_before_incr,
+  minval_after_decr = minval_before_incr,
+  maxval,
+  doy.incr,
+  incr.dur,
+  doy.decr,
+  decr.dur,
+  maxdoy
+)
 }
 \arguments{
-\item{minval}{Minimum value.}
+\item{minval_before_incr}{Minimum value used for the time period before
+\code{doy.incr}.}
+
+\item{minval_after_decr}{Minimum value used for time period after
+\code{doy.decr}.}
 
 \item{maxval}{Maximum value.}
 
-\item{doy.incr}{Day of year when increasing from \code{minval} to
-\code{maxval} begins.}
+\item{doy.incr}{Day of year when increasing from \code{minval_before_incr} to
+\code{maxval} starts.}
 
 \item{incr.dur}{Duration (number of days) since  \code{doy.incr} until
 \code{maxval} is reached.}
 
-\item{doy.decr}{Day of year when decreasing to \code{minval} begins.}
+\item{doy.decr}{Day of year when decreasing to \code{minval_after_decr}
+begins.}
 
 \item{decr.dur}{Duration (number of days) since \code{doy.incr} until
-\code{minval} is reached.}
+\code{minval_after_decr} is reached.}
 
-\item{maxdoy}{Length of the year, 366 for leap years, 365 for normal years.}
+\item{maxdoy}{Length of the year (366 for leap years).}
 }
 \value{
 A numeric vector of length \code{maxdoy}.
 }
 \description{
-Creates a daily sequence for one year from parameters
+Creates a daily sequence for one year from parameters.
 }
 \examples{
-plot(plant_b90(minval = 0,maxval=1,
+plot(plant_b90(minval_before_incr = 0,minval_after_decr = 0.2,
+maxval=1,
 doy.incr = 121,incr.dur = 28,
 doy.decr = 280, decr.dur = 50,
 maxdoy = 365))

@@ -124,7 +124,7 @@ test_that("single output functions works", {
 
 meteo <- data.table(slb1_meteo[,c("dates", "tmin", "tmax", "prec", "tmean","vappres", "windspeed", "globrad" )])
 meteo <- meteo[year(dates)==2013,]
-prec <- meteo[,list(dates, prec = prec*1.1)]
+prec <- meteo[,list(dates, prec = prec*1.1)] # to test if the right input (with prec-interval = 1, is prec from climate or from precip used?
 data("slb1_prec2013_hh")
 setDT(slb1_prec2013_hh)
 
@@ -163,7 +163,7 @@ test_that("precipitation input works",{
 
 })
 
-
+# fixed water table depth
 test_that("water table input works",{
   # from layer 16 there should be groundwater
   res <- run_LWFB90(options_b90 = opts,
@@ -182,6 +182,32 @@ test_that("water table input works",{
   expect_true(all(res$layer_output[nl==21, wetnes] > test_default$layer_output[nl == 21, wetnes]))
 
 })
+
+
+
+# water table depth timeseries
+clim <- data.table(slb1_meteo)
+dateseq <- clim[year(dates) == 2013, seq.Date(data.table::first(dates),data.table::last(dates), "day")]
+parms$water_table_depth <- data.table::data.table(dates = dateseq,
+                                                  water_table_depth = -1.1 + 0.5 * sin(6.28 * 1:length(dateseq) / length(dateseq) ))
+
+#parms$water_table_depth[, plot(dates,water_table_depth) ]
+opts$startdate <- first(dateseq)
+opts$enddate <- last(dateseq)
+simout_water_table_ts <- run_LWFB90(options_b90 = opts,
+                                    param_b90 = parms,
+                                    climate = clim,
+                                    soil = soil)
+
+test_that("timeseries input of water_table_depth also works fine", {
+  upper_sat_layer <- simout_water_table_ts$layer_output[, list(sat_layer = ifelse(any(wetnes == 1), min(nl[which(wetnes==1)]),NA_integer_)),
+                                                        by = list(dates = as.Date(paste(yr, mo, da,sep = "-")))]
+  upper_sat_layer$sat_depth <- with(simout_water_table_ts$model_input$param_b90$soil_nodes, upper[match(upper_sat_layer$sat_layer, layer)])
+
+  expect_true(all(parms$water_table_depth$water_table_depth <= upper_sat_layer$sat_depth, na.rm = T))
+
+})
+
 
 
 

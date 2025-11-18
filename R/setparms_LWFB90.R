@@ -29,7 +29,7 @@
 #'  qffc         \tab Quickflow fraction of infiltrating water at field capacity, for value 0 there is no quickflow (bypass or surface) unless soil profile surface becomes saturated. Default: 0  \tab -                  \tab Flow                   \cr
 #'  qfpar        \tab Quickflow shape parameter. Default: 1 \tab -                  \tab Flow                   \cr
 #'  qlayer       \tab Number of layers which are considered for generation of surface or source area flow. Default: 0\tab -                  \tab Flow                   \cr
-#'  water_table_depth \tab Depth of the water table for a constant head boundary. -9999 means gravitational flow boundary. Default: -9999\tab m                  \tab Flow                   \cr
+#'  water_table_depth \tab Depth of the water table for the lower boundary condition. -9999 (the default) means unit gradient flux boundary, a single value > -999 (i.e. the depth of a groundwater table) creates a constant head boundary. Provide a table with columns 'dates' and 'water_table_depth' to use a timeseries of water table depth observations as variable head boundary.\tab m                  \tab Flow                   \cr
 #'  gwatini      \tab Initial value of groundwater storage. Default: 0\tab mm                  \tab Initial                \cr
 #'  snowini      \tab Initial value of water content of snow pack. Default: 0\tab mm \tab Initial                \cr
 #'  snowlqini    \tab Initial value of liquid water content of snow pack. Default: 0\tab mm \tab Initial                \cr
@@ -80,6 +80,7 @@
 #'  shp_optdoy \tab Day of year when optimum value is reached - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
 #'  lai_doy \tab Day of year values for lai-interpolation - passed to \code{\link{make_seasLAI}} \tab doy               \tab Plant                  \cr
 #'  lai_frac \tab Fractional lai values for lai interpolation, corresponding to lai_doy - passed to \code{\link{make_seasLAI}} Default: 210 \tab doy               \tab Plant                  \cr
+#'  lai_doy_table \tab data.frame with day of year values ('doy) and corresponding lai fractions ('lai_frac'), or a list of data.frames, with one entry for each year of the simulation - passed to \code{\link{make_seasLAI}}  \tab -               \tab Plant                  \cr
 #'  winlaifrac   \tab Minimum LAI as a fraction of maxlai. Default: 0 \tab -                  \tab Plant                  \cr
 #'  standprop_table \tab Data.frame with yearly values of vegetation properties with columns 'year','age', 'height', 'maxlai', 'sai', 'densef' \tab                   \tab Plant                  \cr
 #'  cs           \tab Ratio of projected stem area index to canopy height. Default: 0.035 \tab m-1\tab Plant\cr
@@ -152,6 +153,7 @@ set_paramLWFB90 <- function(...) {
     leaffalldur = 58,
     lai_doy = NULL,
     lai_frac = NULL,
+    lai_doy_table = NULL,
     alb = 0.2,
     albsn = 0.5,
     ksnvp = 0.3,

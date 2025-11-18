@@ -5,57 +5,36 @@
 \title{Interface function to the LWF-Brook90 model}
 \usage{
 r_lwfbrook90(
-  siteparam,
-  climveg,
-  param,
-  pdur,
-  soil_materials,
-  soil_nodes,
-  precdat = NULL,
+  b90f_input,
+  meteo,
+  precip,
   output_log = TRUE,
   chk_input = TRUE,
   timelimit = Inf
 )
 }
 \arguments{
-\item{siteparam}{A [1,9] matrix with site level information: start year,
-start doy, latitude, initial snow, initial groundwater, precipitation
-interval, a snow cover's  liquid water (SNOWLQ) and cold content (CC).}
+\item{b90f_input}{Brook90 input list object containing all the parameters required.}
 
-\item{climveg}{A matrix with 15 columns of climatic and vegetation data:
-year, month, day, global radiation in MJ/(m² d), tmax (deg C), tmin (deg
-C), vappres (kPa), wind (m/s), prec (mm), mesfl (mm), densef (-), stand
-height (m), lai (m²/m²), sai (m²/m²), stand age (years).}
+\item{meteo}{A data.table of daily meteorological data with columns: Date (dates),
+global radiation (globrad, W/m²), minimum and maximum air temperature (tmin, tmax, deg C),
+vapour pressure (vappress, kPa), wind speed (windspeed, m/s),
+precipipitation (prec, mm), and measured flow (mesfl, mm).}
 
-\item{param}{A numeric vector of model input parameters (for the right order
-see \code{\link{param_to_rlwfbrook90}}).}
-
-\item{pdur}{a [1,12]-matrix of precipitation durations (hours) for each
-month.}
-
-\item{soil_materials}{A matrix of the 8 soil materials parameters. When
-imodel = 1 (Mualem-van Genuchten), these refer to: mat, ths, thr, alpha
-(1/m), npar, ksat (mm/d), tort (-), stonef (-). When imodel = 2
-(Clapp-Hornberger): mat, thsat, thetaf, psif (kPa), bexp, kf (mm/d), wetinf
-(-), stonef (-).}
-
-\item{soil_nodes}{A matrix of the soil model layers with columns nl (layer
-number), layer midpoint (m), thickness (mm), mat, psiini (kPa), rootden
-(-).}
-
-\item{precdat}{A matrix of precipitation interval data with 6 columns: year,
-month, day, interval-number (1:precint), prec, mesflp.}
+\item{precip}{An optional data.table of precipitation interval data with 6 columns: year,
+month, day, interval-number (1:prec_interval), prec, mesflp.}
 
 \item{output_log}{Logical whether to print runtime output to console.}
 
 \item{chk_input}{Logical whether to check for NaNs in model inputs.}
 
-\item{timelimit}{Integer to set elapsed time limits for running the model.}
+\item{timelimit}{Integer for setting a time limit (in seconds, default: Inf) for the duration of the model execution.}
 }
 \value{
 A list containing the daily and soil layer model outputs, along with
-  an error code of the simulation (see \code{\link{run_LWFB90}}.
+  an error code of the simulation.
 }
 \description{
-Passes input data matrices to the Fortran model code and returns the results
+Passes input data objects (parameters and meteorology) to the Fortran model
+code and returns the results
 }

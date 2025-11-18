@@ -39,7 +39,7 @@ module fbrook_mod
 
 contains
 
-subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, &
+subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_nodes, precdat, water_table_information, &
                      pr, timer, error, chk, output_day, output_layer) bind(C, name="s_brook90_f_")
 
     implicit none
@@ -56,6 +56,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     real(kind=c_double), dimension( INT(param(65)),6), intent(in) :: soil_nodes
     real(kind=c_double), dimension( INT(param(1)),15), intent(in) :: climveg
     real(kind=c_double), dimension( INT(param(1)*siteparam(6)),6), intent(in) :: precdat
+    real(kind=c_double), dimension( INT(param(1)), 4), intent(in) :: water_table_information
 
     ! Printing
     integer(kind=c_int), intent(in) :: pr
@@ -106,23 +107,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
     NPINT = INT( siteparam( 6 ) )
     SNOWLQ = siteparam( 7 ) ! initialize liquid water and cold content of snowpack
     CC = siteparam( 8 )
-    gwv%water_table_depth = siteparam(9)
-    gwv%vertical_flow_mode = ve_fl_mo(gwv%water_table_depth) ! Function from md_typedefs.f95, 0 for water_table_depth subceeding or equating -999, 1 otherwise.
-    gwv%dep(:NLAYER) = dep(:NLAYER)
-    gwv%asdf = 0
-    do i = 1, NLAYER ! Find the index of layer in which water table is located
-        gwv%N_groundwater = i
-        if (gwv%dep(i) - THICK(i)/2000.d0 < gwv%water_table_depth) exit ! leave the loop
-    end do
 
-    ! In case of water table below all soil layers:
-
-    if (gwv%dep(NLAYER) - THICK(NLAYER)/2000.d0 >= gwv%water_table_depth) gwv%N_groundwater = NLAYER + 1
-    ! write(*, *) "gwv%N_groundwater = ", gwv%N_groundwater
-    ! write(*, *) "gwv%dep = ", gwv%dep(:NLAYER)
-    ! write(*, *) "gwv integers = ", gwv%vertical_flow_mode, gwv%N_groundwater, gwv%asdf
-    ! write(*, *) "gwv%water_table_depth = ", gwv%water_table_depth
-    ! write(*, *) "THICK = ", THICK(:NLAYER)
+    ! Set groundwater variables depending on water table depth from siteparam(11)
+    call initialize_groundwater_variables(gwv, dep, thick, water_table_information(1, 4), nlayer)
 
     ! read PRFILE.DAT if requested
 
@@ -229,6 +216,9 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
             end if
         goto 999
         END IF
+
+        call update_groundwater_variables(gwv, water_table_information(iday, 4), nlayer, thick) ! inout: gwv
+        call adjust_wrt_groundwater(nlayer, gwv, swatmx, rhowg, swati, wetnes, psim) ! inout: swati, wetnes, psim
 
 !        * *  S E T  R O O T  D I S T R I B U T I O N * * * * *  * * * *  * * * *
         CALL RootGrowth (frelden, RELDEN, tini, age, rgroper, inirdep, inirlen, NLAYER)
@@ -491,14 +481,16 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 
             ! Calculate vertical flow rates
             call calc_vertical_flows(gwv, NLAYER, KK, Par(6, :), THICK, PSITI, STONEF, RHOWG, DPSIMX,&
-                                    DRAIN, VRFLI, pr, error)
+                                    DRAIN, VRFLI, error)
             if (error /= 0) go to 999
+
+
 !           first approximation for iteration time step,time remaining or DTIMAX
             DTI = MIN(DTRI, DTIMAX)
 !           net inflow to each layer including E and T withdrawal adjusted
 !           for interception
             call calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TRANI, SLVP,&
-                                    SWATMX, SWATI, VV, INFLI, BYFLI, NTFLI,pr, error)
+                                    SWATMX, SWATI, VV, INFLI, BYFLI, NTFLI, error)
             if (error /= 0) go to 999
 
             DO 61 I = 1, NLAYER
@@ -514,7 +506,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
 !              recalculate flow rates with new DTI
                 DTI = DTINEW
                 call calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TRANI, SLVP,&
-                                    SWATMX, SWATI, VV, INFLI, BYFLI, NTFLI,pr, error)
+                                    SWATMX, SWATI, VV, INFLI, BYFLI, NTFLI, error)
                 if (error /= 0) go to 999
             END IF
 
@@ -544,7 +536,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                     THR=Par(10,i)
                     WETNES(I) = (THS * SWATI(I) / SWATMX(I) -THR) / (THS - THR)
                 end if
-                PSIM(I) = FPSIM(WETNES(I),Par(1,i),iModel)
+                PSIM(I) = FPSIMgw(WETNES(I), Par(1,i), iModel, gwv, I)
 91          CONTINUE
 
 !            CALL SOILVAR(NLAYER, PSIG, PSIM, WETNES, THSAT, KF, BEXP,
@@ -828,7 +820,7 @@ subroutine s_brook90_f( siteparam, climveg, param, pdur, soil_materials, soil_no
                 call intpr("THAT IS THE END", -1,(/ 0/),0)
 
                 case(1)
-                call intpr("THAT IS THE END, water table depth was used", -1,(/ 0/),0)
+                call intpr("THAT IS THE END, (with groundwater switched on)", -1,(/ 0/),0)
 
             end select
         end if
@@ -961,7 +953,7 @@ subroutine BYFLFR (BYPAR, NLAYER, WETNES, Par, QFFC, QFPAR, BYFRAC, MPar, ML)
 
 end subroutine BYFLFR
 
-subroutine calc_vertical_flows(gwv, NLAYER, KK, Par6, THICK, PSITI, STONEF, RHOWG, DPSIMX, DRAIN, VRFLI,pr, error)
+subroutine calc_vertical_flows(gwv, NLAYER, KK, Par6, THICK, PSITI, STONEF, RHOWG, DPSIMX, DRAIN, VRFLI, error)
 ! Errechnet die vertikalen Flüsse von Wasser zwischen den einzelnen Schichten.
 ! Je nach Bedingung wird entweder ein konstanter Potentialgradient am unteren Rand des
 ! Bodenprofils (vertical_flow_mode = 0) oder ein Grundwasserstand im oder unter dem Profil
@@ -980,11 +972,13 @@ subroutine calc_vertical_flows(gwv, NLAYER, KK, Par6, THICK, PSITI, STONEF, RHOW
     real(kind=c_double), intent(in) :: RHOWG
     real(kind=c_double), intent(in) :: DPSIMX
     real(kind=c_double), intent(in) :: DRAIN
-    integer(kind=c_int) :: pr
 
     ! Output
     real(kind=c_double), dimension(:), intent(out) :: VRFLI
-    integer(kind = c_int) :: error
+
+    ! Error code
+    integer, intent(inout) :: error
+
     ! Hilfsvariablen
     integer :: i
 
@@ -1037,7 +1031,7 @@ subroutine calc_vertical_flows(gwv, NLAYER, KK, Par6, THICK, PSITI, STONEF, RHOW
         end if
 
         case default
-        if (.true.) call intpr("Den Case für die untere Randbedingung gibt es nicht in calc_vertical_flows.", -1, (/-0/),0)
+        if (.true.) call intpr("Undefined case selection for the lower boundary condition in calc_vertical_flows.", -1, (/-0/),0)
         error = 9
 
     end select
@@ -1048,7 +1042,7 @@ end subroutine calc_vertical_flows
 
 
 subroutine calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TRANI, SLVP, SWATMX, SWATI,&
-                        VV, INFLI, BYFLI, NTFLI,pr, error)
+                        VV, INFLI, BYFLI, NTFLI, error)
 
     use mod_typedefs
     implicit none
@@ -1065,13 +1059,15 @@ subroutine calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TR
     real(kind=c_double) :: SWATMX(*) ! maximum water storage for layer, mm
     real(kind=c_double) :: SWATI(*)  ! water volume in layer, mm
     real(kind=c_double) :: VRFLI(*)  ! vertical drainage rate from layer, mm/d
-    integer(kind=c_int) :: pr  ! print output to console?
     ! Output
     real(kind=c_double) :: VV(*)     ! modified VRFLI, mm/d
     real(kind=c_double) :: BYFLI(*)  ! bypass flow rate from layer, mm/d
     real(kind=c_double) :: INFLI(*)  ! infiltration rate into layer, mm/d
     real(kind=c_double) :: NTFLI(*)  ! net flow rate into layer, mm/d
-    integer(kind=c_int) :: error ! error code
+
+    ! Error code
+    integer, intent(inout) :: error
+
     ! Local
     integer :: I         ! index variable for layer number
     real(kind=c_double) :: INFIL     ! water reaching layer, SLFL * INFRAC(I), mm/d
@@ -1080,13 +1076,13 @@ subroutine calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TR
 
     select case(gwv%vertical_flow_mode)
 
-        case(0)! Versickerung am unteren Rand. Potentialgradient über DRAIN einstellbar
+        case(0)! Percolation at the lower boundary. Gradient defined with parameter DRAIN.
 
         CALL INFLOW(NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TRANI, SLVP, SWATMX, SWATI, VV,&
                     INFLI, BYFLI, NTFLI)
 
 
-        case(1)! Grundwasser im Profil. Grundwasserstand über water_table_depth einstellbar.
+        case(1)! Groundwater in soil layers. Water table depth defined in water_table_depth.
 
         ! Errechne VV, INFLI, BYFLI, NTFLI nur für die Schichten oberhalb N_groundwater
         if (gwv%N_groundwater >= 2) then
@@ -1095,7 +1091,7 @@ subroutine calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TR
         end if
 
 
-        ! Errechne VV, INFLI, BYFLI, NTFLI für die Schichten im Grundwasser
+        ! Calculate VV, INFLI, BYFLI, NTFLI for soil layers in groundwater
         ! Insbesondere VV ist unphysikalisch, weil es so gewählt wird, dass bei gegebenen INFLI, DSFLI und TRANI
         ! (und SLVP) der Nettofluss NTFLI verschwindet und somit der Annahme voller Sättigung zumindest insoweit
         ! Genüge getan wird.
@@ -1116,8 +1112,7 @@ subroutine calc_inflows(gwv, NLAYER, DTI, INFRAC, BYFRAC, SLFL, VRFLI, DSFLI, TR
         end if
 
         case default
-
-        if (pr == 1) call intpr("Den Case für die untere Randbedingung gibt es nicht in calc_inflows.", -1, (/-0/),0)
+        if (.true.) call intpr("Undefined case selection for the lower boundary condition in calc_inflows.", -1, (/-0/),0)
         error = 9
 
     end select
@@ -1149,10 +1144,13 @@ subroutine calc_DTINEW(gwv, NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, D
     real(kind=c_double) :: DSWMAX    ! maximum change allowed in SWATI, percent of
                            ! SWATMX(i)
     real(kind=c_double) :: DPSIMX    ! maximum potential difference considered "equal", kPa
-    integer(kind=c_int) :: pr  ! print output to console?
-    integer :: error ! error code
+    integer :: pr  ! print output to console?
+
     ! groundwater variables
     type(groundwater_variables), intent(in) :: gwv
+
+    ! Error code
+    integer, intent(inout) :: error
 
 !   Output
     real(kind=c_double) :: DTINEW    ! second estimate of DTI
@@ -1160,19 +1158,19 @@ subroutine calc_DTINEW(gwv, NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, D
 
     select case(gwv%vertical_flow_mode)
 
-        case(0)! Versickerung am unteren Rand. Potentialgradient über DRAIN einstellbar
+        case(0)! Percolation at the lower boundary. Gradient defined with parameter DRAIN.
 
         CALL ITER(gwv, NLAYER, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW, &
                 Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN, pr)
 
 
-        case(1)! Grundwasser im Profil. Grundwasserstand über water_table_depth einstellbar.
+        case(1)! Groundwater in soil layers. Water table depth definde in water_table_depth.
 
         CALL ITER(gwv, gwv%N_groundwater-1, DTI, DPSIDW, NTFLI, SWATMX, PSITI, DSWMAX, DPSIMX, DTINEW,&
                 Thick, Wetnes, Par, iModel, TRANI,SLVP, MPar, ML, DTIMIN, pr)
 
         case default
-        if (pr == 1) call intpr("Den Case für die untere Randbedingung gibt es nicht in calc_DTINEW.", -1, (/-0/),0)
+        if (pr == 1) call intpr("Undefined case selection for the lower boundary condition in calc_DTINEW.", -1, (/-0/),0)
         error = 9
 
     end select
@@ -2367,11 +2365,7 @@ subroutine SOILPAR (gwv, NLAYER, iModel, Par, THICK, STONEF, PSIM, PSICR, &
 
     ! In case of considering groundwater, overwrite water content, saturation and matric potential
     ! in the layers N_groundwater down to layer NLAYER. PSIM can now be positive.
-    if (gwv%vertical_flow_mode == 1 .and. gwv%N_groundwater <= NLAYER) then
-        SWATI(gwv%N_groundwater:NLAYER) = SWATMX(gwv%N_groundwater:NLAYER)
-        WETNES(gwv%N_groundwater:NLAYER) = 1.d0
-        PSIM(gwv%N_groundwater:NLAYER) = (gwv%water_table_depth - gwv%dep(gwv%N_groundwater:NLAYER))*1000.d0*RHOWG
-    end if
+    call adjust_wrt_groundwater(nlayer, gwv, swatmx, rhowg, swati, wetnes, psim)
 
 end subroutine SOILPAR
 

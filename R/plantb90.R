@@ -1,27 +1,34 @@
-#' Interpolate plant properties using the 'b90' method.
+#' Interpolate plant properties using the 'b90' method
 #'
-#' Creates a daily sequence for one year from parameters
+#' Creates a daily sequence for one year from parameters.
 #'
-#' @param minval Minimum value.
+#' @param minval_before_incr Minimum value used for the time period before
+#'   \code{doy.incr}.
+#' @param minval_after_decr Minimum value used for time period after
+#'   \code{doy.decr}.
 #' @param maxval Maximum value.
-#' @param doy.incr Day of year when increasing from \code{minval} to
-#'   \code{maxval} begins.
+#' @param doy.incr Day of year when increasing from \code{minval_before_incr} to
+#'   \code{maxval} starts.
 #' @param incr.dur Duration (number of days) since  \code{doy.incr} until
 #'   \code{maxval} is reached.
-#' @param doy.decr Day of year when decreasing to \code{minval} begins.
+#' @param doy.decr Day of year when decreasing to \code{minval_after_decr}
+#'   begins.
 #' @param decr.dur Duration (number of days) since \code{doy.incr} until
-#'   \code{minval} is reached.
-#' @param maxdoy Length of the year, 366 for leap years, 365 for normal years.
+#'   \code{minval_after_decr} is reached.
+#' @param maxdoy Length of the year (366 for leap years).
 #'
 #' @return A numeric vector of length \code{maxdoy}.
 #'
 #' @examples
-#' plot(plant_b90(minval = 0,maxval=1,
+#' plot(plant_b90(minval_before_incr = 0,minval_after_decr = 0.2,
+#' maxval=1,
 #' doy.incr = 121,incr.dur = 28,
 #' doy.decr = 280, decr.dur = 50,
 #' maxdoy = 365))
 #' @export
-plant_b90 <- function(minval, maxval,
+plant_b90 <- function(minval_before_incr,
+                      minval_after_decr = minval_before_incr,
+                      maxval,
                       doy.incr,incr.dur,
                       doy.decr, decr.dur,
                       maxdoy) {
@@ -37,6 +44,6 @@ plant_b90 <- function(minval, maxval,
   ind <- c(1,doy.incr, doy.incr + incr.dur,
            doy.decr, doy.decr + decr.dur,
            maxdoy)
-  values <- c(minval,minval,maxval,maxval,minval,minval)
+  values <- c(minval_before_incr,minval_before_incr,maxval,maxval,minval_after_decr,minval_after_decr)
   stats::approx(x = ind, y = values,method = "linear", xout = 1:maxdoy)$y
 }

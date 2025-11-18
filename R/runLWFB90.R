@@ -182,6 +182,11 @@ run_LWFB90 <- function(options_b90,
   ## Number of Simulation days
   param_b90$ndays <-  as.integer(difftime(options_b90$enddate,options_b90$startdate)) + 1
 
+  # Other parameters required by b90f_input-arg of r_lwfbrook90
+  param_b90$imodel <- options_b90$imodel
+  param_b90$prec_interval <- options_b90$prec_interval
+  param_b90$startdate <- options_b90$startdate
+
 
   ## Vegetation-Period: calculate budburst and leaffall days of year  ----
   budburst_leaffall <- calc_vegperiod(dates = climate$dates, tavg = climate$tmean,
@@ -209,26 +214,45 @@ run_LWFB90 <- function(options_b90,
     # derive age from age_ini for simyears
     param_b90$age <- seq(from = param_b90$age_ini + 1,
                          by = 1, length.out = length(simyears))
-
   }
 
   ## Create daily standproperties from parameters ----
-  standprop_daily <- make_standprop(options_b90, param_b90, out_yrs = simyears)
+  if (options_b90$lai_method == "linear" & is.null(param_b90$lai_doy_table)) {
+    warning("The use of param_b90-list items 'lai_doy' and 'lai_frac' for use with
+            lai_method = 'linear' will be deprecated in a future version.
+            It was replaced by 'lai_doy_table', to pass both variables as data.frame,
+            or as a list of data.frames, one for each year of the simulation.")
+    param_b90$lai_doy_table <- data.frame(lai_doy = param_b90$lai_doy,
+                                        lai_frac = param_b90$lai_frac)
+  }
+  param_b90$standprop_daily <- make_standprop(options_b90, param_b90, out_yrs = simyears)
 
   ### constrain to simulation period
-  standprop_daily <- standprop_daily[which(standprop_daily$dates >= options_b90$startdate
-                                           & standprop_daily$dates <= options_b90$enddate),]
+  data.table::setDT(param_b90$standprop_daily)
+  dates <- NULL
+  param_b90$standprop_daily <- param_b90$standprop_daily[data.table::between(dates,
+                                                                             options_b90$startdate,
+                                                                             options_b90$enddate),]
   if (verbose == TRUE) {
     message("Standproperties created succesfully")
   }
 
   # Prepare climate ----
   # constrain data to simulation period
-  climate <- climate[which(climate$dates >= options_b90$startdate
-                           & climate$dates <= options_b90$enddate),]
+  data.table::setDT(climate)
+  climate <- climate[data.table::between(dates,
+                                         options_b90$startdate,
+                                         options_b90$enddate),]
   if (!is.null(precip)){
-    precip <- precip[which(precip$dates >= options_b90$startdate
-                           & precip$dates <= options_b90$enddate),]
+    precip <- precip[data.table::between(dates,
+                                         options_b90$startdate,
+                                         options_b90$enddate),]
+  }
+
+  if (data.table::is.data.table(param_b90$water_table_depth)) {
+    param_b90$water_table_depth <- param_b90$water_table_depth[data.table::between(dates,
+                                                                                   options_b90$startdate,
+                                                                                   options_b90$enddate),]
   }
 
   ## Precipitation correction (Richter) ----
@@ -287,19 +311,9 @@ run_LWFB90 <- function(options_b90,
     start <- Sys.time()
 
     simout <- r_lwfbrook90(
-      siteparam = data.frame(simyears[1],
-                             as.integer(format(options_b90$startdate, "%j")),
-                             param_b90$coords_y, param_b90$snowini, param_b90$gwatini,
-                             options_b90$prec_interval, param_b90$snowlqini,
-                             param_b90$snowccini, param_b90$water_table_depth),
-      climveg = cbind(climate[, c("yr", "mo", "da","globrad","tmax","tmin",
-                                  "vappres","windspeed","prec","mesfl")],
-                      standprop_daily[, c("densef", "height", "lai", "sai", "age")]),
-      precdat = precip[,c("yr", "mo", "da","ii","prec", "mesfl")],
-      param = param_to_rlwfbrook90(param_b90, options_b90$imodel),
-      pdur = param_b90$pdur,
-      soil_materials = param_b90$soil_materials,
-      soil_nodes = param_b90$soil_nodes[,c("layer","midpoint", "thick", "mat", "psiini", "rootden")],
+      b90f_input = param_b90,
+      meteo = climate,
+      precip = precip,
       output_log = verbose,
       chk_input = chk_input,
       timelimit = timelimit
@@ -319,9 +333,10 @@ run_LWFB90 <- function(options_b90,
 
     ## append model input ----
     # might be needed for access from output_fun. Will be removed again later, if not required
+
     simres$model_input <- list(options_b90 = options_b90,
-                               param_b90 = param_b90,
-                               standprop_daily = standprop_daily)
+                               param_b90 = param_b90[-which(names(param_b90) == "standprop_daily")],
+                               standprop_daily = param_b90$standprop_daily)
 
 
     ## append simulation results  ----
@@ -371,7 +386,7 @@ run_LWFB90 <- function(options_b90,
     # 'dry' run = FALSE -> always return model input
     return(list(options_b90 = options_b90,
                 param_b90 = param_b90,
-                standprop_daily = standprop_daily))
+                standprop_daily = param_b90$standprop_daily))
   }
 
   if (verbose == TRUE) {
@@ -435,6 +450,22 @@ chk_param <- function() {
       stop(paste("param_b90-list is incomplete. Missing list items:",
                  paste(nms[which(!nms %in% names(param_b90))], collapse = ", ")))
     }
+
+    # check water table input
+    if (inherits(param_b90$water_table_depth, "data.frame")) {
+      if (!all(c("dates", "water_table_depth") %in% names(param_b90$water_table_depth))) {
+        stop("Please provide the timeseries of water table depths as a data.frame or data.table with columns 'dates' and 'water_table_depth'!")
+      }
+
+      if (!data.table::is.data.table(param_b90$water_table_depth)) {
+        data.table::setDT(param_b90$water_table_depth)
+      }
+
+      if (min(param_b90$water_table_depth$dates) > options_b90$startdate | max(param_b90$water_table_depth$dates) < options_b90$enddate){
+        stop("water table timeseries not covering requested simulation period completely.")
+      }
+    }
+
   }))
 
 }

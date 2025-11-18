@@ -2,7 +2,7 @@
 % Please edit documentation in R/standprop_yrly_to_param.R
 \name{standprop_yearly_to_param}
 \alias{standprop_yearly_to_param}
-\title{Transfer standproperties height, maxlai, sai, densef, age to parameter list obeject}
+\title{Transfer standproperties height, maxlai, sai, densef, age to parameter list object}
 \usage{
 standprop_yearly_to_param(standprop_yearly, param_b90, out_yrs)
 }

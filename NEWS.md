@@ -1,37 +1,41 @@
 # LWFBrook90R (in development)
 
 ## Changes
- - removed default value for `topsoil` arguments in functions `hydpar_hypres()` and `hydpar_hypres_tab()`.
+* removed default value for `topsoil` arguments in functions `hydpar_hypres()` and `hydpar_hypres_tab()`.
+* simplified the low-level interface function, bringing a breaking change to users using the `r_lwfbrook90()` instead of `run_LWFB90()` for running the model
+* added an option to use a timeseries of groundwater table depths in the simulation. For activating this option, just provide a data.frame with columns 'dates', 'water_table_depth' to the `param_b90$water_table_depth` list item instead of a single fixed value.
+* The function `make_seasLAI()` now creates smooth transitions between years, by using the previous years' winter-LAI for the period before budburst (Thanks to Michael Köhler).
 
 ## Bug fixes
- - DSLOPE conversion to radians was missing. 
+* conversion of input parameter `dslope` to radians was missing, causing incorrect downslope flow rates when `param_b90$dslope > 0` (see [#76](https://github.com/pschmidtwalter/LWFBrook90R/issues/76#issuecomment-3480040843)). 
+
 
 # LWFBrook90R 0.6.2
  
 ## Bug fixes
  
- - bad table format in docs fixed
- - fixed input parameter name check failure when more than one unknown model parameters were supplied to `set_paramLWFB90()` ([#72](https://github.com/pschmidtwalter/LWFBrook90R/pull/72) by Valentin Gartiser.)
+* bad table format in docs fixed
+* fixed input parameter name check failure when more than one unknown model parameters were supplied to `set_paramLWFB90()` ([#72](https://github.com/pschmidtwalter/LWFBrook90R/pull/72) by Valentin Gartiser.)
 
 # LWFBrook90R 0.6.1
 
 ## Bug fixes
 
- - maintenance
- - added tests 
+* maintenance
+* added tests 
 
 # LWFBrook90R 0.6.0
 
 ## Bug fixes
 
- - fixed problem in parameter replacement multirun-permutations [#70](https://github.com/pschmidtwalter/LWFBrook90R/issues/70)
+* fixed problem in parameter replacement multirun-permutations [#70](https://github.com/pschmidtwalter/LWFBrook90R/issues/70)
 
 ## Changes:
  
- - added a constant head lower boundary condition: It is now possible to define the depth of a constant ground water table (`param_b90$water_table_depth`). In this way, capillary rise from a water table can be simulated. Default is -9999, meaning no groundwater influence (i.e. unit gradient flow at the bottom of the soil profile). Any depth can be specified, also a depth below the lowest soil layer. If the water table is within the soil profile, soil layers below the water table are saturated with water.
- - added output variables 'relawati' (relative plant available water contents of the soil layers) to `layer_output`, and 'snowlq' (liquid water content of snow on the ground) and 'cc' (cold content of snow pack) to `output`. The latter two are important initial variables for continuing a simulation.
- - added 'snowlqini' and 'snowccini' to the list of parameters (`param_b90`). These can now be passed as initial variables to 'snowlq' and 'cc', for simulation continuation
- - set check.data = F in vegperiod::vegperiod to be compatible with extreme climates
+* added a constant head lower boundary condition: It is now possible to define the depth of a constant ground water table (`param_b90$water_table_depth`). In this way, capillary rise from a water table can be simulated. Default is -9999, meaning no groundwater influence (i.e. unit gradient flow at the bottom of the soil profile). Any depth can be specified, also a depth below the lowest soil layer. If the water table is within the soil profile, soil layers below the water table are saturated with water.
+* added output variables 'relawati' (relative plant available water contents of the soil layers) to `layer_output`, and 'snowlq' (liquid water content of snow on the ground) and 'cc' (cold content of snow pack) to `output`. The latter two are important initial variables for continuing a simulation.
+* added 'snowlqini' and 'snowccini' to the list of parameters (`param_b90`). These can now be passed as initial variables to 'snowlq' and 'cc', for simulation continuation
+* set check.data = F in vegperiod::vegperiod to be compatible with extreme climates
 
 # LWFBrook90R 0.5.3
 
@@ -67,12 +71,12 @@
 
 Basic **output** is now at the **precipitation interval** level:
 
-- With `options_b90$prec_interval` > 1, the output of `run_LWFB90()` now contains one row for each day 
+* With `options_b90$prec_interval` > 1, the output of `run_LWFB90()` now contains one row for each day 
 and precipitation interval of the simulation.
-- Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`).
-- Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.
-- With respect to precipitation interval output, the list item `daily_output` of the return was renamed to `output`.
-- Removed `output`-argument and exported the function `process_outputs_LWFB90()` that does the job.
+* Nothing changes with daily precipitation input (`options_b90$prec_interval = 1`).
+* Irrespective of the precipitation interval, the unit of water and vapour fluxes is mm/d.
+* With respect to precipitation interval output, the list item `daily_output` of the return was renamed to `output`.
+* Removed `output`argument and exported the function `process_outputs_LWFB90()` that does the job.
 - New variable added to `output`: `sthr`.
 - Removed redundant variable `slvp` from `layer_output` (soil evaporation).
 - Removed variable `psiti` from `layer_output` (total potential of soil layer): can be calculated by summing the layers' matrix potententials (`psimi`) and the gravity potentials at the soil layers' midpoints.
